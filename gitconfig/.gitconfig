@@ -5,8 +5,8 @@
 	st = status
 	last = log -1 HEAD
 [user]
-    email = haozhongxiu@eyou.net
-	name = haozhongxiu
+    email = nmred_2008@126.com
+	name = nmerd
 [color]
 	ui = true
 
