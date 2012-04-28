@@ -1,0 +1,12 @@
+[alias]
+	co = checkout
+	br = branch
+	ci = commit
+	st = status
+	last = log -1 HEAD
+[user]
+    email = haozhongxiu@eyou.net
+	name = haozhongxiu
+[color]
+	ui = true
+
