@@ -1,0 +1,45 @@
+# vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4 foldmethod=marker:
+#
+# 所有的语言包
+#
+# Copyright  $_SWANBR_COPYRIGHT_$
+#
+
+# {{{ config begin
+
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-05-12 10:11+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# }}} config end
+# {{{ lib
+# {{{ xml
+
+msgid "attribute #%s# don't allow set"
+msgstr "属性#%s#不允许设置"
+
+msgid "attribute #%s# don't exists"
+msgstr "属性#%s#不存在！"
+
+msgid "#%s# method undefined"
+msgstr "#%s#方法未定义"
+
+msgid "not set an XML file"
+msgstr "没有设置XML文件"
+
+msgid "filetype not is xml"
+msgstr "文件类型不是XML类型"
+
+msgid "in xml file #%s# line #%s# columns #%s# #%s#"
+msgstr "在文件#%s#中的第#%s#行，第#%s#列 #%s#"
+# }}}
+# }}}
