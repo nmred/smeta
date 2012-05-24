@@ -1,0 +1,49 @@
+<?xml version="1.0" standalone="yes"?>
+
+<!-- {{{ root -->
+<exceptions>
+    <!-- {{{ 系统异常 -->
+    <cate>
+        <cateid>100</cateid>
+        <title>哈哈哈刻录机刻录机刻录机</title>
+        <exception>
+            <code>000001</code>
+            <title>会尽快回家回家</title>
+            <desc><![CDATA[规划和共和国]]></desc>
+        </exception>
+    </cate>        
+    <!-- }}} -->
+    <!-- {{{ LIB模型异常 -->
+    <cate>
+        <cateid>101</cateid>
+        <title>哈哈哈刻录机刻录机刻录机</title>
+        <exception>
+            <code>000001</code>
+            <title>会尽快回家回家</title>
+            <desc><![CDATA[规划和共和国]]></desc>
+        </exception>
+        <exception>
+            <code>000002</code>
+            <title>会尽快回家回家</title>
+            <desc><![CDATA[规划和共和国]]></desc>
+        </exception>
+        <exception>
+            <code>000003</code>
+            <title>会尽快回家回家</title>
+            <desc><![CDATA[规划和共和国]]></desc>
+        </exception>
+    </cate>        
+    <!-- }}} -->
+    <!-- {{{ LIB模型异常 -->
+    <cate>
+        <cateid>102</cateid>
+        <title>哈哈哈刻录机刻录机刻录机</title>
+        <exception>
+            <code>000001</code>
+            <title>会尽快回家回家</title>
+            <desc><![CDATA[规划和共和国]]></desc>
+        </exception>
+    </cate>        
+    <!-- }}} -->
+</exceptions>
+<!-- }}} -->
