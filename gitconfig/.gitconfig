@@ -6,7 +6,7 @@
 	last = log -1 HEAD
 [user]
     email = nmred_2008@126.com
-	name = nmerdgit
+	name = nmred
 [color]
 	ui = true
 
