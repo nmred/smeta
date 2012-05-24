@@ -1,0 +1,114 @@
+#!/usr/bin/php
+<?php
+/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4 foldmethod=marker: */
+// +---------------------------------------------------------------------------
+// | SWAN [ $_SWANBR_SLOGAN_$ ]
+// +---------------------------------------------------------------------------
+// | Copyright $_SWANBR_COPYRIGHT_$
+// +---------------------------------------------------------------------------
+// | Version  $_SWANBR_VERSION_$
+// +---------------------------------------------------------------------------
+// | Licensed ( $_SWANBR_LICENSED_URL_$ )
+// +---------------------------------------------------------------------------
+// | $_SWANBR_WEB_DOMAIN_$
+// +---------------------------------------------------------------------------
+ 
+/**
++------------------------------------------------------------------------------
+* 创建异常帮助文档工具
++------------------------------------------------------------------------------
+* 
+* @package 
+* @version $_SWANBR_VERSION_$
+* @copyright $_SWANBR_COPYRIGHT_$
+* @author $_SWANBR_AUTHOR_$ 
++------------------------------------------------------------------------------
+*/
+require_once '../../core.php';
+
+//获取创建搜索路劲
+if (!isset($_SERVER['argv'][1])) {
+    display_useage();
+    return;
+}
+switch (trim($_SERVER['argv'][1])) {
+    case '-c' :
+        create_xml();
+        break;
+    case '?' :
+    case '--help':
+    default:
+        display_useage();
+        break;
+}
+
+/**
+ * 显示帮助信息 
+ * 
+ * @access public
+ * @return void
+ */
+function display_useage()
+{
+    echo "sw_create_exception <-c>(创建XML文件) [? : --help](帮助)\n";
+}
+
+/**
+ * 创建exception的XML文件 
+ * 
+ * @param string $search_path 
+ * @access public
+ * @return void
+ */
+function create_xml($search_path = '') 
+{
+    $path = empty($search_path) ? PATH_SWAN_LIB : $search_path;
+
+    //执行搜索代码中的抛出异常
+    exec("grep -rin 'exception(' {$path}", $exception_strs);
+
+    $exception_arrs = array();
+    $exception_failed = array();
+    $tmp_arrs = array();
+
+    foreach($exception_strs as $key => $exception_str) {
+        if (2 == substr_count($exception_str, ':')) {
+            $tmp_arrs[] = explode(':', $exception_str, 3);
+        } else {
+            $tmp_failed[] = $exception_str;
+        }
+    }
+
+    foreach ($tmp_arrs as $key => $values) {
+        //获取异常code
+        $parrent = '/throw\s+new\s+(\S*)\((.*)\)/';
+    
+        if (preg_match($parrent, trim($values[2]), $arr)) {
+            $code = substr($arr[2], strpos($arr[2], '000'), 12);
+            $title = substr($arr[2], 0, strpos($arr[2], '000'));
+            if (preg_match('/\d{12}/', $code, $code_val)) {
+                $exception_arrs['exceptions']['exception'][$key]['@id']    = $code_val[0];
+                $exception_arrs['exceptions']['exception'][$key]['title'] = trim($title, '\'", ');
+                $exception_arrs['exceptions']['exception'][$key]['filepath'] = $values[0];
+                $exception_arrs['exceptions']['exception'][$key]['fileline'] = $values[1];
+                $exception_arrs['exceptions']['exception'][$key]['exception_name'] = $arr[1];
+            }
+        } else {
+            $tmp_failed = array_merge($tmp_failed, (array)$values);
+        }
+    }
+
+    require_once PATH_SWAN_LIB . 'sw_xml.class.php';
+    require_once PATH_SWAN_LIB . 'xml/sw_xml_exception.class.php';
+    $xml_build = sw_xml::factory('output_xml');
+    try {
+        $xml_build->set_filename(PATH_SWAN_HELP . 'exception/exception_desc.xml');
+        $xml_build->output_xml($exception_arrs);
+    } catch (sw_xml_exception $e) {
+        echo $e;
+    }
+
+    echo "+OK create XML success\n";
+
+}
+
