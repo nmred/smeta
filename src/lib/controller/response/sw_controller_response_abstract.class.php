@@ -42,7 +42,7 @@ abstract class sw_controller_response_abstract
 	 * @var array
 	 * @access protected
 	 */
-	protected $__exception = array();
+	protected $__exceptions = array();
 
 	/**
 	 * 存放header的数组 
@@ -641,6 +641,254 @@ abstract class sw_controller_response_abstract
 		}	
 	}
 					
+	// }}}
+	// {{{ public function set_exception()
+
+	/**
+	 * 注册一个response的异常对象 
+	 * 
+	 * @param Exception $e 
+	 * @access public
+	 * @return sw_controller_response_abstract
+	 */
+	public function set_exception(Exception $e)
+	{
+		$this->__exceptions[] = $e;	
+		return $this;
+	}
+
+	// }}}
+	// {{{ public function get_exception()
+
+	/**
+	 * 获取异常 
+	 * 
+	 * @access public
+	 * @return array
+	 */
+	public function get_exception()
+	{
+		return $this->__exceptions;		
+	}
+
+	// }}}
+	// {{{ public function is_exception()
+
+	/**
+	 * 判断是否有response异常对象注册 
+	 * 
+	 * @access public
+	 * @return boolean
+	 */
+	public function is_exception()
+	{
+		return !empty($this->__exceptions);	
+	}
+
+	// }}}
+	// {{{ public function has_exception_of_type()
+
+	/**
+	 * 判断所有的异常中是否有给定的异常类型 
+	 * 
+	 * @param string $type 
+	 * @access public
+	 * @return boolean
+	 */
+	public function has_exception_of_type($type)
+	{
+		foreach ($this->__exceptions as $e) {
+			if ($e instanceof $type) {
+				return true;	
+			}	
+		}
+
+		return false;
+	}
+
+	// }}}
+	// {{{ public function has_exception_of_message()
+
+	/**
+	 * 判断所有的response异常中是否存在给定的错误提示信息 
+	 * 
+	 * @param string $message 
+	 * @access public
+	 * @return boolean
+	 */
+	public function has_exception_of_message($message)
+	{
+		foreach ($this->__exceptions as $e) {
+			if ($message == $e->getMessage()) {
+				return true;	
+			}	
+		}	
+
+		return false;
+	}
+
+	// }}}
+	// {{{ public function has_exception_of_code()
+
+	/**
+	 * 判断response所有中是否有给定的错误码的异常 
+	 * 
+	 * @param string $code 
+	 * @access public
+	 * @return boolean
+	 */
+	public function has_exception_of_code($code)
+	{
+		$code = (int) $code;
+		foreach ($this->__exceptions as $e) {
+			if ($code == $e->getCode()) {
+				return true;	
+			}
+		}
+
+		return false;
+	}
+
+	// }}}
+	// {{{ public function get_exception_by_type()
+
+	/**
+	 * 获取给定异常类型的异常 
+	 * 
+	 * @param string $type 
+	 * @access public
+	 * @return array|boolean
+	 */
+	public function get_exception_by_type($type) 
+	{
+		$exceptions = array();
+		foreach ($this->__exceptions as $e) {
+			if ($e instanceof as $type) {
+				$exceptions[] = $e;	
+			}	
+		}	
+
+		if (empty($exceptions)) {
+			$exceptions = false;	
+		}
+
+		return $exceptions;
+	}
+
+	// }}}
+	// {{{ public function get_exception_by_message()
+
+	/**
+	 * 获取给定异常信息的异常 
+	 * 
+	 * @param string $message
+	 * @access public
+	 * @return array|boolean
+	 */
+	public function get_exception_by_message($message) 
+	{
+		$exceptions = array();
+		foreach ($this->__exceptions as $e) {
+			if ($e->getMessage() == $message) {
+				$exceptions[] = $e;	
+			}	
+		}	
+
+		if (empty($exceptions)) {
+			$exceptions = false;	
+		}
+
+		return $exceptions;
+	}
+
+	// }}}
+	// {{{ public function get_exception_by_code()
+
+	/**
+	 * 获取给定异常错误码的异常 
+	 * 
+	 * @param string $code 
+	 * @access public
+	 * @return array|boolean
+	 */
+	public function get_exception_by_code($code) 
+	{
+		$exceptions = array();
+		foreach ($this->__exceptions as $e) {
+			if ($e->getCode() ==  $code) {
+				$exceptions[] = $e;	
+			}	
+		}	
+
+		if (empty($exceptions)) {
+			$exceptions = false;	
+		}
+
+		return $exceptions;
+	}
+
+	// }}}
+	// {{{ public function render_exceptions()
+
+	/**
+	 * 是否抛出异常 
+	 * 
+	 * @param boolean $flag 
+	 * @access public
+	 * @return boolean
+	 */
+	public function render_exceptions($flag = null)
+	{
+		if (null !== $flag) {
+			$this->__render_exceptions = $flag ? true : false;	
+		}	
+
+		return $this->__render_exceptions;
+	}
+
+	// }}}
+	// {{{ public function send_response()
+	
+	/**
+	 * 响应网页 
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function send_response()
+	{
+		$this->send_headers();
+		
+		if ($this->is_exception() && $this->render_exceptions()) {
+			$exceptions = '';
+			foreach ($this->get_exception() as $e) {
+				$exceptions .= $e->__toString() . "\n";	
+			}	
+
+			echo $exceptions;
+			return;
+		}	
+
+		$this->output_body();
+	}
+
+	// }}}
+	// {{{ public function __toString()
+
+	/**
+	 * __toString 
+	 * 
+	 * @access public
+	 * @return string
+	 */
+	public function __toString()
+	{
+		ob_start();
+		$this->send_response();
+		return ob_get_clean();
+	}
+
+	// }}}
 	// }}} end functions
 }
 
