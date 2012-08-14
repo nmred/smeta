@@ -158,7 +158,7 @@ class sw_xml_build
     }
 
     // }}}
-    // {{{ protected function _fromArray()
+    // {{{ protected static function _fromArray()
     
     /**
      * 递归完成由数组创建XML 
@@ -170,7 +170,7 @@ class sw_xml_build
      * @access protected
      * @return void
      */
-    protected function _fromArray($dom, $node, &$data, $format)
+    protected static function _fromArray($dom, $node, &$data, $format)
     {
         if (empty($data) || !is_array($data)) {
             return;
@@ -228,7 +228,7 @@ class sw_xml_build
     }
 
     // }}}
-    // {{{ protected function __createChild()
+    // {{{ protected static function __createChild()
     
     /**
      * 创建子节点 
@@ -237,7 +237,7 @@ class sw_xml_build
      * @access protected
      * @return void
      */
-    protected function _createChild($data)
+    protected static function _createChild($data)
     {
         extract($data);
         $childNS = $childValue = null;

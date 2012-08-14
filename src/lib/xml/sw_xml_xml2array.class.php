@@ -77,7 +77,6 @@ class sw_xml_xml2array extends sw_xml_abstract
     protected static function _recursive_xml2array($xml, &$parentData, $ns, $namespaces) 
     {
         $data = array();
-
         foreach ($namespaces as $namespace) {
             foreach ($xml->attributes($namespace, true) as $key => $value) {
                 if (!empty($namespace)) {
