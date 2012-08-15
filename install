@@ -1,0 +1,688 @@
+#!/bin/sh
+# vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4 foldmethod=marker: #
+# +---------------------------------------------------------------------------
+# | SWAN [ $_SWANBR_SLOGAN_$ ]
+# +---------------------------------------------------------------------------
+# | Copyright $_SWANBR_COPYRIGHT_$
+# +---------------------------------------------------------------------------
+# | Version  $_SWANBR_VERSION_$
+# +---------------------------------------------------------------------------
+# | Licensed ( $_SWANBR_LICENSED_URL_$ )
+# +---------------------------------------------------------------------------
+# | $_SWANBR_WEB_DOMAIN_$
+# +---------------------------------------------------------------------------
+
+############################
+# 导入配置文件 #############
+############################
+. ./config.cf
+
+############################
+# 导入函数库   #############
+############################
+. ./common.func
+
+############################
+# 导入必要检查函数库   #####
+############################
+. ./check.func
+
+# {{{ function sw_tar_all() 
+
+############################
+# 通过tar解压文件 ##########
+############################
+function sw_tar_all()
+{
+	files=`ls $OPENSOURCE | grep .tar.gz`
+	for file in $files
+	do
+		if [ -d $TMP_DIR/`echo $file | sed 's/.tar.gz//'` ] ; then
+			echo_stdout "$file already extract $ECHO_DOT" 0 1
+			continue
+		fi
+		tar -zxf $OPENSOURCE$file -C $TMP_DIR
+		if [ $? = "0" ] ;then
+			echo_stdout "extract $file success $ECHO_DOT" 0 1
+		else
+			echo_stdout "extract $file fail $ECHO_DOT" 1 1
+		fi
+	done	
+}
+
+ # }}}
+# {{{ function sw_unzip_all()
+
+############################
+# 通过unzip解压文件 ########
+############################
+function sw_unzip_all()
+{
+	files=`ls $OPENSOURCE | grep .zip`
+	for file in $files
+	do
+		if [ -d $TMP_DIR/`echo $file | sed 's/.zip//'` ] ; then
+			echo_stdout "$file already unzip $ECHO_DOT" 0 1
+			continue
+		fi
+		unzip $OPENSOURCE$file -d $TMP_DIR >/dev/null 2>&1
+		if [ $? = "0" ] ;then
+			echo_stdout "unzip $file success $ECHO_DOT" 0 1
+		else
+			echo_stdout "unzip $file fail $ECHO_DOT" 1 1
+		fi
+	done	
+}
+
+ # }}}
+
+# {{{ install httpd
+# {{{ function install_httpd()
+
+############################
+# 安装httpd程序  ###########
+############################
+function install_httpd()
+{
+	# {{{安装pcre的源码到httpd的安装目录
+	echo_center "install httpd "
+	echo_stdout "perpare install httpd $ECHO_DOT" 2 1
+
+	check_libtool
+	check_gccadd
+
+	cd $SRC_PCRE
+
+	./configure --prefix=$INSTALL_PCRE >/dev/null 2>>$INATLL_LOG
+	if [ $? = "0" ] ; then 
+		echo_stdout "configure pcre success $ECHO_DOT" 0 2
+	else
+		echo_stdout "configure pcre faild $ECHO_DOT" 1 2
+		exit 1
+	fi
+
+	if make >/dev/null 2>>$INATLL_LOG && make install >/dev/null 2>>$INATLL_LOG; then
+		echo_stdout  "make pcre success $ECHO_DOT" 0 2
+	else
+		echo_stdout  "make pcre faild $ECHO_DOT" 1 2
+		exit 1
+	fi
+	# }}}
+	# {{{导入apr和apr-utli依赖包
+	if [ -d $INSTALL_APR ]; then
+		echo_stdout "already copy apr source $ECHO_DOT" 0 2
+	else
+		if cp -rf $SRC_APR $INSTALL_APR; then
+			echo_stdout "copy apr success $ECHO_DOT" 0 2
+		else
+			echo_stdout "copy apr faild $ECHO_DOT" 1 2
+			exit 1
+		fi
+	fi
+
+	if [ -d $INSTALL_APR_UTIL ]; then
+		echo_stdout "already copy apr-util source $ECHO_DOT" 0 2
+	else
+		if cp -rf $SRC_APR_UTIL  $INSTALL_APR_UTIL; then
+			echo_stdout  "copy apr-util success $ECHO_DOT" 0 2
+		else
+			echo_stdout "copy apr-util faild $ECHO_DOT" 1 2
+			exit 1
+		fi
+	fi
+	# }}}
+	# {{{ configre && make &&  make install
+	echo_stdout "start install httpd $ECHO_DOT" 2 1
+	cd $SRC_HTTPD
+	./configure \
+		--prefix="$INSTALL_HTTPD"  \
+		--sysconfdir="$ETC_DIR" \
+		--with-included-apr \
+		--disable-userdir \
+		--enable-so \
+		--enable-deflate=shared \
+		--enable-expires=shared \
+		--enable-rewrite=shared \
+		--enable-static-support \
+		--enable-cache \
+		--enable-disk-cache \
+		--enable-mem-cache \
+		--with-pcre=$INSTALL_PCRE >/dev/null 2>>$INATLL_LOG
+
+	if [ $? = "0" ] ; then
+		echo_stdout "httpd configre success $ECHO_DOT" 0 1
+	else
+		echo_stdout "httpd configure faild $ECHO_DOT" 1 1
+		exit 1
+	fi
+
+	if make >/dev/null 2>>$INATLL_LOG && make install >/dev/null 2>>$INATLL_LOG; then
+		echo_stdout "install httpd success $ECHO_DOT" 0 1
+	else
+		echo_stdout "install httpd failed $ECHO_DOT" 1 1
+		exit 1
+	fi
+	# }}}
+}
+
+# }}}
+# }}}
+# {{{ install mysql
+# {{{ function install_cmake()
+
+############################
+# 安装cmake    #############
+############################
+function install_cmake()
+{
+	cd $SRC_CMAKE
+	if ./configure --prefix=$INSTALL_CMAKE >/dev/null 2>>$INATLL_LOG ;then
+		echo_stdout "configure cmake success $ECHO_DOT" 0 2
+	else
+		echo_stdout "configure cmake failed $ECHO_DOT" 1 2
+		exit 1
+	fi
+
+	if make >/dev/null 2>>$INATLL_LOG ; then
+		echo_stdout "make cmake success $ECHO_DOT" 0 2
+	else
+		echo_stdout "make cmake failed $ECHO_DOT" 1 2
+		exit 1
+	fi
+
+	if make install >/dev/null 2>>$INATLL_LOG; then
+		echo_stdout "install cmake success $ECHO_DOT" 0 2
+	else
+		echo_stdout "install cmake failed $ECHO_DOT" 1 2
+		exit 1
+	fi
+}
+
+# }}}
+# {{{ function install_mysql()
+
+############################
+# 安装mysql    #############
+############################
+function install_mysql()
+{
+	echo_center "install mysql "
+	echo_stdout "perpare install mysql $ECHO_DOT" 2 1
+	
+	check_ncurses
+
+	install_cmake
+
+	#添加mysql组
+	is_group=`awk -F: '{print $1}' /etc/group |grep '^mysql$'`
+	if [ $is_group = "" ]; then
+		if groupadd mysql >/dev/null 2>>$INATLL_LOG; then
+			echo_stdout "add mysql group success $ECHO_DOT" 0 2
+		else
+			echo_stdout "add mysql group failed $ECHO_DOT" 1 2
+			exit 1
+		fi
+	fi
+
+	#创建用户mysql并加入到mysql组，不允许mysql用户直接登录系统
+	is_user=`awk -F: '{print $1}' /etc/passwd |grep '^mysql$'`
+	if [ $is_user = "" ]; then
+		if useradd -g mysql mysql -s /bin/false >/dev/null 2>>$INATLL_LOG; then
+			echo_stdout "add mysql user success $ECHO_DOT" 0 2
+		else
+			echo_stdout "add mysql user failed $ECHO_DOT" 1 2
+			exit 1
+		fi
+	fi
+
+	#创建MySQL数据库存放目录
+	sw_mkdir $MYSQL_DATA
+
+	#设置MySQL数据库目录权限
+	if chown -R mysql:mysql $MYSQL_DATA >/dev/null 2>>$INATLL_LOG; then
+		echo_stdout "chown data driectory success $ECHO_DOT" 0 2
+	else
+		echo_stdout "chown data driectory failed $ECHO_DOT" 1 2
+		exit 1
+	fi
+
+	cd $SRC_MYSQL
+	#配置
+	$INSTALL_CMAKE/bin/cmake \
+		 -DCMAKE_INSTALL_PREFIX=$INSTALL_MYSQL \
+		 -DMYSQL_DATADIR=$MYSQL_DATA \
+		 -DSYSCONFDIR=$ETC_DIR >/dev/null 2>>$INATLL_LOG
+	
+	if [ $? = "0" ]; then
+		echo_stdout "configure mysql success $ECHO_DOT" 0 2
+	else
+		echo_stdout "configure mysql failed $ECHO_DOT" 1 2
+		exit 1
+	fi
+
+	if make >/dev/null 2>>$INATLL_LOG ; then
+		echo_stdout "make mysql success $ECHO_DOT" 0 2
+	else
+		echo_stdout "make mysql failed $ECHO_DOT" 1 2
+		exit 1
+	fi
+
+	if make install >/dev/null 2>>$INATLL_LOG; then
+		echo_stdout "install mysql success $ECHO_DOT" 0 2
+	else
+		echo_stdout "install mysql failed $ECHO_DOT" 1 2
+		exit 1
+	fi
+	#添加配置文件
+	
+	if [ -f $ETC_DIR/my.cnf ];then
+		rm -rf $ETC_DIR/my.cnf
+	fi
+
+	if cp $INSTALL_MYSQL/support-files/my-huge.cnf $ETC_DIR/my.cnf >/dev/null 2>>$INATLL_LOG; then
+		echo_stdout "copy mysql etc file success $ECHO_DOT" 0 2
+	else
+		echo_stdout "copy mysql etc file faild $ECHO_DOT" 1 2
+		exit 1
+	fi
+
+	#修改配置文件
+
+	etc_str=" datadir=`echo ${MYSQL_DATA} |sed 's/\//\\\\\//g'`"
+	if sed -e "/\[mysqld\]/{p;s/.*/echo $etc_str/e;}"  $ETC_DIR/my.cnf > $ETC_DIR/my.cnf.bak
+	then
+		rm -rf $ETC_DIR/my.cnf
+		mv $ETC_DIR/my.cnf.bak $ETC_DIR/my.cnf
+	fi
+	
+	#生成数据库
+
+	#判断mysql的这个数据库是否生成
+	if [ -d $MYSQL_DATA/mysql ];then
+		echo_stdout "already install  mysql database $ECHO_DOT" 0 2
+	else
+		cd $INSTALL_MYSQL
+		if ./scripts/mysql_install_db --user=mysql >/dev/null 2>>$INATLL_LOG; then
+			echo_stdout "install  mysql database success $ECHO_DOT" 0 2
+		else
+			echo_stdout "install mysql database faild $ECHO_DOT" 1 2
+			exit 1
+		fi
+	fi
+
+}
+
+# }}}
+# }}}
+# {{{ install php
+# {{{ function install_jpeg()
+
+############################
+# 安装jpeg库   #############
+############################
+function install_jpeg()
+{
+	#创建目录
+	sw_mkdir $INSTALL_JPEG	
+	sw_mkdir $INSTALL_JPEG/bin
+	sw_mkdir $INSTALL_JPEG/lib
+	sw_mkdir $INSTALL_JPEG/include
+	sw_mkdir $INSTALL_JPEG/man
+	sw_mkdir $INSTALL_JPEG/man1
+	sw_mkdir $INSTALL_JPEG/man/man1
+	
+	cd $SRC_JPEG
+	#配置
+	./configure --prefix=$INSTALL_JPEG \
+		--enable-shared \
+		--enable-static >/dev/null 2>>$INATLL_LOG
+	if [ $? = "0" ];then
+		echo_stdout "configure jpeg success $ECHO_DOT" 0 2
+	else
+		echo_stdout "configure jpeg failed $ECHO_DOT" 1 2
+		exit 1
+	fi
+
+	if make >/dev/null 2>>$INATLL_LOG ; then
+		echo_stdout "make jpeg success $ECHO_DOT" 0 2
+	else
+		echo_stdout "make jpeg failed $ECHO_DOT" 1 2
+		exit 1
+	fi
+
+	if make install >/dev/null 2>>$INATLL_LOG; then
+		echo_stdout "install jpeg success $ECHO_DOT" 0 2
+	else
+		echo_stdout "install jpeg failed $ECHO_DOT" 1 2
+		exit 1
+	fi
+
+}
+
+# }}}
+# {{{ function install_png()
+
+############################
+# 安装pnglib库 #############
+############################
+function install_png()
+{
+	cd $SRC_LIBPNG
+	#配置
+	cp scripts/makefile.std makefile
+	./configure --prefix=$INSTALL_LIBPNG  >/dev/null 2>>$INATLL_LOG
+	if [ $? = "0" ];then
+		echo_stdout "configure libpng success $ECHO_DOT" 0 2
+	else
+		echo_stdout "configure libpng failed $ECHO_DOT" 1 2
+		exit 1
+	fi
+
+	if make >/dev/null 2>>$INATLL_LOG ; then
+		echo_stdout "make libpng success $ECHO_DOT" 0 2
+	else
+		echo_stdout "make libpng failed $ECHO_DOT" 1 2
+		exit 1
+	fi
+
+	if make install >/dev/null 2>>$INATLL_LOG; then
+		echo_stdout "install libpng success $ECHO_DOT" 0 2
+	else
+		echo_stdout "install libpng failed $ECHO_DOT" 1 2
+		exit 1
+	fi
+
+}
+
+# }}}
+# {{{ function install_freetype()
+
+############################
+# 安装freetype #############
+############################
+function install_freetype()
+{
+	cd $SRC_FREETYPE			
+	sw_mkdir $INSTALL_FREETYPE
+
+	./configure --prefix=$INSTALL_FREETYPE  >/dev/null 2>>$INATLL_LOG
+	if [ $? = "0" ];then
+		echo_stdout "configure freetype success $ECHO_DOT" 0 2
+	else
+		echo_stdout "configure freetype failed $ECHO_DOT" 1 2
+		exit 1
+	fi
+
+	if make >/dev/null 2>>$INATLL_LOG ; then
+		echo_stdout "make freetype success $ECHO_DOT" 0 2
+	else
+		echo_stdout "make freetype failed $ECHO_DOT" 1 2
+		exit 1
+	fi
+
+	if make install >/dev/null 2>>$INATLL_LOG; then
+		echo_stdout "install freetype success $ECHO_DOT" 0 2
+	else
+		echo_stdout "install freetype failed $ECHO_DOT" 1 2
+		exit 1
+	fi
+}
+
+# }}}
+# {{{ function install_zlib()
+
+############################
+# 安装zlib     #############
+############################
+function install_zlib()
+{
+	cd $SRC_ZLIB			
+	sw_mkdir $INSTALL_ZLIB
+
+	./configure --prefix=$INSTALL_ZLIB  >/dev/null 2>>$INATLL_LOG
+	if [ $? = "0" ];then
+		echo_stdout "configure zlib success $ECHO_DOT" 0 2
+	else
+		echo_stdout "configure zlib failed $ECHO_DOT" 1 2
+		exit 1
+	fi
+
+	if make >/dev/null 2>>$INATLL_LOG ; then
+		echo_stdout "make zlib success $ECHO_DOT" 0 2
+	else
+		echo_stdout "make zlib failed $ECHO_DOT" 1 2
+		exit 1
+	fi
+
+	if make install >/dev/null 2>>$INATLL_LOG; then
+		echo_stdout "install zlib success $ECHO_DOT" 0 2
+	else
+		echo_stdout "install zlib failed $ECHO_DOT" 1 2
+		exit 1
+	fi
+}
+
+# }}}
+# {{{ function install_libxml2()
+
+############################
+# 安装libxml2  #############
+############################
+function install_libxml2()
+{
+	cd $SRC_LIBXML			
+	sw_mkdir $INSTALL_LIBXML
+
+	./configure --prefix=$INSTALL_LIBXML  >/dev/null 2>>$INATLL_LOG
+	#./configure --prefix=$INSTALL_LIBXML  
+	if [ $? = "0" ];then
+		echo_stdout "configure libxml2 success $ECHO_DOT" 0 2
+	else
+		echo_stdout "configure libxml2 failed $ECHO_DOT" 1 2
+		exit 1
+	fi
+
+	if make >/dev/null 2>>$INATLL_LOG ; then
+		echo_stdout "make libxml2 success $ECHO_DOT" 0 2
+	else
+		echo_stdout "make libxml2 failed $ECHO_DOT" 1 2
+		exit 1
+	fi
+
+	if make install >/dev/null 2>>$INATLL_LOG; then
+		echo_stdout "install libxml2 success $ECHO_DOT" 0 2
+	else
+		echo_stdout "install libxml2 failed $ECHO_DOT" 1 2
+		exit 1
+	fi
+}
+
+# }}}
+# {{{ function install_gd()
+
+############################
+# 安装gd库     #############
+############################
+function install_gd()
+{
+	cd $SRC_GD			
+	sw_mkdir $INSTALL_GD
+
+	./configure --prefix=$INSTALL_GD \
+		--with-jpeg=$INSTALL_JPEG \
+		--with-png=$INSTALL_LIBPNG \
+		--with-zlib=$INSTALL_ZLIB \
+		--with-freetype=$INSTALL_FREETYPE \
+		--enable-m4_pattern_allow >/dev/null 2>>$INATLL_LOG
+	if [ $? = "0" ];then
+		echo_stdout "configure gd success $ECHO_DOT" 0 2
+	else
+		echo_stdout "configure gd failed $ECHO_DOT" 1 2
+		exit 1
+	fi
+
+	if make >/dev/null 2>>$INATLL_LOG ; then
+		echo_stdout "make gd success $ECHO_DOT" 0 2
+	else
+		echo_stdout "make gd failed $ECHO_DOT" 1 2
+		exit 1
+	fi
+
+	if make install >/dev/null 2>>$INATLL_LOG; then
+		echo_stdout "install gd success $ECHO_DOT" 0 2
+	else
+		echo_stdout "install gd failed $ECHO_DOT" 1 2
+		exit 1
+	fi
+}
+
+# }}}
+# {{{ function install_php 
+
+############################
+# 安装php主程序 ############
+############################
+function install_php()
+{
+	echo_center "install php"
+	echo_stdout "perpare install php $ECHO_DOT" 2 1
+	install_jpeg
+	install_png
+	install_freetype
+	install_zlib
+	install_gd
+	install_libxml2
+
+	rm -rf $INSTALL_GD/include/gd_io.h
+	cd $CUR_PWD
+	cp ${OPENSOURCE}gd_io.h $INSTALL_GD/include 
+	if [ $? = "0" ];then
+		echo_stdout "fixed php bug success $ECHO_DOT" 0 2
+	else
+		echo_stdout "fixed php bug failed $ECHO_DOT" 1 2
+		exit 1
+	fi
+	cd $SRC_PHP
+	./configure --prefix=$INSTALL_PHP \
+		--with-config-file-path=$ETC_DIR \
+		--with-apxs2=$INSTALL_HTTPD/bin/apxs \
+		--with-mysql=$INSTALL_MYSQL \
+		--with-pdo-mysql=$INSTALL_MYSQL \
+		--enable-ftp \
+		--with-gettext \
+		--with-libxml-dir=$INSTALL_LIBXML \
+		--enable-soap \
+		--with-gd=$INSTALL_GD \
+		--with-jpeg-dir=$INSTALL_JPEG \
+		--with-zlib-dir=$INSTALL_ZLIB \
+		--with-png-dir=$INSTALL_LIBPNG \
+		--with-freetype-dir=$INSTALL_FREETYPE \
+		--enable-mbstring \
+		--enable-sockets >/dev/null 2>>$INATLL_LOG
+	if [ $? = "0" ];then
+		echo_stdout "configure php success $ECHO_DOT" 0 2
+	else
+		echo_stdout "configure php failed $ECHO_DOT" 1 2
+		exit 1
+	fi
+
+	aclocal
+	autoconf
+	if make >/dev/null 2>>$INATLL_LOG ; then
+		echo_stdout "make php success $ECHO_DOT" 0 2
+	else
+		echo_stdout "make php failed $ECHO_DOT" 1 2
+		exit 1
+	fi
+
+	if make install >/dev/null 2>>$INATLL_LOG; then
+		echo_stdout "install php success $ECHO_DOT" 0 2
+	else
+		echo_stdout "install php failed $ECHO_DOT" 1 2
+		exit 1
+	fi
+}
+# }}}
+# }}}
+# {{{ install swan_manager
+# {{{ function install_swan_manager 
+
+############################
+# 安装swan_manager主程序 ###
+############################
+function install_swan_manager()
+{
+	echo_center "install swan manager"
+	echo_stdout "perpare install swan manager $ECHO_DOT" 2 1
+	
+	cp common.func config.cf swan_serv swan_uninstall $INSTALL_SHELL
+
+	if [ $? = "0" ]; then
+		echo_stdout "install swan success $ECHO_DOT" 0 2
+	else
+		echo_stdout "install swan failed $ECHO_DOT" 1 2
+		exit 1
+	fi
+
+	#处理swan_serv和swan_uninstall
+	ln -s /usr/bin/swan_serv $INSTALL_SHELL/swan_serv
+	ln -s /usr/bin/swan_uninstall $INSTALL_SHELL/swan_uninstall
+}
+# }}}
+# }}}
+
+# 安装开始提示信息
+
+echo "+---------------------------------------------------------------------------+"
+echo "| SWAN [ $_SWANBR_SLOGAN_$ ]" 
+echo "+---------------------------------------------------------------------------"
+echo "| Copyright $_SWANBR_COPYRIGHT_$"
+echo "+---------------------------------------------------------------------------"
+echo "| Version  $_SWANBR_VERSION_$"
+echo "+---------------------------------------------------------------------------"
+echo "| Licensed ( $_SWANBR_LICENSED_URL_$ )"
+echo "+---------------------------------------------------------------------------"
+echo "| $_SWANBR_WEB_DOMAIN_$"
+echo "+---------------------------------------------------------------------------"
+
+echo_center "build install directory | extract soucre file"
+#创建安装目录
+sw_mkdir $INSTALL_SOFT
+sw_mkdir $INSTALL_SRC
+sw_mkdir $INSTALL_SHELL
+sw_mkdir $INSTALL_PHP
+sw_mkdir $INSTALL_DIR
+sw_mkdir $INSTALL_HTTPD
+sw_mkdir $INSTALL_PHP
+sw_mkdir $INSTALL_MYSQL
+sw_mkdir $TMP_DIR
+sw_mkdir $ETC_DIR
+
+sw_tar_all
+sw_unzip_all
+
+echo -e "please input install item start httpd->mysql->php:[httpd:mysql:php]:"
+read input
+
+case $input in
+mysql)
+#安装mysql
+	install_mysql
+#安装php
+	install_php
+	;;
+php)
+#安装php
+	install_php
+	;;
+*) 
+#安装httpd
+	install_httpd
+
+#安装mysql
+	install_mysql
+#安装php
+	install_php
+	exit 0
+	;;
+esac
