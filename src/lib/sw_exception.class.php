@@ -26,6 +26,17 @@
 */
 class sw_exception extends Exception
 {
+	// {{{ members
+
+	/**
+	 * 前一个异常链 
+	 * 
+	 * @var null | Exception
+	 * @access private
+	 */
+	private $__previous = null;
+
+	// }}}
     // {{{ functions
     // {{{ public function __construct()
 
@@ -37,42 +48,70 @@ class sw_exception extends Exception
      * @access public
      * @return void
      */
-    public function __construct($message=null, $code=0, $replace = '')
+    public function __construct($message = '', $code = 0, Exception $previous = null)
     {
-        //替换变量
-        if (is_array($replace)) {
-            $message = trim(gettext($message));
-            $str_count = substr_count($message, '#%s#');
-            if (0 != $str_count) {
-                $msg_arr = explode('#%s#', $message);
-            }
-            $message = '';
-            foreach ($replace as $key => $value) {
-                if (isset($msg_arr[$key]) && $str_count > $key ) {
-                    $message .= $msg_arr[$key] . $value;
-                }
-            }
-        } else {
-            $message = str_replace('#%s#', $replace, gettext($message));
-        }
-        parent::__construct($message, $code);    
+		if (version_compare(PHP_VERSION, '5.3.0', '<')) {
+			parent::__construct($message, (int) $code);
+			$this->__previous = $previous;	
+		} else {
+			parent::__construct($message, (int) $code, $previous);	
+		}
     }
 
     // }}}
-    // {{{ public function get_message()
+	// {{{ public function __call()
 
-    /**
-     * catch 异常如果调用则返回带有错误码的提示信息 
-     * 
-     * @access public
-     * @return string
-     */
-    public function get_message()
-    {
-        $message = '[' . $this->code . ']';
-        $message .= $this->message;
-        return $message;
-    }
-    // }}}
+	/**
+	 * 重写，如果PHP<5.3.0,提供get_previous()方法 
+	 * 
+	 * @param string $method 
+	 * @param array $args 
+	 * @access public
+	 * @return mixed
+	 */
+	public function __call($method, array $args)
+	{
+		if ('get_previous' == strtolower($method)) {
+			return $this->_get_previous();	
+		}
+		return null;
+	}
+
+	// }}}
+	// {{{ public function __toString()
+
+	/**
+	 * __toString 
+	 * 
+	 * @access public
+	 * @return string
+	 */
+	public function __toString()
+	{
+		if (version_compare(PHP_VERSION, '5.3.0', '<')) {
+			if (null != ($e = $this->get_previous())) {
+				return $e->__toString()
+					   . "\n\nNext "
+					   . parent::__toString();	
+			}	
+		}
+		return parent::__toString();
+	}
+
+	// }}}
+	// {{{ protected function _get_previous()
+
+	/**
+	 * 获取前一个异常错误
+	 * 
+	 * @access protected
+	 * @return Exception | null
+	 */
+	protected function _get_previous()
+	{
+		return $this->__previous;		
+	}
+
+	// }}}
     // }}}
 }
