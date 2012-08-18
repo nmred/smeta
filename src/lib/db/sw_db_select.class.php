@@ -835,5 +835,546 @@ class sw_db_select
 	}
 
 	// }}}
+	// {{{ public function join_using()
+
+	/**
+	 * join_using 
+	 * 
+	 * <code>
+	 * $select = $db->select()->from('table1')
+	 *						  ->join_using('table2', 'column1');
+	 * </code>
+	 * @param mixed $type 
+	 * @param mixed $name 
+	 * @param mixed $cond 
+	 * @param string $cols 
+	 * @param mixed $schema 
+	 * @access protected
+	 * @return sw_db_select
+	 */
+	public  function join_using($type, $name, $cond, $cols = '*', $schema = null)
+	{
+		if (empty($this->__parts[self::FROM])) {
+			require_once PATH_SWAN_LIB . 'db/sw_db_select_exception.class.php';
+			throw new sw_db_select_exception("You can only perform a joinUsing after specifying a FROM table");	
+		}
+
+		$join = $this->__adapter->quote_identifier(key($this->__parts[self::FROM]), true);
+		$from = $this->__adapter->quote_identifier($this->_unique_correlation($name), true);
+
+		$cond1 = $from . '.' . $cond;
+		$cond2 = $join . '.' . $cond;
+		$cond = $cond1 . ' =' . $cond2;
+
+		return $this->_join($type, $name, $cond, $cols, $schema);
+	}
+		
+	// }}}
+	// {{{ private function _unique_correlation()
+
+	/**
+	 * _unique_correlation 
+	 * 
+	 * @param string|array $name 
+	 * @access private
+	 * @return string
+	 */
+	private function _unique_correlation($name)
+	{
+		if (is_array($name)) {
+			$k = key($name);
+			$c = is_string($k) ? $k : end($name);	
+		} else {
+			$dot = strrpos($name, '.');
+			$c = ($dot === false) ? $name : substr($name, $dot + 1);
+		}
+		for ($i = 2; array_key_exists($c, $this->__parts[self::FROM]); ++$i) {
+			$c = $name . '_' . (string) $i;	
+		}
+		return $c;
+	}
+
+	// }}}
+	// {{{ protected function _table_cols()
+
+	/**
+	 * _table_cols 
+	 * 
+	 * @param string $correlation_name 
+	 * @param array|string $cols 
+	 * @param string|boolean $after_correlation_name 
+	 * @access protected
+	 * @return void
+	 */
+	protected function _table_cols($correlation_name, $cols, $after_correlation_name = null)
+	{
+		if (!is_array($cols)) {
+			$cols = array($cols);	
+		}	
+
+		if ($correlation_name == null) {
+			$correlation_name = '';	
+		}
+
+		$column_values = array();
+
+		foreach (array_filter($cols) as $alias => $col) {
+			$current_correlation_name = $correlation_name;
+			if (is_string($col)) {
+				if (preg_match('/^(.+)\s+' .  self::SQL_AS . '\s+(.+)$/i', $col, $m)) {
+					$col = $m[1];
+					$alias = $m[2];	
+				}
+				if (preg_match('/\(.*\)/', $col)) {
+					$col = new sw_db_expr($col);	
+				} elseif (preg_match('/(.+)\.(.+)/', $col, $m)) {
+					$current_correlation_name = $m[1];
+					$col = $m[2];	
+				}
+			}
+			$column_values[] = array($current_correlation_name, $col, is_string($alias) ? $alias : null);
+		}
+
+		if ($column_values) {
+			if ($after_correlation_name === true || is_string($after_correlation_name)) {
+				$tmp_columns = $this->__parts[self::COLUMNS];	
+				$this->__parts[self::COLUMNS] = array();
+			} else {
+				$tmp_columns = array();	
+			}
+
+			if (is_string($after_correlation_name)) {
+				while ($tmp_columns) {
+					$this->__parts[self::COLUMNS][] = $current_column = array_shift($tmp_columns);
+					if ($current_column[0] == $after_correlation_name) {
+						break;	
+					}	
+				}	
+			}
+
+			foreach ($column_values as $column_value) {
+				array_push($this->__parts[self::COLUMNS], $column_value);
+			}
+
+			while($tmp_columns) {
+				array_push($this->__parts[self::COLUMNS], array_shift($tmp_columns));	
+			}
+		}
+	}
+
+	// }}}
+	// {{{ protected function _where()
+
+	/**
+	 * _where 
+	 * 
+	 * @param string $condition 
+	 * @param mixed $value 
+	 * @param string $type 
+	 * @param boolean $bool 
+	 * @access protected
+	 * @return string clause
+	 */
+	protected function _where($condition, $value = null, $type = null, $bool = true)
+	{
+		if (count($this->__parts[self::UNION])) {
+			require_once PATH_SWAN_LIB . 'db/sw_db_select_exception.class.php';
+			throw new sw_db_select_exception("Invalid use of where clause with " . self::SQL_UNION);	
+		}
+
+		if ($value !== null) {
+			$condition = $this->__adapter->quote_into($condition, $value, $type);	
+		}
+
+		$cond = "";
+		if ($this->__parts[self::WHERE]) {
+			if ($bool === true) {
+				$cond = self::SQL_AND . ' ';
+			} else {
+				$cond = self::SQL_OR . ' ';	
+			}
+		}
+
+		return $cond . "($condition)";
+	}
+
+	// }}}
+	// {{{ protected function _get_dummy_table()
+
+	/**
+	 * _get_dummy_table 
+	 * 
+	 * @access protected
+	 * @return array
+	 */
+	protected function _get_dummy_table()
+	{
+		return array();		
+	}
+
+	// }}}
+	// {{{ protected function _get_quoted_schema()
+
+	/**
+	 * _get_quoted_schema 
+	 * 
+	 * @param mixed $schema 
+	 * @access protected
+	 * @return string|null
+	 */
+	protected function _get_quoted_schema($schema = null)
+	{
+		if ($schema === null) {
+			return null;	
+		}	
+		return $this->__adapter->quote_identifier($schema, true) . '.';
+	}
+
+	// }}}
+	// {{{ protected function _get_quoted_table()
+
+	/**
+	 * _get_quoted_table 
+	 * 
+	 * @param string $table_name 
+	 * @param string $correlation_name 
+	 * @access protected
+	 * @return string
+	 */
+	protected function _get_quoted_table($table_name, $correlation_name = null)
+	{
+		return $this->__adapter->quote_table_as($table_name, $correlation_name, true);	
+	}
+
+	// }}}
+	// {{{ protected function _render_distinct()
+	
+	/**
+	 * _render_distinct 
+	 * 
+	 * @param string $sql 
+	 * @access protected
+	 * @return string
+	 */
+	protected function _render_distinct($sql)
+	{
+		if ($this->__parts[self::DISTINCT]) {
+			$sql .= ' ' . self::SQL_DISTINCT;	
+		}		
+
+		return $sql;
+	}
+
+	// }}}
+	// {{{ protected function _render_columns()
+
+	/**
+	 * _render_columns 
+	 * 
+	 * @param string $sql 
+	 * @access protected
+	 * @return string|null
+	 */
+	protected function _render_columns($sql)
+	{
+		if (!count($this->__parts[self::COLUMNS])) {
+			return null;	
+		}	
+
+		$columns = array();
+		foreach ($this->__parts[self::COLUMNS]  as $column_entry) {
+			list($correlation_name, $column, $alias) = $column_entry;
+			if ($column instanceof sw_db_expr) {
+				$columns[] = $this->__adapter->quote_column_as($column, $alias, true);	
+			} else {
+				if ($column == self::SQL_WILDCARD) {
+					$column = new sw_db_expr(self::SQL_WILDCARD);
+					$alias = null;	
+				}
+				if (empty($correlation_name)) {
+					$columns[] = $this->__adapter->quote_column_as($column, $alias, true);	
+				} else {
+					$columns[] = $this->__adapter->quote_column_as(array($correlation_name, $column), $alias, true);	
+				}
+			}
+		}
+
+		return $sql .= ' ' . implode(', ', $columns);
+	}
+
+	// }}}
+	// {{{ protected function _render_from()
+
+	/**
+	 * _render_from 
+	 * 
+	 * @param string $sql 
+	 * @access protected
+	 * @return string
+	 */
+	protected function _render_from($sql)
+	{
+		if (empty($this->__parts[self::FROM])) {
+			$this->__parts[self::FROM] = $this->_get_dummy_table();	
+		}	
+		$from = array();
+
+		foreach ($this->__parts[self::FROM] as $correlation_name => $table) {
+			$tmp = '';
+			$join_type = ($table['join_type'] == self::FROM) ? self::INNER_JOIN : $table['join_type'];
+			
+			if (! empty($from)) {
+				$tmp .= ' ' . strtoupper($join_type) . ' ';	
+			}	
+
+			$tmp .= $this->_get_quoted_schema($table['schema']);
+			$tmp .= $this->_get_quoted_table($table['table_name'], $correlation_name);
+
+			if (!empty($from) && !empty($table['join_condition'])) {
+				$tmp .= ' ' . self::SQL_ON . ' ' . $table['join_condition'];	
+			}
+
+			$from[] = $tmp;
+		}
+
+		if (!empty($from)) {
+			$sql .= ' ' . self::SQL_FROM . ' ' . implode("\n", $from);	
+		}
+
+		return $sql;
+	}
+
+	// }}}
+	// {{{ protected function _render_union()
+
+	/**
+	 * _render_union 
+	 * 
+	 * @param string $sql 
+	 * @access protected
+	 * @return string
+	 */
+	protected function _render_union($sql)
+	{
+		if ($this->__parts[self::UNION]) {
+			$parts = count($this->__parts[self::UNION]);
+			foreach ($this->__parts[self::UNION] as $cnt => $union) {
+				list($target, $type) = $union;
+				if ($target instanceof sw_db_select) {
+					$target = $target->assemble();	
+				}
+				$sql .= $target;
+				if ($cnt < $parts - 1) {
+					$sql .= ' ' . $type . ' ';	
+				}
+			}	
+		}	
+
+		return $sql;
+	}
+
+	// }}}
+	// {{{ protected function _render_where()
+
+	/**
+	 * _render_where 
+	 * 
+	 * @param string $sql 
+	 * @access protected
+	 * @return string
+	 */
+	protected function _render_where($sql)
+	{
+		if ($this->__parts[self::FROM] && $this->__parts[self::WHERE]) {
+			$sql .= ' ' . self::SQL_WHERE . ' ' . implode(' ', $this->__parts[self::WHERE]);	
+		}
+
+		return $sql;
+	}
+
+	// }}}
+	// {{{ protected function _render_group()
+
+	/**
+	 * _render_group 
+	 * 
+	 * @param string $sql 
+	 * @access protected
+	 * @return string
+	 */
+	protected function _render_group($sql)
+	{
+		if ($this->__parts[self::FROM] && $this->__parts[self::GROUP]) {
+			$group = array();
+			foreach ($this->__parts[self::GROUP] as $term) {
+				$group[] = $this->__adapter->quote_identifier($term, true);	
+			}
+			$sql .= ' '. self::SQL_GROUP_BY . ' ' . implode(",\n\t", $group);
+		}		
+
+		return $sql;
+	}
+
+	// }}}
+	// {{{ protected function _render_having()
+
+	/**
+	 * _render_having 
+	 * 
+	 * @param string $sql 
+	 * @access protected
+	 * @return string
+	 */
+	protected function _render_having($sql)
+	{
+		if ($this->__parts[self::FROM] && $this->__parts[self::HAVING]) {
+			$sql .= ' ' . self::SQL_HAVING . ' ' . implode(' ', $this->__parts[self::HAVING]);	
+		}	
+
+		return $sql;
+	}
+
+	// }}}
+	// {{{ protected function _render_order()
+
+	/**
+	 * _render_order 
+	 * 
+	 * @param string $sql 
+	 * @access protected
+	 * @return string
+	 */
+	protected function _render_order($sql)
+	{
+		if ($this->__parts[self::ORDER]) {
+			$order = array();
+			foreach ($this->__parts[self::ORDER]  as $term) {
+				if (is_array($term)) {
+					if (is_numeric($term[0]) && strval(intval($term[0])) == $term[0]) {
+						$order[] = (int)trim($term[0]) . ' ' . $term[1];	
+					} else {
+						$order[] = $this->__adapter->quote_identifier($term[0], true) . ' ' . $term[1];	
+					}
+				} else if (is_numeric($term) && strval(intval($term)) == $term) {
+					$order[] = (int)trim($term);	
+				} else {
+					$order[] = $this->__adapter->quote_identifier($term, true);
+				}
+			}	
+			$sql .= ' ' . self::SQL_ORDER_BY . ' ' . implode(', ', $order);
+		}	
+
+		return $sql;
+	}
+
+	// }}}
+	// {{{ protected function _render_limit_offset()
+	
+	/**
+	 * _render_limit_offset 
+	 * 
+	 * @param string $sql 
+	 * @access protected
+	 * @return string
+	 */
+	protected function _render_limit_offset($sql)
+	{
+		$count = 0;
+		$offset = 0;
+		
+		if (!empty($this->__parts[self::LIMIT_OFFSET])) {
+			$offset = (int) $this->__parts[self::LIMIT_OFFSET];
+			$count = PHP_INI_MAX;	
+		}
+
+		if (!empty($this->__parts[self::LIMIT_COUNT])) {
+			$count = (int) $this->__parts[self::LIMIT_COUNT];
+		}
+
+		if ($count > 0) {
+			$sql = trim($this->__adapter->limit($sql, $count, $offset));	
+		}
+
+		return $sql;
+	}
+
+	// }}}
+	// {{{ protected function _render_for_update()
+
+	/**
+	 * _render_for_update 
+	 * 
+	 * @param string $sql 
+	 * @access protected
+	 * @return string
+	 */
+	protected function _render_for_update($sql)
+	{
+		if ($this->__parts[self::FOR_UPDATE]) {
+			$sql .= ' ' . self::SQL_FOR_UPDATE;	
+		}	
+
+		return $sql;
+	}
+
+	// }}}
+	// {{{ public function __call()
+
+	/**
+	 * __call 
+	 * 
+	 * @param string $method 
+	 * @param array $args 
+	 * @access public
+	 * @return void
+	 */
+	public function __call($method, array $args)
+	{
+		$matches = array();
+		
+		if (preg_match('/^join_([a-zA-Z]*?)_using$/', $method, $matches)) {
+			$type = strtoupper($matches[1]);
+			if ($type) {
+				$type .= ' join';
+				if (!in_array($type, self::$__join_types)) {
+					require_once PATH_SWAN_LIB . 'db/sw_db_select_exception.class.php';
+					throw new sw_db_select_exception("Unrecognized method '$method()'");	
+				}
+				if (in_array($type, array(self::CROSS_JOIN, self::NATURAL_JOIN))) {
+					require_once PATH_SWAN_LIB . 'db/sw_db_select_exception.class.php';
+					throw new sw_db_select_exception("Cannot perform a joinUsing with method '$method()'");	
+				}
+			} else {
+				$type = self::INNER_JOIN;	
+			}
+			array_shift($args, $type);
+			return call_user_func_array(array($this, 'join_using'), $args);
+		}	
+
+		require_once PATH_SWAN_LIB . 'db/sw_db_select_exception.class.php';
+		throw new sw_db_select_exception("Unrecognized method '$method()'");
+	}
+
+	// }}}
+	// {{{ public function __toString()
+
+	/**
+	 * __toString 
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function __toString()
+	{
+		try {
+			$sql = $this->assemble();	
+		} catch (Exception $e) {
+			trigger_error($e->getMessage(), E_USER_WARNING);
+			$sql = '';
+		}
+		return (string)$sql;
+	}
+
+	// }}}
 	// }}} end functions
 }
