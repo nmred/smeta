@@ -127,6 +127,14 @@ abstract class sw_db_adapter_abstract
 	 */
 	protected $__auto_reconnect_on_unserialize = false;
 
+	/**
+	 * PDO驱动类型 
+	 * 
+	 * @var string
+	 * @access protected
+	 */
+	protected $__pdo_type = 'mysql';
+
 	// }}}	
 	// {{{ functions
 	// {{{ pulic function __construct()
@@ -203,7 +211,88 @@ abstract class sw_db_adapter_abstract
 			$dsn[$key] = "$key=$val";	
 		}	
 
-		return $this->__config['type'] . ':' . implode(':', $dsn);
+		return $this->__pdo_type . ':' . implode(':', $dsn);
+	}
+
+	// }}}
+	// {{{ protected function _connect()
+
+	/**
+	 * 连接数据库 
+	 * 
+	 * @access protected
+	 * @return void
+	 */
+	protected function _connect()
+	{
+		// 如果已经有一个PDO对象则立即返回即可，不需要创建
+		if ($this->__connection) {
+			return;	
+		}	
+
+		$dsn = $this->_dsn();
+
+		if (!extension_loaded('pdo')) {
+			require_once PATH_SWAN_LIB . 'db/sw_db_adapter_exception.class.php';
+			throw new sw_db_adapter_exception('The PDO extension is required for this adapter but the extension is not loaded');
+		}
+
+		//检查PDO驱动是否存在
+		if (!is_array($this->__pdo_type, PDO::getAvailableDrivers())) {
+			require_once PATH_SWAN_LIB . 'db/sw_db_adapter_exception.class.php';
+			throw new sw_db_adapter_exception('The ' . $this->__pdo_type . ' driver is not currently installed');	
+		}
+		
+		//创建PDO连接
+		$q = $this->__profiler->query_start('connect', sw_db_profiler::CONNECT);
+
+		if (isset($this->__config['persistent']) && ($this->__config['persistent'] == true)) {
+			$this->__config['driver_options'][PDO::ATTR_PERSISTENT] = true;	
+		}
+
+		try {
+			$this->__connection = new PDO(
+				$dsn,
+				$this->__config['username'],
+				$this->__config['password'],
+				$this->__config['driver_options']
+			);
+
+			$this->__profiler->query_end($q);
+			$this->__connection->setAttribute(PDO::ATTR_CASE, $this->__case_folding);
+			$this->__connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		} catch (PDOException $e) {
+			require_once PATH_SWAN_LIB . 'db/sw_db_adapter_exception.class.php';
+			throw new sw_db_adapter_exception($e->getMessage(), $e->getCode(), $e);	
+		}
+	}
+
+	// }}}
+	// {{{ public function is_connected()
+
+	/**
+	 * 判断当前的连接是否出于激活状态 
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function is_connected()
+	{
+		return ((bool) ($this->__connection instanceof PDO));	
+	}
+
+	// }}}
+	// {{{ public function close_connection()
+
+	/**
+	 * 关闭连接 
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function close_connection()
+	{
+		$this->__connection = null;	
 	}
 
 	// }}}
@@ -346,6 +435,45 @@ abstract class sw_db_adapter_abstract
 	}
 
 	// }}}
+	// {{{ public function prepare()
+
+	/**
+	 * 预处理 
+	 * 
+	 * @param string $sql 
+	 * @access public
+	 * @return sw_db_statement_standard
+	 */
+	public function prepare($sql)
+	{
+		$this->_connect();
+		$stmt_class = $this->__default_stmt_class;
+		if (!class_exists($stmt_class)) {
+			require_once PATH_SWAN_LIB . 'db/' . $stmt_class . '.class.php';	
+		}
+		$stmt = new $stmt_class($this, $sql);
+		$stmt->set_fetch_mode($this->__fetch_mode);
+		return $stmt;
+	}
+
+	// }}}
+	// {{{ public function last_insert_id()
+
+	/**
+	 * 获取最后插入ID 
+	 * 
+	 * @param mixed $table_name 
+	 * @param mixed $primary_key 
+	 * @access public
+	 * @return string
+	 */
+	public function last_insert_id($table_name = null, $primary_key = null)
+	{
+		$this->_connect();
+		return $this->__connection->lastInsertId();	
+	}
+
+	// }}}
 	// {{{ public function query()
 
 	/**
@@ -372,11 +500,51 @@ abstract class sw_db_adapter_abstract
 			$bind = array($bind);	
 		}
 
+		foreach ($bind as $name => $value) {
+			if (!is_int($name) && !preg_match('/^:/', $name)) {
+				$new_name = ":$name";
+				unset($bind[$name]);
+				$bind[$new_name] = $value;	
+			}	
+		}
 		//预处理，执行
 		$stmt = $this->prepare($sql);
 		$stmt->execute($bind);
 		$stmt->set_fetch_mode($this->__fetch_mode);
 		return $stmt;
+	}
+
+	// }}}
+	// {{{ public function exec()
+
+	/**
+	 * 执行sql语句 
+	 * 
+	 * @param sw_db_select|string $sql 
+	 * @access public
+	 * @return integer
+	 * @throws sw_db_adapter_exception
+	 */
+	public function exec($sql)
+	{
+		if ($sql instanceof sw_db_select) {
+			$sql = $sql->assemble();	
+		}	
+
+		try {
+			$affected = $this->get_connection()->exec($sql);
+			
+			if ($affected === false) {
+				$error_info = $this->get_connection()->errorInfo();
+				require_once PATH_SWAN_LIB . 'db/sw_db_adapter_exception.class.php';
+				throw new sw_db_adapter_exception($error_info[2]);	
+			}
+
+			return $affected;
+		} catch (PDOException $e) {
+			require_once PATH_SWAN_LIB . 'db/sw_db_adapter_exception.class.php';
+			throw new sw_db_adapter_exception($e->getMessage(), $e->getCode(), $e);	
+		}
 	}
 
 	// }}}
@@ -390,7 +558,7 @@ abstract class sw_db_adapter_abstract
 	 */
 	public function begin_transaction()
 	{
-		$this->__connect();
+		$this->_connect();
 		$q = $this->__profiler->query_start('begin', sw_db_profiler::TRANSACTION);
 		$this->_begin_transaction();
 		$this->__profiler->query_end($q);
@@ -431,6 +599,51 @@ abstract class sw_db_adapter_abstract
 		$this->_rollback();
 		$this->__profiler->query_end($q);
 		return $this;	
+	}
+
+	// }}}
+	// {{{ protected function _begin_transaction()
+
+	/**
+	 * _begin_transaction 
+	 * 
+	 * @access protected
+	 * @return void
+	 */
+	protected function _begin_transaction()
+	{
+		$this->_connect();
+		$this->__connection->beginTransaction();	
+	}
+
+	// }}}
+	// {{{ protected function _commit()
+	
+	/**
+	 * _commit 
+	 * 
+	 * @access protected
+	 * @return void
+	 */
+	protected function _commit()
+	{
+		$this->_connect();
+		$this->__connection->commit();	
+	}
+	 
+	// }}}
+	// {{{ protected function _rollback()
+
+	/**
+	 * _rollback 
+	 * 
+	 * @access protected
+	 * @return void
+	 */
+	protected function _rollback()
+	{
+		$this->_connect();
+		$this->__connection->rollBack();	
 	}
 
 	// }}}
@@ -631,6 +844,39 @@ abstract class sw_db_adapter_abstract
 	}
 
 	// }}}
+	// {{{ public function set_fetch_mode()
+
+	/**
+	 * 设置fetch的模式 
+	 * 
+	 * @param integer $mode 
+	 * @access public
+	 * @return void
+	 * @throws sw_db_adapter_exception
+	 */
+	public function set_fetch_mode($mode)
+	{
+		if (!extension_loaded('pdo')) {
+			require_once PATH_SWAN_LIB . 'db/sw_db_adapter_exception.class.php';
+			throw new sw_db_adapter_exception('The PDO extension is required for this adapter but the extension is not loaded');	
+		}
+		switch ($mode) {
+			case PDO::FETCH_LAZY:	
+			case PDO::FETCH_ASSOC:	
+			case PDO::FETCH_NUM:	
+			case PDO::FETCH_BOTH:	
+			case PDO::FETCH_NAMED:	
+			case PDO::FETCH_OBJ:
+				$this->__fetch_mode = $mode;
+				break;
+			default:
+				require_once PATH_SWAN_LIB . 'db/sw_db_adapter_exception.class.php';
+				throw new sw_db_adapter_exception("Invalid fetch mode '$mode' specified");
+				break;	
+		}	
+	}
+
+	// }}}
 	// {{{ public function fetch_all()
 
 	/**
@@ -758,20 +1004,19 @@ abstract class sw_db_adapter_abstract
 	// {{{ protected function _quote()
 
 	/**
-	 * 返回一个原始的字符串 
+	 * _quote 
 	 * 
-	 * @param string $value 
+	 * @param mixed $value 
 	 * @access protected
 	 * @return string
 	 */
 	protected function _quote($value)
 	{
-		if (is_int($value)) {
+		if (is_int($value) || is_float($value)) {
 			return $value;	
-		} else if (is_float($value)) {
-			return sprintf('%F', $value);	
 		}
-		return "'" . addcslashes($value, "\000\n\r\\'\"\032") . "'";
+		$this->_connect();
+		return $this->__connection->quote($value);
 	}
 
 	// }}}
@@ -1062,6 +1307,45 @@ abstract class sw_db_adapter_abstract
 	}
 
 	// }}}
+	// {{{ public function supports_parameters()
+
+	/**
+	 * supports_parameters 
+	 * 
+	 * @param string $type 'positional' or 'named'
+	 * @access public
+	 * @return void
+	 */
+	public function supports_parameters($type)
+	{
+		switch ($type) {
+			case 'positional':
+			case 'named':
+			default:
+				return true;	
+		}	
+	}
+
+	// }}}
+	// {{{ public function get_server_version()
+
+	public function get_server_version()
+	{
+		$this->_connect();
+		try {
+			$version = $this->__connection->getAttribute(PDO::ATTR_SERVER_VERSION);	
+		} catch (PDOException $e) {
+			return null;	
+		}
+		$matches = null;
+		if (preg_match('/((?:[0-9]{1,2}\.){1,3}[0-9]{1,2})/', $version, $matches)) {
+			return $matches[1];	
+		} else {
+			return null;	
+		}
+	}
+
+	// }}}
 	// {{{ public function __sleep()
 
 	/**
@@ -1125,119 +1409,6 @@ abstract class sw_db_adapter_abstract
 	abstract public function describe_table($table_name, $schema_name = null);
 
 	// }}}
-	// {{{ abstract protected function _connect()
-
-	/**
-	 * 连接数据库 
-	 * 
-	 * @abstract
-	 * @access protected
-	 * @return void
-	 */
-	abstract protected function _connect();
-
-	// }}}
-	// {{{ abstract public function is_connected()
-
-	/**
-	 * 判断数据库是否连接上 
-	 * 
-	 * @abstract
-	 * @access public
-	 * @return boolean
-	 */
-	abstract public function is_connected();
-
-	// }}}
-	// {{{ abstract public function close_connection()
-
-	/**
-	 * 关闭数据库连接 
-	 * 
-	 * @abstract
-	 * @access public
-	 * @return void
-	 */
-	abstract public function close_connection();
-
-	// }}}
-	// {{{ abstract public function prepare()
-
-	/**
-	 * 预处理sql生成一个stmt对象 
-	 * 
-	 * @param string|sw_db_select $sql 
-	 * @abstract
-	 * @access public
-	 * @return sw_db_statement_standard|PDOStatement
-	 */
-	abstract public function prepare($sql);
-
-	// }}}
-	// {{{ abstract public function last_insert_id()
-
-	/**
-	 * 返回最后插入的ID
-	 * 
-	 * @param string $table_name 
-	 * @param string $primary_key 
-	 * @abstract
-	 * @access public
-	 * @return string
-	 */
-	abstract public function last_insert_id($table_name = null, $primary_key = null);
-
-	// }}}
-	// {{{ abstract protected function _begin_transaction()
-
-	/**
-	 * 开始事务 
-	 * 
-	 * @abstract
-	 * @access protected
-	 * @return void
-	 */
-	abstract protected function _begin_transaction();
-
-	// }}}
-	// {{{ abstract protected function _commit()
-	
-	/**
-	 * 提交事务 
-	 * 
-	 * @abstract
-	 * @access protected
-	 * @return void
-	 */
-	abstract protected function _commit();
-
-	// }}}
-	// {{{ abstract protected function _rollback()
-
-	/**
-	 * 事务回滚 
-	 * 
-	 * @abstract
-	 * @access protected
-	 * @return void
-	 */
-	abstract protected function _rollback();
-
-	// }}}
-	// {{{ abstract public function set_fetch_mode()
-
-	/**
-	 * 设置结果集遍历模式 
-	 * 
-	 * @param integer $mode 
-	 * @abstract
-	 * @access public
-	 * @return void
-	 * @throws sw_db_adapter_exception
-	 */
-	abstract public function set_fetch_mode($mode);
-
-	// }}}
 	// {{{ abstract public function limit()
 
 	/**
@@ -1251,30 +1422,6 @@ abstract class sw_db_adapter_abstract
 	 * @return string
 	 */
 	abstract public function limit($sql, $count, $offset = 0);
-	// }}}
-	// {{{ abstract public function supports_parameters()
-
-	/**
-	 * 判断继承接口模块是否支持占位符绑定或命名绑定 
-	 * 
-	 * @param mixed $type    'positional' or 'named'
-	 * @abstract
-	 * @access public
-	 * @return boolean
-	 */
-	abstract public function supports_parameters($type);
-
-	// }}}
-	// {{{ abstract public function get_server_version()
-
-	/**
-	 * 获取服务器的版本号 
-	 * 
-	 * @abstract
-	 * @access public
-	 * @return void
-	 */
-	abstract public function get_server_version();
 	// }}}
 	// }}} end abstract
 }
