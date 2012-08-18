@@ -153,10 +153,10 @@ abstract class sw_db_adapter_abstract
 			$this->__config = array_merge($config_default, (array) $config);
 			$this->_check_required_options($this->__config);
 		} else {
-			require_once PATH_SWAN_LIB 'db/sw_db_adapter_exception.class.php';
+			require_once PATH_SWAN_LIB . 'db/sw_db_adapter_exception.class.php';
 			throw new sw_db_adapter_exception('config param must is array');
 		}
-		$this->set_profiler();
+		$this->set_profiler(array('enabled' => true));
 	}
 
 	// }}}
@@ -172,17 +172,17 @@ abstract class sw_db_adapter_abstract
 	protected function _check_required_options(array $config)
 	{
 		if (!array_key_exists('dbname', $config)) {
-			require_once PATH_SWAN_LIB 'db/sw_db_adapter_exception.class.php';
+			require_once PATH_SWAN_LIB . 'db/sw_db_adapter_exception.class.php';
 			throw new sw_db_adapter_exception('Configuration array must have a key for `dbname` tha  t names the database instance');
 		}		
 
 		if (!array_key_exists('password', $config)) {
-			require_once PATH_SWAN_LIB 'db/sw_db_adapter_exception.class.php';
+			require_once PATH_SWAN_LIB . 'db/sw_db_adapter_exception.class.php';
 			throw new sw_db_adapter_exception('Configuration array must have a key for `password` tha  t names the database instance');
 		}		
 
 		if (!array_key_exists('username', $config)) {
-			require_once PATH_SWAN_LIB 'db/sw_db_adapter_exception.class.php';
+			require_once PATH_SWAN_LIB . 'db/sw_db_adapter_exception.class.php';
 			throw new sw_db_adapter_exception('Configuration array must have a key for `username` tha  t names the database instance');
 		}		
 	}
@@ -206,12 +206,17 @@ abstract class sw_db_adapter_abstract
 		unset($dsn['charset']);
 		unset($dsn['persistent']);
 		unset($dsn['driver_options']);
-		
+
+		if ($dsn['unix_socket'] == '') {
+			unset($dsn['unix_socket']);	
+		} else {
+			unset($dsn['host']);	
+		}	
 		foreach ($dsn as $key => $val) {
 			$dsn[$key] = "$key=$val";	
 		}	
 
-		return $this->__pdo_type . ':' . implode(':', $dsn);
+		return $this->__pdo_type . ':' . implode(';', $dsn);
 	}
 
 	// }}}
@@ -238,7 +243,7 @@ abstract class sw_db_adapter_abstract
 		}
 
 		//检查PDO驱动是否存在
-		if (!is_array($this->__pdo_type, PDO::getAvailableDrivers())) {
+		if (!in_array($this->__pdo_type, PDO::getAvailableDrivers())) {
 			require_once PATH_SWAN_LIB . 'db/sw_db_adapter_exception.class.php';
 			throw new sw_db_adapter_exception('The ' . $this->__pdo_type . ' driver is not currently installed');	
 		}
@@ -333,7 +338,7 @@ abstract class sw_db_adapter_abstract
 	 * $profiler 可以是一个sw_db_profiler,布尔型的设置分析器是否开启，或数组
 	 * 数组格式：
 	 * array(
-	 *	'enablde'  => true|false,
+	 *	'enabled'  => true|false,
 	 *  'class'    => ,
 	 *  'instance' =>
 	 * );
@@ -342,17 +347,19 @@ abstract class sw_db_adapter_abstract
 	 * @return sw_db_adapter_abstract
 	 * @throws sw_db_profiler_exception
 	 */
-	public function set_profiler($profiler)
+	public function set_profiler($profiler = null)
 	{
 		$enabled           = null;
 		$profiler_class    = $this->__default_profiler_class;
 		$profiler_instance = null;
 
-		if ($profiler_is_object = is_object($profiler) && $profiler instanceof sw_db_profiler) {
-			$profiler_instance = $profiler;
-		} else {
-			require_once PATH_SWAN_LIB . 'db/sw_db_profiler_exception.class.php';
-			throw new sw_db_profiler_exception("Profiler argument must be an instance of sw_db_profiler as an object");
+		if ($profiler_is_object = is_object($profiler)) {
+			if ($profiler instanceof sw_db_profiler) {
+				$profiler_instance = $profiler;
+			} else {
+				require_once PATH_SWAN_LIB . 'db/sw_db_profiler_exception.class.php';
+				throw new sw_db_profiler_exception("Profiler argument must be an instance of sw_db_profiler as an object");
+			}
 		}
 
 		if (is_array($profiler)) {
@@ -1136,7 +1143,7 @@ abstract class sw_db_adapter_abstract
 		} else {
 			while ($count > 0) {
 				if (strpos($text, '?') !== false) {
-					$text = substr_replace($text, $this->quote($value, $type), strpos($text, '?'), 1));
+					$text = substr_replace($text, $this->quote($value, $type), strpos($text, '?'), 1);
 				}
 				--$count;
 			}

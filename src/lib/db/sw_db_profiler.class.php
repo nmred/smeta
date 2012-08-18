@@ -33,11 +33,6 @@ class sw_db_profiler
 	const CONNECT = 1;
 
 	/**
-	 * 是一个连接数据库的操作，或select一个数据库  
-	 */
-	const CONNECT = 1;
-
-	/**
 	 * 任何通过的数据库查询
 	 */
 	const QUERY = 2;

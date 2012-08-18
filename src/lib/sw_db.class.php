@@ -63,7 +63,27 @@ class sw_db
 	// {{{ functions
 	// {{{ public static function factory()
 	
-	public static function factory($type) 
+	public static function factory($type = null, array $options = array())
+	{
+		if ($type === null) {
+			$type = sw_config::get('db:type');	
+		}
+		
+		$class_name = 'sw_db_adapter_' .  $type;
+
+		if (!class_exists($class_name)) {
+			require_once PATH_SWAN_LIB . 'db/' . $class_name . '.class.php';	
+		}
+
+		if (!class_exists($class_name)) {
+			require_once PATH_SWAN_LIB . 'db/sw_db_exception.class.php';
+			throw new sw_db_exception("can not load $class_name");	
+		}
+
+		return new $class_name($options);
+		
+	}
+	 
 	// }}}
 	// }}} end functions
 }
