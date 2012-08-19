@@ -140,10 +140,10 @@ P($__db);
 */
 
 $select = $__db->select();
-$select->from('test AS t')
+$select->from('test AS t', 'username', 'swan_test')
 	   ->where('count > ?', '3')
 	   ->order('count desc')
-	   ->limit(3);
+	   ->limit(1);
 $all = $__db->fetch_all($select);
 P($all);
 /* }}}

@@ -958,7 +958,7 @@ class sw_db_select
 			foreach ($column_values as $column_value) {
 				array_push($this->__parts[self::COLUMNS], $column_value);
 			}
-
+			
 			while($tmp_columns) {
 				array_push($this->__parts[self::COLUMNS], array_shift($tmp_columns));	
 			}
@@ -969,7 +969,7 @@ class sw_db_select
 	// {{{ protected function _where()
 
 	/**
-	 * _where 
+	 * 修饰WHERE子句 
 	 * 
 	 * @param string $condition 
 	 * @param mixed $value 
@@ -1072,7 +1072,7 @@ class sw_db_select
 	// {{{ protected function _render_columns()
 
 	/**
-	 * _render_columns 
+	 * 修饰查询字段的子句 
 	 * 
 	 * @param string $sql 
 	 * @access protected
