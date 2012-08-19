@@ -221,7 +221,7 @@ class sw_db_select
 	 */
 	public function from($name, $cols = '*', $schema = null)
 	{
-		return $this->__join(self::FROM, $name, null, $cols, $schema);	
+		return $this->_join(self::FROM, $name, null, $cols, $schema);	
 	}
 
 	// }}}

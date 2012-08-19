@@ -105,7 +105,7 @@ class sw_db_adapter_mysql extends sw_db_adapter_abstract
 	}
 	 
 	// }}}
-	// {{{ public function get_quote_indentifier_symbol()
+	// {{{ public function get_quote_identifier_symbol()
 
 	/**
 	 * 重写方法get_quote_indentifier_symbol 
@@ -113,7 +113,7 @@ class sw_db_adapter_mysql extends sw_db_adapter_abstract
 	 * @access public
 	 * @return string
 	 */
-	public function get_quote_indentifier_symbol()
+	public function get_quote_identifier_symbol()
 	{
 		return "`";	
 	}

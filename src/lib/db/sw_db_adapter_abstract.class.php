@@ -464,23 +464,6 @@ abstract class sw_db_adapter_abstract
 	}
 
 	// }}}
-	// {{{ public function last_insert_id()
-
-	/**
-	 * 获取最后插入ID 
-	 * 
-	 * @param mixed $table_name 
-	 * @param mixed $primary_key 
-	 * @access public
-	 * @return string
-	 */
-	public function last_insert_id($table_name = null, $primary_key = null)
-	{
-		$this->_connect();
-		return $this->__connection->lastInsertId();	
-	}
-
-	// }}}
 	// {{{ public function query()
 
 	/**
@@ -698,7 +681,7 @@ abstract class sw_db_adapter_abstract
 				}
 			}	
 		}
-
+		
 		$sql = "INSERT INTO "
 			 . $this->quote_identifier($table, true)
 			 . ' (' . implode(', ', $cols) . ') '
@@ -710,6 +693,23 @@ abstract class sw_db_adapter_abstract
 		$stmt = $this->query($sql, $bind);
 		$result = $stmt->row_count();
 		return $result;
+	}
+
+	// }}}
+	// {{{ public function last_insert_id()
+
+	/**
+	 * 获取最后插入ID 
+	 * 
+	 * @param mixed $table_name 
+	 * @param mixed $primary_key 
+	 * @access public
+	 * @return string
+	 */
+	public function last_insert_id($table_name = null, $primary_key = null)
+	{
+		$this->_connect();
+		return $this->__connection->lastInsertId();	
 	}
 
 	// }}}
@@ -1064,7 +1064,13 @@ abstract class sw_db_adapter_abstract
 	// {{{ public function quote()
 
 	/**
-	 * 返回一个安全的SQL语句 
+	 * 添加引号防止数据库攻击
+	 * <code>
+	 * $db->quote('sddsdsd\'sdsd');
+	 * 返回：'sddsdsd\'sdsd'
+	 * $db->quote(array('a', 'b', 'c'));
+	 * 返回: "a", "b", "c"
+	 * </code> 
 	 * 
 	 * @param mixed $value 
 	 * @param mixed $type 
@@ -1235,7 +1241,7 @@ abstract class sw_db_adapter_abstract
 			}
 			if (is_array($ident)) {
 				$segments = array();
-				foreach ($segments as $segment) {
+				foreach ($ident as $segment) {
 					if ($segment instanceof sw_db_expr) {
 						$segments[] = $segment->__toString();	
 					} else {
@@ -1288,37 +1294,6 @@ abstract class sw_db_adapter_abstract
 	public function get_quote_identifier_symbol()
 	{
 		return '"';	
-	}
-
-	// }}}
-	// {{{ public function last_sequence_id()
-
-	/**
-	 * 返回数据库最近插入的序列
-	 * 只在RDBMS品牌的数据库中支持，例如Oracle,PostgreSQL,DB2中支持，其他的数据库返回NULL 
-	 * 
-	 * @param string $sequence_name 
-	 * @access public
-	 * @return string
-	 */
-	public function last_sequence_id($sequence_name)
-	{
-		return null;	
-	}
-
-	// }}}
-	// {{{ public function next_sequence_id()
-
-	/**
-	 * 生成一个新值从指定的序列在数据库中,并返回它 
-	 * 
-	 * @param string $sequence_name
-	 * @access public
-	 * @return string
-	 */
-	public function next_sequence_id($sequence_name)
-	{
-		return null;
 	}
 
 	// }}}

@@ -224,10 +224,10 @@ abstract class sw_db_statement_abstract
 		}
 
 		$prof = $this->__adapter->get_profiler();
-		$qp = $prof->get_query_profiler($this->__query_id);
+		$qp = $prof->get_query_profile($this->__query_id);
 		if ($qp->has_ended()) {
 			$this->__query_id = $prof->query_clone($qp);
-			$qp = $prof->get_query_profiler($this->__query_id);	
+			$qp = $prof->get_query_profile($this->__query_id);	
 		}
 
 		if ($params !== null) {
