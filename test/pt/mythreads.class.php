@@ -1,6 +1,8 @@
 <?php
 class mythreads extends Thread
 {
+	private $__thread_name;
+
 	// {{{ functions
 	// {{{ public function __construct()
 
@@ -25,7 +27,6 @@ class mythreads extends Thread
 	 */
 	public function run()
 	{
-		$number = 5;
 		for ($i = 0; $i < 100; $i++) {
 			if ($number > 0) {
 				echo $this->__thread_name . ' number=' . $number--, "\n";	
