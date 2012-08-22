@@ -40,7 +40,10 @@ define('PATH_SWAN_BASE', realpath(dirname(__FILE__)));
 define('SWAN_SOFTNAME', 'swansoft');
 
 // 软件版本号
-define('SWAN_VERSION', '0.1');
+define('SWAN_VERSION', '0.11');
+
+// 软件发行号
+define('SWANBR_RELEASE', 'beta');
 
 //软件宣言 ------一切为了简单
 define('SWANBR_SLOGAN', 'Everything in order to facilitate');
@@ -49,7 +52,7 @@ define('SWANBR_SLOGAN', 'Everything in order to facilitate');
 define('SWANBR_COPYRIGHT', '© 2011-2012 swanlinux');
 
 //许可协议 
-define('SWANBR_LICENSED_URL', 'GPL');
+define('SWANBR_LICENSED_URL', 'BSD');
 
 // 官方网址
 define('SWANBR_WEB_DOMAIN', 'http://www.swanlinux.net');
@@ -79,6 +82,10 @@ require_once PATH_SWAN_LIB . 'sw_config.class.php';
 require_once PATH_SWAN_LIB . 'sw_config.class.php';
 require_once PATH_SWAN_BASE . '/global.func.php';
 
+//初始化时区
+date_default_timezone_set(SWAN_TIMEZONE_DEFAULT);
 sw_language::set_gettext();
+//fb
+require_once PATH_SWAN_LIB . 'firephp/FirePHPCore/fb.php';
 
 // }}}

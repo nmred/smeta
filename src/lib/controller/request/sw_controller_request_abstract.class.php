@@ -395,7 +395,7 @@ abstract class sw_controller_request_abstract
 	{
 		$this->__params = $this->__params + (array) $array;
 		
-		foreach ($array $as $key => $value) {
+		foreach ($array as $key => $value) {
 			if (null === $value) {
 				unset($this->__params[$key]);	
 			}
