@@ -48,8 +48,8 @@ class sw_env_shell_const
 				'SRC_APR_UTIL' => '$TMP_DIR/`ls $TMP_DIR|grep apr-util`',
 				
 				// mysql相关
-				'SRC_MYSQL' => '$TMP_DIR/`ls $TMP_DIR |grep mysql`',
-				'SRC_CMAKE' => '$TMP_DIR/`ls $TMP_DIR |grep cmake`',
+				'SRC_MYSQL'    => '$TMP_DIR/`ls $TMP_DIR |grep mysql`',
+				'SRC_CMAKE'    => '$TMP_DIR/`ls $TMP_DIR |grep cmake`',
 				
 				// php核心相关
 				'SRC_PHP'      => '$TMP_DIR/`ls $TMP_DIR |grep php`',
