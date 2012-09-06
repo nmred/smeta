@@ -12,7 +12,6 @@
 // | $_SWANBR_WEB_DOMAIN_$
 // +---------------------------------------------------------------------------
 
-require_once PATH_SWAN_LIB . 'config/sw_config_exception.class.php';  
 /**
 +------------------------------------------------------------------------------
 * LIB配置参数配置器 
@@ -26,37 +25,7 @@ require_once PATH_SWAN_LIB . 'config/sw_config_exception.class.php';
 */
 class sw_config
 {
-	// {{{ members
-	
-	const INI_PATH = 'config/swansoft.ini';
-	/**
-	 * 配置参数 
-	 * 
-	 * @var array
-	 * @access protected
-	 */
-	protected $__param = array();
-
-	// }}} end members
 	// {{{ functions
-	// {{{ public function __construct
-	
-	/**
-	 * __construct 
-	 * 
-	 * @access public
-	 * @return void
-	 */
-	public function __construct()
-	{
-		if (!file_exists(self::INI_PATH)) {
-			throw new sw_config_exception('ini config file not exists！');
-		}
-		
-		$this->__param = parse_ini_file(self::INI_PATH);
-	}
-
-	// }}}
 	// {{{ public static function get()
 
 	/**
@@ -73,17 +42,31 @@ class sw_config
 			throw new sw_config_exception('The parameters of the transmission format error');	
 		}
 		
+		require_once PATH_SWAN_LIB . 'config/sw_config_ini.class.php';
+		$global_config = include(PATH_SWAN_LIB . 'config/sw_config_map.class.php');
+		$config_ini_object = new sw_config_ini();
+		$config_ini = $config_ini_object->get();
+		
 		// sw_config::get('db');
 		if (strpos($string, ':') === false) {
-			if (isset($this->__param[$string])) {
-				return $this->__param[$string];	
+			$global_config_single = array();
+			$config_ini_single    = array();
+			if (isset($global_config[$string])) {
+				$global_config_single = $global_config[$string];	
 			}
+			if (isset($config_ini[$string])) {
+				$config_ini_single = $config_ini[$string];	
+			}
+			return array_merge($global_config_single, $config_ini_single);
 		}
 
 		// sw_config::get('db:username');
-		$temp_arr = explode($string, ':');
-		if (isset($this->__param[$temp_arr[0]][$temp_arr[1]])) {
-			return $this->__param[$temp_arr[0]][$temp_arr[1]];	
+		$temp_arr = explode(':', $string);
+		if (isset($config_ini[$temp_arr[0]][$temp_arr[1]])) {
+			return $config_ini[$temp_arr[0]][$temp_arr[1]];	
+		}
+		if (isset($global_config[$temp_arr[0]][$temp_arr[1]])) {
+			return $global_config[$temp_arr[0]][$temp_arr[1]];	
 		}
 		return false;
 	}
