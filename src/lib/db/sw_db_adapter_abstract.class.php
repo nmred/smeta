@@ -59,7 +59,7 @@ abstract class sw_db_adapter_abstract
 	 * @var string
 	 * @access protected
 	 */
-	protected $__default_stmt_class = 'sw_db_statement';
+	protected $__default_stmt_class = 'sw_db_statement_standard';
 
 	/**
 	 * 默认查询分析器对象的类名 
@@ -129,6 +129,29 @@ abstract class sw_db_adapter_abstract
 
 	// }}}	
 	// {{{ functions
+	// {{{ pulic function __construct()
+
+	/**
+	 * __construct 
+	 * 
+	 * @param array $config 
+	 * @access public
+	 * @return void
+	 */
+	public function __construct($config = null)
+	{
+		$config_default = sw_config::get('db');
+		if ($config === null || is_array($config)) {
+			$this->__config = array_merge($config_default, (array) $config);
+			$this->_check_required_options($this->__config);
+		} else {
+			require_once PATH_SWAN_LIB 'db/sw_db_adapter_exception.class.php';
+			throw new sw_db_adapter_exception('config param must is array');
+		}
+		$this->set_profiler();
+	}
+
+	// }}}
 	// {{{ protected function _check_required_options()
 
 	/**
@@ -304,7 +327,7 @@ abstract class sw_db_adapter_abstract
 	 * @param sw_db_select | string $sql 
 	 * @param array $bind 
 	 * @access public
-	 * @return sw_db_statement
+	 * @return sw_db_statement_standard
 	 */
 	public function query($sql, $bind = array())
 	{
@@ -1119,7 +1142,7 @@ abstract class sw_db_adapter_abstract
 	 * @param string|sw_db_select $sql 
 	 * @abstract
 	 * @access public
-	 * @return sw_db_statement|PDOStatement
+	 * @return sw_db_statement_standard|PDOStatement
 	 */
 	abstract public function prepare($sql);
 

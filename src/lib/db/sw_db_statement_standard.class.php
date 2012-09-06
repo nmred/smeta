@@ -12,9 +12,10 @@
 // | $_SWANBR_WEB_DOMAIN_$
 // +---------------------------------------------------------------------------
  
+require_once PATH_SWAN_LIB . 'db/sw_db_statement_abstract.class.php';
 /**
 +------------------------------------------------------------------------------
-* DB工厂类 
+* sw_db_statement_standard 
 +------------------------------------------------------------------------------
 * 
 * @package 
@@ -23,47 +24,24 @@
 * @author $_SWANBR_AUTHOR_$ 
 +------------------------------------------------------------------------------
 */
-class sw_db
+class sw_db_statement_standard extends sw_db_statement_abstract
 {
-	// {{{ members
-
-	/**
-	 * 定义CASE_FOLDING  
-	 */
-	const CASE_FOLDING = 'case_folding';
-
-	/**
-	 * 定义FETCH_MODE  
-	 */
-	const FETCH_MODE = 'fetch_mode';
-
-	/**
-	 * 定义AUTO_QUOTE_INDENTIFIERS  
-	 */
-	const AUTO_QUOTE_INDENTIFIERS = 'auto_quote_indentifiers';
-
-	/**
-	 * 定义ALLOW_SERIALIZATION  
-	 */
-	const ALLOW_SERIALIZATION = 'allow_serialization';
-
-	/**
-	 * 定义INT_TYPE,BIGINT_TYPE,FLOAT_TYPE在quote()中用
-	 */
-	const INT_TYPE    = 0;
-	const BIGINT_TYPE = 1;
-	const FLOAT_TYPE  = 2;
-
-	/**
-	 * 定义PDO中的常量
-	 */
-	//TODO
-			
-	// }}} end members
 	// {{{ functions
-	// {{{ public static function factory()
-	
-	public static function factory($type) 
+	// {{{ public function __construct()
+
+	/**
+	 * __construct 
+	 * 
+	 * @param sw_db_adapter_abstract $adapter 
+	 * @param sw_db_select|string $sql 
+	 * @access public
+	 * @return void
+	 */
+	public function __construct($adapter, $sql)
+	{
+		parent::__construct($adapter, $sql);	
+	}
+
 	// }}}
-	// }}} end functions
+	// }}}
 }
