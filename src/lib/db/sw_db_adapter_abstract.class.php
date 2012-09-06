@@ -1001,6 +1001,40 @@ abstract class sw_db_adapter_abstract
 	}
 
 	// }}}
+	// {{{ public function limit()
+
+	/**
+	 * limit 
+	 * 
+	 * @param string $sql 
+	 * @param int $count 
+	 * @param int $offset 
+	 * @access public
+	 * @return string
+	 */
+	public function limit($sql, $count, $offset = 0)
+	{
+		$count = intval($count);
+		if ($count <= 0) {
+			require_once PATH_SWAN_LIB . 'sw_db_adapter_exception.class.php';
+			throw new sw_db_adapter_exception("LIMIT argument count=$count is not valid");	
+		}	
+
+		$offset = intval($offset);
+		if ($offset < 0) {
+			require_once PATH_SWAN_LIB . 'db/sw_db_adapter_exception.class.php';
+			throw new sw_db_adapter_exception("LIMIT argument offset=$offset is not valid");	
+		}
+
+		$sql .= " LIMIT $count";
+		if ($offset > 0) {
+			$sql .= " OFFSET $offset";	
+		}
+
+		return $sql;
+	}
+
+	// }}}
 	// {{{ protected function _quote()
 
 	/**
@@ -1408,20 +1442,6 @@ abstract class sw_db_adapter_abstract
 	 */
 	abstract public function describe_table($table_name, $schema_name = null);
 
-	// }}}
-	// {{{ abstract public function limit()
-
-	/**
-	 * 实现limit 
-	 * 
-	 * @param mixed $sql 
-	 * @param integer $count 
-	 * @param integer $offset 
-	 * @abstract
-	 * @access public
-	 * @return string
-	 */
-	abstract public function limit($sql, $count, $offset = 0);
 	// }}}
 	// }}} end abstract
 }
