@@ -180,6 +180,33 @@ abstract class sw_db_adapter_abstract
 	}
 
 	// }}}
+	// {{{ protected function _dsn()
+
+	/**
+	 * 创建PDO的DSN 
+	 * 
+	 * @access protected
+	 * @return string
+	 */
+	protected function _dsn()
+	{
+		$dsn = $this->__config;
+		unset($dsn['type']);
+		unset($dsn['username']);
+		unset($dsn['password']);
+		unset($dsn['options']);
+		unset($dsn['charset']);
+		unset($dsn['persistent']);
+		unset($dsn['driver_options']);
+		
+		foreach ($dsn as $key => $val) {
+			$dsn[$key] = "$key=$val";	
+		}	
+
+		return $this->__config['type'] . ':' . implode(':', $dsn);
+	}
+
+	// }}}
 	// {{{ public function get_connection()
 
 	/**
