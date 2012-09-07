@@ -37,9 +37,9 @@ class sw_db_select
 	const GROUP          = 'group';
 	const HAVING         = 'having';
 	const ORDER          = 'order';
-	const LIMIT_COUNT    = 'limitcount';
-	const LIMIT_OFFSET   = 'limitoffset';
-	const FOR_UPDATE     = 'forupdate';
+	const LIMIT_COUNT    = 'limit_count';
+	const LIMIT_OFFSET   = 'limit_offset';
+	const FOR_UPDATE     = 'for_update';
 
 	const INNER_JOIN     = 'inner join';
 	const LEFT_JOIN      = 'left join';
@@ -98,6 +98,7 @@ class sw_db_select
 		self::WHERE        => array(),
 		self::GROUP        => array(),
 		self::HAVING       => array(),
+		self::ORDER        => array(),
 		self::LIMIT_COUNT  => null,
 		self::LIMIT_OFFSET => null,
 		self::FOR_UPDATE   => false,
@@ -446,6 +447,8 @@ class sw_db_select
 	public function where($cond, $value = null, $type = null)
 	{
 		$this->__parts[self::WHERE][] = $this->_where($cond, $value, $type, true);	
+
+		return $this;
 	}
 
 	// }}}
@@ -553,8 +556,8 @@ class sw_db_select
 	// {{{ public function order()
 
 	/**
-	 * 排序 
-	 * 
+	 * 修饰ORDER BY子句 
+	 * 数组的内容可以是字符串和sw_db_expr的组合 
 	 * @param string|array|sw_db_expr $spec 
 	 * @access public
 	 * @return sw_db_select
@@ -596,7 +599,7 @@ class sw_db_select
 	// {{{ public function limit()
 	
 	/**
-	 * limit 
+	 * 修饰LIMIT x OFFSET y 子句 
 	 * 
 	 * @param int $count 
 	 * @param int $offset 
@@ -614,7 +617,7 @@ class sw_db_select
 	// {{{ public function limit_page()
 
 	/**
-	 * limit_page 
+	 * 修饰LIMIT x OFFSET y 子句 
 	 * 
 	 * @param int $page 
 	 * @param int $row_count 
@@ -1238,7 +1241,7 @@ class sw_db_select
 	// {{{ protected function _render_order()
 
 	/**
-	 * _render_order 
+	 * 修饰ORDER BY子句 
 	 * 
 	 * @param string $sql 
 	 * @access protected
@@ -1271,7 +1274,7 @@ class sw_db_select
 	// {{{ protected function _render_limit_offset()
 	
 	/**
-	 * _render_limit_offset 
+	 * 修饰LIMIT x OFFSET y 子句 
 	 * 
 	 * @param string $sql 
 	 * @access protected

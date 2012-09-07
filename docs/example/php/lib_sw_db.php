@@ -73,11 +73,13 @@ P($quote_3);
 +------------------------------------------------------------------
 */
 /*
-$row = array(
-	'username' => 'user4',
-	'count' => 1
-);
-$__db->insert('test', $row);
+for ($i = 0; $i<100; $i++) {
+	$row = array(
+		'username' => 'user' . $i,
+		'count' => rand(0, 100),
+	);
+	$__db->insert('test', $row);
+}
 $last_insert_id = $__db->last_insert_id();
 P($__db);
 P($last_insert_id);
@@ -139,8 +141,9 @@ P($__db);
 
 $select = $__db->select();
 $select->from('test AS t')
-	   ->where('count = ?', '3');
-
+	   ->where('count > ?', '3')
+	   ->order('count desc')
+	   ->limit(3);
 $all = $__db->fetch_all($select);
 P($all);
 /* }}}
@@ -150,9 +153,18 @@ P($all);
 */
 /* }}}
 +------------------------------------------------------------------
- * {{{  
+ * {{{ get_profiler()  
 +------------------------------------------------------------------
 */
+
+$profiler = $__db->get_profiler();
+$queries = $profiler->get_query_profiles();
+foreach ($queries as $query) {
+	$type = $query->get_query_type();
+	if ($type >= 2) {
+		P($query);	
+	}
+}
 /* }}}
 +------------------------------------------------------------------
  * {{{  
