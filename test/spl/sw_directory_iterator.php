@@ -15,7 +15,7 @@ class directory_reader extends DirectoryIterator
 	{
 		parent::__construct($path);	
 	}	
-	
+
 	// }}}	
 	// {{{ public function current()
 
