@@ -36,7 +36,7 @@ abstract class sw_controller_request_abstract
 	protected $__dispatched = false;
 
 	/**
-	 * __module
+	 * 模块
 	 *
 	 * @var string
 	 * @access protected
@@ -44,7 +44,7 @@ abstract class sw_controller_request_abstract
 	protected $__module;
 
 	/**
-	 * __module_key
+	 * 模块的关联key
 	 *
 	 * @var string
 	 * @access protected
@@ -52,7 +52,7 @@ abstract class sw_controller_request_abstract
 	protected $__module_key = 'module';
 
 	/**
-	 * __controller
+	 * 控制器
 	 *
 	 * @var string
 	 * @access protected
@@ -60,7 +60,7 @@ abstract class sw_controller_request_abstract
 	protected $__controller;
 
 	/**
-	 * __controller_key
+	 * 控制器关联key
 	 *
 	 * @var string
 	 * @access protected
@@ -68,7 +68,7 @@ abstract class sw_controller_request_abstract
 	protected $__controller_key = 'controller';
 
 	/**
-	 * __action
+	 * 操作
 	 *
 	 * @var string
 	 * @access protected
@@ -76,7 +76,7 @@ abstract class sw_controller_request_abstract
 	protected $__action;
 
 	/**
-	 * __action_key
+	 * 操作的关联key
 	 *
 	 * @var string
 	 * @access protected
@@ -84,7 +84,7 @@ abstract class sw_controller_request_abstract
 	protected $__action_key = 'action';
 
 	/**
-	 * __params
+	 * 参数
 	 *
 	 * @var array
 	 * @access protected
@@ -107,7 +107,7 @@ abstract class sw_controller_request_abstract
 			$this->__module = $this->get_param($this->get_module_key());
 		}
 
-		return $this->module;
+		return $this->__module;
 	}
 
 	// }}}
@@ -158,6 +158,295 @@ abstract class sw_controller_request_abstract
 	{
 		$this->__controller = $value;
 		return $this;	
+	}
+
+	// }}}
+	// {{{ public function get_action_name()
+
+	/**
+	 * 获取操作的名称 
+	 * 
+	 * @access public
+	 * @return string
+	 */
+	public function get_action_name()
+	{
+		if (null === $this->__action) {
+			$this->__action = $this->get_param($this->get_action_key());	
+		}
+
+		return $this->__action;
+	}
+
+	// }}}
+	// {{{ public function set_action_name()
+
+	/**
+	 * 设置操作的名称 
+	 * 
+	 * @access public
+	 * @return sw_controller_request_abstract
+	 */
+	public function set_action_name($value)
+	{
+		$this->__action = $value;
+
+		if (null === $value) {
+			$this->set_param($this->get_action_key(), $value);	
+		}
+
+		return $this;
+	}
+
+	// }}}
+	// {{{ public function get_module_key()
+
+	/**
+	 * 获取模块的关联key 
+	 * 
+	 * @access public
+	 * @return string
+	 */
+	public function get_module_key()
+	{
+		return $this->__module_key;		
+	}
+
+	//　}}}
+	// {{{ public function set_module_key()
+
+	/**
+	 * 设置模块的关联key 
+	 * 
+	 * @param string $key
+	 * @access public
+	 * @return sw_controller_request_abstract
+	 */
+	public function set_module_key($key)
+	{
+		$this->__module_key = (string) $key;
+		return $this;
+	}
+
+	// }}}
+	// {{{ public function get_controller_key()
+
+	/**
+	 * 获得控制器的关联key 
+	 * 
+	 * @access public
+	 * @return string
+	 */
+	public function get_controller_key()
+	{
+		return $this->__controller_key;
+	}
+
+	// }}}
+	// {{{ public function set_controller_key()
+
+	/**
+	 * 设置控制器的关联key 
+	 * 
+	 * @param string $key 
+	 * @access public
+	 * @return sw_controller_request_abstract
+	 */
+	public function set_controller_key($key)
+	{
+		$this->__controller_key = (string) $key;
+		return $this;
+	}
+
+	// }}}
+	// {{{ public function get_action_key()
+
+	/**
+	 * 获取操作的关联key 
+	 * 
+	 * @access public
+	 * @return string
+	 */
+	public function get_action_key()
+	{
+		return $this->__action_key;		
+	}
+
+	// }}}
+	// {{{ public function set_action_key()
+
+	/**
+	 * 设置操作的关联的key 
+	 * 
+	 * @param string $key 
+	 * @access public
+	 * @return sw_controller_request_abstract
+	 */
+	public function set_action_key($key)
+	{
+		$this->__action_key = (string) $key;
+		return $this;
+	}
+
+	// }}}
+	// {{{ public function get_param()
+	
+	/**
+	 * 获取操作参数的值 
+	 * 
+	 * @param string $key 
+	 * @param mixed $default 
+	 * @access public
+	 * @return mixed
+	 */
+	public function get_param($key, $default = null)
+	{
+		$key = (string) $key;
+		if (isset($this->__params[$key])) {
+			return $this->__params[$key];	
+		}
+
+		return $default;
+	}
+
+	// }}}
+	// {{{ public function get_user_params()
+	
+	/**
+	 * 获取用户自定义的操作参数 
+	 * 
+	 * @access public
+	 * @return array
+	 */
+	public function get_user_params()
+	{
+		return $this->__params;	
+	}
+
+	// }}}
+	// {{{ public function get_user_param()
+
+	/**
+	 * 获取用户自定义的参数 
+	 * 
+	 * @param string $key 
+	 * @param mixed $default 
+	 * @access public
+	 * @return mixed
+	 */
+	public function get_user_param($key, $default = null)
+	{
+		if (isset($this->__params[$key])) {
+			return $this->__params[$key];	
+		}
+
+		return $default;
+	}
+
+	// }}}
+	// {{{ public function set_param()
+
+	/**
+	 * 设置参数 
+	 * 
+	 * @param string $key 
+	 * @param mixed $value 
+	 * @access public
+	 * @return sw_controller_request_abstract
+	 */
+	public function set_param($key, $value)
+	{
+		$key = (string) $key;
+
+		if ((null === $value) && isset($this->__params[$key])) {
+			unset($this->__params[$key]);	
+		} elseif (null !== $value) {
+			$this->__params[$key] = $value;	
+		}
+
+		return $this;
+	}
+
+	// }}}
+	// {{{ public function get_params()
+
+	/**
+	 * 获取所有的参数 
+	 * 
+	 * @access public
+	 * @return array
+	 */
+	public function get_params()
+	{
+		return $this->__params;	
+	}
+
+	// }}}
+	// {{{ public function set_params()
+
+	/**
+	 * 批量设置参数 
+	 * 
+	 * @param array $array 
+	 * @access public
+	 * @return sw_controller_request_abstract
+	 */
+	public function set_params(array $array)
+	{
+		$this->__params = $this->__params + (array) $array;
+		
+		foreach ($array $as $key => $value) {
+			if (null === $value) {
+				unset($this->__params[$key]);	
+			}
+		}
+		
+		return $this;	
+	}
+
+	// }}}
+	// {{{ public function clear_params()
+
+	/**
+	 * 将所有的参数置空 
+	 * 
+	 * @access public
+	 * @return sw_controller_request_abstract
+	 */
+	public function clear_params()
+	{
+		$this->__params = array();
+		return $this;	
+	}
+
+	// }}}
+	// {{{ public function set_dispatched()
+
+	/**
+	 * 设置是否分发 
+	 * 
+	 * @param boolean $flag 
+	 * @access public
+	 * @return sw_controller_request_abstract
+	 */
+	public function set_dispatched($flag = true)
+	{
+		$this->__dispatched = $flag ? true : false;
+		return $this;
+	}
+	
+	// }}}
+	// {{{ public function is_dispatched()
+
+	/**
+	 * 获取分发状态 
+	 * 
+	 * @access public
+	 * @return boolean
+	 */
+	public function is_dispatched()
+	{
+		return $this->__dispatched;	
 	}
 
 	// }}}
