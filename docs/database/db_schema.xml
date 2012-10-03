@@ -275,7 +275,7 @@
                     </column>
 
                     <column name="project_id">
-                        <desc>关联 project.project_id</desc>
+                        <desc>关联 device_project.project_id</desc>
                         <type>int</type>
                         <nullable>false</nullable>
                         <precision>11</precision>
@@ -401,7 +401,7 @@
                     </column>
 
                     <column name="project_id">
-                        <desc>关联 project.project_id</desc>
+                        <desc>关联 device_project.project_id</desc>
                         <type>int</type>
                         <nullable>false</nullable>
                         <precision>11</precision>
@@ -478,6 +478,220 @@
                         <type>index</type>
                         <fields>
                             <field name="project_id"></field>
+                        </fields>
+                    </key>
+
+                </keys>
+            </table>
+
+            <!-- }}} -->
+
+            <!-- {{{ table rrd_cdef -->
+
+            <table name="rrd_cdef">
+                <desc> 记录绘制的图片规则中的中间变量运算 </desc>
+                <engine>InnoDB</engine>
+                <charset>utf8</charset>
+                <columns>
+                    <column name="cdef_id">
+                        <desc>CDEF id</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+						<auto>true</auto>
+						<unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                    <column name="graph_id">
+                        <desc>关联 rrd_graph.graph_id </desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+						<unsigned>true</unsigned>
+                        <default>0</default>
+                    </column>
+
+                    <column name="define_name">
+                        <desc> 变量名称 </desc>
+                        <type>varchar</type>
+                        <nullable>false</nullable>
+                        <precision>32</precision>
+                        <default></default>
+                    </column>
+
+                    <column name="cdef_cf">
+                        <desc> 算法该字段存取的逆波兰表达式 (当前先就这样了，以后尽量优化的不让用户直接输入逆波兰表达式)</desc>
+                        <type>varchar</type>
+                        <nullable>false</nullable>
+                        <precision>255</precision>
+                        <default></default>
+                    </column>
+
+                </columns>
+
+                <keys>
+                    <key name="">
+						<desc></desc>
+                        <type>primary</type>
+                        <fields>
+                            <field name="cdef_id"></field>
+                        </fields>
+                    </key>
+
+                    <key name="ik_0">
+                        <desc> 快速查询某个图片定义的变量运算规则 </desc>
+                        <type>index</type>
+                        <fields>
+                            <field name="graph_id"></field>
+                        </fields>
+                    </key>
+
+                </keys>
+            </table>
+
+            <!-- }}} -->
+            <!-- {{{ table rrd_line_area -->
+
+            <table name="rrd_line_area">
+                <desc> 记录绘制的图片规则中的线条定义 </desc>
+                <engine>InnoDB</engine>
+                <charset>utf8</charset>
+                <columns>
+                    <column name="line_id">
+                        <desc>线条ID id</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+						<auto>true</auto>
+						<unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                    <column name="graph_id">
+                        <desc>关联 rrd_graph.graph_id </desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+						<unsigned>true</unsigned>
+                        <default>0</default>
+                    </column>
+
+                    <column name="line_cate">
+                        <desc> 线条类型 0：AREA 1: LINE1 2: LINE2 3: LINE3 4: STACK </desc>
+                        <type>tinyint</type>
+                        <nullable>false</nullable>
+                        <precision>2</precision>
+						<unsigned>true</unsigned>
+                        <default>0</default>
+                    </column>
+
+                    <column name="define_name">
+                        <desc> 变量名称 </desc>
+                        <type>varchar</type>
+                        <nullable>false</nullable>
+                        <precision>32</precision>
+                        <default></default>
+                    </column>
+
+                    <column name="color">
+                        <desc> 线条颜色 </desc>
+                        <type>varchar</type>
+                        <nullable>false</nullable>
+                        <precision>32</precision>
+                        <default></default>
+                    </column>
+
+                    <column name="legend">
+                        <desc> 线条注释 对该颜色的提示，最后会写在图上的</desc>
+                        <type>varchar</type>
+                        <nullable>false</nullable>
+                        <precision>32</precision>
+                        <default></default>
+                    </column>
+
+                </columns>
+
+                <keys>
+                    <key name="">
+						<desc></desc>
+                        <type>primary</type>
+                        <fields>
+                            <field name="line_id"></field>
+                        </fields>
+                    </key>
+
+                    <key name="ik_0">
+                        <desc> 快速查询某个图片定义的绘制线条 </desc>
+                        <type>index</type>
+                        <fields>
+                            <field name="graph_id"></field>
+                        </fields>
+                    </key>
+
+                </keys>
+            </table>
+
+            <!-- }}} -->
+            <!-- {{{ table rrd_gprint -->
+
+            <table name="rrd_gprint">
+                <desc> 记录线条中的这个极限值 </desc>
+                <engine>InnoDB</engine>
+                <charset>utf8</charset>
+                <columns>
+                    <column name="gprint_id">
+                        <desc>GPRINT id</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+						<auto>true</auto>
+						<unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                    <column name="line_id">
+                        <desc>关联 rrd_line_area.line_id </desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+						<unsigned>true</unsigned>
+                        <default>0</default>
+                    </column>
+
+                    <column name="line_cf">
+                        <desc> 线条运算算法 0：AVERAGE 1: MIN 2: MAX 3: LAST </desc>
+                        <type>tinyint</type>
+                        <nullable>false</nullable>
+                        <precision>2</precision>
+						<unsigned>true</unsigned>
+                        <default>0</default>
+                    </column>
+
+                    <column name="format">
+                        <desc> 线条极限值注释 对该颜色的提示，最后会写在图上的</desc>
+                        <type>varchar</type>
+                        <nullable>false</nullable>
+                        <precision>32</precision>
+                        <default></default>
+                    </column>
+
+                </columns>
+
+                <keys>
+                    <key name="">
+						<desc></desc>
+                        <type>primary</type>
+                        <fields>
+                            <field name="gprint_id"></field>
+                        </fields>
+                    </key>
+
+                    <key name="ik_0">
+                        <desc> 快速查询某个图片定义的绘制线条 </desc>
+                        <type>index</type>
+                        <fields>
+                            <field name="line_id"></field>
                         </fields>
                     </key>
 

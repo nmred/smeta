@@ -24,7 +24,7 @@
 +------------------------------------------------------------------------------
 */
 
-require_once './core.php';
+require_once 'core.php';
 
 require_once PATH_SWAN_LIB . 'sw_xml.class.php';
 
@@ -37,19 +37,19 @@ require_once PATH_SWAN_LIB . 'sw_xml.class.php';
 
 $xml2array = sw_xml::factory('xml2array');
 
-$xml2array->set_filename('xml_test.xml');
+$xml2array->set_filename('../../database/db_schema.xml');
 $arr = $xml2array->xml2array();
 
-print_r($arr);
+file_put_contents('a.txt', var_export($arr, true));
 /* }}}
 +------------------------------------------------------------------
  * {{{ output_xml 创建一个XML文件
 +------------------------------------------------------------------
 */
 
-$create_xml = sw_xml::factory('output_xml');
-$create_xml->set_filename('output_test.xml');
-var_dump($create_xml->output_xml($arr));
+//$create_xml = sw_xml::factory('output_xml');
+//$create_xml->set_filename('output_test.xml');
+//var_dump($create_xml->output_xml($arr));
 /* }}}
 +------------------------------------------------------------------
  * 
