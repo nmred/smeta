@@ -37,7 +37,8 @@ require_once PATH_SWAN_LIB . 'snmp/sw_snmp_version_one.class.php';
 
 $snmp = new sw_snmp_version_one();
 $snmp->set_object_id('.1.3.6.1.4.1.2021.11.9.0')
-	 ->set_host('192.168.56.131')
+	 ->set_host('192.168.56.133')
+	 ->set_timeout(5)
 	 ->set_community('public');
 var_export($snmp->get_next());
 var_export($snmp->get());

@@ -16,8 +16,15 @@ function my_handler1()
 }
 function my_handler2()
 {
-	echo "This handler2 works./n";
-	file_put_contents('a.txt', "assasaa\n" . time(), FILE_APPEND);
+	require_once PATH_SWAN_LIB . 'snmp/sw_snmp_version_one.class.php';
+
+	$snmp = new sw_snmp_version_one();
+	$snmp->set_object_id('.1.3.6.1.4.1.2021.11.9.0')
+		 ->set_host('192.168.56.131')
+		 ->set_timeout(5)
+		 ->set_community('public');
+	echo $snmp->get_next() . "\n";
+	echo $snmp->get();
 }
 try {
 	$daemon = new sw_daemon($daemon_conf);
@@ -28,7 +35,7 @@ try {
 		for (;;) {
 			echo "running./n";
 			$daemon->send_signal(SIGUSR2);
-			sleep(300);
+			sleep(1);
 		}
 	} elseif ($cmd == 'stop') {
 		$daemon->stop();
