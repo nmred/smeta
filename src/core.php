@@ -28,17 +28,37 @@ define('PATH_SWAN_BASE', realpath(dirname(__FILE__)));
     define('PATH_SWAN_LIB', PATH_SWAN_BASE . '/lib/');
     define('PATH_SWAN_HELP', PATH_SWAN_BASE . '/help/');
     define('PATH_SWAN_SHELL', PATH_SWAN_BASE . '/shell/');
-    define('PATH_SWAN_TPL', PATH_SWAN_BASE . '/TPL/');
+    define('PATH_SWAN_TPL', PATH_SWAN_BASE . '/tpl/');
     define('PATH_SWAN_INC', PATH_SWAN_BASE . '/inc/');
         define('PATH_SWAN_LOCALE', PATH_SWAN_INC . '/locale/');
 // }}}
 // {{{ 参数配置
 
+// {{{ 软件详细信息
+
 // 软件名称
-define('SWAN_SOFTNAME', 'swan');
+define('SWAN_SOFTNAME', 'swansoft');
 
 // 软件版本号
 define('SWAN_VERSION', '0.1');
+
+//软件宣言 ------一切为了简单
+define('SWANBR_SLOGAN', 'Everything in order to facilitate');
+
+//版权声明
+define('SWANBR_COPYRIGHT', '© 2011-2012 swanlinux');
+
+//许可协议 
+define('SWANBR_LICENSED_URL', 'GPL');
+
+// 官方网址
+define('SWANBR_WEB_DOMAIN', 'http://www.swanlinux.net');
+
+// 作者
+define('SWANBR_AUTHOR', 'swanteam <nmred_2008@126.com>');
+
+// }}}
+// {{{ 参数设置
 
 // 默认时区设置
 define('SWAN_TIMEZONE_DEFAULT', 'Asia/Chongqing');
