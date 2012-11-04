@@ -1,0 +1,132 @@
+#!/usr/local/swan/opt/php/bin/php
+<?php
+/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4 foldmethod=marker: */
+// +---------------------------------------------------------------------------
+// | SWAN [ $_SWANBR_SLOGAN_$ ]
+// +---------------------------------------------------------------------------
+// | Copyright $_SWANBR_COPYRIGHT_$
+// +---------------------------------------------------------------------------
+// | Version  $_SWANBR_VERSION_$
+// +---------------------------------------------------------------------------
+// | Licensed ( $_SWANBR_LICENSED_URL_$ )
+// +---------------------------------------------------------------------------
+// | $_SWANBR_WEB_DOMAIN_$
+// +---------------------------------------------------------------------------
+
+require_once 'dev_core.php';
+require_once D_PATH_SWAN_LIB . 'iterator/sw_iterator_fetch_dir.class.php';
+require_once D_PATH_SWAN_LIB . 'sw_create_makefile.class.php';
+
+/**
++------------------------------------------------------------------------------
+* 批量生成Makefile文件 
++------------------------------------------------------------------------------
+* 
+* @package 
+* @version $_SWANBR_VERSION_$
+* @copyright $_SWANBR_COPYRIGHT_$
+* @author $_SWANBR_AUTHOR_$ 
++------------------------------------------------------------------------------
+*/
+class configure
+{
+	// {{{ members
+
+	/**
+	 * 操作的根目录 
+	 * 
+	 * @var string
+	 * @access protected
+	 */
+	protected $__root_dir = './';
+
+	/**
+	 * Makefile.ini的名称 
+	 * 
+	 * @var string
+	 * @access protected
+	 */
+	protected $__makefile_ini = 'Makefile.ini';
+
+	/**
+	 * 忽略的目录 
+	 * 
+	 * @var string
+	 * @access protected
+	 */
+	protected $__ignore_dir = array(
+		'.git/.',
+	);
+
+	// }}}
+	// {{{ functions
+	// {{{ public function run()
+
+	/**
+	 * 运行 
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function run()
+	{
+		$this->_create_makefile();	
+	}
+
+	// }}}
+	// {{{ protected function _create_makefile()
+
+	/**
+	 * 创建Makefile 
+	 * 
+	 * @access protected
+	 * @return void
+	 * @throw Exception
+	 */
+	protected function _create_makefile()
+	{
+		$make_dirs = $this->_get_dirs();
+		$current_dir = getcwd();
+		foreach ($make_dirs as $dir_name) {
+			$path_all = rtrim($this->__root_dir, '/') . '/' .  $dir_name;
+			chdir($path_all);
+			$make_file = new sw_create_makefile();
+			$make_file->run();
+			chdir($current_dir);
+		}
+	}
+
+	// }}} 
+	// {{{ protected function _get_dirs()
+	
+	/**
+	 * 获取应该生成Makefile文件的目录 
+	 * 
+	 * @access protected
+	 * @return array
+	 */
+	protected function _get_dirs()
+	{
+		$make_dirs = array();
+		$sw_dir_iterator = new sw_iterator_fetch_dir($this->__root_dir);
+		$sw_dir_iterator->set_ignore_dir($this->__ignore_dir);
+		foreach ($sw_dir_iterator as $key => $value) {
+			$filename = $value->getFilename();
+			if($filename == $this->__makefile_ini) {
+				$make_dirs[] = substr($key, 0, strlen($key)-(strlen($this->__makefile_ini) + 1));
+			}
+		}
+
+		return $make_dirs;
+	}
+
+	// }}}
+	// }}}
+}
+
+try {
+	$test = new configure();
+	$test->run();
+} catch (Exception $e) {
+	echo $e->getMessage() . "\n";	
+}
