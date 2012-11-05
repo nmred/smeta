@@ -125,11 +125,11 @@ class sw_env_shell_const
 	{
 		return array(
 			'start' => array(
-				'http'  => true,
+				'httpd'  => true,
 				'mysql' => true,
 			),
 			'stop'  => array(
-				'http'  => true,
+				'httpd'  => true,
 				'mysql' => true,
 			),
 		);
