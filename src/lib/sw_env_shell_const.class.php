@@ -39,6 +39,13 @@ class sw_env_shell_const
 	public function get_shell_path()
 	{
 		return array(
+			// {{{ 其他杂项
+			'other' => array(
+				'CUR_PWD' => '`pwd`',
+				'TMP_DIR' => '/tmp/swan/',
+				'OPENSOURCE' => '/usr/local/swan_open/',
+			),
+			// }}}
 			// {{{ 源码的目录
 			'source' => array(
 				// httpd相关
@@ -58,7 +65,7 @@ class sw_env_shell_const
 				'SRC_FREETYPE' => '$TMP_DIR/`ls $TMP_DIR |grep freetype`',
 				'SRC_ZLIB'     => '$TMP_DIR/`ls $TMP_DIR |grep zlib`',
 				'SRC_GD'       => '$TMP_DIR/`ls $TMP_DIR |grep gd`',
-				'SRC_LIBXML'   => '$TMP_DIR/`ls $TMP_DIR |grep libxml',
+				'SRC_LIBXML'   => '$TMP_DIR/`ls $TMP_DIR |grep libxml`',
 
 				// php扩展
 				'SRC_PTHREADS' => '$TMP_DIR/`ls $TMP_DIR |grep pthreads`', //多线程支持扩展包
@@ -69,8 +76,7 @@ class sw_env_shell_const
 				'INSTALL_SOFT'   => '/usr/local/swan',
 				'INSTALL_RUN'    => '$INSTALL_SOFT/run',
 				'INSTALL_SRC'    => '$INSTALL_SOFT/src',
-				'INSTALL_PHP'    => '$INSTALL_SRC/php',
-				'INSTALL_WEB'    => '$INSTALL_SRC/web',
+				'INSTALL_WEB'    => '$INSTALL_SOFT/web',
 				'INSTALL_DIR'    => '$INSTALL_SOFT/opt',
 
 				//lamp相关
@@ -78,6 +84,7 @@ class sw_env_shell_const
 				'INSTALL_APR'      => '$SRC_HTTPD/srclib/apr',
 				'INSTALL_APR_UTIL' => '$SRC_HTTPD/srclib/apr-util',
 				'INSTALL_PCRE'     => '$INSTALL_HTTPD/pcre',
+				'INSTALL_PHP'      => '$INSTALL_DIR/php',
 				'INSTALL_MYSQL'    => '$INSTALL_DIR/mysql',
 				'INSTALL_CMAKE'    => '$INSTALL_DIR/cmake',
 				'INSTALL_PHP'      => '$INSTALL_DIR/php',
@@ -91,20 +98,15 @@ class sw_env_shell_const
 				//php扩展相关
 				'INSTALL_EXT'      => '$INSTALL_PHP/ext',
 				//etc配置相关
-				'ETC_DIR'          => '$INSTALL_DIR/etc'
+				'ETC_DIR'          => '$INSTALL_DIR/etc',
+				//mysql相关
+				'MYSQL_DATA'       => '$INSTALL_DIR/data/mysql',
 			),
 			// }}}
 			// {{{ 日志记录文件
 			'log' => array(
 				'INATLL_LOG' => '$INSTALL_DIR/install.log',
 				'RUN_LOG'    => '$INSTALL_DIR/run.log',
-			),
-			// }}}
-			// {{{ 其他杂项
-			'other' => array(
-				'CUR_PWD' => '`pwd`',
-				'TMP_DIR' => '/tmp/swan/',
-				'OPENSOURCE' => '/usr/local/swan_open/',
 			),
 			// }}}
 		);	
@@ -122,8 +124,14 @@ class sw_env_shell_const
 	public function get_restart_list()
 	{
 		return array(
-			'http'  => true,
-			'mysql' => true,
+			'start' => array(
+				'http'  => true,
+				'mysql' => true,
+			),
+			'stop'  => array(
+				'http'  => true,
+				'mysql' => true,
+			),
 		);
 	}
 
@@ -170,5 +178,26 @@ class sw_env_shell_const
 	}
 
 	// }}}	
+	// {{{ public function get_const()
+
+	/**
+	 * 获取一个shell常量配置
+	 * 
+	 * @param string $key 
+	 * @access public
+	 * @return mixed
+	 */
+	public function get_const($key)
+	{
+		$all_path = $this->get_shell_path();
+		foreach ($all_path as $cate => $value) {
+			if (isset($value[$key])) {
+				return $value[$key];	
+			}
+		}
+		return false;
+	}
+
+	// }}}
 	// }}}
 }
