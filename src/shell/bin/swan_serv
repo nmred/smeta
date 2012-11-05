@@ -1,0 +1,428 @@
+#!/bin/sh
+# vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4 foldmethod=marker: #
+# +---------------------------------------------------------------------------
+# | SWAN [ $_SWANBR_SLOGAN_$ ]
+# +---------------------------------------------------------------------------
+# | Copyright $_SWANBR_COPYRIGHT_$
+# +---------------------------------------------------------------------------
+# | Version  $_SWANBR_VERSION_$
+# +---------------------------------------------------------------------------
+# | Licensed ( $_SWANBR_LICENSED_URL_$ )
+# +---------------------------------------------------------------------------
+# | $_SWANBR_WEB_DOMAIN_$
+# +---------------------------------------------------------------------------
+
+#导入配置
+. /usr/local/swan/app/bin/conf_global.sh
+
+#导入函数库
+# {{{ function echo_stdout()
+
+############################
+# 按全屏输出信息 ###########
+############################
+function echo_stdout()
+{
+	if [ $2 = "0" ];then
+		FLAG=$ECHO_OK
+	elif [ $2 = "1" ]; then
+		FLAG=$ECHO_FAIL
+	else
+		FLAG=""
+	fi
+	
+	if [ -z $3 ];then
+		:
+	else
+		TAB_NUM=$3
+		while [ "$TAB_NUM" -gt "0" ]
+		do
+			echo -ne "$ECHO_TAB"
+			TAB_NUM=`expr $TAB_NUM - 1`
+		done
+		echo -ne "$ECHO_START"
+	fi
+
+	COLS="`tput cols`"
+	LEN="`echo $1|wc -c`"
+	echo -ne $1
+	if [ "$LEN" -lt "$COLS" ] ;then
+		space_num="`expr $COLS - $LEN - 6 - $3 \* 1 `"
+		printf "%${space_num}s" " "
+		echo -e "$FLAG"
+	fi
+}
+
+# }}}
+# {{{ function echo_center()
+
+############################
+# 居中输出信息 #############
+############################
+function echo_center()
+{
+	if [ "$2" = "" ] ;then
+		DOT_CHAR="="
+	else
+		DOT_CHAR=$2
+	fi
+
+	COLS="`tput cols`"
+	LEN="`echo $1|wc -c`"
+	REL_LEN=`expr $COLS - $LEN ` 
+	DOT_LEN=`expr $REL_LEN / 2`
+
+	START_LEN=$DOT_LEN
+	while [ "$START_LEN" -gt "0" ]
+	do
+		echo -ne $DOT_CHAR
+		START_LEN=`expr $START_LEN - 1`
+	done
+
+	echo -n $1
+	
+	while [ "$DOT_LEN" -gt "0" ]
+	do
+		if [ "$DOT_LEN" =  "1" ] ;then
+			echo -e  $DOT_CHAR
+		else
+			echo -ne $DOT_CHAR
+		fi
+		DOT_LEN=`expr $DOT_LEN - 1`
+	done
+
+}
+
+# }}}
+# {{{ function sw_mkdir()
+
+############################
+# 创建目录 #################
+############################
+function sw_mkdir()
+{
+	if [ -d $1 ] ;then
+		#echo -e "directory $1 already exists $ECHO_DOT $ECHO_OK"
+		echo_stdout "directory $1 already exists $ECHO_DOT" 0 1 
+	else
+		if mkdir -p $1; then
+			echo_stdout "create $1 directory success $ECHO_DOT" 0  1
+		else
+			echo_stdout "create $1 directory faild $ECHO_DOT" 1 1
+			exit 1
+		fi
+	fi
+}
+
+# }}} 
+
+# {{{ function usage()
+
+#######################
+#### 帮助信息 #########
+#######################
+
+function usage()
+{
+	echo -e "Usage:"
+	echo -e "\tswan_serv stop|start|watch [SERVICENAME]"
+	echo -e "\t[SERVICENAME$ECHO_DOT]"
+	echo -e "\t\tmysql|httpd"
+}
+
+# }}}
+# {{{ function watch_httpd_port()
+
+#######################
+#### 检查httpd端口 ####
+#######################
+
+function watch_httpd_port()
+{
+	_IS_STAT=`lsof -i:$PORT_HTTPD | wc -l`
+	if [ "$_IS_STAT" -gt "0" ];then
+		echo_stdout "httpd setting port $PORT_HTTPD is occupancy" 1 1
+		exit 1
+	fi
+}
+
+# }}}
+# {{{ function watch_mysql_port()
+
+#######################
+#### 检查mysql端口 ####
+#######################
+
+function watch_mysql_port()
+{
+	_IS_STAT=`lsof -i:$PORT_MYSQL |wc -l`
+	if [ "$_IS_STAT" -gt "0" ];then
+		echo_stdout "mysql setting port $PORT_MYSQL is occupancy" 1 1
+		exit 1
+	fi
+}
+
+# }}}
+# {{{ function watch_httpd()
+
+#######################
+## 检查httpd运行状态 ##
+#######################
+
+function watch_httpd()
+{
+	install_dir="`echo $INSTALL_HTTPD | sed 's/\//\\\\\//g'`"
+	is_httpd=`ps -ef |awk '{print $8 "\n"}' | grep $install_dir |wc -l`	
+	if [ "$is_httpd" = "0" ];then
+		return 1
+	else
+		return 0
+	fi
+}
+
+# }}}
+# {{{ function watch_mysql()
+
+#######################
+## 检查mysql运行状态 ##
+#######################
+
+function watch_mysql()
+{
+	CMD_MYSQL_PING="${INSTALL_MYSQL}/bin/mysqladmin --defaults-file=${ETC_DIR}/my.cnf ping"
+	eval $CMD_MYSQL_PING >/dev/null 2>&1
+	if test 0 != $?;then
+		return 1
+	fi
+
+	install_dir="`echo $INSTALL_MYSQL | sed 's/\//\\\\\//g'`"
+	is_mysql=`ps -ef |awk '{print $8 "\n"}' | grep $install_dir |wc -l`	
+	if [ "$is_mysql" = "0" ];then
+		return 1
+	else
+		return 0
+	fi
+}
+
+# }}}
+# {{{ function start_httpd()
+
+#######################
+#### 启动httpd服务 ####
+#######################
+
+function start_httpd()
+{
+	#检查端口是否占用
+	watch_httpd_port
+	if watch_httpd;then
+		: #noting todo
+	else
+		$INSTALL_HTTPD/bin/apachectl >/dev/null >> $RUN_LOG
+		if watch_httpd;then
+			: #noting todo
+		else
+			echo_stdout "start httpd faild $ECHO_DOT" 1 1
+			exit 1
+		fi
+	fi
+	echo_stdout "httpd runing $ECHO_DOT" 0 1
+}
+
+# }}}
+# {{{ function start_mysql()
+
+#######################
+#### 启动mysql服务 ####
+#######################
+
+function start_mysql()
+{
+	#检查端口是否占用
+	watch_mysql_port
+	if watch_mysql;then
+		echo_stdout "mysqld_safe process runing $ECHO_DOT" 0 1
+	else
+		eval sudo -u swan $INSTALL_MYSQL/bin/mysqld_safe --user=swan --pid-file=$INSTALL_RUN/mysql.pid  & >/dev/null >>$RUN_LOG
+		CMD_MYSQL_PING="sudo -u swan ${INSTALL_MYSQL}/bin/mysqladmin --defaults-file=${ETC_DIR}/my.cnf ping"
+		sleep 3
+		eval $CMD_MYSQL_PING
+		if [ $? = "0" ];then
+			echo_stdout "mysqld_safe process runing $ECHO_DOT" 0 1
+		else
+			while [ $MYSQL_TIMEOUT -lt "1" ]
+			do
+				sleep 1
+				eval $CMD_MYSQL_PING
+				if [ $? = "0" ];then
+					echo_stdout "mysqld_safe process runing $ECHO_DOT" 0 1
+					break;
+				fi
+				MYSQL_TIMEOUT=`expr $MYSQL_TIMEOUT - 1`
+			done
+			echo_stdout "start mysql_safe process failed $ECHO_DOT" 1 1
+		fi
+	fi
+}
+
+# }}}
+# {{{ function stop_httpd()
+
+#######################
+#### 停止httpd服务 ####
+#######################
+
+function stop_httpd()
+{
+	if watch_httpd;then
+		install_dir="`echo $INSTALL_HTTPD | sed 's/\//\\\\\//g'`"
+		httpd_pids=`ps -ef | grep $install_dir | awk '{print $2 "\n"}'`
+		for httpd_pid in $httpd_pids
+		do
+			kill -9 $httpd_pid
+		done
+		if watch_httpd;then
+			echo_stdout "stop httpd failed $ECHO_DOT" 1 1
+		else
+			echo_stdout "stop httpd success $ECHO_DOT" 0 1
+		fi
+	else
+		echo_stdout "stop httpd failed $ECHO_DOT" 1 1
+	fi
+}
+
+# }}}
+# {{{ function stop_mysql()
+
+#######################
+#### 停止mysql服务 ####
+#######################
+
+function stop_mysql()
+{
+	if watch_mysql;then
+		install_dir="`echo $INSTALL_MYSQL | sed 's/\//\\\\\//g'`"
+		mysql_pids=`ps -ef | grep $install_dir | awk '{print $2 "\n"}'`
+		for mysql_pid in $mysql_pids
+		do
+			kill -9 $mysql_pid
+		done
+		if watch_mysql;then
+			echo_stdout "stop mysql failed $ECHO_DOT" 1 1
+		else
+			echo_stdout "stop mysql success $ECHO_DOT" 0 1
+		fi
+	else
+		echo_stdout "stop mysql failed $ECHO_DOT" 1 1
+	fi
+}
+
+# }}}
+# {{{ function start()
+
+#######################
+#### 启动服务 #########
+#######################
+
+function start()
+{
+	if [ -z $1 ];then
+		start_item=$START_ARRAY		
+	else
+		start_item=$1
+	fi
+
+	for service in $START_ARRAY
+	do
+		for start_pre in $start_item
+		do
+			if [ "$service" = "$start_pre" ];then
+				start_$start_pre
+			else
+				continue;
+			fi
+		done
+	done
+}
+
+# }}}
+# {{{ function stop()
+
+#######################
+#### 停止服务 #########
+#######################
+
+function stop()
+{
+	if [ -z $1 ];then
+		stop_item=$STOP_ARRAY		
+	else
+		stop_item=$1
+	fi
+
+	for service in $STOP_ARRAY
+	do
+		for stop_pre in $stop_item
+		do
+			if [ "$service" = "$stop_pre" ];then
+				stop_$stop_pre
+			else
+				continue;
+			fi
+		done
+	done
+}
+
+# }}}
+# {{{ function watch()
+
+#######################
+#### 查看服务状态 #####
+#######################
+
+function watch()
+{
+	if [ -z $1 ];then
+		watch_item=$STOP_ARRAY		
+	else
+		watch_item=$1
+	fi
+
+	for service in $STOP_ARRAY
+	do
+		for watch_pre in $watch_item
+		do
+			if [ "$service" = "$watch_pre" ];then
+				if watch_$watch_pre;then
+					echo_stdout "$watch_pre is runing $ECHO_DOT" 0 1
+				else
+					echo_stdout "$watch_pre is down $ECHO_DOT" 1 1
+				fi
+			else
+				continue;
+			fi
+		done
+	done
+}
+
+# }}}
+
+if [ -z $1 ];then
+	usage
+	exit 1
+fi
+
+case $1 in
+	start)
+		start $2
+		;;
+	stop)
+		stop $2
+		;;
+	watch)
+		watch $2
+		;;
+	*)
+		usage
+		;;
+esac

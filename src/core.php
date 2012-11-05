@@ -42,6 +42,9 @@ define('SWAN_SOFTNAME', 'swansoft');
 // 软件版本号
 define('SWAN_VERSION', '0.1');
 
+// 软件发行号
+define('SWANBR_RELEASE', 'beta');
+
 //软件宣言 ------一切为了简单
 define('SWANBR_SLOGAN', 'Everything in order to facilitate');
 
@@ -49,7 +52,7 @@ define('SWANBR_SLOGAN', 'Everything in order to facilitate');
 define('SWANBR_COPYRIGHT', '© 2011-2012 swanlinux');
 
 //许可协议 
-define('SWANBR_LICENSED_URL', 'GPL');
+define('SWANBR_LICENSED_URL', 'BSD');
 
 // 官方网址
 define('SWANBR_WEB_DOMAIN', 'http://www.swanlinux.net');
