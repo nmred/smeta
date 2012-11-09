@@ -40,7 +40,7 @@ define('PATH_SWAN_BASE', realpath(dirname(__FILE__)));
 define('SWAN_SOFTNAME', 'swansoft');
 
 // 软件版本号
-define('SWAN_VERSION', '0.1');
+define('SWAN_VERSION', '0.11');
 
 // 软件发行号
 define('SWANBR_RELEASE', 'beta');
