@@ -85,5 +85,7 @@ require_once PATH_SWAN_BASE . '/global.func.php';
 //初始化时区
 date_default_timezone_set(SWAN_TIMEZONE_DEFAULT);
 sw_language::set_gettext();
+//fb
+require_once PATH_SWAN_LIB . 'firephp/FirePHPCore/fb.php';
 
 // }}}
