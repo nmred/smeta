@@ -78,6 +78,16 @@ define('SWAN_CHARSET', 'UTF-8');
 // 多语言支持的domain
 define('SWAN_GETTEXT_DOMAIN', 'swan_translater');
 
+//是否开启模板缓存
+define('SW_CACHE_START', false);
+
+//缓存过期时间
+define('SW_CACHE_TIME', 0);
+
+//模板定界符
+define('SW_LEFT_DELIMITER', '<!--{{');
+define('SW_RIGHT_DELIMITER', '}}-->');
+
 // }}}
 // {{{ 系统初始化
 require_once PATH_SWAN_LIB . 'sw_language.class.php';
