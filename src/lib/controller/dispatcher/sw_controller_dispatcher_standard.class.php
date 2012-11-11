@@ -284,11 +284,64 @@ class sw_controller_dispatcher_standard extends sw_controller_dispatcher_abstrac
 	}
 
 	// }}}
-	// {{{ public function load_class()
+	// {{{ public function dispatch()
 
-	public function load_class($class_name)
+	/**
+	 * 分发器 
+	 * 
+	 * @param sw_controller_request_abstract $request 
+	 * @param sw_controller_response_abstract $response 
+	 * @access public
+	 * @return void
+	 */
+	public function dispatch(sw_controller_request_abstract $request, sw_controller_response_abstract $response)
 	{
+		$this->set_response($response);
+	
+		if (!$this->is_dispatchable($request)) {
+			$controller = $this->get_controller_name();
+			require_once PATH_SWAN_LIB . 'controller/dispatcher/sw_controller_dispatcher_exception.class.php';
+			throw new sw_controller_dispatcher_exception('Invalid controller specified (' . $controller_name . ')');	
+		}
+
+		$class_name = $this->get_controller_class($request);
 		
+		$controller = new $class_name($request, $this->get_response(), $this->get_params());
+		if (!($controller instanceof sw_controller_action_interface) &&
+			!($controller instanceof sw_controller_action)) {
+			require_once PATH_SWAN_LIB . 'controller/dispatcher/sw_controller_dispatcher_exception.class.php';
+			throw new sw_controller_dispatcher_exception('controller "' . $class_name . '" is not an instance of sw_controller_action_interface');	
+		}	
+
+		$action = $this->get_action_method($request);
+
+		$request->set_dispatched(true);
+
+		$disable_ob = $this->get_param('disable_output_buffering');
+		$ob_level = ob_get_level();
+		if (empty($disable_ob)) {
+			ob_start();
+		}
+
+		try {
+			$controller->dispatch($action);	
+		} catch (Exception $e) {
+			$cur_ob_level = ob_get_level();
+			if ($cur_ob_level > $ob_level) {
+				do {
+					ob_get_clean();
+					$cur_ob_level = ob_get_level();
+				} while ($cur_ob_level > $ob_level);	
+			}
+			throw $e;	
+		}
+
+		if (empty($disable_ob)) {
+			$content = ob_get_clean();
+			$response->append_body($content);	
+		}
+		
+		$controller = null;
 	}
 
 	// }}}
