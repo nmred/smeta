@@ -12,6 +12,7 @@
 // | $_SWANBR_WEB_DOMAIN_$
 // +---------------------------------------------------------------------------
  
+require_once PATH_SWAN_LIB . 'controller/router/route/sw_controller_router_route_interface.class.php';
 /**
 +------------------------------------------------------------------------------
 * sw_controller_router_route_abstract 

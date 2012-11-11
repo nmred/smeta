@@ -166,7 +166,7 @@ class sw_controller_router_route_static extends sw_controller_router_route_abstr
 		$param = (array) explode('&', $gets);
 		$has_controller = false;
 		foreach ($param as $value) {
-			if (false !== strpos('q=', $value))	{
+			if (false !== strpos($value, 'q='))	{
 				list($tmp, $controller) = explode('=', $value);
 				$has_controller = true;
 			}
@@ -183,6 +183,8 @@ class sw_controller_router_route_static extends sw_controller_router_route_abstr
 			if ('.do' === substr($controller, -3)) {
 				$action = 'action_do';
 				$controller = substr($controller, 0, -3);
+			} else {
+				$action = 'action_default';	
 			}
 
 			$values[$this->__module_key]     = $module;
