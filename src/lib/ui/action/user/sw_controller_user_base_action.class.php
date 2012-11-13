@@ -12,53 +12,49 @@
 // | $_SWANBR_WEB_DOMAIN_$
 // +---------------------------------------------------------------------------
  
-require_once PATH_SWAN_LIB . 'controller/router/route/sw_controller_router_route_interface.class.php';
 /**
 +------------------------------------------------------------------------------
-* sw_controller_router_route_abstract 
+* 用户端首页
 +------------------------------------------------------------------------------
 * 
-* @uses sw_controller_router_route_interface
-* @abstract
 * @package 
 * @version $_SWANBR_VERSION_$
 * @copyright $_SWANBR_COPYRIGHT_$
 * @author $_SWANBR_AUTHOR_$ 
 +------------------------------------------------------------------------------
 */
-abstract class sw_controller_router_route_abstract implements sw_controller_router_route_interface
-{	
+class sw_controller_user_base_action
+{
+	// {{{ members
+	// }}}
 	// {{{ functions
-	// {{{ public function match()
-	
-	/**
-	 * 匹配路由 
-	 * 
-	 * @param sw_controller_request_http $request 
-	 * @access public
-	 * @return array
-	 */
-	public function match(sw_controller_request_http $request) {
-		return;		
-	}
-
-	// }}}	
-	// {{{ public function assemble()
+	// {{{ public function action_default()
 
 	/**
-	 * 生成url 
+	 * action_default 
 	 * 
-	 * @param array $data 
-	 * @param boolean $reset 
-	 * @param boolean $encode 
 	 * @access public
-	 * @return string
+	 * @return void
 	 */
-	public function assemble($data = array(), $reset = false, $encode = false)
+	public function action_default()
 	{
-		return;		
+		
+	}
+
+	// }}}
+	// {{{ public function action_do()
+
+	/**
+	 * action_do
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function action_do()
+	{
+		
 	}
 
 	// }}}
 	// }}}
-} 
+}

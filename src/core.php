@@ -63,6 +63,9 @@ define('SWANBR_AUTHOR', 'swanteam <nmred_2008@126.com>');
 // }}}
 // {{{ 参数设置
 
+// 目录分割线
+define('DIRECTORY_SEPARATOR', '/');
+
 // 默认时区设置
 define('SWAN_TIMEZONE_DEFAULT', 'Asia/Chongqing');
 

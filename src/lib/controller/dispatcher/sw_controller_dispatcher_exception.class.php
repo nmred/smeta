@@ -11,54 +11,22 @@
 // +---------------------------------------------------------------------------
 // | $_SWANBR_WEB_DOMAIN_$
 // +---------------------------------------------------------------------------
- 
-require_once PATH_SWAN_LIB . 'controller/router/route/sw_controller_router_route_interface.class.php';
+
+require_once PATH_SWAN_LIB . 'sw_exception.class.php';
+
 /**
 +------------------------------------------------------------------------------
-* sw_controller_router_route_abstract 
+* controller类异常处理
 +------------------------------------------------------------------------------
 * 
-* @uses sw_controller_router_route_interface
-* @abstract
+* @uses sw_exception
 * @package 
 * @version $_SWANBR_VERSION_$
 * @copyright $_SWANBR_COPYRIGHT_$
 * @author $_SWANBR_AUTHOR_$ 
 +------------------------------------------------------------------------------
 */
-abstract class sw_controller_router_route_abstract implements sw_controller_router_route_interface
-{	
-	// {{{ functions
-	// {{{ public function match()
-	
-	/**
-	 * 匹配路由 
-	 * 
-	 * @param sw_controller_request_http $request 
-	 * @access public
-	 * @return array
-	 */
-	public function match(sw_controller_request_http $request) {
-		return;		
-	}
 
-	// }}}	
-	// {{{ public function assemble()
-
-	/**
-	 * 生成url 
-	 * 
-	 * @param array $data 
-	 * @param boolean $reset 
-	 * @param boolean $encode 
-	 * @access public
-	 * @return string
-	 */
-	public function assemble($data = array(), $reset = false, $encode = false)
-	{
-		return;		
-	}
-
-	// }}}
-	// }}}
-} 
+class sw_controller_dispatcher_exception extends sw_exception
+{
+}
