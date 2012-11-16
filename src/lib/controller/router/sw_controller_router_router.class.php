@@ -317,7 +317,7 @@ class sw_controller_router_router extends sw_controller_router_abstract
 		$route_matched = false;
 
 		foreach (array_reverse($this->__routes, true) as $name => $route) {
-			if ($params = $route->match($request)) {
+			if ($params = $route->match($request, $this->get_front_controller()->get_dispatcher())) {
 				$this->_set_request_params($request, $params);	
 				$this->__current_route = $name;
 				$route_matched = true;

@@ -25,7 +25,7 @@ require_once PATH_SWAN_LIB . 'controller/dispatcher/sw_controller_dispatcher_int
 * @author $_SWANBR_AUTHOR_$ 
 +------------------------------------------------------------------------------
 */
-abstract class  sw_controller_dispatcher_abstract implements
+abstract class  sw_controller_dispatcher_abstract implements sw_controller_dispatcher_interface
 {
 	// {{{ members
 
@@ -43,7 +43,7 @@ abstract class  sw_controller_dispatcher_abstract implements
 	 * @var string
 	 * @access protected
 	 */
-	protected $__default_controller = 'login';
+	protected $__default_controller = 'base';
 	
 	/**
 	 * 设置默认的模块
@@ -51,7 +51,7 @@ abstract class  sw_controller_dispatcher_abstract implements
 	 * @var string
 	 * @access protected
 	 */
-	protected $__default_module = 'admin';
+	protected $__default_module = 'user';
 
 	/**
 	 * 前端控制器对象 
@@ -245,6 +245,20 @@ abstract class  sw_controller_dispatcher_abstract implements
 	public function get_default_module()
 	{
 		return $this->__default_module;	
+	}
+
+	// }}}
+	// {{{ public function get_default_controller()
+
+	/**
+	 * 获取默认的控制器
+	 * 
+	 * @access public
+	 * @return string
+	 */
+	public function get_default_controller()
+	{
+		return $this->__default_controller;	
 	}
 
 	// }}}

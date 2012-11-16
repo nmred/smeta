@@ -118,7 +118,7 @@ class sw_controller_plugin_broker extends sw_controller_plugin_abstract
 		if ($plugin instanceof sw_controller_plugin_abstract) {
 			$key = array_search($plugin, $this->__plugins, true);
 			if (false === $key) {
-				require_once PATH_SWAN_LIB 'controller/sw_controller_exception.class.php';
+				require_once PATH_SWAN_LIB . 'controller/sw_controller_exception.class.php';
 				throw new sw_controller_exception('Plugin never registered.');	
 			}	
 			unset($this->__plugins[$key]);

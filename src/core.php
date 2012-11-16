@@ -45,7 +45,7 @@ define('SWAN_VERSION', '0.11');
 // 软件发行号
 define('SWANBR_RELEASE', 'beta');
 
-//软件宣言 ------一切为了简单
+//软件宣言 ------一切为了方便
 define('SWANBR_SLOGAN', 'Everything in order to facilitate');
 
 //版权声明
@@ -62,9 +62,6 @@ define('SWANBR_AUTHOR', 'swanteam <nmred_2008@126.com>');
 
 // }}}
 // {{{ 参数设置
-
-// 目录分割线
-define('DIRECTORY_SEPARATOR', '/');
 
 // 默认时区设置
 define('SWAN_TIMEZONE_DEFAULT', 'Asia/Chongqing');

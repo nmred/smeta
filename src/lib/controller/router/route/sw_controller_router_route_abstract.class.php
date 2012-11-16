@@ -38,7 +38,7 @@ abstract class sw_controller_router_route_abstract implements sw_controller_rout
 	 * @access public
 	 * @return array
 	 */
-	public function match(sw_controller_request_http $request) {
+	public function match(sw_controller_request_http $request, sw_controller_dispatcher_abstract $dispatcher) {
 		return;		
 	}
 

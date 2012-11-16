@@ -146,7 +146,7 @@ abstract class sw_controller_plugin_abstract
 	 * @access public
 	 * @return void
 	 */
-	public function dispatch_loop_startup(sw_controller_request_abstract $request)
+	public function dispatch_loop_shutdown(sw_controller_request_abstract $request)
 	{
 		
 	}

@@ -35,7 +35,7 @@ interface sw_controller_router_route_interface
 	 * @access public
 	 * @return array
 	 */
-	public function match(sw_controller_request_http $request);
+	public function match(sw_controller_request_http $request, sw_controller_dispatcher_abstract $dispatcher);
 
 	// }}}	
 	// {{{ public function assemble()

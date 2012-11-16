@@ -167,7 +167,7 @@ class sw_controller_action_helper_broker_stack implements IteratorAggregate, Arr
 	{
 		if (!$this->offsetExists($helper_name_or_priority)) {
 			require_once PATH_SWAN_LIB . 'controller/action/sw_controller_action_exception.class.php';
-			throw new sw_controller_action_exception('A helper with priority ' . $helper_name_or_priority . ' does not exist.')		
+			throw new sw_controller_action_exception('A helper with priority ' . $helper_name_or_priority . ' does not exist.');	
 		}
 
 		if (is_string($helper_name_or_priority)) {
@@ -227,7 +227,7 @@ class sw_controller_action_helper_broker_stack implements IteratorAggregate, Arr
 	{
 		if (!$this->offsetExists($helper_name_or_priority)) {
 			require_once PATH_SWAN_LIB . 'controller/action/sw_controller_action_exception.class.php';
-			throw new sw_controller_action_exception('A helper with priority ' . $helper_name_or_priority . ' does not exist.')		
+			throw new sw_controller_action_exception('A helper with priority ' . $helper_name_or_priority . ' does not exist.');	
 		}	
 
 		if (is_string($helper_name_or_priority)) {

@@ -141,44 +141,37 @@ class sw_controller_router_route_static extends sw_controller_router_route_abstr
 	 * @access public
 	 * @return array
 	 */
-	public function match(sw_controller_request_http $request)
+	public function match(sw_controller_request_http $request, sw_controller_dispatcher_abstract $dispatcher)
 	{
 		$this->set_request($request);
 		$this->__module_key     = $this->__request->get_module_key();
 		$this->__controller_key = $this->__request->get_controller_key();
 		$this->__action_key     = $this->__request->get_action_key();
 
-		$request_uri = $this->__request->get_request_uri();
+		$request_query = $this->__request->get_query();
+		$request_pathinfo = $this->__request->get_pathinfo();
 
 		$values  = array();
 		$params = array(); 
 
-		if (false === ($pos = strpos($request_uri, '?')) || (0 === $pos)) {
+		if (false !== strpos(trim($request_pathinfo, '/'), '/')) {
 			return false;
 		}
 
-		list($module, $gets) = explode('?', $request_uri);
-		if (false === ($pos = strpos($gets, '=')) || (0 === $pos)) {
-			return false;
+		$module = trim($request_pathinfo, '/');
+		if (empty($module)) {
+			$module = $dispatcher->get_default_module();	
 		}
 
-		$module = trim($module, '/');
-		$param = (array) explode('&', $gets);
-		$has_controller = false;
-		foreach ($param as $value) {
-			if (false !== strpos($value, 'q='))	{
-				list($tmp, $controller) = explode('=', $value);
-				$has_controller = true;
-			}
-
-			list($name, $param_value) = explode('=', $value);
-			$params[$name] = $param_value;
+		if (isset($request_query['q'])) {
+			$controller = $request_query['q'];
+			unset($request_query['q']);
+		} else {	
+			$controller = $dispatcher->get_default_controller();
 		}
 
-		if (!$has_controller) {
-			return false;	
-		}
-		
+		$params = $request_query;			
+
 		if (isset($this->__allow[$module][$controller])) {
 			if ('.do' === substr($controller, -3)) {
 				$action = 'action_do';
@@ -190,6 +183,8 @@ class sw_controller_router_route_static extends sw_controller_router_route_abstr
 			$values[$this->__module_key]     = $module;
 			$values[$this->__controller_key] = $controller;
 			$values[$this->__action_key]     = $action;
+		} else {
+			return false;	
 		}
 
 		return ($values + $params);
