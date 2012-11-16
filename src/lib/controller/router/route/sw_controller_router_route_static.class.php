@@ -94,9 +94,8 @@ class sw_controller_router_route_static extends sw_controller_router_route_abstr
 	 * @access public
 	 * @return void
 	 */
-	public function __construct(array $allow, sw_controller_request_http $request) {
-		$this->set_request($request)
-			 ->set_allow($allow);			
+	public function __construct(sw_controller_request_http $request) {
+		$this->set_request($request);
 	}
 	
 	// }}}
@@ -116,19 +115,25 @@ class sw_controller_router_route_static extends sw_controller_router_route_abstr
 	}
 
 	// }}}
-	// {{{ public function set_allow()
+	// {{{ public static function get_static_map()
 
 	/**
-	 * 设置allow 
+	 * 设置静态路由 
 	 * 
-	 * @param  array $allow
 	 * @access public
-	 * @return sw_controller_router_route_static
 	 */
-	public function set_allow(array $allow)
+	public function get_static_map()
 	{
-		$this->__allow = $allow;
-		return $this;	
+		return array (
+			// {{{ user
+			'user' => array(
+				'base'  => true,
+				'test'  => true,
+			),
+			// }}}
+			// {{{ admin
+			// }}}
+		);
 	}
 
 	// }}}
@@ -172,7 +177,8 @@ class sw_controller_router_route_static extends sw_controller_router_route_abstr
 
 		$params = $request_query;			
 
-		if (isset($this->__allow[$module][$controller])) {
+		$allow = $this->get_static_map();
+		if (isset($allow[$module][$controller])) {
 			if ('.do' === substr($controller, -3)) {
 				$action = 'action_do';
 				$controller = substr($controller, 0, -3);

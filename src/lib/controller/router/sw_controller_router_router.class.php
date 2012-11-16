@@ -48,14 +48,6 @@ class sw_controller_router_router extends sw_controller_router_abstract
 	protected $__routes = array();
 
 	/**
-	 * 路由器信息map表 
-	 * 
-	 * @var array
-	 * @access protected
-	 */
-	protected $__route_map = array();
-
-	/**
 	 * 设置当前使用的路由 
 	 * 
 	 * @var sw_controller_router_route_interface
@@ -96,31 +88,10 @@ class sw_controller_router_router extends sw_controller_router_abstract
 			
 			require_once PATH_SWAN_LIB . 'controller/router/route/sw_controller_router_route_static.class.php';
 
-			$compat = new sw_controller_router_route_static($this->__route_map, $request);
+			$compat = new sw_controller_router_route_static($request);
 
 			$this->__routes = array('default' => $compat) + $this->__routes;
 		}
-
-		return $this;
-	}
-
-	// }}}
-	// {{{ public function set_route_map()
-
-	/**
-	 * 设置静态路由表 
-	 * 
-	 * @param array $array 
-	 * @access public
-	 * @return sw_controller_router_router
-	 */
-	public function set_route_map($array)
-	{
-		if (!is_array($array)) {
-			return $this;	
-		}	
-
-		$this->__route_map = $array;
 
 		return $this;
 	}

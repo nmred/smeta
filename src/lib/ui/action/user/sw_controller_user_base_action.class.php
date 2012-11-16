@@ -12,6 +12,8 @@
 // | $_SWANBR_WEB_DOMAIN_$
 // +---------------------------------------------------------------------------
  
+require_once PATH_SWAN_LIB . 'ui/action/sw_controller_action_web.class.php';
+
 /**
 +------------------------------------------------------------------------------
 * 用户端首页
@@ -23,7 +25,7 @@
 * @author $_SWANBR_AUTHOR_$ 
 +------------------------------------------------------------------------------
 */
-class sw_controller_user_base_action
+class sw_controller_user_base_action extends sw_controller_action_web
 {
 	// {{{ members
 	// }}}
@@ -38,7 +40,21 @@ class sw_controller_user_base_action
 	 */
 	public function action_default()
 	{
-		
+		$tpl_param['test'] = '测试';
+		$tpl_param['user'] = 'admin@test.swan.com';
+
+		$a = array('s', 'a');
+		$b = array(
+			array('字段一', '字段二'),
+			array ('user', 'test.swan'),
+			array ('user', 'test.swan'),
+			array ('user', 'test.swan'),
+			array ('user', 'test.swan'),
+		);
+		 
+		fb::table('表格', $b);
+		fb::info($tpl_param);
+		$this->render('base.html', $tpl_param);
 	}
 
 	// }}}

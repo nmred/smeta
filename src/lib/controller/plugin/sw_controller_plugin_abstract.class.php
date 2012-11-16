@@ -92,6 +92,20 @@ abstract class sw_controller_plugin_abstract
 	}
 
 	// }}}
+	// {{{ public function get_response()
+
+	/**
+	 * 获取响应对象 
+	 * 
+	 * @access public
+	 * @return sw_controller_response_abstract
+	 */
+	public function get_response()
+	{
+		return $this->__response;
+	}
+
+	// }}}
 	// {{{ public function route_startup()
 
 	/**

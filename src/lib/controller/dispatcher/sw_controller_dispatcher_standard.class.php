@@ -278,7 +278,7 @@ class sw_controller_dispatcher_standard extends sw_controller_dispatcher_abstrac
 
 		$file_spec = $this->class_to_filename($class_name);
 		$dispatch_dir = $this->get_dispatch_directory();
-		$test = $dispatcher . DIRECTORY_SEPARATOR . $file_spec;
+		$test = $dispatch_dir . DIRECTORY_SEPARATOR . $file_spec;
 		
 		return is_readable($test);
 	}
@@ -299,12 +299,17 @@ class sw_controller_dispatcher_standard extends sw_controller_dispatcher_abstrac
 		$this->set_response($response);
 	
 		if (!$this->is_dispatchable($request)) {
-			$controller = $this->get_controller_name();
+			$controller_name = $request->get_controller_name();
 			require_once PATH_SWAN_LIB . 'controller/dispatcher/sw_controller_dispatcher_exception.class.php';
 			throw new sw_controller_dispatcher_exception('Invalid controller specified (' . $controller_name . ')');	
 		}
 
-		$class_name = $this->get_controller_class($request);
+		
+		$class_name   = $this->get_controller_class($request);
+		$file_spec    = $this->class_to_filename($class_name);
+		$dispatch_dir = $this->get_dispatch_directory();
+		$class_path   = $dispatch_dir . DIRECTORY_SEPARATOR . $file_spec;
+		require_once $class_path;
 		
 		$controller = new $class_name($request, $this->get_response(), $this->get_params());
 		if (!($controller instanceof sw_controller_action_interface) &&
@@ -400,7 +405,7 @@ class sw_controller_dispatcher_standard extends sw_controller_dispatcher_abstrac
 		}	
 
 		$module          = strtolower($module);
-		$controller_dirs = $this->get_controller_directory($module);
+		$controller_dirs = $this->get_controller_directory();
 
 		foreach (array_keys($controller_dirs) as $module_name) {
 			if ($module == strtolower($module_name)) {

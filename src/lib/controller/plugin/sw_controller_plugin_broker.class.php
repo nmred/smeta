@@ -286,7 +286,8 @@ class sw_controller_plugin_broker extends sw_controller_plugin_abstract
 			try {
 				$plugin->route_startup($request);	
 			} catch (Exception $e) {
-				if (sw_controller_front::get_instance()->throw_exception()) {
+				if (sw_controller_front::get_instance()->throw_exceptions()) {
+					require_once PATH_SWAN_LIB . 'controller/sw_controller_exception.class.php';
 					throw new sw_controller_exception($e->getMessage() . $e->getTraceAsString());	
 				} else {
 					$this->get_response()->set_exception($e);	
@@ -311,7 +312,8 @@ class sw_controller_plugin_broker extends sw_controller_plugin_abstract
 			try {
 				$plugin->route_shutdown($request);	
 			} catch (Exception $e) {
-				if (sw_controller_front::get_instance()->throw_exception()) {
+				if (sw_controller_front::get_instance()->throw_exceptions()) {
+					require_once PATH_SWAN_LIB . 'controller/sw_controller_exception.class.php';
 					throw new sw_controller_exception($e->getMessage() . $e->getTraceAsString());	
 				} else {
 					$this->get_response()->set_exception($e);	
@@ -336,7 +338,8 @@ class sw_controller_plugin_broker extends sw_controller_plugin_abstract
 			try {
 				$plugin->dispatch_loop_startup($request);	
 			} catch (Exception $e) {
-				if (sw_controller_front::get_instance()->throw_exception()) {
+				if (sw_controller_front::get_instance()->throw_exceptions()) {
+					require_once PATH_SWAN_LIB . 'controller/sw_controller_exception.class.php';
 					throw new sw_controller_exception($e->getMessage() . $e->getTraceAsString());	
 				} else {
 					$this->get_response()->set_exception($e);	
@@ -361,7 +364,8 @@ class sw_controller_plugin_broker extends sw_controller_plugin_abstract
 			try {
 				$plugin->dispatch_loop_shutdown($request);	
 			} catch (Exception $e) {
-				if (sw_controller_front::get_instance()->throw_exception()) {
+				if (sw_controller_front::get_instance()->throw_exceptions()) {
+					require_once PATH_SWAN_LIB . 'controller/sw_controller_exception.class.php';
 					throw new sw_controller_exception($e->getMessage() . $e->getTraceAsString());	
 				} else {
 					$this->get_response()->set_exception($e);	
@@ -386,7 +390,8 @@ class sw_controller_plugin_broker extends sw_controller_plugin_abstract
 			try {
 				$plugin->pre_dispatch($request);	
 			} catch (Exception $e) {
-				if (sw_controller_front::get_instance()->throw_exception()) {
+				if (sw_controller_front::get_instance()->throw_exceptions()) {
+					require_once PATH_SWAN_LIB . 'controller/sw_controller_exception.class.php';
 					throw new sw_controller_exception($e->getMessage() . $e->getTraceAsString());	
 				} else {
 					$this->get_response()->set_exception($e);	
@@ -411,7 +416,8 @@ class sw_controller_plugin_broker extends sw_controller_plugin_abstract
 			try {
 				$plugin->post_dispatch($request);	
 			} catch (Exception $e) {
-				if (sw_controller_front::get_instance()->throw_exception()) {
+				if (sw_controller_front::get_instance()->throw_exceptions()) {
+					require_once PATH_SWAN_LIB . 'controller/sw_controller_exception.class.php';
 					throw new sw_controller_exception($e->getMessage() . $e->getTraceAsString());	
 				} else {
 					$this->get_response()->set_exception($e);	

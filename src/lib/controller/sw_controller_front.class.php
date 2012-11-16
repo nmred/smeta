@@ -116,7 +116,7 @@ class sw_controller_front
 	 * @var boolean
 	 * @access protected
 	 */
-	protected $__throw_exception = false;
+	protected $__throw_exceptions = false;
 
 	// }}}
 	// {{{ functions
@@ -808,8 +808,8 @@ class sw_controller_front
 		//初始化request对象
 		if (null !== $request) {
 			$this->set_request($request);	
-		} elseif ((null === $request) && (null === ($request == $this->get_request()))) {
-			require_once PATH_SWAN_LIB . 'controller/sw_controller_request_http.class.php';
+		} elseif ((null === $request) && (null === ($request = $this->get_request()))) {
+			require_once PATH_SWAN_LIB . 'controller/request/sw_controller_request_http.class.php';
 			$request = new sw_controller_request_http();
 			$this->set_request($request);
 		}
@@ -823,9 +823,9 @@ class sw_controller_front
 		//初始化response对象
 		if (null !== $response) {
 			$this->set_response($response);	
-		} elseif ((null === $response) && (null === ($response == $this->get_response()))) {
-			require_once PATH_SWAN_LIB . 'controller/sw_controller_response_http.class.php';
-			$request = new sw_controller_response_http();
+		} elseif ((null === $response) && (null == ($response = $this->get_response()))) {
+			require_once PATH_SWAN_LIB . 'controller/response/sw_controller_response_http.class.php';
+			$response = new sw_controller_response_http();
 			$this->set_response($response);
 		}
 
@@ -899,7 +899,7 @@ class sw_controller_front
 			$this->__response->set_exception($e);
 		}
 
-		if ($this->return_response) {
+		if ($this->return_response()) {
 			return $this->__response;	
 		}
 

@@ -472,7 +472,7 @@ abstract class sw_controller_response_abstract
 			if (isset($this->__body['default'])) {
 				$this->__body['default'] .= (string) $content;	
 			} else {
-				return $this->append('default', $content);	
+				return $this->append($content, 'default');	
 			}
 		} elseif (isset($this->__body[$name])) {
 			$this->__body[$name] .= (string) $content;	

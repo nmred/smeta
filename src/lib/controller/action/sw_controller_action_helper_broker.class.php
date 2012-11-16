@@ -50,7 +50,7 @@ class sw_controller_action_helper_broker
 	 * @var sw_controller_action_helper_broker_stack
 	 * @access protected
 	 */
-	protected $__stack = null;
+	static protected $__stack = null;
 
 	// }}}
 	// {{{ functions

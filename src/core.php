@@ -29,6 +29,9 @@ define('PATH_SWAN_BASE', realpath(dirname(__FILE__)));
     define('PATH_SWAN_HELP', PATH_SWAN_BASE . '/help/');
     define('PATH_SWAN_SHELL', PATH_SWAN_BASE . '/shell/');
     define('PATH_SWAN_TPL', PATH_SWAN_BASE . '/tpl/');
+    define('PATH_SWAN_TMP', PATH_SWAN_BASE . '/tmp/');
+		define('PATH_SWAN_COMPILE', PATH_SWAN_TMP . '/compile/');
+		define('PATH_SWAN_CACHE', PATH_SWAN_TMP . '/tmp/');
     define('PATH_SWAN_INC', PATH_SWAN_BASE . '/inc/');
         define('PATH_SWAN_LOCALE', PATH_SWAN_INC . '/locale/');
 // }}}
