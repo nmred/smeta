@@ -399,5 +399,24 @@ abstract class sw_controller_action implements sw_controller_action_interface
 	}
 
 	// }}}
+	// {{{ public function json_stdout()
+
+	/**
+	 * json形式返回 
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function json_stdout(array $options)
+	{
+		ob_start();
+		echo json_encode($options);
+		$this->get_response()->append_body(
+			$this->get_request()->get_action_name(),
+			ob_get_clean()
+		);
+	}
+
+	// }}}
 	// }}}
 }

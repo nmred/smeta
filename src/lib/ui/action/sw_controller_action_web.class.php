@@ -101,7 +101,36 @@ class sw_controller_action_web extends sw_controller_action
 	 */
 	public function get_static_path()
 	{
+		$base_path = $this->get_request()->get_base_path() . '/static/';
+		$tpl_static_public = $base_path . 'public/';
+		$tpl_static_user   = $base_path . 'user/';
+		$tpl_static_admin  = $base_path . 'admin/';
+
 		$map = array(
+			//全局
+			'TPL_STATIC_PATH'   => $base_path,
+			'TPL_STATIC_PUBLIC' => $tpl_static_public,
+			'TPL_STATIC_USER'   => $tpl_static_user,
+			'TPL_STATIC_ADMIN'  => $tpl_static_admin,
+
+			// {{{ public
+
+			'TPL_STATIC_PUBLIC_JS'    => $tpl_static_public . 'js/',
+				'TPL_STATIC_JQUERY' => $tpl_static_public . 'js/jquery-1.7.2.min.js',
+			'TPL_STATIC_PUBLIC_CSS'   => $tpl_static_public . 'css/',
+			'TPL_STATIC_PUBLIC_IMAGE' => $tpl_static_public . 'image/',
+
+			// }}}
+			// {{{ user
+
+			'TPL_STATIC_USER_JS'    => $tpl_static_user . 'js/',
+			'TPL_STATIC_USER_CSS'   => $tpl_static_user . 'css/',
+				'TPL_STATIC_CSS_BASE' => $tpl_static_user . 'css/base.css',
+			'TPL_STATIC_USER_IMAGE' => $tpl_static_user . 'image/',
+
+			// }}}
+			// {{{ admin
+			// }}}
 		);
 
 		return $map;

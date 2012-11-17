@@ -12,11 +12,9 @@
 // | $_SWANBR_WEB_DOMAIN_$
 // +---------------------------------------------------------------------------
  
-require_once PATH_SWAN_LIB . 'ui/action/sw_controller_action_web.class.php';
-
 /**
 +------------------------------------------------------------------------------
-* 用户端首页
+* 处理snmp
 +------------------------------------------------------------------------------
 * 
 * @package 
@@ -25,42 +23,42 @@ require_once PATH_SWAN_LIB . 'ui/action/sw_controller_action_web.class.php';
 * @author $_SWANBR_AUTHOR_$ 
 +------------------------------------------------------------------------------
 */
-class sw_controller_user_base_action extends sw_controller_action_web
+class sw_snmp
 {
-	// {{{ members
-	// }}}
-	// {{{ functions
-	// {{{ public function action_default()
+	// {{{ const
 
 	/**
-	 * action_default 
-	 * 
-	 * @access public
-	 * @return void
+	 * snmp的版本  
 	 */
-	public function action_default()
-	{
-		$tpl_param['test'] = '测试';
-		$tpl_param['user'] = 'admin@test.swan.com';
-		require_once PATH_SWAN_LIB . 'sw_validate.class.php';
-		sw_validate::validate_ip('1sassa27.0.0.1');
-		$this->render('base.html', $tpl_param);
-	}
+	const VERSION_1  = 'version_one';
+	const VERSION_2  = 'version_two';
+	const VERSION_3  = 'version_three';
 
 	// }}}
-	// {{{ public function action_do()
+	// {{{ public function get_snmp()
 
 	/**
-	 * action_do
+	 * 获取snmp对象 
 	 * 
+	 * @param string $version 
 	 * @access public
-	 * @return void
+	 * @return sw_snmp_abstract
 	 */
-	public function action_do()
+	public function get_snmp($version = self::VERSION_1)
 	{
-		return $this->json_stdout(array('res' => 0, 'data' => 'test'));	
+		$class_name = 'sw_snmp_' . $version;
+		if (!class_exists($class_name)) {
+			$class_path = PATH_SWAN_LIB . 'snmp/' . $class_name . '.class.php';
+			if (is_readable($class_path)) {
+				require_once $class_path;	
+			} else {
+				require_once PATH_SWAN_LIB . 'snmp/sw_snmp_exception.class.php';	
+				throw new sw_snmp_exception("snmp get class failed. ");
+			}
+		}
+
+		return new $class_name();
 	}
 
-	// }}}
 	// }}}
 }

@@ -127,8 +127,8 @@ class sw_controller_router_route_static extends sw_controller_router_route_abstr
 		return array (
 			// {{{ user
 			'user' => array(
-				'base'  => true,
-				'test'  => true,
+				'base'     => true,
+				'base.do'  => true,
 			),
 			// }}}
 			// {{{ admin
