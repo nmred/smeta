@@ -5,19 +5,13 @@
 <title>SWANSOFT 管理端</title>
 <link rel="stylesheet" href="<!--{{$TPL_STATIC_ADMIN_CSS}}-->admin.css" type="text/css" media="" />
 <script type="text/javascript" src="<!--{{$TPL_STATIC_JQUERY}}-->" ></script>
+<script type="text/javascript" src="<!--{{$TPL_STATIC_ADMIN_JS}}-->common.js" ></script>
+<script type="text/javascript" src="<!--{{$TPL_STATIC_ADMIN_JS}}-->base.js" ></script>
 <script type="text/javascript">
-$(document).ready(function() {
-	$("#main").scrollTop = $("#main").scrollTop();
-	document.getElementById("main").scrollTop =  32;
-	console.info(document.getElementById("main").offsetTop);
-});
-
-function test() {
-	document.getElementById("main").scrollTo(0, document.getElementById("main").scrollTop+ 92);
-	console.info(document.getElementById("main").scrollTop, 'top');
-	console.info(document.getElementById("main").scrollHeight, 'height');
-	console.info(document.getElementById("main").clientHeight, 'height');
-}
+var gUrlPrefix = "{{$URL_PREFIX_APP}}";
+var gBase = new Base();
+gBase.setThisName('gBase');
+gBase.init();
 </script>
 </head>
 <body style="overflow: hidden;">

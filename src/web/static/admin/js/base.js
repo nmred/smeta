@@ -13,7 +13,7 @@
  
 /**
 +------------------------------------------------------------------------------
-* 管理端基本库 :各个模块操作的基类
+* base页面
 +------------------------------------------------------------------------------
 * 
 * @package 
@@ -23,34 +23,27 @@
 +------------------------------------------------------------------------------
 */
 
-function ModuleBase()
-{
-	// {{{ members
+function Base() {
+	ModuleBase.call(this);
+	var __this = this;
 
-	/**
-	 * this 对象在外部的名字
-	 *
-	 * @type {String}  
-	 */
-	this.__thisName = 'this';
-	
-	// }}}
 	// {{{ functions
-	// {{{ function setThisName()
-		
+	
 	/**
-	 * 设置this对象在外部的名字
-	 *
-	 * @param {String} thisName
-	 * @return {Void}  
+	 * 初始化  
 	 */
-	this.setThisName = function (thisName)
+	this.init = function()
 	{
-		this.__thisName = thisName;	
+		$(document).ready(function() {
+			console.info("debug");
+			$("#sidebar").mouseover(function() {
+				$("#sidebar").css('overflow', 'auto');	
+			});						
+			$("#sidebar").mouseout(function() {
+				$("#sidebar").css('overflow', 'hidden');	
+			});						
+		});	
 	}
 
-	// }}}
-	// {{{ TODO 
-	// }}}
 	// }}}
 }
