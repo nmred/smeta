@@ -36,8 +36,10 @@ class sw_validate
 			}
 		}
 
-		$validate = new $class_name();
-		if ($validate->is_valid($args[0])) {
+		$options = func_get_args();
+		$valid_value = array_shift($options[1]);
+		$validate = new $class_name($options[1]);
+		if ($validate->is_valid($valid_value)) {
 			return true;	
 		} else {
 			require_once PATH_SWAN_LIB .  'sw_exception.class.php';	

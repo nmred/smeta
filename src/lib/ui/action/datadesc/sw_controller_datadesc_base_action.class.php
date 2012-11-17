@@ -12,46 +12,55 @@
 // | $_SWANBR_WEB_DOMAIN_$
 // +---------------------------------------------------------------------------
  
+require_once PATH_SWAN_LIB . 'ui/action/sw_controller_action_web.class.php';
+
 /**
 +------------------------------------------------------------------------------
-* Validate类example
+* 数据字典
 +------------------------------------------------------------------------------
 * 
-* @package sw_validate
+* @package 
 * @version $_SWANBR_VERSION_$
 * @copyright $_SWANBR_COPYRIGHT_$
 * @author $_SWANBR_AUTHOR_$ 
 +------------------------------------------------------------------------------
 */
+class sw_controller_datadesc_base_action extends sw_controller_action_web
+{
+	// {{{ members
+	// }}}
+	// {{{ functions
+	// {{{ public function action_default()
 
-require_once './core.php';
+	/**
+	 * action_default 
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function action_default()
+	{
+		$tpl_param['test'] = '测试';
+		$tpl_param['user'] = 'admin@test.swan.com';
+		require_once PATH_SWAN_LIB . 'sw_validate.class.php';
+		sw_validate::validate_ip('127.0.0.1');
+		$this->render('base.html', $tpl_param);
+	}
 
-#require_once PATH_SWAN_LIB . 'sw_validate.class.php';
+	// }}}
+	// {{{ public function action_do()
 
-/*
-+------------------------------------------------------------------
- * {{{ sw_validate_ip
-+------------------------------------------------------------------
-*/
-require_once PATH_SWAN_LIB . 'sw_validate.class.php';
+	/**
+	 * action_do
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function action_do()
+	{
+		return $this->json_stdout(array('res' => 0, 'data' => 'test'));	
+	}
 
-var_dump(sw_validate::validate_int("22"));
-//var_dump(sw_validate::validate_ip("2ww2"));
-var_dump(sw_validate::validate_between("4", 2, 56));
-var_dump(sw_validate::validate_in_array("4", array(2,4), false, true));
-/* }}}
-+------------------------------------------------------------------
- * {{{ output_xml 创建一个XML文件
-+------------------------------------------------------------------
-*/
-
-#$create_xml = sw_xml::factory('output_xml');
-#$create_xml->set_filename('output_test.xml');
-#var_dump($create_xml->output_xml($arr));
-/* }}}
-+------------------------------------------------------------------
- * 
-+------------------------------------------------------------------
-*/
-
-
+	// }}}
+	// }}}
+}

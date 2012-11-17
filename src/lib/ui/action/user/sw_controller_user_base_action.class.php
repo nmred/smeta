@@ -43,7 +43,7 @@ class sw_controller_user_base_action extends sw_controller_action_web
 		$tpl_param['test'] = '测试';
 		$tpl_param['user'] = 'admin@test.swan.com';
 		require_once PATH_SWAN_LIB . 'sw_validate.class.php';
-		sw_validate::validate_ip('1sassa27.0.0.1');
+		sw_validate::validate_ip('127.0.0.1');
 		$this->render('base.html', $tpl_param);
 	}
 
