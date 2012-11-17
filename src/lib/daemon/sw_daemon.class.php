@@ -440,7 +440,7 @@ class sw_daemon
 	 */
 	public function signal_handler($signo)
 	{
-		$sign_funs = $this->__signal_handler_funs[$signo];
+		$sign_funs = isset($this->__signal_handler_funs[$signo]) ? $this->__signal_handler_funs[$signo] : array();
 		if (is_array($sign_funs)) {
 			foreach ($sign_funs as $fun) {
 				call_user_func($fun);	
@@ -880,7 +880,7 @@ class sw_daemon
 	protected function _out($str)
 	{
 		if ($this->__verbose) {
-			fwrite(STDOUT, $str, "\n");	
+			fwrite(STDOUT, $str . "\n");	
 		}	
 
 		return true;
