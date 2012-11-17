@@ -35,7 +35,7 @@ define('PATH_SWAN_BASE', realpath(dirname(__FILE__)));
 		define('PATH_SWAN_CACHE', PATH_SWAN_TMP . 'tmp/');
     define('PATH_SWAN_INC', PATH_SWAN_BASE . '/inc/');
         define('PATH_SWAN_LOCALE', PATH_SWAN_INC . '/locale/');
-
+    define('PATH_SWAN_RUN', PATH_SWAN_BASE . '/run/'); //系统运行过程中产生的文件，一般是pid文件
 define('PATH_SNMP_BIN', '/usr/bin/');
 // }}}
 // {{{ 参数配置
