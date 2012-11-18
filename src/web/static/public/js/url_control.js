@@ -87,6 +87,20 @@ function UrlControl() {
 
 	// }}}
 	// {{{ functions
+	// function setUrl()
+
+	/**
+	 * 初始化url  
+	 * 
+	 * @params {String} url
+	 * @return {Void}
+	 */
+	this.setUrl = function (url)
+	{
+		__this._parseUrl(url);
+	}
+
+	// }}}
 	// {{{ function setParamsFormat()
 	
 	/**

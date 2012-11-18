@@ -59,7 +59,8 @@ function Base() {
 			//绘制一级菜单
 			_html.push('</hr><h3>' + gMenu[_key]['text'] + '</h3><ul class="toggle">');
 			for (var _vkey in gMenu[_key]['sub_categories']) {
-				_html.push('<li class="icn_new_article"><a href="">');
+				_html.push('<li class="icn_new_article"><a href="javascript:void(0)"');
+				_html.push(' onclick="' + __this.__thisName +'.jumpHref(\'' + gMenu[_key]['sub_categories'][_vkey]['q']+ '\')">');
 				_html.push(gMenu[_key]['sub_categories'][_vkey]['text']);
 				_html.push('</a></li>');
 			}
@@ -67,6 +68,23 @@ function Base() {
 		}	
 
 		$("#menu").html(_html.join(''));
+	}
+
+	// }}}
+	// {{{ function jumpHref()
+	
+	this.jumpHref = function (qs, param)
+	{
+		var _url = gUrlPrefix + '?q=' + qs;
+		
+		console.info(_url);
+		if ("undefined" !== typeof(param)) {
+			_url += param;	
+		}
+
+		document.getElementById("mainframe").src = _url;
+		
+		return false;	
 	}
 
 	// }}}
