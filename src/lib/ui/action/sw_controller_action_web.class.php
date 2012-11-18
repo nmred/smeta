@@ -135,6 +135,7 @@ class sw_controller_action_web extends sw_controller_action
 			'URL_JS_ADMIN'     => $tpl_static_admin . 'js/',
 				'URL_JS_COMMON_ADMIN' => $tpl_static_admin . 'js/common.js' .$this->get_version(),
 				'URL_JS_BASE_ADMIN'   => $tpl_static_admin . 'js/base.js' .$this->get_version(),
+				'URL_JS_DEVICE_MANAGE_ADMIN'   => $tpl_static_admin . 'js/device_manage.js' .$this->get_version(),
 			'URL_CSS_ADMIN'    => $tpl_static_admin . 'css/',
 				'URL_CSS_COMMON_ADMIN' => $tpl_static_admin . 'css/admin.css' . $this->get_version(),
 			'URL_IMAGE_ADMIN'  => $tpl_static_admin . 'image/',

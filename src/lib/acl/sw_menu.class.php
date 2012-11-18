@@ -38,7 +38,7 @@ class sw_menu
 				'sub_categories' => array (
 					'm_device_add' => array(
 						'text' => gettext('添加设备'),
-						'q'    => 'device_add',
+						'q'    => 'device_manage',
 					),
 					'm_device_list' => array(
 						'text' => gettext('设备列表'),
