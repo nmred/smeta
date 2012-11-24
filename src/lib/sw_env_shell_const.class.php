@@ -48,6 +48,9 @@ class sw_env_shell_const
 			// }}}
 			// {{{ 源码的目录
 			'source' => array(
+				//rrdtool 相关
+				'SRC_RRDTOOL'  => '$TMP_DIR/`ls $TMP_DIR |grep rrdtool`',
+
 				// httpd相关
 				'SRC_HTTPD'    => '$TMP_DIR/`ls $TMP_DIR |grep httpd`',
 				'SRC_PCRE'     => '$TMP_DIR/`ls $TMP_DIR |grep pcre`',
@@ -101,6 +104,8 @@ class sw_env_shell_const
 				'ETC_DIR'          => '$INSTALL_DIR/etc',
 				//mysql相关
 				'MYSQL_DATA'       => '$INSTALL_DIR/data/mysql',
+				//rrdtool
+				'INSTALL_RRDTOOL'  => '$INSTALL_DIR/rrdtool',
 			),
 			// }}}
 			// {{{ 日志记录文件
