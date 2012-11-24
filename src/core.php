@@ -95,7 +95,7 @@ define('SW_RIGHT_DELIMITER', '}}-->');
 // {{{ 系统初始化
 require_once PATH_SWAN_LIB . 'sw_language.class.php';
 require_once PATH_SWAN_LIB . 'sw_config.class.php';
-require_once PATH_SWAN_LIB . 'sw_config.class.php';
+require_once PATH_SWAN_LIB . 'sw_db.class.php';
 require_once PATH_SWAN_BASE . '/global.func.php';
 
 //初始化时区

@@ -39,22 +39,22 @@
 -- 	认证密钥
 
 CREATE TABLE `device` (
-	`device_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT DEFAULT0,
-	`device_name` varchar(255) NOT NULL DEFAULT,
-	`host` varchar(32) CHARACTER SET latin1 NOT NULL DEFAULT,
-	`port` smallint(6) UNSIGNED DEFAULT161,
-	`snmp_version` tinyint(2) UNSIGNED DEFAULT0,
-	`snmp_method` tinyint(2) UNSIGNED DEFAULT0,
-	`snmp_protocol` tinyint(2) UNSIGNED DEFAULT0,
-	`snmp_community` varchar(32) DEFAULTpublic,
-	`snmp_timeout` int(6) UNSIGNED DEFAULT5000,
-	`snmp_retries` tinyint(2) UNSIGNED DEFAULT3,
-	`security_name` varchar(32) DEFAULT,
-	`security_level` tinyint(2) UNSIGNED DEFAULT0,
-	`auth_protocol` tinyint(2) UNSIGNED DEFAULT0,
-	`auth_passphrase` varchar(32) DEFAULT,
-	`priv_protocol` tinyint(2) UNSIGNED DEFAULT0,
-	`priv_passphrase` varchar(32) DEFAULT,
+	`device_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT ,
+	`device_name` varchar(255) NOT NULL ,
+	`host` varchar(32) CHARACTER SET latin1 NOT NULL ,
+	`port` smallint(6) UNSIGNED DEFAULT '161',
+	`snmp_version` tinyint(2) UNSIGNED DEFAULT '0',
+	`snmp_method` tinyint(2) UNSIGNED DEFAULT '0',
+	`snmp_protocol` tinyint(2) UNSIGNED DEFAULT '0',
+	`snmp_community` varchar(32) DEFAULT 'public',
+	`snmp_timeout` int(6) UNSIGNED DEFAULT '5000',
+	`snmp_retries` tinyint(2) UNSIGNED DEFAULT '3',
+	`security_name` varchar(32) ,
+	`security_level` tinyint(2) UNSIGNED DEFAULT '0',
+	`auth_protocol` tinyint(2) UNSIGNED DEFAULT '0',
+	`auth_passphrase` varchar(32) ,
+	`priv_protocol` tinyint(2) UNSIGNED DEFAULT '0',
+	`priv_passphrase` varchar(32) ,
 	PRIMARY KEY (`device_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -76,11 +76,11 @@ CREATE TABLE `device` (
 -- 	数据库的起始时间 默认是now() - 10s
 
 CREATE TABLE `device_project` (
-	`project_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT DEFAULT,
-	`project_name` varchar(64) NOT NULL DEFAULT,
-	`device_id` int(11) UNSIGNED NOT NULL DEFAULT0,
-	`step` int(6) UNSIGNED DEFAULT300,
-	`start_time` int(11) UNSIGNED DEFAULT,
+	`project_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT ,
+	`project_name` varchar(64) NOT NULL ,
+	`device_id` int(11) UNSIGNED NOT NULL DEFAULT '0',
+	`step` int(6) UNSIGNED DEFAULT '300',
+	`start_time` int(11) UNSIGNED ,
 	PRIMARY KEY (`project_id`),
 	KEY`ik_0` (`device_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -115,17 +115,17 @@ CREATE TABLE `device_project` (
 -- 	传递数据的最大限制 默认不限制
 
 CREATE TABLE `rrd_ds` (
-	`ds_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT DEFAULT,
-	`ds_name` varchar(64) NOT NULL DEFAULT,
-	`project_id` int(11) UNSIGNED NOT NULL DEFAULT0,
-	`device_id` int(11) UNSIGNED NOT NULL DEFAULT0,
-	`get_method` tinyint(2) UNSIGNED DEFAULT0,
-	`object_type` char(32) DEFAULT,
-	`object_id` varchar(255) DEFAULT,
-	`source_type` tinyint(2) UNSIGNED DEFAULT0,
-	`heart_time` int(11) UNSIGNED DEFAULT300,
-	`min` varchar(32) DEFAULTU,
-	`max` varchar(32) DEFAULTU,
+	`ds_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT ,
+	`ds_name` varchar(64) NOT NULL ,
+	`project_id` int(11) UNSIGNED NOT NULL DEFAULT '0',
+	`device_id` int(11) UNSIGNED NOT NULL DEFAULT '0',
+	`get_method` tinyint(2) UNSIGNED DEFAULT '0',
+	`object_type` char(32) ,
+	`object_id` varchar(255) ,
+	`source_type` tinyint(2) UNSIGNED DEFAULT '0',
+	`heart_time` int(11) UNSIGNED DEFAULT '300',
+	`min` varchar(32) DEFAULT 'U',
+	`max` varchar(32) DEFAULT 'U',
 	PRIMARY KEY (`ds_id`),
 	KEY`ik_0` (`project_id`,`device_id`),
 	KEY`ik_1` (`project_id`)
@@ -153,13 +153,13 @@ CREATE TABLE `rrd_ds` (
 -- 	归档的条数
 
 CREATE TABLE `rrd_rra` (
-	`rra_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT DEFAULT,
-	`project_id` int(11) UNSIGNED NOT NULL DEFAULT0,
-	`device_id` int(11) UNSIGNED NOT NULL DEFAULT0,
-	`rra_cf` tinyint(2) UNSIGNED DEFAULT0,
-	`rra_xff` float(11) DEFAULT0.5,
-	`steps` int(11) UNSIGNED NOT NULL DEFAULT,
-	`rows` int(11) UNSIGNED NOT NULL DEFAULT,
+	`rra_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT ,
+	`project_id` int(11) UNSIGNED NOT NULL DEFAULT '0',
+	`device_id` int(11) UNSIGNED NOT NULL DEFAULT '0',
+	`rra_cf` tinyint(2) UNSIGNED DEFAULT '0',
+	`rra_xff` float(11) DEFAULT '0.5',
+	`steps` int(11) UNSIGNED NOT NULL ,
+	`rows` int(11) UNSIGNED NOT NULL ,
 	PRIMARY KEY (`rra_id`),
 	KEY`ik_0` (`project_id`,`device_id`),
 	KEY`ik_1` (`project_id`)
@@ -181,10 +181,10 @@ CREATE TABLE `rrd_rra` (
 -- 	算法该字段存取的逆波兰表达式 (当前先就这样了，以后尽量优化的不让用户直接输入逆波兰表达式)
 
 CREATE TABLE `rrd_cdef` (
-	`cdef_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT DEFAULT,
-	`graph_id` int(11) UNSIGNED NOT NULL DEFAULT0,
-	`define_name` varchar(32) NOT NULL DEFAULT,
-	`cdef_cf` varchar(255) NOT NULL DEFAULT,
+	`cdef_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT ,
+	`graph_id` int(11) UNSIGNED NOT NULL DEFAULT '0',
+	`define_name` varchar(32) NOT NULL ,
+	`cdef_cf` varchar(255) NOT NULL ,
 	PRIMARY KEY (`cdef_id`),
 	KEY`ik_0` (`graph_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -209,12 +209,12 @@ CREATE TABLE `rrd_cdef` (
 -- 	线条注释 对该颜色的提示，最后会写在图上的
 
 CREATE TABLE `rrd_line_area` (
-	`line_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT DEFAULT,
-	`graph_id` int(11) UNSIGNED NOT NULL DEFAULT0,
-	`line_cate` tinyint(2) UNSIGNED NOT NULL DEFAULT0,
-	`define_name` varchar(32) NOT NULL DEFAULT,
-	`color` varchar(32) NOT NULL DEFAULT,
-	`legend` varchar(32) NOT NULL DEFAULT,
+	`line_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT ,
+	`graph_id` int(11) UNSIGNED NOT NULL DEFAULT '0',
+	`line_cate` tinyint(2) UNSIGNED NOT NULL DEFAULT '0',
+	`define_name` varchar(32) NOT NULL ,
+	`color` varchar(32) NOT NULL ,
+	`legend` varchar(32) NOT NULL ,
 	PRIMARY KEY (`line_id`),
 	KEY`ik_0` (`graph_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -235,10 +235,10 @@ CREATE TABLE `rrd_line_area` (
 -- 	线条极限值注释 对该颜色的提示，最后会写在图上的
 
 CREATE TABLE `rrd_gprint` (
-	`gprint_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT DEFAULT,
-	`line_id` int(11) UNSIGNED NOT NULL DEFAULT0,
-	`line_cf` tinyint(2) UNSIGNED NOT NULL DEFAULT0,
-	`format` varchar(32) NOT NULL DEFAULT,
+	`gprint_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT ,
+	`line_id` int(11) UNSIGNED NOT NULL DEFAULT '0',
+	`line_cf` tinyint(2) UNSIGNED NOT NULL DEFAULT '0',
+	`format` varchar(32) NOT NULL ,
 	PRIMARY KEY (`gprint_id`),
 	KEY`ik_0` (`line_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

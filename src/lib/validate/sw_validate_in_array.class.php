@@ -88,10 +88,14 @@ class sw_validate_in_array extends sw_validate_abstract
 
 			if (!empty($options)) {
 				$tmp['strict'] = array_shift($options);	
+			} else {
+				$tmp['strict'] = false;	
 			}
 
 			if (!empty($options)) {
 				$tmp['recursive'] = array_shift($options);	
+			} else {
+				$tmp['recursive'] = false;	
 			}
 		}		
 

@@ -16,7 +16,7 @@ require_once PATH_SWAN_LIB . 'operator/sw_operator_abstract.class.php';
 
 /**
 +------------------------------------------------------------------------------
-* device操作对象 
+* rrd ds操作对象 
 +------------------------------------------------------------------------------
 * 
 * @uses sw_operator_abstract
@@ -26,58 +26,57 @@ require_once PATH_SWAN_LIB . 'operator/sw_operator_abstract.class.php';
 * @author $_SWANBR_AUTHOR_$ 
 +------------------------------------------------------------------------------
 */
-class sw_operator_rrd_device extends sw_operator_abstract
+class sw_operator_rrd_rrd_ds extends sw_operator_abstract
 {
 	// {{{ functions
-	// {{{ public funcction add_device()
+	// {{{ public funcction add_rrd_ds()
 
 	/**
-	 * 添加设备 
+	 * 添加数据源 
 	 * 
-	 * @param sw_property_rrd_device $property 
+	 * @param sw_property_rrd_rrd_ds $property 
 	 * @access public
 	 * @return void
 	 */
-	public function add_device(sw_property_rrd_device $property)
+	public function add_rrd_ds(sw_property_rrd_rrd_ds $property)
 	{
 		$attributes = $property->attributes();
-		$require_fields = array('device_name', 'host',);
+		$require_fields = array('ds_name', 'project_id', 'device_id');
 		$this->_check_require($attributes, $require_fields);
 
-		$this->__db->insert(SWAN_TBN_DEVICE, $attributes);
+		$this->__db->insert(SWAN_TBN_RRD_DS, $attributes);
 	}
 
 	// }}}
-	// {{{ public funcction get_device()
+	// {{{ public funcction get_rrd_ds()
 
 	/**
-	 * 获取所有的设备信息 
+	 * 获取数据源信息 
 	 * 
-	 * @param sw_condition_operator_rrd_device_get_device $condition 
+	 * @param sw_condition_operator_rrd_rrd_ds_get_rrd_ds $condition 
 	 * @access public
 	 * @return array
 	 */
-	public function get_device(sw_condition_operator_rrd_device_get_device $condition)
+	public function get_rrd_ds(sw_condition_operator_rrd_rrd_ds_get_rrd_ds $condition)
 	{
 		$condition->check_params();
 		$select = $this->__db->select()
-						     ->from(SWAN_TBN_DEVICE, null);
+						     ->from(SWAN_TBN_RRD_DS, null);
 		$condition->where($select, true);
 		return $this->_get($select, $condition->params());
-
 	}
 
 	// }}}
-	// {{{ public funcction mod_device()
+	// {{{ public funcction mod_rrd_ds()
 
 	/**
-	 * 修改的设备信息 
+	 * 修改数据源信息 
 	 * 
-	 * @param sw_condition_operator_rrd_device_mod_device $condition 
+	 * @param sw_condition_operator_rrd_rrd_ds_mod_rrd_ds $condition 
 	 * @access public
 	 * @return array
 	 */
-	public function mod_device(sw_condition_operator_rrd_device_mod_device $condition)
+	public function mod_rrd_ds(sw_condition_operator_rrd_rrd_ds_mod_rrd_ds $condition)
 	{
 		$condition->check_params();
 		$params = $condition->params();
@@ -88,20 +87,20 @@ class sw_operator_rrd_device extends sw_operator_abstract
 			return;	
 		}
 
-		$this->__db->update(SWAN_TBN_DEVICE, $attributes, $where);
+		$this->__db->update(SWAN_TBN_RRD_DS, $attributes, $where);
 	}
 
 	// }}}
-	// {{{ public funcction del_device()
+	// {{{ public funcction del_rrd_ds()
 
 	/**
-	 * 删除的设备信息 
+	 * 删除数据源信息 
 	 * 
-	 * @param sw_condition_operator_rrd_device_del_device $condition 
+	 * @param sw_condition_operator_rrd_rrd_ds_del_rrd_ds $condition 
 	 * @access public
 	 * @return void
 	 */
-	public function del_device(sw_condition_operator_rrd_device_del_device $condition)
+	public function del_rrd_ds(sw_condition_operator_rrd_rrd_ds_del_rrd_ds $condition)
 	{
 		$condition->check_params();
 		$where = $condition->where();
@@ -109,7 +108,7 @@ class sw_operator_rrd_device extends sw_operator_abstract
 			return;	
 		}
 
-		$this->__db->delete(SWAN_TBN_DEVICE, $where);
+		$this->__db->delete(SWAN_TBN_RRD_DS, $where);
 	}
 
 	// }}}

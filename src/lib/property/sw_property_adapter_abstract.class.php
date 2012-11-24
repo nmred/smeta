@@ -203,7 +203,7 @@ class sw_property_adapter_abstract
 			}	
 
 			if (isset($this->__allow_attributes[$attribute])) {
-				$this->__attributesp[$attribute] = $args[0];	
+				$this->__attributes[$attribute] = $args[0];	
 			} elseif (isset($this->__allow_propertys[$attribute])) {
 				$object = 'em_property_' . $attribute;
 				if ($args[0] instanceof $object) {

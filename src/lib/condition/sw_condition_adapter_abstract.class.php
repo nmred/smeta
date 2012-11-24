@@ -365,7 +365,7 @@ abstract class sw_condition_adapter_abstract
 	 */
 	public function where($select = null, $disable_alias = true)
 	{
-		$db = sw_db::signleton()
+		$db = sw_db::singleton();
 		if (!isset($select)) {
 			$select = $db->select();
 			$is_return = true;	
@@ -393,7 +393,7 @@ abstract class sw_condition_adapter_abstract
 						}
 						break;
 					case self::QUERY_OPTS_LIKE:
-						$value = $db->quote_add_quote('%'  . $db->quote_like($value) . '%');
+						$value = $db->quote('%'  . $value . '%');
 						$select->where($field . ' LIKE ' . $value);
 						break;
 					case self::QUERY_OPTS_RANGE:

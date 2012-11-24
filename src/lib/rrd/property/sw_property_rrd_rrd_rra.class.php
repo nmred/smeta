@@ -16,7 +16,7 @@ require_once PATH_SWAN_LIB . 'property/sw_property_adapter_abstract.class.php';
 
 /**
 +------------------------------------------------------------------------------
-* sw_property_rrd_device 
+* 归档策略属性对象 
 +------------------------------------------------------------------------------
 * 
 * @uses sw_property_adapter_abstract
@@ -26,7 +26,7 @@ require_once PATH_SWAN_LIB . 'property/sw_property_adapter_abstract.class.php';
 * @author $_SWANBR_AUTHOR_$ 
 +------------------------------------------------------------------------------
 */
-class sw_property_rrd_device extends sw_property_adapter_abstract
+class sw_property_rrd_rrd_rra extends sw_property_adapter_abstract
 {
 	// {{{ members
 
@@ -37,21 +37,12 @@ class sw_property_rrd_device extends sw_property_adapter_abstract
 	 * @access protected
 	 */
 	protected $__allow_attributes = array(
-		'device_name'     => true,
-		'host'            => true,
-		'port'            => true,
-		'snmp_version'    => true,
-		'snmp_method'     => true,
-		'snmp_protocol'   => true,
-		'snmp_community'  => true,
-		'snmp_timeout'    => true,
-		'snmp_retries'    => true,
-		'security_name'   => true,
-		'security_level'  => true,
-		'auth_protocol'   => true,	
-		'auth_passphrase' => true,
-		'priv_protocol'   => true,
-		'priv_passphrase' => true,
+		'project_id'  => true,
+		'device_id'   => true,
+		'rra_cf'  => true,
+		'rra_xff' => true,
+		'steps'   => true,
+		'rows' => true,
 	);
 
 	/**
@@ -69,9 +60,8 @@ class sw_property_rrd_device extends sw_property_adapter_abstract
 	 * @access protected
 	 */
 	protected $__int_fields = array(
-		'port',
-		'snmp_timeout',
-		'snmp_retries',
+		'steps',
+		'rows',
 	);
 
 	/**
@@ -81,12 +71,7 @@ class sw_property_rrd_device extends sw_property_adapter_abstract
 	 * @access protected
 	 */
 	protected $__int_enum_fields = array(
-		'snmp_version'   => array(0, 1, 2),
-		'snmp_method'    => array(0, 1),
-		'snmp_protocol'  => array(0, 1),
-		'security_level' => array(0, 1, 2),
-		'auth_protocol'  => array(0, 1),
-		'priv_protocol'  => array(0, 1),
+		'rra_cf'  => array(0, 1, 2, 3),
 	);
 		
 	// }}}		
@@ -102,12 +87,6 @@ class sw_property_rrd_device extends sw_property_adapter_abstract
 	public function check()
 	{
 		parent::check();
-		$attributes = $this->attributes();
-
-		if (isset($attributes['host'])) {	
-			require_once PATH_SWAN_LIB . 'sw_validate.class.php';
-			sw_validate::validate_ip($attributes['host']);	
-		}	
 	}
 
 	// }}}
