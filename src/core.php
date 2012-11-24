@@ -105,3 +105,16 @@ sw_language::set_gettext();
 require_once PATH_SWAN_LIB . 'firephp/FirePHPCore/fb.php';
 
 // }}}
+// }}}
+// {{{ 数据库表定义
+
+define('SWAN_TBN_DEVICE', 'device');
+define('SWAN_TBN_DEVICE_PROJECT', 'device_project');
+define('SWAN_TBN_RRD_DS', 'rrd_ds');
+define('SWAN_TBN_RRD_RRA', 'rrd_rra');
+define('SWAN_TBN_RRD_CDEF', 'rrd_cdef');
+define('SWAN_TBN_RRD_GRAPH', 'rrd_graph');
+define('SWAN_TBN_RRD_LINE_AREA', 'rrd_line_area');
+define('SWAN_TBN_RRD_FPRINT', 'rrd_gprint');
+
+// }}}
