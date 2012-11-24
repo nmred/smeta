@@ -41,6 +41,7 @@ $__db = sw_db::factory();
 +------------------------------------------------------------------
 */
 /*
+*/
 $sql =<<<SQL
 CREATE TABLE test(
  id int auto_increment not null primary key,
@@ -53,7 +54,6 @@ try {
 } catch(sw_db_adapter_exception $e) {
 	echo $e->getMessage();	
 }
-*/
 /* }}}
 +------------------------------------------------------------------
  * {{{ quote and quote_into 

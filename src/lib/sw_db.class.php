@@ -25,7 +25,7 @@
 */
 class sw_db
 {
-	// {{{ members
+	// {{{ const
 
 	/**
 	 * 定义CASE_FOLDING  
@@ -54,15 +54,27 @@ class sw_db
 	const BIGINT_TYPE = 1;
 	const FLOAT_TYPE  = 2;
 
+	// }}}
+	// {{{ members
+	
 	/**
-	 * 定义PDO中的常量
+	 * 每种数据库一个单件  
 	 */
-	//TODO
-			
+	protected static $__db = array();
+
 	// }}} end members
 	// {{{ functions
 	// {{{ public static function factory()
 	
+	/**
+	 * factory 
+	 * 
+	 * @param mixed $type 
+	 * @param array $options 
+	 * @static
+	 * @access public
+	 * @return void
+	 */
 	public static function factory($type = null, array $options = array())
 	{
 		if ($type === null) {
@@ -84,6 +96,45 @@ class sw_db
 		
 	}
 	 
+	// }}}
+	// {{{ public static function singleton()
+	
+	/**
+	 * db的单件 
+	 * 
+	 * @param string $db_type 
+	 * @param array $options 
+	 * @static
+	 * @access public
+	 * @return sw_db_adapter_abstract
+	 */
+	public static function singleton($db_type = null, array $options = array())
+	{
+		$db_type = isset($db_type) ? $db_type : sw_config::get('db:type');
+		
+		if (isset(self::$__db[$db_type]) && self::$__db[$db_type] instanceof sw_db_adapter_abstract) {
+			return self::$__db[$db_type];
+		} 
+
+		self::$__db[$db_type] = self::factory($db_type, $options);
+		return self::$__db[$db_type];
+	}
+
+	// }}}
+	// {{{ public static function singleton_clear()
+
+	/**
+	 * 清除单件，多进程下不能共用一个连接 
+	 * 
+	 * @static
+	 * @access public
+	 * @return void
+	 */
+	public static function singleton_clear()
+	{
+		self::$__db = array();	
+	}
+
 	// }}}
 	// }}} end functions
 }
