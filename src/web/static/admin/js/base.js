@@ -28,22 +28,47 @@ function Base() {
 	var __this = this;
 
 	// {{{ functions
-	
+	// {{{ function init()
+		
 	/**
 	 * 初始化  
 	 */
 	this.init = function()
 	{
 		$(document).ready(function() {
-			console.info("debug");
+			console.info(gMenu);
 			$("#sidebar").mouseover(function() {
 				$("#sidebar").css('overflow', 'auto');	
 			});						
 			$("#sidebar").mouseout(function() {
 				$("#sidebar").css('overflow', 'hidden');	
 			});						
+
+			__this.drawMenu();
 		});	
 	}
+	
+	// }}}
+	// {{{ function drawMenu()
 
+	this.drawMenu = function ()
+	{
+		var _html = [];
+
+		for (var _key in gMenu) {
+			//绘制一级菜单
+			_html.push('</hr><h3>' + gMenu[_key]['text'] + '</h3><ul class="toggle">');
+			for (var _vkey in gMenu[_key]['sub_categories']) {
+				_html.push('<li class="icn_new_article"><a href="">');
+				_html.push(gMenu[_key]['sub_categories'][_vkey]['text']);
+				_html.push('</a></li>');
+			}
+			_html.push('</ul>');
+		}	
+
+		$("#menu").html(_html.join(''));
+	}
+
+	// }}}
 	// }}}
 }

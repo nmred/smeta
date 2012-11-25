@@ -12,6 +12,7 @@
 // | $_SWANBR_WEB_DOMAIN_$
 // +---------------------------------------------------------------------------
  
+require_once PATH_SWAN_LIB . 'acl/sw_menu.class.php';
 require_once PATH_SWAN_LIB . 'ui/action/sw_controller_action_web.class.php';
 
 /**
@@ -40,6 +41,8 @@ class sw_controller_admin_base_action extends sw_controller_action_web
 	 */
 	public function action_default()
 	{
+		// 获取菜单
+		$tpl_param['menu'] = json_encode(sw_menu::get_static_menu());
 		$tpl_param['test'] = '测试';
 		$tpl_param['user'] = 'admin@test.swan.com';
 		$this->render('base.html', $tpl_param);

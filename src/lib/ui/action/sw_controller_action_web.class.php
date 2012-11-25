@@ -125,6 +125,7 @@ class sw_controller_action_web extends sw_controller_action
 			// }}}
 			// {{{ user
 
+			'PREFIX_URL_USER'       => $base_path . '/user/',
 			'TPL_STATIC_USER_JS'    => $tpl_static_user . 'js/',
 			'TPL_STATIC_USER_CSS'   => $tpl_static_user . 'css/',
 			'TPL_STATIC_USER_IMAGE' => $tpl_static_user . 'image/',
@@ -132,6 +133,7 @@ class sw_controller_action_web extends sw_controller_action
 			// }}}
 			// {{{ admin
 
+			'PREFIX_URL_ADMIN'       => $base_path . '/admin/',
 			'TPL_STATIC_ADMIN_JS'    => $tpl_static_admin . 'js/',
 			'TPL_STATIC_ADMIN_CSS'   => $tpl_static_admin . 'css/',
 			'TPL_STATIC_ADMIN_IMAGE' => $tpl_static_admin . 'image/',
