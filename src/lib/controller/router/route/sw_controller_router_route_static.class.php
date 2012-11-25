@@ -132,6 +132,10 @@ class sw_controller_router_route_static extends sw_controller_router_route_abstr
 			),
  			// }}}
 			// {{{ admin
+			'admin' => array(
+				'base'     => true,
+				'base.do'  => true,
+			),
 			// }}}
 			// {{{ datadesc
 			'datadesc' => array(

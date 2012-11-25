@@ -31,12 +31,12 @@ require_once PATH_SWAN_LIB . 'sw_orm.class.php';
 +------------------------------------------------------------------
  * {{{ add rrd rra
 +------------------------------------------------------------------
-*/
 
 $property = sw_orm::property_factory('rrd', 'rrd_rra');
 $property->set_project_id(1);
 $property->set_device_id(1);
-
+$property->set_steps(6);
+$property->set_rows(700);
 try {
 	$property->check();
 } catch (sw_exception $e) {
@@ -52,6 +52,7 @@ try {
 	exit;
 }
 
+*/
 /* }}}
 +------------------------------------------------------------------
  * {{{ get rrd ds
@@ -73,12 +74,12 @@ P($arr);
 +------------------------------------------------------------------
  * {{{ mod device project
 +------------------------------------------------------------------
-*/
 $property = sw_orm::property_factory('rrd', 'rrd_rra');
-$property->set_project_id(23);
+$property->set_steps(1);
+$property->set_rows(600);
 $condition = sw_orm::condition_factory('rrd', 'rrd_rra:mod_rrd_rra');
 
-$condition->set_in('ds_name');
+$condition->set_in('project_id');
 $condition->set_project_id(1);
 $condition->set_property($property);
 try {
@@ -91,11 +92,11 @@ try {
 
 P($arr);
 
+*/
 /* }}}
 +------------------------------------------------------------------
  * {{{ del device project
 +------------------------------------------------------------------
-*/
 
 $condition = sw_orm::condition_factory('rrd', 'rrd_rra:del_rrd_rra');
 
@@ -111,6 +112,7 @@ try {
 
 P($arr);
 
+*/
 /* }}}
 +------------------------------------------------------------------
  * {{{ get_profiler()  

@@ -36,7 +36,8 @@ require_once PATH_SWAN_LIB . 'sw_orm.class.php';
 $property = sw_orm::property_factory('rrd', 'rrd_ds');
 $property->set_project_id(1);
 $property->set_device_id(1);
-$property->set_ds_name('cpu');
+$property->set_ds_name('cpu_idel');
+$property->set_object_id('.1.3.6.1.4.1.2021.11.11.0');
 
 try {
 	$property->check();
@@ -60,7 +61,7 @@ try {
 */
 $condition = sw_orm::condition_factory('rrd', 'rrd_ds:get_rrd_ds');
 
-$condition->set_columns(array('ds_name'));
+//$condition->set_columns(array('ds_name'));
 try {
 	$operator = sw_orm::operator_factory('rrd', 'rrd_ds');
 	$arr = $operator->get_rrd_ds($condition);
@@ -75,13 +76,13 @@ P($arr);
 +------------------------------------------------------------------
  * {{{ mod device project
 +------------------------------------------------------------------
-*/
 $property = sw_orm::property_factory('rrd', 'rrd_ds');
-$property->set_ds_name("cpu_test");
+$property->set_ds_name("cpu_system");
+$property->set_object_id(".1.3.6.1.4.1.2021.11.10.0");
 $condition = sw_orm::condition_factory('rrd', 'rrd_ds:mod_rrd_ds');
 
-$condition->set_like('ds_name');
-$condition->set_ds_name('cpu');
+$condition->set_in('ds_id');
+$condition->set_ds_id(3);
 $condition->set_property($property);
 try {
 	$operator = sw_orm::operator_factory('rrd', 'rrd_ds');
@@ -93,11 +94,11 @@ try {
 
 P($arr);
 
+*/
 /* }}}
 +------------------------------------------------------------------
  * {{{ del device project
 +------------------------------------------------------------------
-*/
 
 $condition = sw_orm::condition_factory('rrd', 'rrd_ds:del_rrd_ds');
 
@@ -113,6 +114,7 @@ try {
 
 P($arr);
 
+*/
 /* }}}
 +------------------------------------------------------------------
  * {{{ get_profiler()  

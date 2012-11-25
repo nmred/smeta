@@ -30,12 +30,14 @@ define('PATH_SWAN_BASE', realpath(dirname(__FILE__)));
     define('PATH_SWAN_SHELL', PATH_SWAN_BASE . '/shell/');
     define('PATH_SWAN_TPL', PATH_SWAN_BASE . '/tpl/');
     define('PATH_SWAN_WEB', PATH_SWAN_BASE . '/web/');
+		define('PATH_SWAN_RRDPNG', PATH_SWAN_WEB . 'rrdpng/');
     define('PATH_SWAN_TMP', PATH_SWAN_BASE . '/tmp/');
 		define('PATH_SWAN_COMPILE', PATH_SWAN_TMP . 'compile/');
 		define('PATH_SWAN_CACHE', PATH_SWAN_TMP . 'tmp/');
     define('PATH_SWAN_INC', PATH_SWAN_BASE . '/inc/');
         define('PATH_SWAN_LOCALE', PATH_SWAN_INC . '/locale/');
     define('PATH_SWAN_RUN', PATH_SWAN_BASE . '/run/'); //系统运行过程中产生的文件，一般是pid文件
+		define('PATH_SWAN_RRA', PATH_SWAN_RUN . 'rrd/'); //rrdtool数据库文件
 define('PATH_SNMP_BIN', '/usr/bin/');
 // }}}
 // {{{ 参数配置

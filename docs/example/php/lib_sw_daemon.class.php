@@ -23,8 +23,12 @@ function my_handler2()
 		 ->set_host('192.168.56.131')
 		 ->set_timeout(5)
 		 ->set_community('public');
-	echo $snmp->get_next() . "\n";
-	echo $snmp->get();
+	$string = '/usr/local/swan/opt/rrdtool/bin/rrdtool update /usr/local/swan/opt/rrdtool/bin/cpu.rrd ';
+	$string .= ' --template cpu ' . time() . ':' . trim($snmp->get_next());
+//	echo $string . "\n";
+	exec($string, $rev);
+	//echo $snmp->get_next() . "\n";
+//	echo $snmp->get();
 }
 try {
 	$daemon = new sw_daemon($daemon_conf);

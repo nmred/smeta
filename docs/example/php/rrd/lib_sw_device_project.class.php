@@ -60,7 +60,7 @@ try {
 */
 $condition = sw_orm::condition_factory('rrd', 'device_project:get_device_project');
 
-$condition->set_columns(array('project_name', 'start_time'));
+//$condition->set_columns(array('project_name', 'start_time'));
 try {
 	$device_operator = sw_orm::operator_factory('rrd', 'device_project');
 	$arr = $device_operator->get_device_project($condition);
@@ -97,7 +97,6 @@ P($arr);
 +------------------------------------------------------------------
  * {{{ del device project
 +------------------------------------------------------------------
-*/
 
 $condition = sw_orm::condition_factory('rrd', 'device_project:del_device_project');
 
@@ -113,6 +112,7 @@ try {
 
 P($arr);
 
+*/
 /* }}}
 +------------------------------------------------------------------
  * {{{ get_profiler()  
