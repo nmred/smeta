@@ -17,6 +17,11 @@ body, ul, ol, h1, h2, h3, h4, h5, h6, form, li, p {
 	padding: 0;
 }
 
+label {
+	display: block;
+	margin-bottom: 5px;	
+}
+
 .clear {
 	clear: both;
 }
@@ -246,3 +251,104 @@ aside#sidebar {
 	overflow:auto;
 }
 
+
+/*详细的应用开始*/
+.empty_line {
+	height:30px;	
+}
+.button_bottom {
+	height: 30px;
+	width: 100%;
+	margin:0px 0px -2px 0px;
+	position: fixed;
+	bottom: 0px;
+	background-color: #FBFBFB;
+	background-image: -moz-linear-gradient(center top , #FFFFFF, #F5F5F5);
+	background-repeat: repeat-x;
+	border: 1px solid #DDDDDD;
+	border-radius: 5px 5px 3px 3px;
+	box-shadow: 0 1px 0 #FFFFFF inset;
+	list-style: none outside none;
+	margin: 0 0 0px;
+	padding: 3px 14px;
+}
+
+.btn {
+	color:#ffffff;
+	border-radius: 5px 5px 5px 5px;
+	font-size: 12px;
+	line-height: normal;
+	padding: 3px 14px;	
+	vertical-align: middle;
+	text-align: center;
+	margin: 0px 5px;
+	cursor: pointer;
+	display: inline-block;
+	border-style: solid;
+	border-width: 1px;
+	background-color: #43A1DA;
+	background-repeat: repeat-x;
+	border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+}
+
+.content {
+	padding:10px;
+}
+
+.tips {
+	line-height: 24px;
+	background: none repeat scroll 0 0 #FFF6BF;
+	border-radius: 10px 10px 10px 10px;
+	line-height: 24px;
+	padding: 10px;
+}
+
+
+/*表单设置*/
+.ltmtab {
+	width:100%;
+}
+
+.ltmtab td , .ltmtab th {
+	padding:5px;
+	border-bottom: 1px solid #EAEAEA;
+}
+
+.tab_set {
+	line-height: 50px;	
+}
+
+/*input type=text*/
+.text {
+	background-color: #ffffff;
+	border: 1px solid #959595;
+	color: #333333;
+	font-family: "Lucida Grande","Lucida Sans Unicode",Arial,Helvetica,Verdana,sans-serif;
+	font-size: 12px;
+	padding: 5px;
+}
+.text_disabled {
+	background-color: #EAEAEA;
+	border: 1px solid #959595;
+	color: #333333;
+	font-family: "Lucida Grande","Lucida Sans Unicode",Arial,Helvetica,Verdana,sans-serif;
+	font-size: 12px;
+	padding: 5px;
+}
+
+.wtd1 {
+	width: 240px;	
+}
+
+/*select*/
+select {
+	background-color: #FFFFFF;
+}
+select {
+	border: 1px solid #BBBBBB;
+	width: 220px;
+}
+select, input[type="file"] {
+	height: 28px;
+	line-height: 28px;
+}

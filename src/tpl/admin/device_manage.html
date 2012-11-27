@@ -11,7 +11,59 @@ var gDeviceManage = new DeviceManage();
 gDeviceManage.setThisName('gDeviceManage');
 gDeviceManage.init();
 </script>
+<style>
+</style>
 </head>
 <body>
+<div class="content">
+	<div class="tips">
+		<p>打算dad撒旦撒昆德拉斯科拉迪卡拉操作性村民所说的垃圾斯达康垃圾啊岁</p>	
+		<p>打算dad撒旦撒昆德拉斯科拉迪卡拉操作性村民所说的垃圾斯达康垃圾啊岁</p>	
+		<p>打算dad撒旦撒昆德拉斯科拉迪卡拉操作性村民所说的垃圾斯达康垃圾啊岁</p>	
+		<p>打算dad撒旦撒昆德拉斯科拉迪卡拉操作性村民所说的垃圾斯达康垃圾啊岁</p>	
+	</div>
+	<form action="<!--{$url}-->/insert" method="post">
+	<table class="ltmtab tab_set">
+	<colgroup>
+		<col width="150px">
+		<col>
+	</colgroup>
+	<tbody>
+	<tr>
+		<th>文章分类：</th>
+		<td>
+			<select id="selectError3">
+			<option>Option 1</option>
+			<option>Option 2</option>
+			<option>Option 3</option>
+			<option>Option 4</option>
+			<option>Option 5</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<th>文章标题：</th>
+		<td><input class="text wtd1" type="text" name="title" value="<!--{$post.title}-->"/></td>
+	</tr>
+	<tr>
+		<th>文章内容：</th>
+		<td><textarea name="content"><!--{$post.content}--></textarea><!--{$ck}--></td>
+	</tr>
+	<tr>
+		<th>是否可见：</th>
+		<td>
+			<input type="radio" name="visible" value="on" checked/>显示
+			<input type="radio" name="visible" value="off"/>隐藏
+		</td>
+	</tr>
+	</tbody>
+	</table>
+	</form>
+	<div class="empty_line"></div>
+	<div class="button_bottom">
+		<button class="btn" style="margin-left:30%">确 定</button>
+		<button class="btn">取 消</button>
+	</div>
+</div>
 </body>
 </html>
