@@ -55,19 +55,23 @@ function Base() {
 	{
 		var _html = [];
 
+		_html.push('<ul class="nav">');
 		for (var _key in gMenu) {
 			//绘制一级菜单
-			_html.push('</hr><h3>' + gMenu[_key]['text'] + '</h3><ul class="toggle">');
+			_html.push('<li style="font-weight:700;"><a href="javascript:void(0)"');
+			_html.push(' class="headitem ' + gMenu[_key]['icons'] + '">' + gMenu[_key]['text'] + '</a>');
+			_html.push('<ul class="opened closed" style="display:none">');
 			for (var _vkey in gMenu[_key]['sub_categories']) {
-				_html.push('<li class="icn_new_article"><a href="javascript:void(0)"');
-				_html.push(' onclick="' + __this.__thisName +'.jumpHref(\'' + gMenu[_key]['sub_categories'][_vkey]['q']+ '\')">');
+				_html.push('<li><a href="javascript:void(0);"');
+				_html.push(' onclick="' + __this.__thisName + '.jumpHref(\'' + gMenu[_key]['sub_categories'][_vkey]['q']+ '\')">');
 				_html.push(gMenu[_key]['sub_categories'][_vkey]['text']);
 				_html.push('</a></li>');
 			}
-			_html.push('</ul>');
+			_html.push('</ul></li>');
 		}	
+		_html.push('</ul>');
 
-		$("#menu").html(_html.join(''));
+		$("#sidebar").html(_html.join(''));
 	}
 
 	// }}}

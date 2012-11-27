@@ -34,6 +34,7 @@ class sw_menu
 			// {{{ input
 			'm_device' => array (
 				'text' => gettext('监控设备管理'),
+				'icons'=> 'icons_computer',
 				'sub_categories' => array (
 					'm_device_add' => array(
 						'text' => gettext('添加设备'),
@@ -47,6 +48,7 @@ class sw_menu
 			),
 			'm_project' => array (
 				'text' => gettext('监控项管理'),
+				'icons'=> 'icons_search',
 				'sub_categories' => array (
 					'm_project_add' => array(
 						'text' => gettext('添加监控项'),
@@ -60,6 +62,7 @@ class sw_menu
 			),
 			'm_input_data' => array (
 				'text' => gettext('数据输入管理'),
+				'icons'=> 'icons_advanced',
 				'sub_categories' => array (
 					'm_input_ds_add' => array(
 						'text' => gettext('数据源添加'),
