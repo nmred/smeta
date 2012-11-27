@@ -36,22 +36,32 @@ function Base() {
 	this.init = function()
 	{
 		$(document).ready(function() {
-			console.info(gMenu);
+			//设置左侧的滚动条
 			$("#sidebar").mouseover(function() {
-				$("#sidebar").css('overflow', 'auto');	
+				$("#sidebar").css('overflow-y', 'auto');	
+				$("#sidebar").css('overflow-x', 'hidden');	
 			});						
 			$("#sidebar").mouseout(function() {
 				$("#sidebar").css('overflow', 'hidden');	
 			});						
+			
+			//设置右侧iframe宽度
+			var _contentWidth = parseInt($("#main").css("width")) - 270;
+			$("#div_iframe").css("width", _contentWidth + 'px');
 
-			__this.drawMenu();
+			__this._drawMenu();
 		});	
 	}
 	
 	// }}}
-	// {{{ function drawMenu()
+	// {{{ function _drawMenu()
 
-	this.drawMenu = function ()
+	/**
+	 *  绘制菜单
+	 *  
+	 * @return {Void}
+	 */
+	this._drawMenu = function ()
 	{
 		var _html = [];
 
@@ -59,8 +69,10 @@ function Base() {
 		for (var _key in gMenu) {
 			//绘制一级菜单
 			_html.push('<li style="font-weight:700;"><a href="javascript:void(0)"');
-			_html.push(' class="headitem ' + gMenu[_key]['icons'] + '">' + gMenu[_key]['text'] + '</a>');
-			_html.push('<ul class="opened closed" style="display:none">');
+			_html.push(' class="headitem ' + gMenu[_key]['icons'] + '"');
+			_html.push(' onclick="' + __this.__thisName + '.changeMenu(\'' + _key + '\')">');
+			_html.push(gMenu[_key]['text'] + '</a>');
+			_html.push('<ul id="' + _key + '" class="opened closed" style="display:none">');
 			for (var _vkey in gMenu[_key]['sub_categories']) {
 				_html.push('<li><a href="javascript:void(0);"');
 				_html.push(' onclick="' + __this.__thisName + '.jumpHref(\'' + gMenu[_key]['sub_categories'][_vkey]['q']+ '\')">');
@@ -77,11 +89,16 @@ function Base() {
 	// }}}
 	// {{{ function jumpHref()
 	
+	/**
+	 *  跳转，只限于父框架内
+	 *  
+	 * @param {String} qs 跳转的模块，param参数 &sdsd=dsd&dsd
+	 * @return {Void}
+	 */
 	this.jumpHref = function (qs, param)
 	{
 		var _url = gUrlPrefix + '?q=' + qs;
 		
-		console.info(_url);
 		if ("undefined" !== typeof(param)) {
 			_url += param;	
 		}
@@ -89,6 +106,25 @@ function Base() {
 		document.getElementById("mainframe").src = _url;
 		
 		return false;	
+	}
+
+	// }}}
+	// {{{ function changeMenu()
+
+	/**
+	 *  折叠菜单
+	 *  
+	 * @param {String}  id
+	 * @return {Void}
+	 */
+	this.changeMenu = function (menuId)
+	{
+		var menuObj = sW.g(menuId);
+		if ('none' == menuObj.style.display) {
+			menuObj.style.display = '';	
+		} else {
+			menuObj.style.display = 'none';	
+		}
 	}
 
 	// }}}
