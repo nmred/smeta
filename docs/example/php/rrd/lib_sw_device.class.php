@@ -62,9 +62,9 @@ try {
 $condition = sw_orm::condition_factory('rrd', 'device:get_device');
 
 //$condition->set_is_count(true);
-$condition->set_like('device_name');
+//$condition->set_like('device_name');
 $condition->set_columns(array('device_name', 'port'));
-$condition->set_device_name('test');
+//dcondition->set_device_name('test');
 try {
 	$device_operator = sw_orm::operator_factory('rrd', 'device');
 	$arr = $device_operator->get_device($condition);

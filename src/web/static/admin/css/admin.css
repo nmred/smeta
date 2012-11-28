@@ -17,9 +17,8 @@ body, ul, ol, h1, h2, h3, h4, h5, h6, form, li, p {
 	padding: 0;
 }
 
-label {
-	display: block;
-	margin-bottom: 5px;	
+form label {
+	padding-left: 5px;	
 }
 
 .clear {
@@ -339,6 +338,9 @@ aside#sidebar {
 .wtd1 {
 	width: 240px;	
 }
+.wtd2 {
+	width: 40px;	
+}
 
 /*select*/
 select {
@@ -351,4 +353,121 @@ select {
 select, input[type="file"] {
 	height: 28px;
 	line-height: 28px;
+}
+
+.add-on {
+	background-color: #F5F5F5;
+	border: 1px solid #CCCCCC;
+	display: inline-block;
+	font-weight: normal;
+	height: 18px;
+	line-height: 18px;
+	min-width: 16px;
+	padding: 4px 5px;
+	text-align: center;
+	text-shadow: 0 1px 0 #FFFFFF;
+	vertical-align: middle;
+	width: auto;	
+}
+.add-on-left {
+	margin-left:-2px;
+	font-weight:700;
+	border-radius: 0 3px 3px 0;
+}
+
+.add-on-mid {
+	margin:0px -2px;
+	font-weight:700;
+}
+.form_boxy_span {
+	width: 1px;
+	height: 18px;
+	display: inline-block;
+	text-align: center;
+}
+
+/* alert*/
+.alert {
+	width: 100%;
+	left: 0;
+	position: fixed;
+	top: 0;
+} 
+.alert p{
+	margin: 5px;
+	text-align:center;
+	vertical-align: middle;
+	line-height: 25px;
+	font-size: 14px;
+} 
+.alert-failure {
+	background-color: rgba(213, 43, 43, 0.46);
+	border-color: #E8D1DF;
+	color: #000000;	
+}
+.alert-success {
+	background-color: rgba(63, 213, 43, 0.46);
+	border-color: #E8D1DF;
+	color: #000000;	
+}
+
+.head_notice {
+	width: 100%;	
+}
+
+.head_notice h3 {
+	border-bottom: 3px solid black;
+	margin: 5px;
+	padding-bottom: 5px;
+}
+
+.head_notice h3 .icons_help {
+	background-position: -96px -96px;	
+	margin-left: 5px;
+	cursor: pointer;
+}
+.head_notice h3 .icons_head {
+	background-position: -120px -144px;
+	margin-left: 5px;
+	cursor: pointer;
+}
+
+/*列表页的table样式*/
+
+.listtab {
+	margin-bottom: 15px;
+	width: 100%;	
+}
+
+.listtab th {
+	background: none repeat scroll 0 0 #EAEAEA;
+	color: #222222;
+	padding: 10px;
+	text-align: center;
+}
+
+.listtab th .first {
+	width: 30px;
+}
+
+.listtab th .last {
+	width: 200px;
+	min-width: 90px;
+}
+
+.listtab td {
+	 border-bottom: 1px solid #EAEAEA;
+	 padding: 10px;
+}
+
+.icon-zoom-in {
+	background-position: -336px 0;	
+}
+
+.icons-edit {
+	background-position: -96px -72px;	
+}
+
+.icons-trash {
+	background-position: -456px 0;	
 }

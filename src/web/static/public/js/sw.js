@@ -57,7 +57,7 @@ function sw (){
 	}
 
 	// }}}
-	// {{{ function D()
+	// {{{ function DE()
 	
 	/**
 	 * 调试专用  
@@ -71,6 +71,63 @@ function sw (){
 			console.info(debug);
 		}
 	}
+
+	// }}}
+	// {{{ function getPosition()
+	
+	/**
+	 * 获取元素的绝对位置
+	 * 
+	 * @return {Object} [left, top]
+	 */
+	this.getPosition = function (ele)
+	{
+		if (null === ele || "undefined" == typeof(ele)) {
+			return false;	
+		}
+		
+		var _top = ele.offsetTop;
+		var _left = ele.offsetLeft;
+		var _width = ele.offsetWidth;
+		var _height = ele.offsetHeight;
+
+		while(ele = ele.offsetParent) {
+			_top  += ele.offsetTop;
+			_left += ele.offsetLeft;		
+		}
+
+		return {top:_top, left:_left, width:_width, height:_height, bottom:(_top + _height), right: (_left + _width)};
+	}
+
+	// }}}
+	// {{{ function remove()
+	
+	/**
+	 * 删除一个dom元素 
+	 * 
+	 * @param {Dom} 需要删除的元素
+	 * @return {Void}
+	 */
+	this.remove = function (ele)
+	{
+		if (null === ele || "undefined" == typeof(ele)) {
+			return false;	
+		}
+		
+		ele.parentNode.removeChild(ele);
+	}
+
+	// }}}
+	// {{{ function ajaxError 
+
+    /**
+     * ajax error
+     *
+     * @returns {Void}
+     */
+    this.ajaxError = function() {
+        fMessage.show('the system error,please try agian later', 'failure');
+    };
 
 	// }}}
 	// }}}

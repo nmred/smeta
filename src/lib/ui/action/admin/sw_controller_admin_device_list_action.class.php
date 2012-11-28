@@ -16,7 +16,7 @@ require_once PATH_SWAN_LIB . 'ui/action/sw_controller_action_web.class.php';
 
 /**
 +------------------------------------------------------------------------------
-* 管理端管理设备
+* 管理端设备列表
 +------------------------------------------------------------------------------
 * 
 * @package 
@@ -25,8 +25,30 @@ require_once PATH_SWAN_LIB . 'ui/action/sw_controller_action_web.class.php';
 * @author $_SWANBR_AUTHOR_$ 
 +------------------------------------------------------------------------------
 */
-class sw_controller_admin_device_manage_action extends sw_controller_action_web
+class sw_controller_admin_device_list_action extends sw_controller_action_web
 {
+	// {{{ const
+
+	/**
+	 * SNMP版本  
+	 */
+	const SNMP_VERSION_1 = 0;
+	const SNMP_VERSION_2 = 1;
+	const SNMP_VERSION_3 = 2;
+
+	/**
+	 * 获取方式  
+	 */
+	const METHOD_EXEC = 0;
+	const METHOD_EXT  = 1;
+
+	/**
+	 * 通讯协议  
+	 */
+	const PROTOCOL_NET = 0;
+	const PROTOCOL_UDP = 1;
+
+	// }}}
 	// {{{ members
 	// }}}
 	// {{{ functions
@@ -40,9 +62,31 @@ class sw_controller_admin_device_manage_action extends sw_controller_action_web
 	 */
 	public function action_default()
 	{
+		$device_condition = sw_orm::condition_factory('rrd', 'device:get_device');
+
+		$device_condition->set_is_count(false);
+		try {
+			$device_operator = sw_orm::operator_factory('rrd', 'device');	
+			$device_infos = $device_operator->get_device($device_condition);
+		} catch (sw_exception $e) {
+			return false;	
+		}
+
+		//格式化信息
+		$snmp_versions = array('VERSION_1', 'VERSION_2', 'VERSION_3');
+		$snmp_methods  = array('EXEC', 'EXT');
+		$snmp_protocols = array('NET', 'UDP');
+		$list = array();
+		foreach ($device_infos as $key => $value) {
+			$list[$key]['version']  = $snmp_versions[$value['snmp_version']];
+			$list[$key]['method']   = $snmp_methods[$value['snmp_method']];
+			$list[$key]['protocol'] = $snmp_protocols[$value['snmp_protocol']];
+			$list[$key] = array_merge($value, $list[$key]);	
+		}
 		// 获取菜单
-		$tpl_param['mode'] = 'add';
-		$this->render('device_manage.html', $tpl_param);
+		$tpl_param['list'] = $list;
+		fb::info($list);
+		$this->render('device_list.html', $tpl_param);
 	}
 
 	// }}}
@@ -69,12 +113,6 @@ class sw_controller_admin_device_manage_action extends sw_controller_action_web
 	// }}}
 	// {{{ protected function _add_device_do()
 
-	/**
-	 * 添加设备 
-	 * 
-	 * @access protected
-	 * @return void
-	 */
 	protected function _add_device_do()
 	{
 		$device_name     = trim($this->__request->get_post('device_name', ''));

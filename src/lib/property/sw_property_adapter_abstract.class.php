@@ -69,6 +69,14 @@ class sw_property_adapter_abstract
 	protected $__validate = array();
 
 	/**
+	 * 存储验证结果信息(子类中的验证规则) 
+	 * 
+	 * @var array
+	 * @access protected
+	 */
+	protected $__validate_msg = array();
+
+	/**
 	 * 整形字段 
 	 * 
 	 * @var array
@@ -308,6 +316,48 @@ class sw_property_adapter_abstract
 	}
 	 
 	// }}}	
+	// {{{ public function get_restrict()
+
+	/**
+	 * 返回验证信息 
+	 * 
+	 * @param string $attribute 
+	 * @access public
+	 * @return array | string
+	 */
+	public function get_restrict($attribute = null)
+	{
+		$restrict = array();
+		
+		$messsage = gettext('Value of %s must be integer.');
+		foreach ($this->__int_fields as $field) {
+			$restrict[$field] = sprintf($messsage, gettext($field));	
+		}	
+
+		$messsage = gettext('Value of %s must be 1 or 0.');
+		foreach ($this->__bool_fields as $field) {
+			$restrict[$field] = sprintf($messsage, gettext($field));	
+		}
+
+		$messsage = gettext('Value of %s must be (%s).');
+		foreach ($this->__int_enum_fields as $field => $enum) {
+			$restrict[$field] = sprintf($messsage, gettext($field), implode(',', $enum));	
+		}
+
+		$messsage = gettext('Value of %s must be string.');
+		foreach ($this->__str_fields as $field => $haystack) {
+			$restrict[$field] = sprintf($messsage, gettext($field));	
+		}
+
+		$restrict = array_merge($restrict, $this->__validate_msg);
+
+		if (null === $attribute) {
+			return $restrict;	
+		} else {
+			return $restrict[$attribute];	
+		}
+	}
+
 	// }}}
 }
 

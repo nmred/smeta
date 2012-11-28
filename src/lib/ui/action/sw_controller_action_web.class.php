@@ -119,7 +119,9 @@ class sw_controller_action_web extends sw_controller_action
 			'URL_JS_PUBLIC'    => $tpl_static_public . 'js/',
 				'URL_JQUERY_PUBLIC' => $tpl_static_public . 'js/jquery-1.7.2.min.js' . $this->get_version(),
 				'URL_SW_JS_PUBLIC' => $tpl_static_public . 'js/sw.js' . $this->get_version(),
+				'URL_SW_BOXY_JS_PUBLIC' => $tpl_static_public . 'js/sw_boxy.js' . $this->get_version(),
 			'URL_CSS_PUBLIC'   => $tpl_static_public . 'css/',
+				'URL_COMMON_JS_CSS_PUBLIC' => $tpl_static_public . 'css/common_js.css' . $this->get_version(),
 			'URL_IMAGE_PUBLIC' => $tpl_static_public . 'image/',
 
 			// }}}
@@ -136,6 +138,7 @@ class sw_controller_action_web extends sw_controller_action
 				'URL_JS_COMMON_ADMIN' => $tpl_static_admin . 'js/common.js' .$this->get_version(),
 				'URL_JS_BASE_ADMIN'   => $tpl_static_admin . 'js/base.js' .$this->get_version(),
 				'URL_JS_DEVICE_MANAGE_ADMIN'   => $tpl_static_admin . 'js/device_manage.js' .$this->get_version(),
+				'URL_JS_DEVICE_LIST_ADMIN'   => $tpl_static_admin . 'js/device_list.js' .$this->get_version(),
 			'URL_CSS_ADMIN'    => $tpl_static_admin . 'css/',
 				'URL_CSS_COMMON_ADMIN' => $tpl_static_admin . 'css/admin.css' . $this->get_version(),
 			'URL_IMAGE_ADMIN'  => $tpl_static_admin . 'image/',
@@ -158,6 +161,29 @@ class sw_controller_action_web extends sw_controller_action
 	public function get_version()
 	{
 		return '?v=' . SWAN_VERSION;	
+	}
+
+	// }}}
+	// {{{ protected function _collect_check_info()
+	
+	/**
+	 * 收集错误信息 
+	 * 
+	 * @param sw_propery_abstract $property 
+	 * @param boolean $is_string 
+	 * @param string $glue 
+	 * @access protected
+	 * @return array|string
+	 */
+	protected function _collect_check_info($property, $is_string = false, $glue = '')
+	{
+		$msg = array();
+		
+		foreach ($property->get_validate() as $attribute) {
+			$msg[] = $property->get_restrict($attribute);	
+		}
+
+		return (false === $is_string) ? $msg : implode($glue, $msg);
 	}
 
 	// }}}

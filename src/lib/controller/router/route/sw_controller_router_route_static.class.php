@@ -137,6 +137,8 @@ class sw_controller_router_route_static extends sw_controller_router_route_abstr
 				'base.do'  => true,
 				'device_manage'     => true,
 				'device_manage.do'  => true,
+				'device_list'       => true,
+				'device_list.do'    => true,
 			),
 			// }}}
 			// {{{ datadesc

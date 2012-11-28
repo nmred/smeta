@@ -50,7 +50,19 @@ function ModuleBase()
 	}
 
 	// }}}
-	// {{{ TODO 
+	// {{{ function checkLogin()
+	
+	/**
+	 * 检查是否登录
+	 *
+	 * @param {Object} data
+	 * @return {Boolean}  
+	 */
+	this.checkLogin = function (data) 
+	{
+		return true;	
+	}
+	 
 	// }}}
 	// }}}
 }

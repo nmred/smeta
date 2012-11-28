@@ -15,55 +15,147 @@ gDeviceManage.init();
 </style>
 </head>
 <body>
+<div id="container">
 <div class="content">
-	<div class="tips">
-		<p>打算dad撒旦撒昆德拉斯科拉迪卡拉操作性村民所说的垃圾斯达康垃圾啊岁</p>	
-		<p>打算dad撒旦撒昆德拉斯科拉迪卡拉操作性村民所说的垃圾斯达康垃圾啊岁</p>	
-		<p>打算dad撒旦撒昆德拉斯科拉迪卡拉操作性村民所说的垃圾斯达康垃圾啊岁</p>	
-		<p>打算dad撒旦撒昆德拉斯科拉迪卡拉操作性村民所说的垃圾斯达康垃圾啊岁</p>	
+	<div id="head_notice" class="head_notice">
+		<h3>添加设备<a class="icons_gray icons_help" id="help_notice"></a></h3>
 	</div>
-	<form action="<!--{$url}-->/insert" method="post">
+	<div class="tips" style="display:none;" id="tips">
+		<p>1.设备的显示名不能为空</p>	
+		<p>2.主机名必须是正确的IP地址</p>	
+		<p>3.如果选择V1/V2的SNMP协议则必须填写共同体</p>	
+	</div>
+	<form name="form1" id="form1">
 	<table class="ltmtab tab_set">
 	<colgroup>
 		<col width="150px">
 		<col>
 	</colgroup>
 	<tbody>
-	<tr>
-		<th>文章分类：</th>
-		<td>
-			<select id="selectError3">
-			<option>Option 1</option>
-			<option>Option 2</option>
-			<option>Option 3</option>
-			<option>Option 4</option>
-			<option>Option 5</option>
-			</select>
-		</td>
-	</tr>
-	<tr>
-		<th>文章标题：</th>
-		<td><input class="text wtd1" type="text" name="title" value="<!--{$post.title}-->"/></td>
-	</tr>
-	<tr>
-		<th>文章内容：</th>
-		<td><textarea name="content"><!--{$post.content}--></textarea><!--{$ck}--></td>
-	</tr>
-	<tr>
-		<th>是否可见：</th>
-		<td>
-			<input type="radio" name="visible" value="on" checked/>显示
-			<input type="radio" name="visible" value="off"/>隐藏
-		</td>
-	</tr>
+		<tr>
+			<th>设备名称</th>
+			<td><input class="text wtd1" type="text" name="device_name" id="device_name" value=""/></td>
+		</tr>
+		<tr>
+			<th>主机名-端口</th>
+			<td>
+				<input class="text wtd1" type="text" name="host" id="device_host" value=""/>
+				<span  class="add-on add-on-mid">:</span>
+				<input class="text wtd2" type="text" name="port" id="device_port" value="161"/>
+				<span id="host_port" class="form_boxy_span"></span>
+			</td>
+		</tr>
+		<tr>
+			<th>SNMP 版本</th>
+			<td>
+				<input type="radio" id="version_one" name="snmp_version" value="0" checked/>
+				<label for="version_one">VERSION_1</label>
+				<input type="radio" id="version_two" name="snmp_version" value="1"/>
+				<label for="version_two">VERSION_2</label>
+				<input type="radio" id="version_three" name="snmp_version" value="2"/>
+				<label for="version_three">VERSION_3</label>
+				<span id ="snmp_version" class="form_boxy_span"></span>
+			</td>
+		</tr>
+	</tbody>
+	<tbody id="version_auth" style="display:none;">
+		<tr>
+			<th>认证用户名</th>
+			<td><input class="text wtd1" type="text" name="security_name" id="security_name" value=""/></td>
+		</tr>
+		<tr>
+			<th>安全等级</th>
+			<td>
+				<input type="radio" id="no_auth" name="security_level" value="0" checked/>
+				<label for="no_auth">noAuthNoPriv</label>
+				<input type="radio" id="auth_no_priv" name="security_level" value="1"/>
+				<label for="auth_no_priv">authNoPriv</label>
+				<input type="radio" id="auth_priv" name="security_level" value="2"/>
+				<label for="auth_priv">authPriv</label>
+				<span id ="security_level" class="form_boxy_span"></span>
+			</td>
+		</tr>
+		<tr>
+			<th>认证算法</th>
+			<td>
+				<input type="radio" id="auth_md5" name="auth_protocol" value="0" checked/>
+				<label for="auth_md5">MD5</label>
+				<input type="radio" id="auth_sha" name="auth_protocol" value="1"/>
+				<label for="auth_sha">SHA</label>
+				<span id ="auth_protocol" class="form_boxy_span"></span>
+			</td>
+		</tr>
+		<tr>
+			<th>认证公钥</th>
+			<td><input class="text wtd1" type="text" name="auth_passphrase" id="auth_passphrase" value=""/></td>
+		</tr>
+		<tr>
+			<th>密钥算法</th>
+			<td>
+				<input type="radio" id="priv_des" name="priv_protocol" value="0" checked/>
+				<label for="priv_des">DES</label>
+				<input type="radio" id="priv_aes" name="priv_protocol" value="1"/>
+				<label for="priv_aes">AES</label>
+				<span id ="priv_protocol" class="form_boxy_span"></span>
+			</td>
+		</tr>
+		<tr>
+			<th>认证密钥</th>
+			<td><input class="text wtd1" type="text" name="priv_passphrase" id="priv_passphrase" value=""/></td>
+		</tr>
+	</tbody>
+	<tbody id="version_community">
+		<tr>
+			<th>共同体名</th>
+			<td><input class="text wtd1" type="text" name="snmp_community" id="snmp_community" value=""/></td>
+		</tr>
+	</tbody>
+	<tbody>
+		<tr>
+			<th>获取数据方式</th>
+			<td>
+				<input type="radio" id="method_exec" name="snmp_method" value="0" checked/>
+				<label for="method_exec">EXEC</label>
+				<input type="radio" id="method_ext" name="snmp_method" value="1"/>
+				<label for="method_ext">EXT</label>
+				<span id ="snmp_method" class="form_boxy_span"></span>
+			</td>
+		</tr>
+		<tr>
+			<th>SNMP 通讯协议</th>
+			<td>
+				<input type="radio" id="protocol_net" name="snmp_protocol" value="0" checked/>
+				<label for="protocol_net">NET</label>
+				<input type="radio" id="protocol_udp" name="snmp_protocol" value="1"/>
+				<label for="protocol_udp">UDP</label>
+				<span id ="snmp_protocol" class="form_boxy_span"></span>
+			</td>
+		</tr>
+		<tr>
+			<th>SNMP 超时时间</th>
+			<td>
+				<input class="text wtd1" type="text" name="snmp_timout" id="timeout" value="5000"/>
+				<span  class="add-on add-on-left">毫秒</span>
+				<span id="timeout_alias" class="form_boxy_span"></span>
+			</td>
+		</tr>
+		<tr>
+			<th>SNMP 重试次数</th>
+			<td>
+				<input class="text wtd1" type="text" name="snmp_retries" id="retries" value="3"/>
+				<span  class="add-on add-on-left">次</span>
+				<span id="retries_alias" class="form_boxy_span" ></span>
+			</td>
+		</tr>
 	</tbody>
 	</table>
 	</form>
 	<div class="empty_line"></div>
 	<div class="button_bottom">
-		<button class="btn" style="margin-left:30%">确 定</button>
+		<button class="btn" onclick="gDeviceManage.handle('<!--{{$mode}}-->')" style="margin-left:30%">确 定</button>
 		<button class="btn">取 消</button>
 	</div>
+</div>
 </div>
 </body>
 </html>
