@@ -23,6 +23,8 @@
 +------------------------------------------------------------------------------
 */
 
+include('public', 'sw_boxy.js');
+
 function DeviceManage() {
 	ModuleBase.call(this);
 	var __this = this;

@@ -1,0 +1,13 @@
+========创建安装脚本注意事项=====
+1.因为php和js分别定义了相同的常量，打包前要同步信息（用脚本判断）
+//软件版本，和php的同步
+| var SWAN_VERSION = '0.12.b';
+| 
+| //public js
+| var SWAN_PUBLIC_JS = './';
+| 
+| //user js
+| var SWAN_USER_JS = '../../user/';
+| 
+| //admin js
+| var SWAN_ADMIN_JS = '../../admin/';

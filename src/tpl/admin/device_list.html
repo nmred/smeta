@@ -25,42 +25,50 @@ gDeviceList.init();
 		<p>2.主机名必须是正确的IP地址</p>	
 		<p>3.如果选择V1/V2的SNMP协议则必须填写共同体</p>	
 	</div>
-	<form name="form1" id="form1">
-	<table class="listtab">
-		<tr>
-			<th class="first" style="width:30px;">
-				<input type="checkbox" value="all" />
-			</th>
-			<th width="20%">设备名</th>
-			<th width="20%">设备主机名</th>
-			<th width="10%">版本</th>
-			<th width="10%">获取数据方式</th>
-			<th width="10%">通讯协议</th>
-			<th class="last">操作</th>
-		</tr>
-	<!--{{foreach from=$list key=key item=value}}-->	
-		<tr>
-			<td><input type="checkbox" value="all" /></td>	
-			<td><!--{{$value.device_name}}--></td>	
-			<td><!--{{$value.host}}--></td>	
-			<td><!--{{$value.version}}--></td>	
-			<td><!--{{$value.method}}--></td>	
-			<td><!--{{$value.protocol}}--></td>	
-			<td>
-				<a class="btn">
-					<i class="icon-zoom-in icons_gray_white"></i>详细
-				</a>
-				<a class="btn">
-					<i class="icons-edit icons_gray_white"></i>修改
-				</a>
-				<a class="btn">
-					<i class="icons-trash icons_gray_white"></i>删除
-				</a>
-			</td>	
-		</tr>
-	<!--{{/foreach}}-->	
-	</table>
-	</form>
+	<div class="block">
+		<form name="form1" id="form1">
+		<table class="listtab">
+			<tr>
+				<th class="first" style="width:30px;">
+					<input type="checkbox" value="all" />
+				</th>
+				<th width="20%">设备名</th>
+				<th width="20%">设备主机名</th>
+				<th width="10%">版本</th>
+				<th width="10%">通讯协议</th>
+				<th class="last">操作</th>
+			</tr>
+		<!--{{foreach from=$list key=key item=value}}-->	
+			<tr>
+				<td style="text-align:center;"><input type="checkbox" value="all" /></td>	
+				<td><!--{{$value.device_name}}--></td>	
+				<td><!--{{$value.host}}--></td>	
+				<td><!--{{$value.version}}--></td>	
+				<td><!--{{$value.protocol}}--></td>	
+				<td style="text-align:center;">
+					<a class="btn">
+						<i class="icon-zoom-in icons_gray_white" style="margin-right:3px;"></i>详细
+					</a>
+					<a class="btn">
+						<i class="icons-edit icons_gray_white" style="margin-right:3px;"></i>修改
+					</a>
+					<a class="btn">
+						<i class="icons-trash icons_gray_white" style="margin-right:3px;"></i>删除
+					</a>
+				</td>	
+			</tr>
+		<!--{{/foreach}}-->	
+		</table>
+		<div class="actions-bar wat-cf">
+			<div class="actions">
+				<button class="button">		
+					<img alt="Delete" src="<!--{{$URL_IMAGE_ADMIN}}-->cross.png">
+					批量删除
+				</button>
+			</div>
+		</div>
+		</form>
+	</div>
 </div>
 </div>
 </body>

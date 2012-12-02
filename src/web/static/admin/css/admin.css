@@ -290,6 +290,16 @@ aside#sidebar {
 	border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
 }
 
+a.button, button.button {
+	background: none repeat scroll center top #EDEEED;
+	border: 1px solid #C3C4BA;
+	border-radius: 3px 3px 3px 3px;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+	font-family: "MuseoSans500",helvetica,arial,sans-serif;
+	font-weight: normal;
+	padding:5px;
+}
+
 .content {
 	padding:10px;
 }
@@ -300,6 +310,7 @@ aside#sidebar {
 	border-radius: 10px 10px 10px 10px;
 	line-height: 24px;
 	padding: 10px;
+	margin-bottom: 10px;
 }
 
 
@@ -446,6 +457,9 @@ select, input[type="file"] {
 	text-align: center;
 }
 
+.listtab tr:hover {
+	background: none repeat scroll 0 0 #FFF6BF;
+}
 .listtab th .first {
 	width: 30px;
 }
@@ -470,4 +484,60 @@ select, input[type="file"] {
 
 .icons-trash {
 	background-position: -456px 0;	
+}
+
+.actions-bar {
+	padding: 10px 1px;
+}
+.wat-cf {
+	display: block;
+	height: 40px;
+	padding:10px;
+}
+
+.actions-bar .pagination {
+	float: right;
+	padding: 1px 0;
+}
+
+.pagination a, .pagination span {
+	background: url("../image/button-background.png") repeat scroll 0 0 #DDDDDD;
+	border: 1px solid #C3C4BA;
+	border-radius: 2px 2px 2px 2px;
+	color: #111111;
+	margin-right: 5px;
+	min-width: 15px;
+	padding: 6px;
+	text-align: center;
+	display: block;
+	float: left;
+}
+
+
+.pagination span.current {
+	background: none repeat scroll 0 0 #261F1F;
+	border: 1px solid #261F1F;
+	color: white;
+}
+
+.pagination a:hover {
+	border: 1px solid #818171;
+	box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+}
+
+.pagination a:active {
+	background-image: url("../image/button-background-active.png");
+	outline: medium none;
+}
+
+.actions {
+	float:left;	
+}
+
+.block {
+	background-color: white;
+	border-radius: 6px 6px 6px 6px;
+	box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 1px rgba(0, 0, 0, 0.3);
+	padding-top: 0;
+	text-shadow: 0 1px 0 white;
 }

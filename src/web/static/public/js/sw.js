@@ -13,7 +13,7 @@
  
 /**
 +------------------------------------------------------------------------------
-* 共用函数库
+* JS主框架,任何页面都必须加载本JS
 +------------------------------------------------------------------------------
 * 
 * @package 
@@ -33,6 +33,12 @@ function sw (){
 	 *  
 	 */
 	this.__isDebug = true;
+
+	/**
+	 * 允许自动加载的模块 
+	 *  
+	 */
+	this.__allowIncludeModule = {public:true,admin:true,user:true};
 
 	// }}}
 	// {{{ functions
@@ -130,18 +136,71 @@ function sw (){
     };
 
 	// }}}
+	// {{{ function include()
+
+	/**
+	 * 动态加载js文件
+	 * 
+	 * @param {String} 加载的模块名
+	 * @param {String} 加载的文件名
+	 * @return {Void}
+	 */
+	this.include = function (module, filename)
+	{	
+		if ("undefined" == typeof(__this.__allowIncludeModule[module])) {
+			return false;	
+		}
+
+		//判断是否已经加载
+		if ("undefined" != typeof(gIncludes[module][filename])) {
+			return false;	
+		}
+
+		var _html = [];
+		var info = document.getElementById('js_sw_base').src.split('/');
+		var version = info.pop().split('v=')[1];
+		info.pop();
+		info.pop();
+		var _prefixPath = info.join('/') + '/';	
+		
+		_html.push('<script type="text/javascript" src="');
+		_html.push(_prefixPath + module + '/js/');
+		_html.push(filename + '?v=' + version);
+		_html.push('" ></script>');
+		$('head').append(_html.join(''));	
+
+		//添加MAP表
+		gIncludes[module][filename] = true;
+	}
+	
+	// }}}	
 	// }}}
 };
+// {{{ Vars
 
+/**
+ * 动态加载文件管理MAP表
+ * 
+ */
+var gIncludes = {public:{},admin:{},user:{}};
+
+// }}}
 // {{{ Object
 
 var sW = new sw();
 
 // }}}
+// {{{ Functions
 
-// {{{ functions
 
-//DE()的别名
+/**
+ * DE的别名 用sW.DE()也可以调用调试工具 
+ */
 var D = sW.DE;
+
+/**
+ * sW.include()的别名
+ */
+var include = sW.include;
 
 // }}}
