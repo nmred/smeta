@@ -62,11 +62,19 @@ class sw_controller_admin_device_list_action extends sw_controller_action_web
 	 */
 	public function action_default()
 	{
-		$device_condition = sw_orm::condition_factory('rrd', 'device:get_device');
+		$page       = $this->__request->get_query('page', 1);
+		$rows_count = $this->__request->get_query('rows_count', 10);
+		$method     = $this->__request->get_query('method', 'tpl');
 
-		$device_condition->set_is_count(false);
+		$device_condition = sw_orm::condition_factory('rrd', 'device:get_device');
+		$device_condition->set_columns(array('device_id', 'device_name', 'host', 'snmp_version', 'snmp_protocol'));
 		try {
 			$device_operator = sw_orm::operator_factory('rrd', 'device');	
+			$device_condition->set_is_count(true);
+			$total = $device_operator->get_device($device_condition);	
+
+			$device_condition->set_is_count(false);
+			$device_condition->set_limit_page(array('page' => $page, 'rows_count' => $rows_count));
 			$device_infos = $device_operator->get_device($device_condition);
 		} catch (sw_exception $e) {
 			return false;	
@@ -79,14 +87,19 @@ class sw_controller_admin_device_list_action extends sw_controller_action_web
 		$list = array();
 		foreach ($device_infos as $key => $value) {
 			$list[$key]['version']  = $snmp_versions[$value['snmp_version']];
-			$list[$key]['method']   = $snmp_methods[$value['snmp_method']];
 			$list[$key]['protocol'] = $snmp_protocols[$value['snmp_protocol']];
 			$list[$key] = array_merge($value, $list[$key]);	
 		}
-		// 获取菜单
-		$tpl_param['list'] = $list;
-		fb::info($list);
-		$this->render('device_list.html', $tpl_param);
+
+		if ('tpl' == $method) {
+			$tpl_params['list'] = $list;
+			$tpl_params['page'] = $page;
+			$tpl_params['total'] = $total;
+			$this->render('device_list.html', $tpl_params);	
+		} else {
+			return $this->json_stdout(array('res' => 0, 'data' => $list));	
+		}
+
 	}
 
 	// }}}
@@ -100,10 +113,13 @@ class sw_controller_admin_device_list_action extends sw_controller_action_web
 	 */
 	public function action_do()
 	{
-		$action = $this->__request->get_post('action', '');
+		$action = $this->__request->get_query('action', '');
 		switch ($action) {
-			case 'add_device_do':
-				$this->_add_device_do();
+			case 'get_detail':
+				$this->_get_detail();
+				break;
+			case 'batch_delete':
+				$this->_batch_delete();
 				break;
 			default:
 				break;	
@@ -111,57 +127,89 @@ class sw_controller_admin_device_list_action extends sw_controller_action_web
 	}
 
 	// }}}
-	// {{{ protected function _add_device_do()
+	// {{{ protected function _get_detail()
 
-	protected function _add_device_do()
+	/**
+	 * 获取设备的详情 
+	 * 
+	 * @access protected
+	 * @return void
+	 */
+	protected function _get_detail()
 	{
-		$device_name     = trim($this->__request->get_post('device_name', ''));
-		$host			 = trim($this->__request->get_post('host', ''));
-		$port			 = trim($this->__request->get_post('port', ''));
-		$snmp_version    = trim($this->__request->get_post('snmp_version', ''));
-		$security_name   = trim($this->__request->get_post('security_name', ''));
-		$security_level  = trim($this->__request->get_post('security_level', ''));
-		$auth_protocol   = trim($this->__request->get_post('auth_protocol', ''));
-		$auth_passphrase = trim($this->__request->get_post('auth_passphrase', ''));
-		$priv_protocol   = trim($this->__request->get_post('priv_protocol', ''));
-		$priv_passphrase = trim($this->__request->get_post('priv_passphrase', ''));
-		$snmp_community  = trim($this->__request->get_post('snmp_community', ''));
-		$snmp_method     = trim($this->__request->get_post('snmp_method', ''));
-		$snmp_protocol   = trim($this->__request->get_post('snmp_protocol', ''));
-		$snmp_timout     = trim($this->__request->get_post('snmp_timout', ''));
-		$snmp_retries    = trim($this->__request->get_post('snmp_retries', ''));
+		$device_id = $this->__request->get_post('device_id', '');
 
-		$device_property = sw_orm::property_factory('rrd', 'device');
-		$device_property->set_device_name($device_name);
-		$device_property->set_host($host);
-		$device_property->set_port($port);
-		$device_property->set_snmp_version($snmp_version);
-		$device_property->set_snmp_method($snmp_method);
-		$device_property->set_snmp_protocol($snmp_protocol);
-		$device_property->set_snmp_community($snmp_community);
-		$device_property->set_snmp_timeout($snmp_timout);
-		$device_property->set_snmp_retries($snmp_retries);
-		$device_property->set_security_name($security_name);
-		$device_property->set_security_level($security_level);
-		$device_property->set_auth_protocol($auth_protocol);
-		$device_property->set_auth_passphrase($auth_passphrase);
-		$device_property->set_priv_protocol($priv_protocol);
-		$device_property->set_priv_passphrase($priv_passphrase);
-
-		try {
-			$device_property->check();	
-		} catch (sw_exception $e) {
-			return $this->json_stdout(array('res' => 1, 'message' => $this->_collect_check_info($device_property, true, '</br>') . $e->getMessage()));	
-		}
-
+		$device_condition = sw_orm::condition_factory('rrd', 'device:get_device');
+		$device_condition->set_eq('device_id');
+		$device_condition->set_device_id($device_id);
 		try {
 			$device_operator = sw_orm::operator_factory('rrd', 'device');	
-			$device_operator->add_device($device_property);
+			$device_infos = $device_operator->get_device($device_condition);
 		} catch (sw_exception $e) {
-			return $this->json_stdout(array('res' => 1, 'message' => $e->getMessage()));	
+			return false;	
 		}
-		
-		return $this->json_stdout(array('res' => 0, 'message' => '添加设备成功.'));	
+
+		//格式化信息
+		$snmp_versions   = array('VERSION_1', 'VERSION_2', 'VERSION_3');
+		$snmp_methods    = array('EXEC', 'EXT');
+		$snmp_protocols  = array('NET', 'UDP');
+		$security_levels = array('noAuthNoPriv', 'authNoPriv', 'authPriv');
+		$auth_protocols  = array('MD5', 'SHA');
+		$priv_protocols   = array('DES', 'AES');
+		$list = array();
+		$tmp_arr = $device_infos[0];
+
+		//基本信息
+		$list['base']['version']	  = $snmp_versions[$tmp_arr['snmp_version']];
+		$list['base']['protocol']	  = $snmp_protocols[$tmp_arr['snmp_protocol']];
+		$list['base']['method']		  = $snmp_methods[$tmp_arr['snmp_method']];
+		$list['base']['device_name']  = $tmp_arr['device_name'];
+		$list['base']['host']		  = $tmp_arr['host'];
+		$list['base']['port']		  = $tmp_arr['port'];
+		$list['base']['snmp_timeout'] = $tmp_arr['snmp_timeout'];
+		$list['base']['snmp_retries'] = $tmp_arr['snmp_retries'];
+		$list['base']['snmp_version'] = $tmp_arr['snmp_version'];
+
+		//认证信息
+		if (self::SNMP_VERSION_3 == $tmp_arr['snmp_version']) {
+			$list['auth']['security_name']   = $tmp_arr['security_name'];	
+			$list['auth']['security_level']  = $security_levels[$tmp_arr['security_level']];	
+			$list['auth']['auth_protocol']   = $auth_protocols[$tmp_arr['auth_protocol']];	
+			$list['auth']['auth_passphrase'] = $tmp_arr['auth_passphrase'];	
+			$list['auth']['priv_protocol']   = $priv_protocols[$tmp_arr['priv_protocol']];	
+			$list['auth']['priv_passphrase'] = $tmp_arr['priv_passphrase'];	
+		} else {
+			$list['base']['snmp_community'] = $tmp_arr['snmp_community'];
+		}
+
+		return $this->json_stdout(array('res' => 0, 'data' => $list));	
+	}
+
+	// }}}
+	// {{{ protected function _batch_delete()
+
+	/**
+	 * 删除设备 
+	 * 
+	 * @access protected
+	 * @return void
+	 */
+	protected function _batch_delete()
+	{
+		$device_ids = $this->__request->get_post('device_id', '');
+		$device_id_arr = explode(",", $device_ids);
+
+		$device_condition = sw_orm::condition_factory('rrd', 'device:del_device');
+		$device_condition->set_in('device_id');
+		$device_condition->set_device_id($device_id_arr);
+		try {
+			$device_operator = sw_orm::operator_factory('rrd', 'device');	
+			$device_operator->del_device($device_condition);
+		} catch (sw_exception $e) {
+			return $this->json_stdout(array('res' => 0, 'message' => gettext('删除设备失败。') . $e->getMessage()));	
+		}
+
+		return $this->json_stdout(array('res' => 0, 'message' => gettext('删除设备成功')));	
 	}
 
 	// }}}

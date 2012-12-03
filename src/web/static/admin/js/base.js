@@ -23,6 +23,8 @@
 +------------------------------------------------------------------------------
 */
 
+include("public", 'url_control.js');
+
 function Base() {
 	ModuleBase.call(this);
 	var __this = this;
@@ -50,6 +52,28 @@ function Base() {
 			$("#div_iframe").css("width", _contentWidth + 'px');
 
 			__this._drawMenu();
+			
+
+			//处理带有furl的参数
+			var uc = new UrlControl();
+			uc.setUrl(window.location.href);
+			var _furl = decodeURIComponent(uc.getParam("furl"));
+
+			if ('false' !== _furl) {
+				var	uc1 = new UrlControl();
+				uc1Url = (-1 === _furl.indexOf('?')) ? ("?" + _furl) : _furl;
+				uc1.setUrl(uc1Url);
+				var _q = uc1.getParam('q');
+
+				if ('base' !== _q && "base" !== _furl) {
+					if(false === _q) {
+						g("mainframe").src = gUrlPrefix + "?q=" + _furl;
+					} else {
+						g("mainframe").src = gUrlPrefix + "?" + _furl;
+					}		
+				}
+			}
+
 		});	
 	}
 	
@@ -103,7 +127,7 @@ function Base() {
 			_url += param;	
 		}
 
-		document.getElementById("mainframe").src = _url;
+		g("mainframe").src = _url;
 		
 		return false;	
 	}

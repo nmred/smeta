@@ -7,6 +7,8 @@
 <script type="text/javascript" src="<!--{{$URL_JS_DEVICE_LIST_ADMIN}}-->" ></script>
 <script type="text/javascript">
 var gUrlPrefix = "<!--{{$URL_PREFIX_ADMIN}}-->";
+var gTotal = "<!--{{$total}}-->"
+var gPage  = "<!--{{$page}}-->"
 var gDeviceList = new DeviceList();
 gDeviceList.setThisName('gDeviceList');
 gDeviceList.init();
@@ -30,7 +32,7 @@ gDeviceList.init();
 		<table class="listtab">
 			<tr>
 				<th class="first" style="width:30px;">
-					<input type="checkbox" value="all" />
+					<input type="checkbox" value="all" onclick="gDeviceList.selectAll(this)"/>
 				</th>
 				<th width="20%">设备名</th>
 				<th width="20%">设备主机名</th>
@@ -38,34 +40,37 @@ gDeviceList.init();
 				<th width="10%">通讯协议</th>
 				<th class="last">操作</th>
 			</tr>
+			<tbody id="list_info">
 		<!--{{foreach from=$list key=key item=value}}-->	
-			<tr>
-				<td style="text-align:center;"><input type="checkbox" value="all" /></td>	
+			<tr id="tr_<!--{{$value.device_id}}-->">
+				<td style="text-align:center;"><input type="checkbox" id="chk_<!--{{$value.device_id}}-->" value="<!--{{$value.device_id}}-->" /></td>	
 				<td><!--{{$value.device_name}}--></td>	
 				<td><!--{{$value.host}}--></td>	
 				<td><!--{{$value.version}}--></td>	
 				<td><!--{{$value.protocol}}--></td>	
 				<td style="text-align:center;">
-					<a class="btn">
+					<a class="btn" href="javascript:void(0);" onclick="gDeviceList.getDetail(<!--{{$value.device_id}}-->)">
 						<i class="icon-zoom-in icons_gray_white" style="margin-right:3px;"></i>详细
 					</a>
-					<a class="btn">
+					<a class="btn" href="<!--{{$URL_PREFIX_ADMIN}}-->?q=device_manage.do&action=modify&device_id=<!--{{$value.device_id}}-->">
 						<i class="icons-edit icons_gray_white" style="margin-right:3px;"></i>修改
 					</a>
-					<a class="btn">
+					<a class="btn" href="javascript:void(0);" onclick="gDeviceList.deleteDevice(<!--{{$value.device_id}}-->)">
 						<i class="icons-trash icons_gray_white" style="margin-right:3px;"></i>删除
 					</a>
 				</td>	
 			</tr>
 		<!--{{/foreach}}-->	
+			</tbody>
 		</table>
 		<div class="actions-bar wat-cf">
 			<div class="actions">
-				<button class="button">		
+				<button class="button" onclick="gDeviceList.batchDelete();return false;">		
 					<img alt="Delete" src="<!--{{$URL_IMAGE_ADMIN}}-->cross.png">
 					批量删除
 				</button>
 			</div>
+			<div id="pager"></div>
 		</div>
 		</form>
 	</div>

@@ -124,6 +124,24 @@ function sw (){
 	}
 
 	// }}}
+	// {{{ function empty()
+	
+	/**
+	 * 清除一个dom元素 
+	 * 
+	 * @param {Dom} 需要清除的元素
+	 * @return {Void}
+	 */
+	this.empty = function (ele)
+	{
+		if (null === ele || "undefined" == typeof(ele)) {
+			return false;	
+		}
+		
+		ele.innerHTML = '';
+	}
+
+	// }}}
 	// {{{ function ajaxError 
 
     /**
@@ -202,5 +220,10 @@ var D = sW.DE;
  * sW.include()的别名
  */
 var include = sW.include;
+
+/**
+ * sW.g()的别名
+ */
+var g = sW.g;
 
 // }}}

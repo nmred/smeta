@@ -30,7 +30,6 @@ form label {
 }
 
 a:link, a:visited {
-	color: #000000;
 	text-decoration: none;
 }
 
@@ -212,6 +211,7 @@ aside#sidebar {
 	padding: 0 40px;
 	text-decoration: none;
 	width: 210px;
+	color: black;
 }
 #sidebar ul li ul li a:hover {
 	background-color: #FFFFFF;
@@ -458,7 +458,7 @@ select, input[type="file"] {
 }
 
 .listtab tr:hover {
-	background: none repeat scroll 0 0 #FFF6BF;
+	#background: none repeat scroll 0 0 #FFF6BF;
 }
 .listtab th .first {
 	width: 30px;
@@ -471,11 +471,15 @@ select, input[type="file"] {
 
 .listtab td {
 	 border-bottom: 1px solid #EAEAEA;
-	 padding: 10px;
+	 padding: 5px;
 }
 
 .icon-zoom-in {
 	background-position: -336px 0;	
+}
+
+.icon-close {
+	background-position: -310px 0;	
 }
 
 .icons-edit {
@@ -514,7 +518,7 @@ select, input[type="file"] {
 }
 
 
-.pagination span.current {
+.pagination a.current {
 	background: none repeat scroll 0 0 #261F1F;
 	border: 1px solid #261F1F;
 	color: white;
@@ -539,5 +543,53 @@ select, input[type="file"] {
 	border-radius: 6px 6px 6px 6px;
 	box-shadow: 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 1px rgba(0, 0, 0, 0.3);
 	padding-top: 0;
-	text-shadow: 0 1px 0 white;
+}
+
+/* 详细信息展示样式 */
+.preview_list {
+	width: 100%;
+#	border: #CCC 1px solid;
+}
+.preview_list dl {
+	margin:0px;
+}
+.preview_list dd {
+	margin:0px 1px;
+	border: #CCC 1px solid;
+}
+
+.preview_list dt {
+	width:100%;
+	height: 29px;
+	background: none repeat scroll 0 0 rgba(10, 174, 252, 0.82);
+}
+
+.preview_list .ltitle {
+	background: none repeat scroll 0 0 rgba(10, 174, 252, 0.82);
+	border: 1px solid white;
+	float: left;
+	padding: 5px 15px;
+	line-height:16px;
+	margin-top:1px;
+	color:white;
+	cursor: pointer;
+	position: relative;
+	margin-right: 2px;
+	border-bottom: none;
+}
+.preview_list .current {
+	color: rgba(10, 174, 252, 0.82);
+	background: #FDFFFE;
+}
+.preview_list .arrow {
+	border-left: 5px solid transparent;
+	border-right: 5px solid transparent;
+	border-top: 5px solid  rgba(10, 174, 252, 0.82);
+	bottom: 0;
+	left: 50%;
+	top:29px;
+	margin: -3px 0px 0px -5px;
+	height: 0;
+	position: absolute;
+	width: 0;
 }

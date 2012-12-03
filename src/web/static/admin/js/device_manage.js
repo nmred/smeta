@@ -91,21 +91,22 @@ function DeviceManage() {
 			});
 
 			$("#version_one").click(function () {
+				__this._clearInput();
 				sW.g("version_auth").style.display = "none";	
 				sW.g("version_community").style.display = "";	
 			});
 
 			$("#version_two").click(function () {
+				__this._clearInput();
 				sW.g("version_auth").style.display = "none";	
 				sW.g("version_community").style.display = "";	
 			});
 
 			$("#version_three").click(function () {
+				__this._clearInput();
 				sW.g("version_auth").style.display = "";	
 				sW.g("version_community").style.display = "none";	
 			});
-
-		//	fMessage.show("设备添加成功<br/>设备添加成功<br/>设备添加成功", 'success');
 
 			$("#help_notice").click(function () {
 				if ('none' == sW.g("tips").style.display) {
@@ -136,18 +137,18 @@ function DeviceManage() {
 		}
 			
 		var _formData = $("#form1").serialize();	
-		var _url,_data;
+		var _url;
 		_url = gUrlPrefix + '?q=device_manage.do';
 		if ('add' == mode) {	
-			_data = _formData + "&action=add_device_do";
+			_url  += "&action=add_device_do";
 		} else {
-			_data = _formData + "&action=modify_device_do";
+			_url  += "&action=modify_do";
 		}
 
 		$.ajax ({
 			type: "post",
 			url : _url,
-			data: _data,
+			data: _formData,
 			dataType: "json",
 			error: sW.ajaxError,
 			success: function (dataRes) {
@@ -163,6 +164,25 @@ function DeviceManage() {
 				}
 			}
 		});
+	}
+
+	// }}}
+	// {{{ function _clearInput()
+
+	/**
+	 * 当切换版本的时候清空表单值
+	 *
+	 * @return {Void}
+	 */
+	this._clearInput = function ()
+	{
+		g("security_name").value = '';
+		g("no_auth").checked = true;
+		g("auth_md5").checked = true;
+		g("auth_passphrase").value = '';
+		g("priv_des").checked = true;
+		g("priv_passphrase").value = '';
+		g("snmp_community").value = "";	
 	}
 
 	// }}}
