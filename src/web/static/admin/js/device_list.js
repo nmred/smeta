@@ -87,15 +87,19 @@ function DeviceList() {
 					
 					_baseInfoHTML.push('<div id="base"><table class="listtab">');
 					_baseInfoHTML.push('<tr><th width="20%">设备名</th><td>' + _data['base']['device_name'] + '</td>');
-					_baseInfoHTML.push('<th width="20%">SNMP 版本</th><td>' + _data['base']['version'] + '</td></tr>');
+					_baseInfoHTML.push('<th width="20%">设备显示名</th><td>' + _data['base']['device_display_name'] + '</td></tr>');
 					_baseInfoHTML.push('<tr><th>主机名</th><td>' + _data['base']['host'] + '</td>');
 					_baseInfoHTML.push('<th>端口</th><td>' + _data['base']['port'] + '</td></tr>');
 					_baseInfoHTML.push('<tr><th>获取数据方式</th><td>' + _data['base']['method'] + '</td>');
 					_baseInfoHTML.push('<th>SNMP 通信协议</th><td>' + _data['base']['protocol'] + '</td></tr>');
 					_baseInfoHTML.push('<tr><th>SNMP 重试次数</th><td>' + _data['base']['snmp_retries'] + '</td>');
 					_baseInfoHTML.push('<th>SNMP 超时时间</th><td>' + _data['base']['snmp_timeout'] + '</td></tr>');
+					_baseInfoHTML.push('<tr><th>SNMP 版本</th>');
 					if ("undefined" != typeof(_data['base']['snmp_community'])) {
-						_baseInfoHTML.push('<tr><th>共同体名</th><td colspan="3">' + _data['base']['snmp_community'] + '</td></tr>');
+						_baseInfoHTML.push('<td>' + _data['base']['version'] + '</td>');
+						_baseInfoHTML.push('<th>共同体名</th><td colspan="3">' + _data['base']['snmp_community'] + '</td></tr>');
+					} else {
+						_baseInfoHTML.push('<td colspan="3">' + _data['base']['version'] + '</td></tr>');
 					}
 					_baseInfoHTML.push('</table></div>');
 
@@ -252,7 +256,7 @@ function DeviceList() {
 				for (var _key in _data) {
 					_html.push('<tr id="tr_' + _data[_key]['device_id'] + '"><td style="text-align:center;">');
 					_html.push('<input type="checkbox" id="chk_' + _data[_key]['device_id'] + '" value="' + _data[_key]['device_id'] + '" /></td>');
-					_html.push('<td>' + _data[_key]['device_name'] + '</td>');	
+					_html.push('<td>' + _data[_key]['device_display_name'] + '</td>');	
 					_html.push('<td>' + _data[_key]['host'] + '</td>');	
 					_html.push('<td>' + _data[_key]['version'] + '</td>');	
 					_html.push('<td>' + _data[_key]['protocol'] + '</td>');	

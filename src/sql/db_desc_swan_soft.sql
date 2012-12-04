@@ -8,6 +8,8 @@
 -- device_id
 -- 	设备 id
 -- device_name
+-- 	设备名称(唯一)
+-- device_display_name
 -- 	设备显示名称
 -- host
 -- 	设备的主机名
@@ -41,6 +43,7 @@
 CREATE TABLE `device` (
 	`device_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT ,
 	`device_name` varchar(255) NOT NULL ,
+	`device_display_name` varchar(255) NOT NULL ,
 	`host` varchar(32) CHARACTER SET latin1 NOT NULL ,
 	`port` smallint(6) UNSIGNED DEFAULT '161',
 	`snmp_version` tinyint(2) UNSIGNED DEFAULT '0',

@@ -17,19 +17,19 @@ gDeviceManage.init();
 </head>
 <body>
 <div id="container">
-<div class="content">
-	<div id="head_notice" class="head_notice">
-		<!--{{if 'mod' == $mode}}-->
-		<h3>修改设备<a class="icons_gray icons_help" id="help_notice"></a></h3>
-		<!--{{else}}-->
-		<h3>添加设备<a class="icons_gray icons_help" id="help_notice"></a></h3>
-		<!--{{/if}}-->
-	</div>
-	<div class="tips" style="display:none;" id="tips">
-		<p>1.设备的显示名不能为空</p>	
-		<p>2.主机名必须是正确的IP地址</p>	
-		<p>3.如果选择V1/V2的SNMP协议则必须填写共同体</p>	
-	</div>
+<div class="tab_manage">
+	<dl>
+		<dt>
+			<div id="div_base" class="ltitle current" onclick="gDeviceList.displayInfo('base')">基本信息
+				<div id="base_arrow" class="arrow" style=""></div>
+			</div>
+			<div id="div_auth" class="ltitle" onclick="gDeviceList.displayInfo('auth')">认证信息
+				<div id="auth_arrow" class="arrow" style="display:none;"></div>
+			</div>
+		</dt>
+	</dl>
+</div>
+<div class="content" style="margin-top:35px;">
 	<form name="form1" id="form1">
 	<table class="ltmtab tab_set">
 	<colgroup>

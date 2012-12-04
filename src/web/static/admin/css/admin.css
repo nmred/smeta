@@ -285,7 +285,7 @@ aside#sidebar {
 	display: inline-block;
 	border-style: solid;
 	border-width: 1px;
-	background-color: #43A1DA;
+	background-color: #424C52;
 	background-repeat: repeat-x;
 	border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
 }
@@ -453,12 +453,12 @@ select, input[type="file"] {
 .listtab th {
 	background: none repeat scroll 0 0 #EAEAEA;
 	color: #222222;
-	padding: 10px;
+	padding: 5px;
 	text-align: center;
 }
 
 .listtab tr:hover {
-	#background: none repeat scroll 0 0 #FFF6BF;
+	background: none repeat scroll 0 0 #FFF6BF;
 }
 .listtab th .first {
 	width: 30px;
@@ -471,7 +471,7 @@ select, input[type="file"] {
 
 .listtab td {
 	 border-bottom: 1px solid #EAEAEA;
-	 padding: 5px;
+	 padding: 3px;
 }
 
 .icon-zoom-in {
@@ -575,6 +575,7 @@ select, input[type="file"] {
 	cursor: pointer;
 	position: relative;
 	margin-right: 2px;
+	margin-left:1px;
 	border-bottom: none;
 }
 .preview_list .current {
@@ -585,6 +586,61 @@ select, input[type="file"] {
 	border-left: 5px solid transparent;
 	border-right: 5px solid transparent;
 	border-top: 5px solid  rgba(10, 174, 252, 0.82);
+	bottom: 0;
+	left: 50%;
+	top:29px;
+	margin: -3px 0px 0px -5px;
+	height: 0;
+	position: absolute;
+	width: 0;
+}
+
+/* 详细信息展示样式 */
+.tab_manage {
+	width: 100%;
+	left: 0;
+	position: fixed;
+	top: 0px;
+	background: none repeat scroll 0 0 #f3f3f3;
+}
+.tab_manage dl {
+	margin-top:0px;
+	padding-top:10px;
+}
+.tab_manage dd {
+	margin:0px 1px;
+	border: #CCC 1px solid;
+}
+
+.tab_manage dt {
+	width:100%;
+	height: 29px;
+	border-bottom: 1px solid #000;
+	position: absolute;
+	background: none repeat scroll 0 0 #f3f3f3;
+}
+
+.tab_manage .ltitle {
+	background: none repeat scroll 0 0 #ccc;
+	border: 1px solid white;
+	float: left;
+	padding: 5px 15px;
+	line-height:16px;
+	margin-top:1px;
+	color:white;
+	cursor: pointer;
+	position: relative;
+	margin-left:5px;
+	border-bottom: none;
+}
+.tab_manage .current {
+	color: rgba(10, 174, 252, 0.82);
+	background: #FDFFFE;
+}
+.tab_manage .arrow {
+	border-left: 5px solid transparent;
+	border-right: 5px solid transparent;
+	border-top: 5px solid #000;
 	bottom: 0;
 	left: 50%;
 	top:29px;

@@ -37,21 +37,22 @@ class sw_property_rrd_device extends sw_property_adapter_abstract
 	 * @access protected
 	 */
 	protected $__allow_attributes = array(
-		'device_name'     => true,
-		'host'            => true,
-		'port'            => true,
-		'snmp_version'    => true,
-		'snmp_method'     => true,
-		'snmp_protocol'   => true,
-		'snmp_community'  => true,
-		'snmp_timeout'    => true,
-		'snmp_retries'    => true,
-		'security_name'   => true,
-		'security_level'  => true,
-		'auth_protocol'   => true,	
-		'auth_passphrase' => true,
-		'priv_protocol'   => true,
-		'priv_passphrase' => true,
+		'device_name'         => true,
+		'device_display_name' => true,
+		'host'                => true,
+		'port'                => true,
+		'snmp_version'        => true,
+		'snmp_method'         => true,
+		'snmp_protocol'       => true,
+		'snmp_community'      => true,
+		'snmp_timeout'        => true,
+		'snmp_retries'        => true,
+		'security_name'       => true,
+		'security_level'      => true,
+		'auth_protocol'       => true,	
+		'auth_passphrase'     => true,
+		'priv_protocol'       => true,
+		'priv_passphrase'     => true,
 	);
 
 	/**

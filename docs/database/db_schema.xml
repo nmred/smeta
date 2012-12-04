@@ -32,6 +32,14 @@
                     </column>
 
                     <column name="device_name">
+                        <desc>设备名称(唯一)</desc>
+                        <type>varchar</type>
+                        <nullable>false</nullable>
+                        <precision>255</precision>
+                        <default></default>
+                    </column>
+
+                    <column name="device_display_name">
                         <desc>设备显示名称</desc>
                         <type>varchar</type>
                         <nullable>false</nullable>

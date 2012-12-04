@@ -41,7 +41,8 @@ function DeviceManage() {
 			fBindBoxy({
 				data: {
 					// {{{
-					'device_name': '设备显示名称',	
+					'device_name': '设备名称',	
+					'device_display_name': '设备显示名称, 设备名的格式必须是首个字符是字母，由数字、字母、下划线组成,并且至少6位',	
 					'device_host': '设备的主机名例如 localhost',
 					'device_port': '设备的端口号默认是  SNMP 的默认端口：161',
 					'version_one': 'SNMP 协议的版本 : VERSION_1',
@@ -117,6 +118,10 @@ function DeviceManage() {
 					sW.g("help_notice").className = "icons_gray icons_help";	
 				}
 			});	
+
+			$("#reset_form").click(function () {
+				g("form1").reset();
+			});
 		});	
 
 	}
@@ -126,8 +131,13 @@ function DeviceManage() {
 	
 	this.handle = function (mode)
 	{
-		if ('' == $.trim(sW.g("device_name").value)) {
+		if ('add' == mode && '' == $.trim(sW.g("device_name").value)) {
 			fMessage.show("设备名不能为空.", "failure");	
+			return false;
+		}
+
+		if ('' == $.trim(sW.g("device_display_name").value)) {
+			fMessage.show("设备显示名不能为空.", "failure");	
 			return false;
 		}
 		
@@ -161,6 +171,7 @@ function DeviceManage() {
 					fMessage.show(dataRes.message, "failure");	
 				} else {
 					fMessage.show(dataRes.message, "success", 2);	
+					__this.fJumpTo('device_list');
 				}
 			}
 		});

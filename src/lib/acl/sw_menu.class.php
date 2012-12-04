@@ -52,7 +52,7 @@ class sw_menu
 				'sub_categories' => array (
 					'm_project_add' => array(
 						'text' => gettext('添加监控项'),
-						'q'    => 'project_add',
+						'q'    => 'project_manage',
 					),
 					'm_project_list' => array(
 						'text' => gettext('监控项列表'),

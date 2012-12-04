@@ -16,7 +16,7 @@ require_once PATH_SWAN_LIB . 'ui/action/sw_controller_action_web.class.php';
 
 /**
 +------------------------------------------------------------------------------
-* 管理端管理设备
+* 管理端项目管理
 +------------------------------------------------------------------------------
 * 
 * @package 
@@ -25,7 +25,7 @@ require_once PATH_SWAN_LIB . 'ui/action/sw_controller_action_web.class.php';
 * @author $_SWANBR_AUTHOR_$ 
 +------------------------------------------------------------------------------
 */
-class sw_controller_admin_device_manage_action extends sw_controller_action_web
+class sw_controller_admin_project_manage_action extends sw_controller_action_web
 {
 	// {{{ members
 	// }}}
@@ -42,7 +42,7 @@ class sw_controller_admin_device_manage_action extends sw_controller_action_web
 	{
 		// 获取菜单
 		$tpl_param['mode'] = 'add';
-		$this->render('device_manage.html', $tpl_param);
+		$this->render('project_manage.html', $tpl_param);
 	}
 
 	// }}}
