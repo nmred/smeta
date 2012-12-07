@@ -48,7 +48,7 @@ define('PATH_SNMP_BIN', '/usr/bin/');
 define('SWAN_SOFTNAME', 'swansoft');
 
 // 软件版本号
-define('SWAN_VERSION', '0.12.b');
+define('SWAN_VERSION', '0.12.c');
 
 // 软件发行号
 define('SWANBR_RELEASE', 'beta');
