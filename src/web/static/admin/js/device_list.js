@@ -44,15 +44,18 @@ function DeviceList() {
 	this.init = function()
 	{
 		$(document).ready(function() {
-			$("#help_notice").click(function () {
+			sW.bind("help_notice", 'click', function () {
 				if ('none' == sW.g("tips").style.display) {
-					sW.g("tips").style.display = '';
-					sW.g("help_notice").className = "icons_gray icons_head";	
+					sW.show("tips");
+					sW.removeClass("help_notice", "icons_help");
+					sW.addClass("help_notice", "icons_gray icons_head");	
 				} else {
-					sW.g("tips").style.display = 'none';
-					sW.g("help_notice").className = "icons_gray icons_help";	
+					sW.hide("tips");
+					sW.removeClass("help_notice", "icons_head");
+					sW.addClass("help_notice", "icons_gray icons_help");	
 				}
-			});	
+
+			});
 
 			__this._dislayList();
 		});	
@@ -134,7 +137,7 @@ function DeviceList() {
 						sW.remove(g("detail_info"));
 					}
 					$("#tr_" + deviceId).after(_html.join(''));
-					g("base_arrow").style.display = '';
+					sW.show("base_arrow");
 					g("div_base").className = 'ltitle current';
 				}
 			}
@@ -147,15 +150,17 @@ function DeviceList() {
 
 	this.displayInfo = function (labelName)
 	{
+		sW.unbind("help_notice", "click");
 		for (var _key in __this.__detailList) {
-			g(_key).style.display = 'none';			
-			g('div_' + _key).className = 'ltitle';
-			g(_key + '_arrow').style.display = 'none';
+			sW.hide(_key);			
+			sW.addClass(g('div_' + _key), 'ltitle');
+			sW.removeClass(g('div_' + _key), 'current');
+			sW.hide(_key + '_arrow');
 		}
 
-		g(labelName).style.display = '';			
-		g('div_' + labelName).className = 'ltitle current';
-		g(labelName + '_arrow').style.display = '';
+		sW.show(labelName);			
+		sW.addClass(g('div_' + labelName), 'ltitle current');
+		sW.show(labelName + '_arrow');
 	}
 
 	// }}}
@@ -277,5 +282,10 @@ function DeviceList() {
 	}
 
 	// }}}
+	this.test = function (a, b) 
+	{
+		D(a + b);
+		return a + b;
+	}
 	// }}}
 }

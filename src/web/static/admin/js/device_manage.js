@@ -24,6 +24,7 @@
 */
 
 include('public', 'sw_boxy.js');
+include('public', 'sw_date_calendar.js');
 
 function DeviceManage() {
 	ModuleBase.call(this);
@@ -122,6 +123,9 @@ function DeviceManage() {
 			$("#reset_form").click(function () {
 				g("form1").reset();
 			});
+			
+			var swDate = new swCalendar();
+			D(swDate.initParam({fixed:true}));
 		});	
 
 	}

@@ -27,8 +27,8 @@ function my_handler2()
 	$string .= ' --template cpu ' . time() . ':' . trim($snmp->get_next());
 //	echo $string . "\n";
 	exec($string, $rev);
-	//echo $snmp->get_next() . "\n";
-//	echo $snmp->get();
+	echo $snmp->get_next() . "\n";
+	echo $snmp->get();
 }
 try {
 	$daemon = new sw_daemon($daemon_conf);

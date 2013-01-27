@@ -90,7 +90,7 @@ class configure
 		foreach ($make_dirs as $dir_name) {
 			$path_all = rtrim($this->__root_dir, '/') . '/' .  $dir_name;
 			chdir($path_all);
-			$make_file = new sw_create_makefile();
+			$make_file = sw_create_makefile::factory('common');
 			$make_file->run();
 			chdir($current_dir);
 		}

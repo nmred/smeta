@@ -41,7 +41,7 @@ abstract class sw_snmp_abstract
 	/**
 	 * 通过php的系统调用方式调用 
 	 */
-	const PHP_EXEC = 'PHP_EXT';
+	const PHP_EXEC = 'PHP_EXEC';
 
 	/**
 	 * SNMP通信方式 
