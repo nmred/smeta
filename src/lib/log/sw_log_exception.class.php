@@ -11,12 +11,15 @@
 // +---------------------------------------------------------------------------
 // | $_SWANBR_WEB_DOMAIN_$
 // +---------------------------------------------------------------------------
- 
+
+require_once PATH_SWAN_LIB . 'sw_exception.class.php';
+
 /**
 +------------------------------------------------------------------------------
-* 全局函数
+* log 类异常处理
 +------------------------------------------------------------------------------
 * 
+* @uses sw_exception
 * @package 
 * @version $_SWANBR_VERSION_$
 * @copyright $_SWANBR_COPYRIGHT_$
@@ -24,32 +27,6 @@
 +------------------------------------------------------------------------------
 */
 
-// {{{ function P()
-
-function P($var)
-{
-	echo "\n===================\n";
-	if (is_bool($var)) {
-		var_dump($var);
-	} else if (is_string($var) || is_int($var)) {
-		echo $var;
-	} else {
-		print_r($var);	
-	}
-	echo "\n===================\n";
-}
-
-// }}}
-// {{{ function func_enjoy()
-
-/**
- * 空函数 
- * 
- * @access public
- * @return void
- */
-function func_enjoy()
+class sw_db_exception extends sw_exception
 {
 }
-
-// }}}

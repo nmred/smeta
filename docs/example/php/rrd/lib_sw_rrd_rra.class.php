@@ -31,12 +31,13 @@ require_once PATH_SWAN_LIB . 'sw_orm.class.php';
 +------------------------------------------------------------------
  * {{{ add rrd rra
 +------------------------------------------------------------------
+*/
 
 $property = sw_orm::property_factory('rrd', 'rrd_rra');
 $property->set_project_id(1);
-$property->set_device_id(1);
-$property->set_steps(6);
-$property->set_rows(700);
+$property->set_device_id(5);
+$property->set_steps(720); // 5秒 * 12 = 1min
+$property->set_rows(24);// 60行=一小时 
 try {
 	$property->check();
 } catch (sw_exception $e) {
@@ -52,7 +53,6 @@ try {
 	exit;
 }
 
-*/
 /* }}}
 +------------------------------------------------------------------
  * {{{ get rrd ds

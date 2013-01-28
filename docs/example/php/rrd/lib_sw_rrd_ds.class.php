@@ -31,11 +31,10 @@ require_once PATH_SWAN_LIB . 'sw_orm.class.php';
 +------------------------------------------------------------------
  * {{{ add rrd ds
 +------------------------------------------------------------------
-*/
 
 $property = sw_orm::property_factory('rrd', 'rrd_ds');
 $property->set_project_id(1);
-$property->set_device_id(1);
+$property->set_device_id(5);
 $property->set_ds_name('cpu_idel');
 $property->set_object_id('.1.3.6.1.4.1.2021.11.11.0');
 
@@ -54,6 +53,7 @@ try {
 	exit;
 }
 
+*/
 /* }}}
 +------------------------------------------------------------------
  * {{{ get rrd ds

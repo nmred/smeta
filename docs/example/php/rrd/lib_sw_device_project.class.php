@@ -33,9 +33,10 @@ require_once PATH_SWAN_LIB . 'sw_orm.class.php';
 +------------------------------------------------------------------
 
 $project_property = sw_orm::property_factory('rrd', 'device_project');
-$project_property->set_project_name("cpu1");
-$project_property->set_device_id(1);
+$project_property->set_project_name("cpu");
+$project_property->set_device_id(5);
 $project_property->set_start_time(time());
+$project_property->set_step(300);
 
 try {
 	$project_property->check();
@@ -76,7 +77,7 @@ P($arr);
  * {{{ mod device project
 +------------------------------------------------------------------
 $property = sw_orm::property_factory('rrd', 'device_project');
-$property->set_project_name("cpu_test");
+$property->set_step(5);
 $condition = sw_orm::condition_factory('rrd', 'device_project:mod_device_project');
 
 $condition->set_like('project_name');

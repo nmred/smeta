@@ -14,7 +14,7 @@
  
 /**
 +------------------------------------------------------------------------------
-* 全局函数
+* sw_log_format_phpd
 +------------------------------------------------------------------------------
 * 
 * @package 
@@ -23,33 +23,34 @@
 * @author $_SWANBR_AUTHOR_$ 
 +------------------------------------------------------------------------------
 */
-
-// {{{ function P()
-
-function P($var)
+class sw_log_format_phpd extends sw_log_format_abstract
 {
-	echo "\n===================\n";
-	if (is_bool($var)) {
-		var_dump($var);
-	} else if (is_string($var) || is_int($var)) {
-		echo $var;
-	} else {
-		print_r($var);	
+	// {{{ members
+	
+	/**
+	 * 默认的变量值 
+	 * 
+	 * @var array
+	 * @access protected
+	 */
+	protected $__default = array (
+		'message' = null,
+	);
+
+	// }}}
+	// {{{ functions
+	// {{{ public function message()
+
+	/**
+	 * 格式化信息 
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function message()
+	{ 	
 	}
-	echo "\n===================\n";
+
+	// }}}
+	// }}}		
 }
-
-// }}}
-// {{{ function func_enjoy()
-
-/**
- * 空函数 
- * 
- * @access public
- * @return void
- */
-function func_enjoy()
-{
-}
-
-// }}}

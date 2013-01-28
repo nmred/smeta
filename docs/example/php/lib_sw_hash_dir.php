@@ -14,42 +14,29 @@
  
 /**
 +------------------------------------------------------------------------------
-* 全局函数
+* hash_dir 类example
 +------------------------------------------------------------------------------
 * 
-* @package 
+* @package sw_snmp
 * @version $_SWANBR_VERSION_$
 * @copyright $_SWANBR_COPYRIGHT_$
 * @author $_SWANBR_AUTHOR_$ 
 +------------------------------------------------------------------------------
 */
 
-// {{{ function P()
+require_once 'core.php';
 
-function P($var)
-{
-	echo "\n===================\n";
-	if (is_bool($var)) {
-		var_dump($var);
-	} else if (is_string($var) || is_int($var)) {
-		echo $var;
-	} else {
-		print_r($var);	
-	}
-	echo "\n===================\n";
-}
+/*
++------------------------------------------------------------------
+ * {{{ sw_snmp_version_one
++------------------------------------------------------------------
+*/
+require_once PATH_SWAN_LIB . 'sw_hash_dir.class.php';
 
-// }}}
-// {{{ function func_enjoy()
+$str =  sw_hash_dir::get_hash_dir('device_test_cpu');
+sw_hash_dir::make_hash_dir(PATH_SWAN_RRA, $str);
 
-/**
- * 空函数 
- * 
- * @access public
- * @return void
- */
-function func_enjoy()
-{
-}
+/* }}}
+*/
 
-// }}}
+

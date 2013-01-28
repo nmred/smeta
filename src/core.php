@@ -37,7 +37,8 @@ define('PATH_SWAN_BASE', realpath(dirname(__FILE__)));
     define('PATH_SWAN_INC', PATH_SWAN_BASE . '/inc/');
         define('PATH_SWAN_LOCALE', PATH_SWAN_INC . '/locale/');
     define('PATH_SWAN_RUN', PATH_SWAN_BASE . '/run/'); //系统运行过程中产生的文件，一般是pid文件
-		define('PATH_SWAN_RRA', PATH_SWAN_RUN . 'rrd/'); //rrdtool数据库文件
+    define('PATH_SWAN_DATA', PATH_SWAN_BASE . '/data/'); //系统运行过程中产生的文件，一般是pid文件
+		define('PATH_SWAN_RRA', PATH_SWAN_DATA . 'rrd/'); //rrdtool数据库文件
 define('PATH_SNMP_BIN', '/usr/bin/');
 // }}}
 // {{{ 参数配置
@@ -92,6 +93,9 @@ define('SW_CACHE_TIME', 0);
 //模板定界符
 define('SW_LEFT_DELIMITER', '<!--{{');
 define('SW_RIGHT_DELIMITER', '}}-->');
+
+//RRD相关
+define('RRD_NL', "\\\n");
 
 // }}}
 // {{{ 系统初始化

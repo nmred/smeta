@@ -58,11 +58,13 @@ try {
 +------------------------------------------------------------------
  * {{{ get device
 +------------------------------------------------------------------
+*/
 $condition = sw_orm::condition_factory('rrd', 'device:get_device');
 
 //$condition->set_is_count(true);
-//$condition->set_like('device_name');
-$condition->set_columns(array('device_name', 'port'));
+$condition->set_eq('device_id');
+$condition->set_device_id('5');
+$condition->set_columns(array('device_id', 'device_name', 'port'));
 //dcondition->set_device_name('test');
 try {
 	$device_operator = sw_orm::operator_factory('rrd', 'device');
@@ -74,18 +76,17 @@ try {
 
 P($arr);
 
-*/
 /* }}}
 +------------------------------------------------------------------
  * {{{ mod device
 +------------------------------------------------------------------
 
 $device_property = sw_orm::property_factory('rrd', 'device');
-$device_property->set_device_name("test_mod");
+$device_property->set_device_name("device_test");
 $condition = sw_orm::condition_factory('rrd', 'device:mod_device');
 
-$condition->set_like('device_name');
-$condition->set_device_name('test');
+$condition->set_in('device_id');
+$condition->set_device_id('5');
 $condition->set_property($device_property);
 try {
 	$device_operator = sw_orm::operator_factory('rrd', 'device');
@@ -105,7 +106,7 @@ P($arr);
 $condition = sw_orm::condition_factory('rrd', 'device:del_device');
 
 $condition->set_in('device_id');
-$condition->set_device_id(1);
+$condition->set_device_id(array(2, 3, 4));
 try {
 	$device_operator = sw_orm::operator_factory('rrd', 'device');
 	$arr = $device_operator->del_device($condition);
@@ -115,8 +116,8 @@ try {
 }
 
 P($arr);
-*/
 
+*/
 /* }}}
 +------------------------------------------------------------------
  * {{{ get_profiler()  
