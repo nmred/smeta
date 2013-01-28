@@ -28,9 +28,8 @@ require_once 'core.php';
 require_once PATH_SWAN_LIB . 'sw_orm.class.php';
 
 /*
- * {{{ get device
+ * {{{ 创建 rrd 数据库
 +------------------------------------------------------------------
-*/
 try {
 	require_once PATH_SWAN_LIB . 'rrd/protocol/sw_rrd_protocol_create_rrd.class.php';
 	require_once PATH_SWAN_LIB . 'rrd/sw_rrd_project.class.php';
@@ -40,6 +39,48 @@ try {
 
 	$create_rrd = new sw_rrd_protocol_create_rrd();
 	$create_rrd->create($project);
+} catch (sw_exception $e) {
+	echo $e->getMessage();	
+	exit;
+}
+
+*/
+
+/* }}}
+ * {{{ 更新 rrd 数据库
++------------------------------------------------------------------
+try {
+	require_once PATH_SWAN_LIB . 'rrd/protocol/sw_rrd_protocol_update_rrd.class.php';
+	require_once PATH_SWAN_LIB . 'rrd/sw_rrd_project.class.php';
+
+	$project = new sw_rrd_project();
+	$project->set_project_id(1)->process_key();
+
+	$update = new sw_rrd_protocol_update_rrd($project);
+	$update->set_update_time(time())
+		   ->set_field('cpu_idel', 22)
+		   ->update();
+} catch (sw_exception $e) {
+	echo $e->getMessage();	
+	exit;
+}
+
+
+*/
+/* }}}
+ * {{{ 修改 rrd 数据库
++------------------------------------------------------------------
+*/
+try {
+	require_once PATH_SWAN_LIB . 'rrd/protocol/sw_rrd_protocol_tune_rrd.class.php';
+	require_once PATH_SWAN_LIB . 'rrd/sw_rrd_project.class.php';
+
+	$project = new sw_rrd_project();
+	$project->set_project_id(1)->process_key();
+
+	$update = new sw_rrd_protocol_tune_rrd($project);
+	$update->set_data_source('cpu_idel', array('minimum' => 30))
+		   ->tune();
 } catch (sw_exception $e) {
 	echo $e->getMessage();	
 	exit;

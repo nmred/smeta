@@ -17,7 +17,7 @@ require_once PATH_SWAN_LIB . 'rrd/protocol/sw_rrd_protocol_abstract.class.php';
 
 /**
 +------------------------------------------------------------------------------
-* 更新rrd数据库
+* 修改 rrd 数据库
 +------------------------------------------------------------------------------
 * 
 * @package 
@@ -26,7 +26,7 @@ require_once PATH_SWAN_LIB . 'rrd/protocol/sw_rrd_protocol_abstract.class.php';
 * @author $_SWANBR_AUTHOR_$ 
 +------------------------------------------------------------------------------
 */
-class sw_rrd_protocol_update_rrd extends sw_rrd_protocol_abstract
+class sw_rrd_protocol_tune_rrd extends sw_rrd_protocol_abstract
 {
 	// {{{ members
 
@@ -39,20 +39,12 @@ class sw_rrd_protocol_update_rrd extends sw_rrd_protocol_abstract
 	protected $__project = null;
 
 	/**
-	 * update time 
-	 * 
-	 * @var int
-	 * @access protected
-	 */
-	protected $__update_time = 'N';
-
-	/**
 	 * 更新字段 
 	 * 
 	 * @var array
 	 * @access protected
 	 */
-	protected $__fields = array();
+	protected $__update_attr = array();
 
 	// }}}
 	// {{{ functions
@@ -71,90 +63,82 @@ class sw_rrd_protocol_update_rrd extends sw_rrd_protocol_abstract
 	}
 
 	// }}}
-	// {{{ public function update()
+	// {{{ public function tune()
 
 	/**
-	 * 更新rrd数据库 
+	 * 修改 rrd 数据库 
 	 * 
 	 * @access public
 	 * @return void
 	 */
-	public function update()
+	public function tune()
 	{
-		if (!isset($this->__fields) || !is_array($this->__fields)) {
+		if (!isset($this->__update_attr) || !is_array($this->__update_attr)) {
 			require_once PATH_SWAN_LIB . 'rrd/protocol/sw_rrd_protocol_exception.class.php';
-			throw new sw_rrd_protocol_exception('not data source need update. ');	
+			throw new sw_rrd_protocol_exception('not data source need alter. ');	
 		}
 
-		$rrd_update_template = '';
-		$rrd_update_value = $this->__update_time . ':';
-		foreach ($this->__fields as $field => $value) {
-			$rrd_update_template .= $field . ':';
-			$rrd_update_value .= $value . ':';
+		$rrd_tune = 'tune ' .  $this->_get_rrd_path() . ' ';
+
+		if (isset($this->__update_attr['heartbeat'])) {
+			$rrd_tune .= sprintf(' --heartbeat %s:%s', $this->__update_attr['data_source'], $this->__update_attr['heartbeat']);	
 		}
 
-		$rrd_update_template = rtrim($rrd_update_template, ':');
-		$rrd_update_value = rtrim($rrd_update_value, ':');
+		if (isset($this->__update_attr['rename'])) {
+			$rrd_tune .= sprintf(' --data-source-rename %s:%s', $this->__update_attr['data_source'], $this->__update_attr['rename']);	
+		}
 
-		$string = sprintf('update %s --template %s %s',
-					$this->_get_rrd_path(),
-					$rrd_update_template,
-					$rrd_update_value
-				);
+		if (isset($this->__update_attr['minimum'])) {
+			$rrd_tune .= sprintf(' --minimum %s:%s', $this->__update_attr['data_source'], $this->__update_attr['minimum']);	
+		}
 
-		/*
-		*/
-		$return = $this->set_command($string)
+		if (isset($this->__update_attr['maximum'])) {
+			$rrd_tune .= sprintf(' --maximum %s:%s', $this->__update_attr['data_source'], $this->__update_attr['maximum']);	
+		}
+
+		if (isset($this->__update_attr['data_source_type'])) {
+			$rrd_tune .= sprintf(' --data-source-type %s:%s', $this->__update_attr['data_source'], $this->__update_attr['data_source_type']);	
+		}
+
+		$return = $this->set_command($rrd_tune)
 			->exec();
 		if (0 !== $return['res'] || 'OK' !== substr(trim($return['message']), 0, 2)) {
 			require_once PATH_SWAN_LIB . 'rrd/sw_rrd_protocol_exception.class.php';
-			throw new sw_rrd_protocol_exception("update rra database failed . ");	
+			throw new sw_rrd_protocol_exception("alter rra database failed . ");	
 		}
 
 		return $return;
 	}
 
 	// }}}
-	// {{{ public function set_update_time()
+	// {{{ public function set_data_source()
 
 	/**
-	 * 设置更新时间
+	 * 设置将要更新的数据源参数 
 	 * 
-	 * @access public
-	 * @return sw_rrd_protocol_update_rrd
-	 */
-	public function set_update_time($update_time)
-	{
-		if ($update_time) {
-			$this->__update_time = $update_time;	
-		} else {
-			$this->__update_time = 'N';	
-		}
-
-		return $this;
-	}
-
-	// }}}
-	// {{{ public function set_field()
-
-	/**
-	 * 设置更新的数据源
+	 * @param string $old_ds 
+	 * @param string $options 
 	 * 
+	 *  array (
+	 *	'rename' => 'new_ds_name',
+	 *	'heartbeat' => 
+	 *	'minimum' =>
+	 *	'maximum' =>
+	 *	'data_source_type' =>
+	 *	'data_source_rename' =>
+	 *   );
 	 * @access public
-	 * @return sw_rrd_protocol_update_rrd
+	 * @return sw_rrd_protocol_tune_rrd
 	 */
-	public function set_field($field, $value)
+	public function set_data_source($old_ds, $options)
 	{
-		if (!$this->_is_exists_ds($field)) {
+		if (!$this->_is_exists_ds($old_ds)) {
 			require_once PATH_SWAN_LIB . 'rrd/protocol/sw_rrd_protocol_exception.class.php';
 			throw new sw_rrd_protocol_exception('this data source not exists.');
 		}
-
-		if (!isset($value) || !is_numeric($value)) {
-			$this->__fields[$field] = 'U';	
-		} else {
-			$this->__fields[$field] = $value;	
-		}
+		
+		$this->__update_attr = $options;
+		$this->__update_attr['data_source'] = $old_ds;
 
 		return $this;
 	}
