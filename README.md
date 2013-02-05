@@ -77,6 +77,7 @@ Everything in order to facilitate ! 一切为了方便！
 - 调整数据库表结构
 
 <!-- }}} -->
+
 <!-- {{{ 开发说明 -->
 
 ## 开发说明
@@ -126,45 +127,45 @@ Everything in order to facilitate ! 一切为了方便！
 		如果在文件路劲中第一个字符是(/)符号，则认为是绝对路径
 	    如果没有的话就认为相对路劲，前面会连接默认的根目标路径即：/usr/local/swan/
 
-```php
-示例：		[target#xx]
-			target = "/usr/local/swan/src/web/";   ：该组目标路劲
-			target_param = "755"                   ：文件的权限
-			target_user = "swan";				   ：文件属主
-			target_group = "swan";				   ：文件属组
-			target_dir_param = "755"               ：目标目录文件的权限
-			target_dir_user = "swan";			   ：目标目录文件属主
-			target_dir_group = "swan";			   ：目标目录文件属组
-			src_file = "file1,file2";              ：文件列表 (*)  这个很重要，默认#0下的该配置是没有意义，
-											   ：因为#0代表所有的文件，而其他的#xxx中必须包含这个配置并且用英文逗号分隔
-											   ：，而且如果没有权限、属组、属主、或目标路劲不同的情况就用target#0就够用
-											   ： 了。
-```	
-```php
-	;/**
-	;+------------------------------------------------------------------------------
-	;* 生成Makefile的配置文件 
-	;+------------------------------------------------------------------------------
-	;* 
-	;* @package 
-	;* @version $_SWANBR_VERSION_$
-	;* @copyright $_SWANBR_COPYRIGHT_$
-	;* @author $_SWANBR_AUTHOR_$ 
-	;+------------------------------------------------------------------------------
-	;*/
-	[global]
-	ignore_file = " Makefile.ini, Makefile";
-	ignore_dir = "help";
+	```php
+	示例：		[target#xx]
+				target = "/usr/local/swan/src/web/";   ：该组目标路劲
+				target_param = "755"                   ：文件的权限
+				target_user = "swan";				   ：文件属主
+				target_group = "swan";				   ：文件属组
+				target_dir_param = "755"               ：目标目录文件的权限
+				target_dir_user = "swan";			   ：目标目录文件属主
+				target_dir_group = "swan";			   ：目标目录文件属组
+				src_file = "file1,file2";              ：文件列表 (*)  这个很重要，默认#0下的该配置是没有意义，
+												   ：因为#0代表所有的文件，而其他的#xxx中必须包含这个配置并且用英文逗号分隔
+												   ：，而且如果没有权限、属组、属主、或目标路劲不同的情况就用target#0就够用
+												   ： 了。
+	```	
+	```php
+		;/**
+		;+------------------------------------------------------------------------------
+		;* 生成Makefile的配置文件 
+		;+------------------------------------------------------------------------------
+		;* 
+		;* @package 
+		;* @version $_SWANBR_VERSION_$
+		;* @copyright $_SWANBR_COPYRIGHT_$
+		;* @author $_SWANBR_AUTHOR_$ 
+		;+------------------------------------------------------------------------------
+		;*/
+		[global]
+		ignore_file = " Makefile.ini, Makefile";
+		ignore_dir = "help";
 
-	[target#0]
-	target = "/usr/local/swan/";
-	target_param = "644"
-	target_user = "swan";
-	target_group = "swan";
-	target_dir_param = "755"
-	target_dir_user = "swan";
-	target_dir_group = "swan";
-```
+		[target#0]
+		target = "/usr/local/swan/";
+		target_param = "644"
+		target_user = "swan";
+		target_group = "swan";
+		target_dir_param = "755"
+		target_dir_user = "swan";
+		target_dir_group = "swan";
+	```
 
 4. jjcm 工具说明
  
