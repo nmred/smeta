@@ -115,7 +115,12 @@ Everything in order to facilitate ! 一切为了方便！
 		ignore_dir  :是在MAKE的时候该目录需要忽略的子目录，用英文逗号分隔;
 
 	b. 配置target的(#规则) ， #后面是不能重复的数字，并且#0有特殊意义，不可省略
+	
+	c. 关于配置每组的target字段需要注意：
+		如果在文件路劲中第一个字符是(/)符号，则认为是绝对路径
+	    如果没有的话就认为相对路劲，前面会连接默认的根目标路径即：/usr/local/swan/
 
+```php
 示例：		[target#xx]
 			target = "/usr/local/swan/src/web/";   ：该组目标路劲
 			target_param = "755"                   ：文件的权限
@@ -128,10 +133,7 @@ Everything in order to facilitate ! 一切为了方便！
 											   ：因为#0代表所有的文件，而其他的#xxx中必须包含这个配置并且用英文逗号分隔
 											   ：，而且如果没有权限、属组、属主、或目标路劲不同的情况就用target#0就够用
 											   ： 了。
-		
-	c. 关于配置每组的target字段需要注意：
-		如果在文件路劲中第一个字符是(/)符号，则认为是绝对路径
-	    如果没有的话就认为相对路劲，前面会连接默认的根目标路径即：/usr/local/swan/
+```	
 ```php
 	;/**
 	;+------------------------------------------------------------------------------
@@ -157,7 +159,9 @@ Everything in order to facilitate ! 一切为了方便！
 	target_dir_user = "swan";
 	target_dir_group = "swan";
 ```
+
 4. jjcm 工具说明
+ 
 	本工具是 dev_swan 工具库中的工具，需要配置好工具库即可使用，本工具只能将当前目录下的文件和目录生成 Makefile ，不支持递归生成功能。
 	如果想递归生成 Makefile 文件可以使用开发库目录中的 ./configure 工具生成
 
