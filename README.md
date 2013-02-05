@@ -5,7 +5,7 @@ Everything in order to facilitate ! 一切为了方便！
 ## 我们的愿景
 
 打造卓越的开源云计算监控平台！
-// {{{ 目录
+<!-- {{{ 目录 -->
 
 ## 目录
 
@@ -33,7 +33,7 @@ Everything in order to facilitate ! 一切为了方便！
 	* [CSS/HTML5 代码规范](#)**
 5. **[加入团队](#)**
 
-// }}}
+<!-- }}} -->
 // {{{ 最新特性 
 ## 最新特性
 
