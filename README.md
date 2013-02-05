@@ -9,8 +9,8 @@ Everything in order to facilitate ! 一切为了方便！
 
 ## 目录
 
-1. **[最新特性](#new-features)**
-	* [WEB](#)**
+1. **[最新特性](#最新特性)**
+	* [WEB](#WEB)**
 		* [WEB USER 端](#)**
 		* [WEB ADMIN 端](#)**
 	* [LIB](#)**
@@ -92,8 +92,10 @@ Everything in order to facilitate ! 一切为了方便！
 ### 代码仓库说明
 
 1. **[dev_swan]()** 是开发工具库 (存放一些开发的辅助工具)
-	注意：1. 开发工具库在代码中已包含 Makefile 文件，所以可以直接执行 make install 安装工具库。
-		  2. 想要正确的运行工具库中的工具必须安装最新的 rpm 软件。
+
+		注意：1. 开发工具库在代码中已包含 Makefile 文件，所以可以直接执行 make install 安装工具库。
+			  2. 想要正确的运行工具库中的工具必须安装最新的 rpm 软件。
+			  
 2. **[swansoft]()** 是 SWANSOFT 的主力开发库
 
 ### 开发工具库说明
