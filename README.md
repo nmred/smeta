@@ -43,22 +43,22 @@ Everything in order to facilitate ! 一切为了方便！
 
 #### WEB ADMIN 端
 
--- 增加了添加设备功能
--- 增加了设备管理功能
--- 增加表单提示框
+- 增加了添加设备功能
+- 增加了设备管理功能
+- 增加表单提示框
 
 ### LIB
 
--- 添加控制器模块
--- 添加SNMP模块
--- 添加DAEMON模块
--- 修正LIB中validate对外的调用工厂
+- 添加控制器模块
+- 添加SNMP模块
+- 添加DAEMON模块
+- 修正LIB中validate对外的调用工厂
 
 ### 运维相关
 
--- 修正开发环境中php没有mysql相关的模块的bug
--- 添加开发环境中添加pcntl扩展
--- 修正开发环境中缺少pdo-mysql模块的bug
+- 修正开发环境中php没有mysql相关的模块的bug
+- 添加开发环境中添加pcntl扩展
+- 修正开发环境中缺少pdo-mysql模块的bug
 					  ~                                      
 // }}}
 // {{{ 最近开发计划
@@ -67,13 +67,13 @@ Everything in order to facilitate ! 一切为了方便！
 
 ### LIB
 
--- PHPD 整体的框架
--- 配合数据库表结构调整来调整对应的 ORM
+- PHPD 整体的框架
+- 配合数据库表结构调整来调整对应的 ORM
 
 ### 运维相关
 
--- 调整打包程序
--- 调整数据库表结构
+- 调整打包程序
+- 调整数据库表结构
 
 // }}}
 // {{{ 开发说明
@@ -100,13 +100,18 @@ Everything in order to facilitate ! 一切为了方便！
 1. MAKE 工具对于本项目的作用
 	由于本软件的运行目录是 `/usr/local/swan/` 下， 而日常多人协助开发的时候目录一般是 `/home/xxx` 下， 借助 MAKE 工具可以将仓库中更改或新添加的代码 copy 到运行目录--目标。
 2. MAKE 工具使用
+
 	正常情况下执行的步骤：
-		`\# jjcm`
-		`\# make install` (将所有的文件 make 到目标)
-		`\# make 文件名.` (注意在文件名后面要紧跟一个点号, 是将单个文件 make 到目标)
+	
+		# jjcm
+		# make install (将所有的文件 make 到目标)
+		# make 文件名. (注意在文件名后面要紧跟一个点号, 是将单个文件 make 到目标)
+		
 	要使上述步骤运行成功的前提是：
+	
 		1) 确保当前目录中有 Makefile 文件，而初次建立目录是没有 Makefile , 建立 Makefile 需要用 jjcm 命令。
 		2) jjcm 正确的运行需要的是 Makefile.ini 文件
+		
 3. Makefile.ini 文件配置规则
 		
 	a. 首先配置全局的参数[global]
