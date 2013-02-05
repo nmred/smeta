@@ -34,6 +34,7 @@ Everything in order to facilitate ! 一切为了方便！
 5. **[加入团队](#)**
 
 <!-- }}} -->
+
 <!-- {{{ 最新特性 -->
 ## 最新特性
 
@@ -59,7 +60,7 @@ Everything in order to facilitate ! 一切为了方便！
 - 修正开发环境中php没有mysql相关的模块的bug
 - 添加开发环境中添加pcntl扩展
 - 修正开发环境中缺少pdo-mysql模块的bug
-					  ~                                      
+ 
 <!-- }}} -->
 
 <!-- {{{ 最近开发计划 -->
