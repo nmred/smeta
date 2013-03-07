@@ -70,7 +70,6 @@ try {
 /* }}}
  * {{{ 修改 rrd 数据库
 +------------------------------------------------------------------
-*/
 try {
 	require_once PATH_SWAN_LIB . 'rrd/protocol/sw_rrd_protocol_tune_rrd.class.php';
 	require_once PATH_SWAN_LIB . 'rrd/sw_rrd_project.class.php';
@@ -81,6 +80,28 @@ try {
 	$update = new sw_rrd_protocol_tune_rrd($project);
 	$update->set_data_source('cpu_idel', array('minimum' => 30))
 		   ->tune();
+} catch (sw_exception $e) {
+	echo $e->getMessage();	
+	exit;
+}
+
+*/
+/* }}}
+ * {{{ 遍历 rrd 数据库
++------------------------------------------------------------------
+*/
+try {
+	require_once PATH_SWAN_LIB . 'rrd/protocol/sw_rrd_protocol_fetch_rrd.class.php';
+	require_once PATH_SWAN_LIB . 'rrd/sw_rrd_project.class.php';
+
+	$project = new sw_rrd_project();
+	$project->set_project_id(1)->process_key();
+
+	$fetch = new sw_rrd_protocol_fetch_rrd($project);
+	$fetch->set_start_time(time() - 30)
+		  ->set_end_time(time())
+		  ->set_cf(sw_rrd_protocol_fetch_rrd::CF_AVERAGE)
+		  ->fetch();
 } catch (sw_exception $e) {
 	echo $e->getMessage();	
 	exit;

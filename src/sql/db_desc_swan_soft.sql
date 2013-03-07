@@ -84,7 +84,7 @@ CREATE TABLE `device_project` (
 	`device_id` int(11) UNSIGNED NOT NULL DEFAULT '0',
 	`step` int(6) UNSIGNED DEFAULT '300',
 	`start_time` int(11) UNSIGNED ,
-	PRIMARY KEY (`project_id`),
+	PRIMARY KEY (`project_id`,`device_id`,`project_name`),
 	KEY`ik_0` (`device_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
