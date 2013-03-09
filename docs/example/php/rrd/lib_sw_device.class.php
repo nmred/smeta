@@ -33,7 +33,7 @@ require_once PATH_SWAN_LIB . 'sw_orm.class.php';
 +------------------------------------------------------------------
 
 $device_property = sw_orm::property_factory('rrd', 'device');
-$device_property->set_device_name("test");
+$device_property->set_device_name("test_130");
 $device_property->set_snmp_version(1);
 $device_property->set_host("192.168.56.130");
 $device_property->set_port("161");
@@ -63,7 +63,7 @@ $condition = sw_orm::condition_factory('rrd', 'device:get_device');
 
 //$condition->set_is_count(true);
 $condition->set_eq('device_id');
-$condition->set_device_id('5');
+//$condition->set_device_id('5');
 $condition->set_columns(array('device_id', 'device_name', 'port'));
 //dcondition->set_device_name('test');
 try {

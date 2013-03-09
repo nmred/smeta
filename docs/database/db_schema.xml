@@ -241,7 +241,6 @@
 						<desc></desc>
                         <type>primary</type>
                         <fields>
-                            <field name="project_id"></field>
                             <field name="device_id"></field>
                             <field name="project_name"></field>
                         </fields>
