@@ -41,7 +41,7 @@ class sw_operator_rrd_device extends sw_operator_abstract
 	public function add_device(sw_property_rrd_device $property)
 	{
 		$attributes = $property->attributes();
-		$require_fields = array('device_name', 'host',);
+		$require_fields = array('device_name', 'host', 'device_id');
 		$this->_check_require($attributes, $require_fields);
 		$this->_check_unique($attributes);
 
@@ -83,6 +83,11 @@ class sw_operator_rrd_device extends sw_operator_abstract
 		$condition->check_params();
 		$params = $condition->params();
 		$attributes = $condition->get_property()->prepared_attributes();
+
+		// 排除 device_name
+		if (isset($attributes['device_name'])) {
+			unset($attributes['device_name']);	
+		}
 
 		$where = $condition->where();
 		if (!$where || !$attributes) {

@@ -1,5 +1,62 @@
 --  vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4 foldmethod=marker:
 
+-- {{{  table sequence_global
+
+-- 
+-- 维护全局的数据表的唯一序列号
+-- 
+-- table_name
+-- 	维护序列号的表名称
+-- sequence_id
+-- 	自增长 ID
+
+CREATE TABLE `sequence_global` (
+	`table_name` varchar(64) NOT NULL ,
+	`sequence_id` int(11) UNSIGNED NOT NULL ,
+	PRIMARY KEY (`table_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--  }}} 
+-- {{{  table sequence_device
+
+-- 
+-- 设备成员数据表的唯一序列号
+-- 
+-- device_id
+-- 	设备 ID
+-- table_name
+-- 	维护序列号的表名称
+-- sequence_id
+-- 	自增长 ID
+
+CREATE TABLE `sequence_device` (
+	`device_id` int(11) UNSIGNED NOT NULL ,
+	`table_name` varchar(64) NOT NULL ,
+	`sequence_id` int(11) UNSIGNED NOT NULL ,
+	PRIMARY KEY (`device_id`,`table_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--  }}} 
+-- {{{  table sequence_project
+
+-- 
+-- 项目成员数据表的唯一序列号
+-- 
+-- project_id
+-- 	项目 ID
+-- table_name
+-- 	维护序列号的表名称
+-- sequence_id
+-- 	自增长 ID
+
+CREATE TABLE `sequence_project` (
+	`project_id` int(11) UNSIGNED NOT NULL ,
+	`table_name` varchar(64) NOT NULL ,
+	`sequence_id` int(11) UNSIGNED NOT NULL ,
+	PRIMARY KEY (`project_id`,`table_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--  }}} 
 -- {{{  table device
 
 -- 
@@ -41,7 +98,7 @@
 -- 	认证密钥
 
 CREATE TABLE `device` (
-	`device_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT ,
+	`device_id` int(11) UNSIGNED NOT NULL ,
 	`device_name` varchar(255) NOT NULL ,
 	`device_display_name` varchar(255) NOT NULL ,
 	`host` varchar(32) CHARACTER SET latin1 NOT NULL ,
@@ -79,7 +136,7 @@ CREATE TABLE `device` (
 -- 	数据库的起始时间 默认是now() - 10s
 
 CREATE TABLE `device_project` (
-	`project_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT ,
+	`project_id` int(11) UNSIGNED NOT NULL ,
 	`project_name` varchar(64) NOT NULL ,
 	`device_id` int(11) UNSIGNED NOT NULL DEFAULT '0',
 	`step` int(6) UNSIGNED DEFAULT '300',
@@ -118,7 +175,7 @@ CREATE TABLE `device_project` (
 -- 	传递数据的最大限制 默认不限制
 
 CREATE TABLE `rrd_ds` (
-	`ds_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT ,
+	`ds_id` int(11) UNSIGNED NOT NULL ,
 	`ds_name` varchar(64) NOT NULL ,
 	`project_id` int(11) UNSIGNED NOT NULL DEFAULT '0',
 	`device_id` int(11) UNSIGNED NOT NULL DEFAULT '0',
@@ -156,7 +213,7 @@ CREATE TABLE `rrd_ds` (
 -- 	归档的条数
 
 CREATE TABLE `rrd_rra` (
-	`rra_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT ,
+	`rra_id` int(11) UNSIGNED NOT NULL ,
 	`project_id` int(11) UNSIGNED NOT NULL DEFAULT '0',
 	`device_id` int(11) UNSIGNED NOT NULL DEFAULT '0',
 	`rra_cf` tinyint(2) UNSIGNED DEFAULT '0',
@@ -184,7 +241,7 @@ CREATE TABLE `rrd_rra` (
 -- 	算法该字段存取的逆波兰表达式 (当前先就这样了，以后尽量优化的不让用户直接输入逆波兰表达式)
 
 CREATE TABLE `rrd_cdef` (
-	`cdef_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT ,
+	`cdef_id` int(11) UNSIGNED NOT NULL ,
 	`graph_id` int(11) UNSIGNED NOT NULL DEFAULT '0',
 	`define_name` varchar(32) NOT NULL ,
 	`cdef_cf` varchar(255) NOT NULL ,
@@ -212,7 +269,7 @@ CREATE TABLE `rrd_cdef` (
 -- 	线条注释 对该颜色的提示，最后会写在图上的
 
 CREATE TABLE `rrd_line_area` (
-	`line_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT ,
+	`line_id` int(11) UNSIGNED NOT NULL ,
 	`graph_id` int(11) UNSIGNED NOT NULL DEFAULT '0',
 	`line_cate` tinyint(2) UNSIGNED NOT NULL DEFAULT '0',
 	`define_name` varchar(32) NOT NULL ,
@@ -238,7 +295,7 @@ CREATE TABLE `rrd_line_area` (
 -- 	线条极限值注释 对该颜色的提示，最后会写在图上的
 
 CREATE TABLE `rrd_gprint` (
-	`gprint_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT ,
+	`gprint_id` int(11) UNSIGNED NOT NULL ,
 	`line_id` int(11) UNSIGNED NOT NULL DEFAULT '0',
 	`line_cf` tinyint(2) UNSIGNED NOT NULL DEFAULT '0',
 	`format` varchar(32) NOT NULL ,

@@ -14,6 +14,139 @@
         <charset>utf8</charset>
         <!-- {{{ tables -->
         <tables>
+            <!-- {{{ table sequence_global -->
+
+            <table name="sequence_global">
+                <desc>维护全局的数据表的唯一序列号</desc>
+                <engine>InnoDB</engine>
+                <charset>utf8</charset>
+                <columns>
+                    <column name="table_name">
+                        <desc>维护序列号的表名称</desc>
+                        <type>varchar</type>
+                        <nullable>false</nullable>
+                        <precision>64</precision>
+                        <default></default>
+                    </column>
+
+                    <column name="sequence_id">
+                        <desc>自增长 ID</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+						<unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                </columns>
+
+                <keys>
+                    <key name="">
+						<desc></desc>
+                        <type>primary</type>
+                        <fields>
+                            <field name="table_name"></field>
+                        </fields>
+                    </key>
+
+                </keys>
+            </table>
+
+            <!-- }}} -->
+            <!-- {{{ table sequence_device -->
+
+            <table name="sequence_device">
+                <desc>设备成员数据表的唯一序列号</desc>
+                <engine>InnoDB</engine>
+                <charset>utf8</charset>
+                <columns>
+                    <column name="device_id">
+                        <desc>设备 ID</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+						<unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                    <column name="table_name">
+                        <desc>维护序列号的表名称</desc>
+                        <type>varchar</type>
+                        <nullable>false</nullable>
+                        <precision>64</precision>
+                        <default></default>
+                    </column>
+
+                    <column name="sequence_id">
+                        <desc>自增长 ID</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+						<unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+                </columns>
+
+                <keys>
+                    <key name="">
+						<desc></desc>
+                        <type>primary</type>
+                        <fields>
+                            <field name="device_id"></field>
+                            <field name="table_name"></field>
+                        </fields>
+                    </key>
+                </keys>
+            </table>
+
+            <!-- }}} -->
+            <!-- {{{ table sequence_project -->
+
+            <table name="sequence_project">
+                <desc>项目成员数据表的唯一序列号</desc>
+                <engine>InnoDB</engine>
+                <charset>utf8</charset>
+                <columns>
+                    <column name="project_id">
+                        <desc>项目 ID</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+						<unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                    <column name="table_name">
+                        <desc>维护序列号的表名称</desc>
+                        <type>varchar</type>
+                        <nullable>false</nullable>
+                        <precision>64</precision>
+                        <default></default>
+                    </column>
+
+                    <column name="sequence_id">
+                        <desc>自增长 ID</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+						<unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+                </columns>
+
+                <keys>
+                    <key name="">
+						<desc></desc>
+                        <type>primary</type>
+                        <fields>
+                            <field name="project_id"></field>
+                            <field name="table_name"></field>
+                        </fields>
+                    </key>
+                </keys>
+            </table>
+
+            <!-- }}} -->
             <!-- {{{ table device -->
 
             <table name="device">
@@ -26,7 +159,6 @@
                         <type>int</type>
                         <nullable>false</nullable>
                         <precision>11</precision>
-                        <auto>true</auto>
                         <unsigned>true</unsigned>
                         <default></default>
                     </column>
@@ -195,7 +327,6 @@
                         <type>int</type>
                         <nullable>false</nullable>
                         <precision>11</precision>
-						<auto>true</auto>
 						<unsigned>true</unsigned>
                         <default></default>
                     </column>
@@ -245,15 +376,6 @@
                             <field name="project_name"></field>
                         </fields>
                     </key>
-
-                    <key name="ik_0">
-                        <desc> 用于快速关联查询出该设备的所有项目 </desc>
-                        <type>index</type>
-                        <fields>
-                            <field name="device_id"></field>
-                        </fields>
-                    </key>
-
                 </keys>
             </table>
 
@@ -270,7 +392,6 @@
                         <type>int</type>
                         <nullable>false</nullable>
                         <precision>11</precision>
-						<auto>true</auto>
 						<unsigned>true</unsigned>
                         <default></default>
                     </column>
@@ -368,26 +489,9 @@
                         <type>primary</type>
                         <fields>
                             <field name="ds_id"></field>
-                        </fields>
-                    </key>
-
-                    <key name="ik_0">
-                        <desc> 用于快速关联查询出该设备的所有项目 </desc>
-                        <type>index</type>
-                        <fields>
-                            <field name="project_id"></field>
-                            <field name="device_id"></field>
-                        </fields>
-                    </key>
-
-                    <key name="ik_1">
-                        <desc> 用于快速关联查询出该设备的所有项目 </desc>
-                        <type>index</type>
-                        <fields>
                             <field name="project_id"></field>
                         </fields>
                     </key>
-
                 </keys>
             </table>
 
@@ -404,7 +508,6 @@
                         <type>int</type>
                         <nullable>false</nullable>
                         <precision>11</precision>
-						<auto>true</auto>
 						<unsigned>true</unsigned>
                         <default></default>
                     </column>
@@ -470,26 +573,9 @@
                         <type>primary</type>
                         <fields>
                             <field name="rra_id"></field>
-                        </fields>
-                    </key>
-
-                    <key name="ik_0">
-                        <desc> 用于快速关联查询出该设备的所有项目 </desc>
-                        <type>index</type>
-                        <fields>
-                            <field name="project_id"></field>
-                            <field name="device_id"></field>
-                        </fields>
-                    </key>
-
-                    <key name="ik_1">
-                        <desc> 用于快速关联查询出该设备的所有项目 </desc>
-                        <type>index</type>
-                        <fields>
                             <field name="project_id"></field>
                         </fields>
                     </key>
-
                 </keys>
             </table>
 
@@ -507,7 +593,6 @@
                         <type>int</type>
                         <nullable>false</nullable>
                         <precision>11</precision>
-						<auto>true</auto>
 						<unsigned>true</unsigned>
                         <default></default>
                     </column>
@@ -572,7 +657,6 @@
                         <type>int</type>
                         <nullable>false</nullable>
                         <precision>11</precision>
-						<auto>true</auto>
 						<unsigned>true</unsigned>
                         <default></default>
                     </column>
@@ -654,7 +738,6 @@
                         <type>int</type>
                         <nullable>false</nullable>
                         <precision>11</precision>
-						<auto>true</auto>
 						<unsigned>true</unsigned>
                         <default></default>
                     </column>

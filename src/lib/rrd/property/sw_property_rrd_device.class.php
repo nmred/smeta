@@ -37,6 +37,7 @@ class sw_property_rrd_device extends sw_property_adapter_abstract
 	 * @access protected
 	 */
 	protected $__allow_attributes = array(
+		'device_id'           => true,
 		'device_name'         => true,
 		'device_display_name' => true,
 		'host'                => true,

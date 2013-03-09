@@ -115,6 +115,9 @@ require_once PATH_SWAN_LIB . 'firephp/FirePHPCore/fb.php';
 // }}}
 // {{{ 数据库表定义
 
+define('SWAN_TBN_SEQUENCE_GLOBAL', 'sequence_global');
+define('SWAN_TBN_SEQUENCE_DEVICE', 'sequence_device');
+define('SWAN_TBN_SEQUENCE_PROJECT', 'sequence_project');
 define('SWAN_TBN_DEVICE', 'device');
 define('SWAN_TBN_DEVICE_PROJECT', 'device_project');
 define('SWAN_TBN_RRD_DS', 'rrd_ds');

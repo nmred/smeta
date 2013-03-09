@@ -31,10 +31,13 @@ require_once PATH_SWAN_LIB . 'sw_orm.class.php';
 +------------------------------------------------------------------
  * {{{ add device project
 +------------------------------------------------------------------
-
+*/
+require_once PATH_SWAN_LIB . 'sw_sequence.class.php';
+$project_id = sw_sequence::get_next_device(2, SWAN_TBN_SEQUENCE_DEVICE);
 $project_property = sw_orm::property_factory('rrd', 'device_project');
+$project_property->set_project_id($project_id);
 $project_property->set_project_name("cpu");
-$project_property->set_device_id(5);
+$project_property->set_device_id(2);
 $project_property->set_start_time(time());
 $project_property->set_step(300);
 
@@ -52,7 +55,6 @@ try {
 	echo $e->getMessage();	
 	exit;
 }
-
 /* }}}
 +------------------------------------------------------------------
  * {{{ get device project

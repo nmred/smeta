@@ -31,9 +31,14 @@ require_once PATH_SWAN_LIB . 'sw_orm.class.php';
 +------------------------------------------------------------------
  * {{{ add device
 +------------------------------------------------------------------
+*/
 
+require_once PATH_SWAN_LIB . 'sw_sequence.class.php';
+
+$device_id = sw_sequence::get_next_global(SWAN_TBN_DEVICE);
 $device_property = sw_orm::property_factory('rrd', 'device');
-$device_property->set_device_name("test_130");
+$device_property->set_device_id($device_id);
+$device_property->set_device_name("test_132");
 $device_property->set_snmp_version(1);
 $device_property->set_host("192.168.56.130");
 $device_property->set_port("161");
@@ -53,7 +58,6 @@ try {
 	exit;
 }
 
-*/
 /* }}}
 +------------------------------------------------------------------
  * {{{ get device

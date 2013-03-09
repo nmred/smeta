@@ -41,7 +41,7 @@ class sw_operator_rrd_device_project extends sw_operator_abstract
 	public function add_device_project(sw_property_rrd_device_project $property)
 	{
 		$attributes = $property->attributes();
-		$require_fields = array('project_name', 'device_id',);
+		$require_fields = array('project_name', 'device_id', 'project_id');
 		$this->_check_require($attributes, $require_fields);
 
 		$this->__db->insert(SWAN_TBN_DEVICE_PROJECT, $attributes);
