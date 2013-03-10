@@ -41,7 +41,7 @@ class sw_operator_rrd_rrd_rra extends sw_operator_abstract
 	public function add_rrd_rra(sw_property_rrd_rrd_rra $property)
 	{
 		$attributes = $property->attributes();
-		$require_fields = array('project_id', 'device_id');
+		$require_fields = array('project_id', 'device_id', 'rra_id');
 		$this->_check_require($attributes, $require_fields);
 
 		$this->__db->insert(SWAN_TBN_RRD_RRA, $attributes);

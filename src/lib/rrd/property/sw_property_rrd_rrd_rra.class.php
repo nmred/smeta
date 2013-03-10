@@ -37,6 +37,7 @@ class sw_property_rrd_rrd_rra extends sw_property_adapter_abstract
 	 * @access protected
 	 */
 	protected $__allow_attributes = array(
+		'rra_id'      => true,
 		'project_id'  => true,
 		'device_id'   => true,
 		'rra_cf'  => true,
@@ -51,7 +52,7 @@ class sw_property_rrd_rrd_rra extends sw_property_adapter_abstract
 	 * @var string
 	 * @access protected
 	 */
-	protected $__key_attributes = array('device_id');
+	protected $__key_attributes = array('project_id', 'rra_id');
 
 	/**
 	 * 整形类型 

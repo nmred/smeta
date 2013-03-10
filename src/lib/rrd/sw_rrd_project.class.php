@@ -178,6 +178,7 @@ class sw_rrd_project
 			}
 			$this->__device_id = $projects[0]['device_id'];
 			$this->__project_name = $projects[0]['project_name'];
+			print_r($projects);
 		} else {
 			$condition = sw_orm::condition_factory('rrd', 'device_project:get_device_project');
 			$condition->set_eq('device_id');
@@ -212,6 +213,7 @@ class sw_rrd_project
 			require_once PATH_SWAN_LIB . 'rrd/sw_rrd_exception.class.php';
 			throw new sw_rrd_exception('get device name faild. ex:' . $e->getMessage());	
 		}
+		print_r($devices);
 		$this->__device_name = $devices[0]['device_name'];
 		return $this;
 	}

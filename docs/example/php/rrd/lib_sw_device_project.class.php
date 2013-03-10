@@ -33,7 +33,7 @@ require_once PATH_SWAN_LIB . 'sw_orm.class.php';
 +------------------------------------------------------------------
 */
 require_once PATH_SWAN_LIB . 'sw_sequence.class.php';
-$project_id = sw_sequence::get_next_device(2, SWAN_TBN_SEQUENCE_DEVICE);
+$project_id = sw_sequence::get_next_device(2, SWAN_TBN_DEVICE_PROJECT);
 $project_property = sw_orm::property_factory('rrd', 'device_project');
 $project_property->set_project_id($project_id);
 $project_property->set_project_name("cpu");

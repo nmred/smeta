@@ -145,6 +145,19 @@ class sw_sequence
 		if (!isset($db)) {
 			$db = sw_db::singleton();	
 		}
+
+		//判断是否是合法的 device_id
+		try {
+			$device_id = $db->fetch_one($db->select()
+							  ->from(SWAN_TBN_DEVICE, array('device_id'))
+							  ->where('device_id= ?'), $device_id);
+		} catch (sw_exception $e) {
+			throw new sw_sequence_exception('invalid device id, get sequence faild. ');	
+		}
+
+		if (false === $device_id) {
+			throw new sw_sequence_exception('invalid device id, get sequence faild. ');	
+		}
 		
 		try {
 			$db->begin_transaction();
@@ -218,6 +231,19 @@ class sw_sequence
 		if (!isset($db)) {
 			$db = sw_db::singleton();	
 		}
+
+		//判断是否是合法的 device_id
+		try {
+			$project_id = $db->fetch_one($db->select()
+							  ->from(SWAN_TBN_DEVICE_PROJECT, array('project_id'))
+							  ->where('device_id= ?'), $device_id);
+		} catch (sw_exception $e) {
+			throw new sw_sequence_exception('invalid device id, get sequence faild. ');	
+		}
+
+		if (false === $device_id) {
+			throw new sw_sequence_exception('invalid device id, get sequence faild. ');	
+		}
 		
 		try {
 			$db->begin_transaction();
@@ -229,7 +255,7 @@ class sw_sequence
 		try {
 			$fields = array('sequence_id' => new sw_db_expr('sequence_id+' . self::get_increment_num()));	
 			$where = $db->quote_into('table_name = ?', $table_name);
-			$where = $db->quote_into(' AND project_id = ?', $project_id);
+			$where .= $db->quote_into(' AND project_id = ?', $project_id);
 			$try_num = 1;
 			do {
 				$affected = $db->update(SWAN_TBN_SEQUENCE_PROJECT, $fields, $where);

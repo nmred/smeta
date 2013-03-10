@@ -30,6 +30,7 @@ require_once PATH_SWAN_LIB . 'sw_orm.class.php';
 /*
  * {{{ 创建 rrd 数据库
 +------------------------------------------------------------------
+*/
 try {
 	require_once PATH_SWAN_LIB . 'rrd/protocol/sw_rrd_protocol_create_rrd.class.php';
 	require_once PATH_SWAN_LIB . 'rrd/sw_rrd_project.class.php';
@@ -41,10 +42,9 @@ try {
 	$create_rrd->create($project);
 } catch (sw_exception $e) {
 	echo $e->getMessage();	
-	exit;
+	//exit;
 }
 
-*/
 
 /* }}}
  * {{{ 更新 rrd 数据库
@@ -89,7 +89,6 @@ try {
 /* }}}
  * {{{ 遍历 rrd 数据库
 +------------------------------------------------------------------
-*/
 try {
 	require_once PATH_SWAN_LIB . 'rrd/protocol/sw_rrd_protocol_fetch_rrd.class.php';
 	require_once PATH_SWAN_LIB . 'rrd/sw_rrd_project.class.php';
@@ -107,6 +106,15 @@ try {
 	exit;
 }
 
+*/
+/* }}}
+ * {{{ get_profiler()  
++------------------------------------------------------------------
+*/
+$__db = sw_db::singleton();
+
+$profile = $__db->get_profiler()->get_query_profiles(null, true);
+P($profile);
 
 /* }}}
 */

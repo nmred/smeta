@@ -16,7 +16,7 @@ require_once PATH_SWAN_LIB . 'property/sw_property_adapter_abstract.class.php';
 
 /**
 +------------------------------------------------------------------------------
-* 数据源属性对象 
+* sw_property_rrd_device 
 +------------------------------------------------------------------------------
 * 
 * @uses sw_property_adapter_abstract
@@ -26,7 +26,7 @@ require_once PATH_SWAN_LIB . 'property/sw_property_adapter_abstract.class.php';
 * @author $_SWANBR_AUTHOR_$ 
 +------------------------------------------------------------------------------
 */
-class sw_property_rrd_rrd_ds extends sw_property_adapter_abstract
+class sw_property_rrd_device extends sw_property_adapter_abstract
 {
 	// {{{ members
 
@@ -37,17 +37,23 @@ class sw_property_rrd_rrd_ds extends sw_property_adapter_abstract
 	 * @access protected
 	 */
 	protected $__allow_attributes = array(
-		'ds_id'       => true,
-		'ds_name'     => true,
-		'project_id'  => true,
-		'device_id'   => true,
-		'get_method'  => true,
-		'object_type' => true,
-		'object_id'   => true,
-		'source_type' => true,
-		'heart_time'  => true,
-		'min'         => true,
-		'max'         => true,
+		'device_id'           => true,
+		'device_name'         => true,
+		'device_display_name' => true,
+		'host'                => true,
+		'port'                => true,
+		'snmp_version'        => true,
+		'snmp_method'         => true,
+		'snmp_protocol'       => true,
+		'snmp_community'      => true,
+		'snmp_timeout'        => true,
+		'snmp_retries'        => true,
+		'security_name'       => true,
+		'security_level'      => true,
+		'auth_protocol'       => true,	
+		'auth_passphrase'     => true,
+		'priv_protocol'       => true,
+		'priv_passphrase'     => true,
 	);
 
 	/**
@@ -56,7 +62,7 @@ class sw_property_rrd_rrd_ds extends sw_property_adapter_abstract
 	 * @var string
 	 * @access protected
 	 */
-	protected $__key_attributes = array('ds_id', 'project_id');
+	protected $__key_attributes = array('device_id');
 
 	/**
 	 * 整形类型 
@@ -65,9 +71,9 @@ class sw_property_rrd_rrd_ds extends sw_property_adapter_abstract
 	 * @access protected
 	 */
 	protected $__int_fields = array(
-		'heart_time',
-		'min',
-		'max',
+		'port',
+		'snmp_timeout',
+		'snmp_retries',
 	);
 
 	/**
@@ -77,8 +83,12 @@ class sw_property_rrd_rrd_ds extends sw_property_adapter_abstract
 	 * @access protected
 	 */
 	protected $__int_enum_fields = array(
-		'get_method'  => array(0, 1),
-		'source_type' => array(0, 1, 2, 3),
+		'snmp_version'   => array(0, 1, 2),
+		'snmp_method'    => array(0, 1),
+		'snmp_protocol'  => array(0, 1),
+		'security_level' => array(0, 1, 2),
+		'auth_protocol'  => array(0, 1),
+		'priv_protocol'  => array(0, 1),
 	);
 		
 	// }}}		
@@ -94,6 +104,12 @@ class sw_property_rrd_rrd_ds extends sw_property_adapter_abstract
 	public function check()
 	{
 		parent::check();
+		$attributes = $this->attributes();
+
+		if (isset($attributes['host'])) {	
+			require_once PATH_SWAN_LIB . 'sw_validate.class.php';
+			sw_validate::validate_ip($attributes['host']);	
+		}	
 	}
 
 	// }}}

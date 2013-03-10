@@ -33,9 +33,13 @@ require_once PATH_SWAN_LIB . 'sw_orm.class.php';
 +------------------------------------------------------------------
 */
 
+require_once PATH_SWAN_LIB . 'sw_sequence.class.php';
+
+$rra_id = sw_sequence::get_next_project(1, SWAN_TBN_RRD_RRA);
 $property = sw_orm::property_factory('rrd', 'rrd_rra');
+$property->set_rra_id($rra_id);
 $property->set_project_id(1);
-$property->set_device_id(5);
+$property->set_device_id(1);
 $property->set_steps(720); // 5秒 * 12 = 1min
 $property->set_rows(24);// 60行=一小时 
 try {

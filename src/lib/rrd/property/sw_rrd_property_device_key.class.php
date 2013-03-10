@@ -16,7 +16,7 @@ require_once PATH_SWAN_LIB . 'property/sw_property_adapter_abstract.class.php';
 
 /**
 +------------------------------------------------------------------------------
-* 数据源属性对象 
+* sw_property_rrd_device 
 +------------------------------------------------------------------------------
 * 
 * @uses sw_property_adapter_abstract
@@ -26,7 +26,7 @@ require_once PATH_SWAN_LIB . 'property/sw_property_adapter_abstract.class.php';
 * @author $_SWANBR_AUTHOR_$ 
 +------------------------------------------------------------------------------
 */
-class sw_property_rrd_rrd_ds extends sw_property_adapter_abstract
+class sw_rrd_property_device_key extends sw_property_adapter_abstract
 {
 	// {{{ members
 
@@ -37,17 +37,8 @@ class sw_property_rrd_rrd_ds extends sw_property_adapter_abstract
 	 * @access protected
 	 */
 	protected $__allow_attributes = array(
-		'ds_id'       => true,
-		'ds_name'     => true,
-		'project_id'  => true,
-		'device_id'   => true,
-		'get_method'  => true,
-		'object_type' => true,
-		'object_id'   => true,
-		'source_type' => true,
-		'heart_time'  => true,
-		'min'         => true,
-		'max'         => true,
+		'device_id'           => true,
+		'device_name'         => true,
 	);
 
 	/**
@@ -56,7 +47,7 @@ class sw_property_rrd_rrd_ds extends sw_property_adapter_abstract
 	 * @var string
 	 * @access protected
 	 */
-	protected $__key_attributes = array('ds_id', 'project_id');
+	protected $__key_attributes = array('device_id');
 
 	/**
 	 * 整形类型 
@@ -65,9 +56,6 @@ class sw_property_rrd_rrd_ds extends sw_property_adapter_abstract
 	 * @access protected
 	 */
 	protected $__int_fields = array(
-		'heart_time',
-		'min',
-		'max',
 	);
 
 	/**
@@ -77,8 +65,6 @@ class sw_property_rrd_rrd_ds extends sw_property_adapter_abstract
 	 * @access protected
 	 */
 	protected $__int_enum_fields = array(
-		'get_method'  => array(0, 1),
-		'source_type' => array(0, 1, 2, 3),
 	);
 		
 	// }}}		

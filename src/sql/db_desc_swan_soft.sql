@@ -42,6 +42,8 @@ CREATE TABLE `sequence_device` (
 -- 
 -- 项目成员数据表的唯一序列号
 -- 
+-- device_id
+-- 	设备 ID
 -- project_id
 -- 	项目 ID
 -- table_name
@@ -50,28 +52,67 @@ CREATE TABLE `sequence_device` (
 -- 	自增长 ID
 
 CREATE TABLE `sequence_project` (
+	`device_id` int(11) UNSIGNED NOT NULL ,
 	`project_id` int(11) UNSIGNED NOT NULL ,
 	`table_name` varchar(64) NOT NULL ,
 	`sequence_id` int(11) UNSIGNED NOT NULL ,
-	PRIMARY KEY (`project_id`,`table_name`)
+	PRIMARY KEY (`device_id`,`project_id`,`table_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --  }}} 
--- {{{  table device
+-- {{{  table device_key
 
 -- 
--- 监控的设备信息表
+-- 监控的设备关键表
 -- 
 -- device_id
 -- 	设备 id
 -- device_name
 -- 	设备名称(唯一)
+
+CREATE TABLE `device_key` (
+	`device_id` int(11) UNSIGNED NOT NULL ,
+	`device_name` varchar(255) NOT NULL ,
+	PRIMARY KEY (`device_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--  }}} 
+-- {{{  table device_basic
+
+-- 
+-- 监控的设备基本信息表
+-- 
+-- device_id
+-- 	设备 id
 -- device_display_name
 -- 	设备显示名称
 -- host
 -- 	设备的主机名
 -- port
 -- 	设备的端口号，默认是  SNMP 的默认端口：161
+-- is_delete
+-- 	是否是已经删除的设备
+-- delete_time
+-- 	设备删除时间
+
+CREATE TABLE `device_basic` (
+	`device_id` int(11) UNSIGNED NOT NULL ,
+	`device_display_name` varchar(255) NOT NULL ,
+	`host` varchar(32) CHARACTER SET latin1 NOT NULL ,
+	`port` smallint(6) UNSIGNED DEFAULT '161',
+	`is_delete` tinyint(1) UNSIGNED DEFAULT '0',
+	`delete_time` int(10) UNSIGNED NOT NULL ,
+	PRIMARY KEY (`device_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--  }}} 
+-- {{{  table device_snmp
+
+-- 
+-- 监控的设备 SNMP 信息表
+-- 
+-- device_id
+-- 	设备 id
 -- snmp_version
 -- 	SNMP 协议的版本 0:VERSION_1, 1:VERSION_2 2:VERSION_3
 -- snmp_method
@@ -97,12 +138,8 @@ CREATE TABLE `sequence_project` (
 -- priv_passphrase
 -- 	认证密钥
 
-CREATE TABLE `device` (
+CREATE TABLE `device_snmp` (
 	`device_id` int(11) UNSIGNED NOT NULL ,
-	`device_name` varchar(255) NOT NULL ,
-	`device_display_name` varchar(255) NOT NULL ,
-	`host` varchar(32) CHARACTER SET latin1 NOT NULL ,
-	`port` smallint(6) UNSIGNED DEFAULT '161',
 	`snmp_version` tinyint(2) UNSIGNED DEFAULT '0',
 	`snmp_method` tinyint(2) UNSIGNED DEFAULT '0',
 	`snmp_protocol` tinyint(2) UNSIGNED DEFAULT '0',
@@ -119,46 +156,68 @@ CREATE TABLE `device` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --  }}} 
--- {{{  table device_project
+-- {{{  table project_key
 
 -- 
--- 记录监控设备的每个项目rrd信息
+-- 记录监控设备的项目关键表
 -- 
 -- project_id
 -- 	项目 id
 -- project_name
 -- 	监控设备项目名称
 -- device_id
--- 	关联 device.device_id
+-- 	关联 device_key.device_id
+
+CREATE TABLE `project_key` (
+	`project_id` int(11) UNSIGNED NOT NULL ,
+	`project_name` varchar(64) NOT NULL ,
+	`device_id` int(11) UNSIGNED NOT NULL DEFAULT '0',
+	PRIMARY KEY (`device_id`,`project_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--  }}} 
+-- {{{  table project_basic
+
+-- 
+-- 记录监控设备的项目基本信息表
+-- 
+-- project_id
+-- 	项目 id
+-- device_id
+-- 	关联 device_id.device_id
 -- step
 -- 	rrd刷新周期 默认值 300s
 -- start_time
 -- 	数据库的起始时间 默认是now() - 10s
+-- is_delete
+-- 	是否是已经删除的项目
+-- delete_time
+-- 	项目删除时间
 
-CREATE TABLE `device_project` (
+CREATE TABLE `project_basic` (
 	`project_id` int(11) UNSIGNED NOT NULL ,
-	`project_name` varchar(64) NOT NULL ,
 	`device_id` int(11) UNSIGNED NOT NULL DEFAULT '0',
 	`step` int(6) UNSIGNED DEFAULT '300',
 	`start_time` int(11) UNSIGNED ,
-	PRIMARY KEY (`device_id`,`project_name`),
-	KEY`ik_0` (`device_id`)
+	`is_delete` tinyint(1) UNSIGNED DEFAULT '0',
+	`delete_time` int(10) UNSIGNED NOT NULL ,
+	PRIMARY KEY (`device_id`,`project_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --  }}} 
--- {{{  table rrd_ds
+-- {{{  table project_data_source
 
 -- 
--- 记录每个监控项目对应的多个字段属性
+-- 记录每个监控项目对应的所有数据源
 -- 
 -- ds_id
 -- 	DS id
 -- ds_name
 -- 	属性名 规则和变量命名一样，限制不能输入中文，这个是有意义的字段
 -- project_id
--- 	关联 device_project.project_id
+-- 	关联 project_key.project_id
 -- device_id
--- 	关联 device.device_id (可能以后会有意义)
+-- 	关联 device_key.device_id (可能以后会有意义)
 -- get_method
 -- 	数据获取方式 0 :通过 SNMP 协议获取 1:通过其他方式，例如脚本等
 -- object_type
@@ -174,7 +233,7 @@ CREATE TABLE `device_project` (
 -- max
 -- 	传递数据的最大限制 默认不限制
 
-CREATE TABLE `rrd_ds` (
+CREATE TABLE `project_data_source` (
 	`ds_id` int(11) UNSIGNED NOT NULL ,
 	`ds_name` varchar(64) NOT NULL ,
 	`project_id` int(11) UNSIGNED NOT NULL DEFAULT '0',
@@ -186,13 +245,11 @@ CREATE TABLE `rrd_ds` (
 	`heart_time` int(11) UNSIGNED DEFAULT '300',
 	`min` varchar(32) DEFAULT 'U',
 	`max` varchar(32) DEFAULT 'U',
-	PRIMARY KEY (`ds_id`),
-	KEY`ik_0` (`project_id`,`device_id`),
-	KEY`ik_1` (`project_id`)
+	PRIMARY KEY (`ds_name`,`project_id`,`device_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --  }}} 
--- {{{  table rrd_rra
+-- {{{  table project_archive
 
 -- 
 -- 记录每个监控项目对数据的归档规则(合并数据的规则)
@@ -200,9 +257,9 @@ CREATE TABLE `rrd_ds` (
 -- rra_id
 -- 	RRA id
 -- project_id
--- 	关联 device_project.project_id
+-- 	关联 project_key.project_id
 -- device_id
--- 	关联 device.device_id (可能以后会有意义)
+-- 	关联 device_key.device_id (可能以后会有意义)
 -- rra_cf
 -- 	归档策略算法 0 : AVERAGE 1:MIN 2:MAX 3:LAST
 -- rra_xff
@@ -212,7 +269,7 @@ CREATE TABLE `rrd_ds` (
 -- rows
 -- 	归档的条数
 
-CREATE TABLE `rrd_rra` (
+CREATE TABLE `project_archive` (
 	`rra_id` int(11) UNSIGNED NOT NULL ,
 	`project_id` int(11) UNSIGNED NOT NULL DEFAULT '0',
 	`device_id` int(11) UNSIGNED NOT NULL DEFAULT '0',
@@ -220,9 +277,7 @@ CREATE TABLE `rrd_rra` (
 	`rra_xff` float(11) DEFAULT '0.5',
 	`steps` int(11) UNSIGNED NOT NULL ,
 	`rows` int(11) UNSIGNED NOT NULL ,
-	PRIMARY KEY (`rra_id`),
-	KEY`ik_0` (`project_id`,`device_id`),
-	KEY`ik_1` (`project_id`)
+	PRIMARY KEY (`rra_id`,`project_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --  }}} 

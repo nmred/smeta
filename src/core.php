@@ -118,13 +118,12 @@ require_once PATH_SWAN_LIB . 'firephp/FirePHPCore/fb.php';
 define('SWAN_TBN_SEQUENCE_GLOBAL', 'sequence_global');
 define('SWAN_TBN_SEQUENCE_DEVICE', 'sequence_device');
 define('SWAN_TBN_SEQUENCE_PROJECT', 'sequence_project');
-define('SWAN_TBN_DEVICE', 'device');
-define('SWAN_TBN_DEVICE_PROJECT', 'device_project');
-define('SWAN_TBN_RRD_DS', 'rrd_ds');
-define('SWAN_TBN_RRD_RRA', 'rrd_rra');
-define('SWAN_TBN_RRD_CDEF', 'rrd_cdef');
-define('SWAN_TBN_RRD_GRAPH', 'rrd_graph');
-define('SWAN_TBN_RRD_LINE_AREA', 'rrd_line_area');
-define('SWAN_TBN_RRD_FPRINT', 'rrd_gprint');
+define('SWAN_TBN_DEVICE_KEY', 'device_key');
+define('SWAN_TBN_DEVICE_BASIC', 'device_basic');
+define('SWAN_TBN_DEVICE_SNMP', 'device_snmp');
+define('SWAN_TBN_PROJECT_KEY', 'project_key');
+define('SWAN_TBN_PROJECT_BASIC', 'project_key');
+define('SWAN_TBN_PROJECT_DATA_SOURCE', 'project_data_source');
+define('SWAN_TBN_PROJECT_ARCHIVE', 'project_archive');
 
 // }}}
