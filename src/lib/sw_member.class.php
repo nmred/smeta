@@ -14,7 +14,7 @@
  
 /**
 +------------------------------------------------------------------------------
-* 数据对象映射工厂
+* member 对象映射工厂
 +------------------------------------------------------------------------------
 * 
 * @package 
@@ -23,7 +23,7 @@
 * @author $_SWANBR_AUTHOR_$ 
 +------------------------------------------------------------------------------
 */
-class sw_orm
+class sw_member
 {
 	// {{{ functions
 	// {{{ public static function property_factory()
@@ -38,10 +38,10 @@ class sw_orm
 	 * @access public
 	 * @return void
 	 */
-	public static function property_factory($module, $type, array $params = array())
+	public static function property_factory($type, array $params = array())
 	{
 		require_once 'sw_property.class.php';
-		return sw_property::factory($module, $type, $params);
+		return sw_property::factory('member', $type, $params);
 	}
 
 	// }}}
@@ -50,18 +50,17 @@ class sw_orm
 	/**
 	 * 条件工厂 
 	 * 
-	 * @param string $module 
-	 * @param string $type 
+	 * @param string $type device_key:add_key 
 	 * @param array $params 
 	 * @param array $query_opts 
 	 * @static
 	 * @access public
 	 * @return void
 	 */
-	public static function condition_factory($module, $type, array $params = array(), array $query_opts = array())
+	public static function condition_factory($type, array $params = array(), array $query_opts = array())
 	{
 		require_once 'sw_condition.class.php';
-		return sw_condition::factory($module, $type, $params, $query_opts);
+		return sw_condition::factory('member:operator', $type, $params, $query_opts);
 	}
 
 	// }}}
@@ -70,32 +69,38 @@ class sw_orm
 	/**
 	 * 操作对象工厂 
 	 * 
-	 * @param string $module   rrd 
-	 * @param string $type     device:get
-	 * @param array $params 
+	 * @param string $type     device_key
+	 * @param sw_member_property_abstract $property
 	 * @static
 	 * @access public
 	 * @return void
 	 */
-	public static function operator_factory($module, $type, array $params = array())
+	public static function operator_factory($type, sw_member_property_abstract $property = null)
 	{
-		if (empty($module) || empty($type)) {
-			require_once PATH_SWAN_LIB . 'operator/sw_operator_exception.class.php';
-			throw new sw_operator_exception("factory param error");	
+		if (!class_exists('sw_member_operator_device')) {
+			require_once PATH_SWAN_LIB . 'member/operator/sw_member_operator_device.class.php';
+			if (!class_exists('sw_member_operator_device')) {
+				require_once PATH_SWAN_LIB . 'member/operator/sw_member_operator_exception_.class.php';
+				throw new sw_member_operator_exception("Can not load class `sw_member_operator_device`.");
+			}
 		}
 
-		$class_name = 'sw_operator_' . $module . '_' .  $type;
-
-		if (!class_exists($class_name)) {
-			require_once PATH_SWAN_LIB . $module . '/operator/' . $class_name . '.class.php';	
+		if (isset($property)) {
+			$device = new sw_member_operator_device($property);	
+		} else {
+			$device = new sw_member_operator_device();	
 		}
 
-		if (!class_exists($class_name)) {	
-			require_once PATH_SWAN_LIB . 'operator/sw_operator_exception.class.php';
-			throw new sw_operator_exception("can not load '$class_name'");	
+		if ('device' === $type) {
+			return $device;	
 		}
 
-		return new $class_name($params);
+		if (!method_exists($device, $type)) {
+			require_once PATH_SWAN_LIB . 'member/operator/sw_member_operator_exception_.class.php';
+			throw new sw_member_operator_exception("Can not get `$type` operator object");
+		}
+
+		return $device->$type();
 	}
 
 	// }}}

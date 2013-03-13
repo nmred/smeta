@@ -46,10 +46,12 @@ class sw_condition
 			throw new sw_condition_exception("factory param error");	
 		}
 
-		$class_name = 'sw_condition_operator_' . $module . '_' . str_replace(':', '_', $type) ;
+		$module_name = str_replace(':', '_', $module);
+		$module_path = str_replace(':', '/', $module);
+		$class_name = 'sw_condition_adapter_' . $module_name . '_' . str_replace(':', '_', $type) ;
 
 		if (!class_exists($class_name)) {
-			require_once PATH_SWAN_LIB . $module . '/operator/condition/' . $class_name . '.class.php';	
+			require_once PATH_SWAN_LIB . $module_path . '/condition/' . $class_name . '.class.php';	
 		}
 
 		if (!class_exists($class_name)) {	

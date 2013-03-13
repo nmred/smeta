@@ -12,46 +12,20 @@
 // | $_SWANBR_WEB_DOMAIN_$
 // +---------------------------------------------------------------------------
  
+require_once PATH_SWAN_LIB . 'property/sw_property_adapter_abstract.class.php';
+
 /**
 +------------------------------------------------------------------------------
-* 属性的工厂类
+* 成员属性抽象 
 +------------------------------------------------------------------------------
 * 
+* @uses sw_property_adapter_abstract
 * @package 
 * @version $_SWANBR_VERSION_$
 * @copyright $_SWANBR_COPYRIGHT_$
 * @author $_SWANBR_AUTHOR_$ 
 +------------------------------------------------------------------------------
 */
-class sw_property
+class sw_member_property_abstract extends sw_property_adapter_abstract
 {
-	// {{{ functions
-
-	/**
-	 * 属性工厂类 
-	 * 
-	 * @param string $module 
-	 * @param string $type 
-	 * @param array $params 
-	 * @static
-	 * @access public
-	 * @return void
-	 */
-	public static function factory($module, $type, array $params = array())
-	{
-		$class_name = 'sw_' . $module . '_property_' . $type;
-		
-		if (!class_exists($class_name)) {
-			require_once PATH_SWAN_LIB . $module . '/property/'	. $class_name . '.class.php';
-		}		
-
-		if (!class_exists($class_name)) {
-			require_once PATH_SWAN_LIB . 'property/sw_property_adapter_exception.class.php';
-			throw new sw_property_adapter_exception("can not load '$class_name'");
-		}
-
-		return new $class_name($params);
-	}
-
-	// }}}		
 }
