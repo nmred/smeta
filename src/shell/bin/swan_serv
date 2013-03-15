@@ -243,7 +243,7 @@ function start_mysql()
 	if watch_mysql;then
 		echo_stdout "mysqld_safe process runing $ECHO_DOT" 0 1
 	else
-		CMD_MYSQL_START="$INSTALL_MYSQL/bin/mysqld_safe --defaults-file=${ETC_DIR}/my.cnf &"
+		CMD_MYSQL_START="sudo -u swan $INSTALL_MYSQL/bin/mysqld_safe --defaults-file=${ETC_DIR}/my.cnf &"
 		CMD_MYSQL_PING="${INSTALL_MYSQL}/bin/mysqladmin --defaults-file=${ETC_DIR}/my.cnf -u swan -S $INSTALL_RUN/sw_mysql.sock ping"
 		eval $CMD_MYSQL_START
 		sleep 3

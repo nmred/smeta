@@ -81,6 +81,7 @@ class sw_env_shell_const
 				'INSTALL_SRC'    => '$INSTALL_SOFT/src',
 				'INSTALL_WEB'    => '$INSTALL_SOFT/web',
 				'INSTALL_DIR'    => '$INSTALL_SOFT/opt',
+				'INSTALL_DATA'   => '$INSTALL_SOFT/data',
 
 				//lamp相关
 				'INSTALL_HTTPD'    => '$INSTALL_DIR/apache2',
@@ -103,7 +104,7 @@ class sw_env_shell_const
 				//etc配置相关
 				'ETC_DIR'          => '$INSTALL_DIR/etc',
 				//mysql相关
-				'MYSQL_DATA'       => '$INSTALL_DIR/data/mysql',
+				'MYSQL_DATA'       => '$INSTALL_DATA/mysql',
 				//rrdtool
 				'INSTALL_RRDTOOL'  => '$INSTALL_DIR/rrdtool',
 			),

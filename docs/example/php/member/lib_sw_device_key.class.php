@@ -31,20 +31,28 @@ require_once PATH_SWAN_LIB . 'sw_member.class.php';
 +------------------------------------------------------------------
  * {{{ add device
 +------------------------------------------------------------------
+mysql:dbname=swan_soft;port=3306;unix_socket=/usr/local/swan/run/sw_mysql.sock
+
 */
 
+$dsn = 'mysql:host=localhost;dbname=swan_soft;port=3306;unix_socket=/usr/local/swan/run/sw_mysql.sock';
+try {
+	    $dbh = new PDO($dsn, 'swan', '');
+} catch (PDOException $e) {
+	    echo 'Connection failed: ' . $e->getMessage();
+}
+
+
+/*
 require_once PATH_SWAN_LIB . 'sw_sequence.class.php';
 
-$device_id = sw_sequence::get_next_global(SWAN_TBN_DEVICE);
-$device_property = sw_orm::property_factory('rrd', 'device');
-$device_property->set_device_id($device_id);
-$device_property->set_device_name("test_132");
-$device_property->set_snmp_version(1);
-$device_property->set_host("192.168.56.130");
-$device_property->set_port("161");
+$device_id = sw_sequence::get_next_global(SWAN_TBN_SEQUENCE_GLOBAL);
+$device_key_property = sw_member::property_factory('device_key');
+$device_key_property->set_device_id($device_id);
+$device_key_property->set_device_name("test_132");
 
 try {
-	$device_property->check();
+	$device_key_property->check();
 } catch (sw_exception $e) {
 	echo $e->getMessage();
 	exit;
@@ -57,12 +65,12 @@ try {
 	echo $e->getMessage();	
 	exit;
 }
+*/
 
 /* }}}
 +------------------------------------------------------------------
  * {{{ get device
 +------------------------------------------------------------------
-*/
 $condition = sw_orm::condition_factory('rrd', 'device:get_device');
 
 //$condition->set_is_count(true);
@@ -80,6 +88,7 @@ try {
 
 P($arr);
 
+*/
 /* }}}
 +------------------------------------------------------------------
  * {{{ mod device
