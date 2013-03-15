@@ -38,14 +38,6 @@ abstract class sw_operator_abstract
 	 */
 	protected $__db;
 
-	/**
-	 * 各基础操作类 
-	 * 
-	 * @var array
-	 * @access protected
-	 */
-	protected $__operators;
-
 	// }}}	
 	// {{{ functions
 	// {{{ public function __construct()
@@ -128,28 +120,6 @@ abstract class sw_operator_abstract
 				throw new sw_operator_exception("must given $field");	
 			}
 		}	
-	}
-
-	// }}}
-	// {{{ public function _operator()
-
-	/**
-	 * 获取各基础操作类 
-	 * 
-	 * @param string $cate 
-	 * @param string $type 
-	 * @access public
-	 * @return sw_operator_abstract
-	 */
-	public function _operator($cate, $type)
-	{
-		if (!isset($this->__operators[$cate . ':' . $type])) {
-			$class = $cate . '/' . 'sw_operator_' . $type;
-			require_once PATH_SWAN_LIB . $class . '.class.php';
-			$this->__operators[$cate . ':' . $type] = new $class;
-		}
-
-		return $this->__operators[$cate . ':' . $type];
 	}
 
 	// }}}

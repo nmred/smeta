@@ -189,7 +189,7 @@ function watch_httpd()
 
 function watch_mysql()
 {
-	CMD_MYSQL_PING="${INSTALL_MYSQL}/bin/mysqladmin --defaults-file=${ETC_DIR}/my.cnf ping"
+	CMD_MYSQL_PING="${INSTALL_MYSQL}/bin/mysqladmin --defaults-file=${ETC_DIR}/my.cnf -u swan -S $INSTALL_RUN/sw_mysql.sock ping"
 	eval $CMD_MYSQL_PING >/dev/null 2>&1
 	if test 0 != $?;then
 		return 1
@@ -243,8 +243,9 @@ function start_mysql()
 	if watch_mysql;then
 		echo_stdout "mysqld_safe process runing $ECHO_DOT" 0 1
 	else
-		eval sudo -u swan $INSTALL_MYSQL/bin/mysqld_safe --user=swan --pid-file=$INSTALL_RUN/mysql.pid  & >/dev/null >>$RUN_LOG
-		CMD_MYSQL_PING="sudo -u swan ${INSTALL_MYSQL}/bin/mysqladmin --defaults-file=${ETC_DIR}/my.cnf ping"
+		CMD_MYSQL_START="$INSTALL_MYSQL/bin/mysqld_safe --defaults-file=${ETC_DIR}/my.cnf &"
+		CMD_MYSQL_PING="${INSTALL_MYSQL}/bin/mysqladmin --defaults-file=${ETC_DIR}/my.cnf -u swan -S $INSTALL_RUN/sw_mysql.sock ping"
+		eval $CMD_MYSQL_START
 		sleep 3
 		eval $CMD_MYSQL_PING
 		if [ $? = "0" ];then

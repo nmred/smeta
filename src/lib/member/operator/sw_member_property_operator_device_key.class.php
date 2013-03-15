@@ -12,7 +12,7 @@
 // | $_SWANBR_WEB_DOMAIN_$
 // +---------------------------------------------------------------------------
  
-require_once PATH_SWAN_LIB . 'operator/sw_operator_abstract.class.php';
+require_once PATH_SWAN_LIB . 'member/operator/sw_member_property_operator_device_abstract.class.php';
 
 /**
 +------------------------------------------------------------------------------
@@ -26,19 +26,19 @@ require_once PATH_SWAN_LIB . 'operator/sw_operator_abstract.class.php';
 * @author $_SWANBR_AUTHOR_$ 
 +------------------------------------------------------------------------------
 */
-class sw_rrd_property_operator_device_key extends sw_operator_abstract
+class sw_member_property_operator_device_key extends sw_member_property_operator_device_abstract
 {
 	// {{{ functions
-	// {{{ public function add_device()
+	// {{{ public function add_key()
 
 	/**
 	 * 添加设备关键信息 
 	 * 
-	 * @param sw_rrd_property_device_key $property 
+	 * @param sw_member_property_device_key $property 
 	 * @access public
 	 * @return void
 	 */
-	public function add_device(sw_rrd_property_device_key $property)
+	public function add_key(sw_member_property_operator_device_key $property)
 	{
 		$attributes = $property->attributes();
 		$require_fields = array('device_name', 'device_id');
@@ -49,20 +49,20 @@ class sw_rrd_property_operator_device_key extends sw_operator_abstract
 	}
 
 	// }}}
-	// {{{ public function get_device()
+	// {{{ public function get_key()
 
 	/**
 	 * 获取所有的设备信息 
 	 * 
-	 * @param sw_condition_operator_rrd_device_get_device $condition 
+	 * @param sw_condition_adapter_member_operator_device_key_get_key $condition 
 	 * @access public
 	 * @return array
 	 */
-	public function get_device(sw_condition_operator_rrd_device_get_device $condition)
+	public function get_key(sw_condition_adapter_member_operator_device_key_get_key $condition)
 	{
 		$condition->check_params();
 		$select = $this->__db->select()
-						     ->from(SWAN_TBN_DEVICE, null);
+						     ->from(SWAN_TBN_DEVICE_KEY, null);
 		$condition->where($select, true);
 		return $this->_get($select, $condition->params());
 

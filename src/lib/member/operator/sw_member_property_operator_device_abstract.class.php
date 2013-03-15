@@ -11,7 +11,9 @@
 // +---------------------------------------------------------------------------
 // | $_SWANBR_WEB_DOMAIN_$
 // +---------------------------------------------------------------------------
- 
+
+require_once PATH_SWAN_LIB . 'operator/sw_operator_abstract.class.php';
+
 /**
 +------------------------------------------------------------------------------
 * sw_member_property_operator_device_abstract 
@@ -24,7 +26,7 @@
 * @author $_SWANBR_AUTHOR_$ 
 +------------------------------------------------------------------------------
 */
-abstract class sw_member_property_operator_device_abstract
+abstract class sw_member_property_operator_device_abstract extends sw_operator_abstract
 {
 	// {{{ members
 	
@@ -50,6 +52,7 @@ abstract class sw_member_property_operator_device_abstract
 	public function __construct(sw_member_operator_device $operator)
 	{
 		$this->__device_operator = $operator;	
+		parent::__construct();
 	}
 
 	// }}}
