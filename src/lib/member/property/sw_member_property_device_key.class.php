@@ -12,21 +12,21 @@
 // | $_SWANBR_WEB_DOMAIN_$
 // +---------------------------------------------------------------------------
  
-require_once PATH_SWAN_LIB . 'property/sw_property_adapter_abstract.class.php';
+require_once PATH_SWAN_LIB . 'member/property/sw_member_property_abstract.class.php';
 
 /**
 +------------------------------------------------------------------------------
-* sw_property_rrd_device 
+* sw_member_property_device_key 
 +------------------------------------------------------------------------------
 * 
-* @uses sw_property_adapter_abstract
+* @uses sw_member_property_abstract
 * @package 
 * @version $_SWANBR_VERSION_$
 * @copyright $_SWANBR_COPYRIGHT_$
 * @author $_SWANBR_AUTHOR_$ 
 +------------------------------------------------------------------------------
 */
-class sw_rrd_property_device_key extends sw_property_adapter_abstract
+class sw_member_property_device_key extends sw_member_property_abstract
 {
 	// {{{ members
 
@@ -49,24 +49,6 @@ class sw_rrd_property_device_key extends sw_property_adapter_abstract
 	 */
 	protected $__key_attributes = array('device_id');
 
-	/**
-	 * 整形类型 
-	 * 
-	 * @var array
-	 * @access protected
-	 */
-	protected $__int_fields = array(
-	);
-
-	/**
-	 * 枚举类型 
-	 * 
-	 * @var array
-	 * @access protected
-	 */
-	protected $__int_enum_fields = array(
-	);
-		
 	// }}}		
 	// {{{ functions
 	// {{{ public function check()
