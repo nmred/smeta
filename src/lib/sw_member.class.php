@@ -80,7 +80,7 @@ class sw_member
 		if (!class_exists('sw_member_operator_device')) {
 			require_once PATH_SWAN_LIB . 'member/operator/sw_member_operator_device.class.php';
 			if (!class_exists('sw_member_operator_device')) {
-				require_once PATH_SWAN_LIB . 'member/operator/sw_member_operator_exception_.class.php';
+				require_once PATH_SWAN_LIB . 'member/operator/sw_member_operator_exception.class.php';
 				throw new sw_member_operator_exception("Can not load class `sw_member_operator_device`.");
 			}
 		}

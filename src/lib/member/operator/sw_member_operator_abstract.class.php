@@ -41,7 +41,7 @@ abstract class sw_member_operator_abstract
 	 * @var string
 	 * @access protected
 	 */
-	protected $__prefix_property_operator_class_name = 'sw_member_property_operator_device_';
+	protected $__prefix_property_operator_class_name = 'sw_member_property_operator_';
 
 	/**
 	 * 保存子类成员属性操作的对象 
@@ -94,7 +94,7 @@ abstract class sw_member_operator_abstract
 	public function get_operator($operator_type)
 	{
 		if (!array_key_exists($operator_type, $this->__operator_types)) {
-			require_once PATH_SWAN_LIB . 'member/sw_member_operator_exception.class.php';
+			require_once PATH_SWAN_LIB . 'member/operator/sw_member_operator_exception.class.php';
 			throw new sw_member_operator_exception("Invalid operator type `$operator_type`");	
 		}
 

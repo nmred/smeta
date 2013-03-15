@@ -359,5 +359,6 @@ class sw_property_adapter_abstract
 	}
 
 	// }}}
+	// }}}
 }
 

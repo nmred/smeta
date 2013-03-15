@@ -12,7 +12,7 @@
 // | $_SWANBR_WEB_DOMAIN_$
 // +---------------------------------------------------------------------------
  
-require_once PATH_SWAN_LIB . 'member/operator/sw_member_operator.class.php';
+require_once PATH_SWAN_LIB . 'member/operator/sw_member_operator_abstract.class.php';
 
 /**
 +------------------------------------------------------------------------------
@@ -55,9 +55,9 @@ class sw_member_operator_device extends sw_member_operator_abstract
 	 * @access protected
 	 */
 	protected $__operator_types = array(
-		'key'   => true,
-		'basic' => true,
-		'snmp'  => true,
+		'device_key'   => true,
+		'device_basic' => true,
+		'device_snmp'  => true,
 	);
 
 	// }}}	
@@ -75,7 +75,7 @@ class sw_member_operator_device extends sw_member_operator_abstract
 	{
 		if (!isset($key_property)) {
 			require_once PATH_SWAN_LIB . 'sw_member.class.php';	
-			$key_property = em_member::property_factory('device_key');
+			$key_property = sw_member::property_factory('device_key');
 		}	
 
 		$this->__key_property = clone $key_property;

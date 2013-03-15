@@ -26,7 +26,7 @@ require_once PATH_SWAN_LIB . 'condition/sw_condition_adapter_get_abstract.class.
 * @author $_SWANBR_AUTHOR_$ 
 +------------------------------------------------------------------------------
 */
-class sw_condition_rrd_operator_device_key_get_device extends sw_condition_adapter_get_abstract
+class sw_condition_adapter_member_operator_device_key_get_key extends sw_condition_adapter_get_abstract
 {
 	// {{{ members
 

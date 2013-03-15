@@ -93,7 +93,7 @@ abstract class sw_member_property_operator_device_abstract extends sw_operator_a
 	 * @return void
 	 * @throws sw_member_property_operator_exception
 	 */
-	abstract public function del_device_handler($property = null);
+	abstract public function del_device_handler($property);
 
 	// }}}
 	// {{{ abstract public function mod_device_handler()
@@ -106,7 +106,7 @@ abstract class sw_member_property_operator_device_abstract extends sw_operator_a
 	 * @return void
 	 * @throws sw_member_property_operator_exception
 	 */
-	abstract public function mod_device_handler($property = null);
+	abstract public function mod_device_handler($property);
 
 	// }}}
 	// {{{ abstract public function clear_device_handler()
@@ -119,7 +119,7 @@ abstract class sw_member_property_operator_device_abstract extends sw_operator_a
 	 * @return void
 	 * @throws sw_member_property_operator_exception
 	 */
-	abstract public function clear_device_handler($property = null);
+	abstract public function clear_device_handler($property);
 
 	// }}}
 	// {{{ abstract public function recover_device_handler()
@@ -132,7 +132,7 @@ abstract class sw_member_property_operator_device_abstract extends sw_operator_a
 	 * @return void
 	 * @throws sw_member_property_operator_exception
 	 */
-	abstract public function recover_device_handler($property = null);
+	abstract public function recover_device_handler($property);
 
 	// }}}
 	// }}}

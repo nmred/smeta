@@ -29,27 +29,9 @@ require_once PATH_SWAN_LIB . 'sw_member.class.php';
 
 /*
 +------------------------------------------------------------------
- * {{{ add device
+ * {{{ add device_key
 +------------------------------------------------------------------
-mysql:dbname=swan_soft;port=3306;unix_socket=/usr/local/swan/run/sw_mysql.sock
-
-*/
-
-$dsn = 'mysql:host=localhost;dbname=swan_soft;port=3306;unix_socket=/usr/local/swan/run/sw_mysql.sock';
-try {
-	    $dbh = new PDO($dsn, 'swan', '');
-} catch (PDOException $e) {
-	    echo 'Connection failed: ' . $e->getMessage();
-}
-
-
-/*
-require_once PATH_SWAN_LIB . 'sw_sequence.class.php';
-
-$device_id = sw_sequence::get_next_global(SWAN_TBN_SEQUENCE_GLOBAL);
-$device_key_property = sw_member::property_factory('device_key');
-$device_key_property->set_device_id($device_id);
-$device_key_property->set_device_name("test_132");
+$device_key_property = sw_member::property_factory('device_key', array('device_name' => 'test1_2222'));
 
 try {
 	$device_key_property->check();
@@ -59,36 +41,35 @@ try {
 }
 
 try {
-	$device_operator = sw_orm::operator_factory('rrd', 'device');
-	$device_operator->add_device($device_property);
+	$device_operator = sw_member::operator_factory('device', $device_key_property);
+	$device_key_operator = $device_operator->get_operator('device_key');
+	$device_key_operator->add_key();
+
 } catch (sw_exception $e) {
 	echo $e->getMessage();	
 	exit;
 }
 */
+/*
 
 /* }}}
 +------------------------------------------------------------------
- * {{{ get device
+ * {{{ process_key
 +------------------------------------------------------------------
-$condition = sw_orm::condition_factory('rrd', 'device:get_device');
-
-//$condition->set_is_count(true);
-$condition->set_eq('device_id');
-//$condition->set_device_id('5');
-$condition->set_columns(array('device_id', 'device_name', 'port'));
-//dcondition->set_device_name('test');
+*/
+$device_key_property = sw_member::property_factory('device_key', array('device_name' => 'test1_2222'));
 try {
-	$device_operator = sw_orm::operator_factory('rrd', 'device');
-	$arr = $device_operator->get_device($condition);
+	$device_operator = sw_member::operator_factory('device', $device_key_property);
+	$device_key_operator = $device_operator->get_operator('device_key');
+	$device_key_operator->process_key();
+	$device_key_property = $device_key_operator->get_device_operator()->get_device_key_property();
 } catch (sw_exception $e) {
 	echo $e->getMessage();	
 	exit;
 }
 
-P($arr);
+P($device_key_property);
 
-*/
 /* }}}
 +------------------------------------------------------------------
  * {{{ mod device

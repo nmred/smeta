@@ -16,7 +16,7 @@ require_once PATH_SWAN_LIB . 'sw_exception.class.php';
 
 /**
 +------------------------------------------------------------------------------
-* member 类异常处理
+* member device 类异常处理
 +------------------------------------------------------------------------------
 * 
 * @uses sw_exception
@@ -27,6 +27,6 @@ require_once PATH_SWAN_LIB . 'sw_exception.class.php';
 +------------------------------------------------------------------------------
 */
 
-class sw_member_operator_exception extends sw_exception
+class sw_member_property_operator_device_exception extends sw_exception
 {
 }
