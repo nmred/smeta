@@ -1,0 +1,32 @@
+#!/bin/bash
+#
+# vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4 foldmethod=marker:
+#
+# 初始化脚本配置文件
+#
+
+
+# 需要启动的进程
+ARRAY_START=(
+    mysql
+    httpd
+    cron_etc
+)
+
+# 需要停止的进程
+ARRAY_STOP=(
+    cron_etc
+    httpd
+    mysql
+)
+
+# 需要检查的进程
+ARRAY_WATCH=(
+    mysql "mysqld_safe,mysqld"
+    httpd "httpd"
+    cron_etc "crond_etc"
+)
+
+
+# MySQL 启动超时时间
+MYSQL_START_TIMEOUT=10

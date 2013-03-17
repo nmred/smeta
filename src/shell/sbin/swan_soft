@@ -31,11 +31,12 @@ PATH_SWAN="/usr/local/swan"
 PATH_OPT="$PATH_SWAN/opt"
 PATH_OPT_ETC="$PATH_OPT/etc"
 PATH_OPT_MYSQL="$PATH_OPT/mysql"
+PATH_OPT_HTTP="$PATH_OPT/apache2"
 PATH_RUN="$PATH_SWAN/run"
 PATH_LOG="$PATH_SWAN/log"
 PATH_INITLOG="$PATH_LOG/init.out"
 PATH_LOG_STDOUT="$PATH_LOG/stdout"
-PATH_CONFIG="$PATH_ETC/em_init_config"
+PATH_CONFIG="$PATH_OPT_ETC/sw_init_config"
 PATH_SW_CROND="/etc/cron.d/swan_soft"
 
 PIDF_MYSQL="$PATH_RUN/sw_mysql.pid"
@@ -236,32 +237,6 @@ init_var ()
 
 init_var
 
-# {{{ build dir
-
-build_hex_hash ()
-{
-    array_hex_dir=(0 1 2 3 4 5 6 7 8 9 a b c d e f)
-
-    for i in "${array_hex_dir[@]}"; do
-        path_hash=$1/$i
-        mkdir -p $path_hash -m 0755
-        chown $EXEC_USER:$EXEC_GROUP $path_hash
-
-        if test $3; then
-            _hash_num=$3
-        else
-            _hash_num=1
-        fi
-
-        if test $_hash_num -lt $2; then
-            let "_hash_num = _hash_num + 1"
-            build_hex_hash $path_hash $2 $_hash_num
-        fi
-    done
-}
-
-# }}}
-
 # {{{ watch
 
 init_watch_var ()
@@ -339,14 +314,11 @@ get_proc_name ()
 watch_mysql ()
 {
     watch_res="0"
-    type_mysql_lower="$1"
-    type_mysql_upper="$2"
 
-    CMD_MYSQL_PING="./bin/mysqladmin --defaults-file=$PATH_ETC/my.cnf ping"
+    CMD_MYSQL_PING="./bin/mysqladmin --defaults-file=$PATH_OPT_ETC/my.cnf ping"
 
-    eval 'pid_mysql="$PIDF_MYSQL'"$type_mysql_upper"'"'
     # 获取 pid
-    get_pid "$pid_mysql"
+    get_pid $PIDF_MYSQL
     if test "0" != "$get_pid_res"; then
         watch_res="$get_pid_res"
         return
@@ -356,7 +328,7 @@ watch_mysql ()
     cd $PATH_OPT_MYSQL
     eval $CMD_MYSQL_PING
     if test 0 != $?; then
-        watch_res="mysql$type_mysql_lower is not alive"
+        watch_res="mysql is not alive"
         return
     fi
     cd $PATH_PWD
@@ -364,7 +336,7 @@ watch_mysql ()
     # 获取 mysqld_safe 的 pid
     mysqld_safe_pid=`ps -C mysqld -o ppid,pid | grep "\<$pid_no\>" | awk '{print $1}'`
     if ! test "$mysqld_safe_pid"; then
-        watch_res="mysqld_safe$type_mysql_lower process not running."
+        watch_res="mysqld_safe process not running."
         return
     fi
 
@@ -380,53 +352,31 @@ watch_cron_etc ()
 {
     watch_res="0"
 
-    _tmp_diff_cron_etc=`diff $PATH_ETC/em_cron.cf $PATH_EM_CROND`
+    _tmp_diff_cron_etc=`diff $PATH_OPT_ETC/sw_cron.cf $PATH_SW_CROND`
 
-    if ! test -f "$PATH_EM_CROND"; then
-        watch_res="can not find $PATH_EM_CROND"
+    if ! test -f "$PATH_SW_CROND"; then
+        watch_res="can not find $PATH_SW_CROND"
         return
     fi
 
-    if ! test -f "$PATH_ETC/em_cron.cf"; then
-        watch_res="can not find em_cron.cf"
+    if ! test -f "$PATH_OPT_ETC/sw_cron.cf"; then
+        watch_res="can not find sw_cron.cf"
         return
     fi
 
     if test "$_tmp_diff_cron_etc"; then
-        watch_res="$PATH_EM_CROND need update"
+        watch_res="$PATH_SW_CROND need update"
         return
     fi
 
-    pid_no="$PATH_EM_CROND is ok"
+    pid_no="$PATH_SW_CROND is ok"
     watch_tree=""
 }
 
 watch_proc ()
 {
     array_watch_common=(
-        mproxy
-        mproxy_index
-        mproxy_log
         httpd
-        nginx
-        memcache_session
-        memcache_fix
-        memcache_hot
-        gearman
-        crtmpd
-        phpd
-        syslog
-        filed
-        filedagent
-        filedrepd
-        bounce
-        local
-        remote
-        mlist
-        smtp
-        pop
-        imap
-        cleanup
     )
 
     t_proc_name_watch="$1"
@@ -551,8 +501,8 @@ start_mysql ()
     init_res=0
     init_msg=""
 
-    CMD_MYSQL_START="$CMD_SUDO_SWAN ./bin/mysqld_safe --defaults-file=$PATH_ETC/my.cnf &"
-    CMD_MYSQL_PING="./bin/mysqladmin --defaults-file=$PATH_ETC/my.cnf ping"
+    CMD_MYSQL_START="$CMD_SUDO_SWAN ./bin/mysqld_safe --defaults-file=$PATH_OPT_ETC/my.cnf &"
+    CMD_MYSQL_PING="./bin/mysqladmin --defaults-file=$PATH_OPT_ETC/my.cnf ping"
 
     watch_proc mysql
     if test "0" = "$watch_res"; then
@@ -621,7 +571,7 @@ start_httpd ()
         return
     fi
 
-    $CMD_SUDO_SWAN $PATH_OPT_BIN/apachectl -f $PATH_ETC/httpd.conf -k start
+    $PATH_OPT_HTTP/bin/apachectl -f $PATH_OPT_ETC/httpd.conf -k start
     let "init_res = 0 || $?"
 }
 
@@ -636,34 +586,13 @@ start_cron_etc ()
         return
     fi
 
-    cp $PATH_ETC/em_cron.cf $PATH_EM_CROND
+    cp $PATH_OPT_ETC/sw_cron.cf $PATH_SW_CROND
     let "init_res = 0 || $?"
 }
 
 stop_proc ()
 {
     array_stop_common=(
-        mproxy
-        mproxy_index
-        mproxy_log
-        memcache_session
-        memcache_fix
-        memcache_hot
-        gearman
-        crtmpd
-        phpd
-        syslog
-        filed
-        filedagent
-        filedrepd
-        bounce
-        local
-        remote
-        mlist
-        smtp
-        pop
-        imap
-        cleanup
     )
 
     t_proc_name_stop="$1"
@@ -711,7 +640,7 @@ stop_cron_etc ()
     init_res=0
     init_msg=""
 
-    rm -f $PATH_EM_CROND
+    rm -f $PATH_SW_CROND
     let "init_res = 0 || $?"
 
     return $init_res
@@ -722,41 +651,16 @@ stop_httpd ()
     init_res=0
     init_msg=""
 
-    $CMD_SUDO_EYOU $PATH_OPT_BIN/apachectl -f $PATH_ETC/httpd/conf/httpd.conf -k stop
+    $PATH_OPT_HTTP/bin/apachectl -f $PATH_OPT_ETC/httpd.conf -k stop
     let "init_res = 0 || $?"
 }
 
-stop_nginx ()
+stop_mysql()
 {
     init_res=0
     init_msg=""
 
-    $PATH_OPT_SBIN/nginx -s stop
-    let "init_res = 0 || $?"
-}
-
-stop_mysql ()
-{
-    stop_mysql_base
-}
-
-stop_mysql_index ()
-{
-    stop_mysql_base "_index"
-}
-
-stop_mysql_log ()
-{
-    stop_mysql_base "_log"
-}
-
-stop_mysql_base ()
-{
-    init_res=0
-    init_msg=""
-    type_mysql="$1"
-
-    CMD_MYSQL_STOP="./bin/mysqladmin --defaults-file=$PATH_ETC/mysql/my$type_mysql.cnf shutdown"
+    CMD_MYSQL_STOP="./bin/mysqladmin --defaults-file=$PATH_OPT_ETC/my.cnf shutdown"
 
     cd $PATH_OPT_MYSQL
     eval $CMD_MYSQL_STOP
@@ -852,9 +756,6 @@ stop ()
 stops ()
 {
     ARRAY_STOP=(${ARRAY_STOP[@]##mysql*})
-    ARRAY_STOP=(${ARRAY_STOP[@]##mproxy*})
-    ARRAY_STOP=(${ARRAY_STOP[@]##memcache*})
-    ARRAY_STOP=(${ARRAY_STOP[@]##gearman*})
     stop $1
 }
 

@@ -1,0 +1,278 @@
+#!/bin/sh
+# vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4 foldmethod=marker: #
+# +---------------------------------------------------------------------------
+# | SWAN [ $_SWANBR_SLOGAN_$ ]
+# +---------------------------------------------------------------------------
+# | Copyright $_SWANBR_COPYRIGHT_$
+# +---------------------------------------------------------------------------
+# | Version  $_SWANBR_VERSION_$
+# +---------------------------------------------------------------------------
+# | Licensed ( $_SWANBR_LICENSED_URL_$ )
+# +---------------------------------------------------------------------------
+# | $_SWANBR_WEB_DOMAIN_$
+# +---------------------------------------------------------------------------
+#
+# swansoft 安装脚本
+#
+#
+
+# 路径配置
+PATH_SWAN="/usr/local/swan"
+PATH_OPT="$PATH_SWAN/opt"
+PATH_OPT_MYSQL="$PATH_OPT/mysql"
+PATH_OPT_ETC="$PATH_OPT/etc"
+PATH_APP="$PATH_SWAN/app"
+PATH_LOG="$PATH_SWAN/log"
+PATH_APP_SBIN="$PATH_APP/sbin"
+PATH_PWD=`pwd`
+PATH_DATA="$PATH_SWAN/data"
+PATH_DATA_MYSQL="$PATH_DATA/mysql"
+PATH_TMP_INSTALL="$PATH_SWAN/tmp_install"
+PATH_TMP_INSTALL_SBIN="$PATH_TMP_INSTALL/sbin"
+PATH_TMP_INSTALL_SQL="$PATH_TMP_INSTALL/sql"
+
+# 参数配置
+LOG_INSTALL="$PATH_LOG/install.log"
+SW_USER="swan"
+SW_USER_UID="19389"
+
+# 命令配置
+CMD_USERADD="/usr/sbin/useradd"
+CMD_USERMOD="/usr/sbin/usermod"
+CMD_CHKCONFIG="/sbin/chkconfig"
+CMD_SUDO_SWAN="sudo -u swan"
+
+# 高亮输出
+ECHO_OK="\033[0;32mOK\033[0m"
+ECHO_FAIL="\033[0;31mFAIL\033[0m"
+ECHO_NO="\033[0;31mNO\033[0m"
+
+
+###### 输出信息
+echo_log ()
+{
+    t_echo_argv=""
+    t_echo_con=$1
+    if [[ $2 ]]; then
+        t_echo_argv=$1
+        t_echo_con=$2
+    fi
+
+    echo $t_echo_argv $t_echo_con >> $LOG_INSTALL 2>&1
+    echo $t_echo_argv $t_echo_con
+}
+
+
+###### 输出带有 Build: 前缀的信息
+echo_log_prefix ()
+{
+    t_echo_argv=""
+    t_echo_con=$1
+    if [[ $2 ]]; then
+        t_echo_argv=$1
+        t_echo_con=$2
+    fi
+    t_echo_con="Build: $t_echo_con"
+
+    echo $t_echo_argv $t_echo_con >> $LOG_INSTALL 2>&1
+    echo $t_echo_argv $t_echo_con
+}
+
+
+###### 处理日志文件
+log_init ()
+{
+    mkdir -p $PATH_LOG
+    touch $LOG_INSTALL
+    chmod 777 $LOG_INSTALL
+    DATESTR=$(date '+%Y-%m-%d %H:%M:%S')
+    echo -e "\n\n======== build install $1 $DATESTR ========\n" >> $LOG_INSTALL 2>&1
+}
+
+
+###### 输出手工执行安装脚本的提示
+exit_echo_build_manually ()
+{
+    echo_log_prefix -e "$1. You need exec build_install.sh manually after resolve it. Exit now."
+    exit 1
+}
+
+
+###### 检查 swan 用户是否存在
+run_check_exec_user ()
+{
+    t_log_con="check exec as root"
+    echo_log_prefix -n "$t_log_con ..."
+    if test "root" != `whoami`; then
+        echo_log -e "$ECHO_NO"
+        exit_echo_build_manually "$t_log_con $ECHO_NO"
+    else
+        echo_log -e "$ECHO_OK"
+    fi
+
+    t_log_con="check user '$SW_USER'"
+    echo_log_prefix -n "$t_log_con ..."
+    if ! $CMD_USERMOD -e '' $SW_USER >> $LOG_INSTALL 2>&1; then
+        echo_log -n "NO, will add it ..."
+        if $CMD_USERADD $SW_USER -m -d $PATH_SWAN -u $SW_USER_UID >> $LOG_INSTALL 2>&1; then
+            echo_log -e "$ECHO_OK"
+        else
+            echo_log -e "$ECHO_FAIL"
+            exit_echo_build_manually "Add user '$SW_USER' $ECHO_FAIL"
+        fi
+    else
+        echo_log -e "$ECHO_OK"
+    fi
+
+    t_log_con="check system can exec sudo cmd"
+    echo_log_prefix -n "$t_log_con ..."
+    if sudo ls $PATH_SWAN > /dev/null 2>&1; then
+        echo_log -e "$ECHO_OK"
+    else
+        echo_log -e "$ECHO_NO"
+        exit_echo_build_manually "$t_log_con $ECHO_NO"
+    fi
+}
+
+
+###### 检查 mysql 需要的 3306 等端口是否已经被占用
+run_check_mysql_port ()
+{
+    t_mysql_ports=(3306)
+    t_log_con="check MySQL/MySQL-Proxy server port ${t_mysql_ports[@]} not in use"
+    echo_log_prefix -n "$t_log_con ..."
+
+    t_mysql_port_implode="${t_mysql_ports[0]}"
+    for i in "${t_mysql_ports[@]:1}"; do
+        t_mysql_port_implode="$t_mysql_port_implode,$i"
+    done
+
+    if nmap -sT localhost -p "$t_mysql_port_implode" | grep ' open ' >> $LOG_INSTALL 2>&1; then
+        echo_log -e "$ECHO_NO"
+        exit_echo_build_manually "$t_log_con $ECHO_NO"
+    else
+        echo_log -e "$ECHO_OK"
+    fi
+}
+
+
+###### 初始化目录结构
+run_build_dirs ()
+{
+    t_log_con="build dirs"
+    echo_log_prefix -n "$t_log_con ..."
+
+    $PATH_TMP_INSTALL_SBIN/build_dirs > /dev/null 2>&1
+
+    echo_log -e "$ECHO_OK"
+}
+
+
+###### 初始化 mysql 数据库
+run_init_mysql_db ()
+{
+    cd $PATH_OPT_MYSQL
+
+	t_log_con="init MySQL Database"
+	echo_log_prefix -n "$t_log_con ..."
+
+	if ./scripts/mysql_install_db --defaults-file=$PATH_OPT_ETC/my.cnf --datadir=$PATH_DATA/mysql >> $LOG_INSTALL 2>&1; then
+		echo_log -e "$ECHO_OK"
+	else
+		echo_log -e "$ECHO_FAIL"
+		exit_echo_build_manually "$t_log_con $ECHO_FAIL"
+	fi
+
+    cd $PATH_PWD
+}
+
+
+###### 启动 mysql
+run_start_mysql ()
+{
+	t_log_con="start MySQL"
+	echo_log_prefix -n "$t_log_con ..."
+	if $PATH_APP_SBIN/swan_soft start mysql >> $LOG_INSTALL 2>&1; then
+		echo_log -e "$ECHO_OK"
+	else
+		echo_log -e "$ECHO_FAIL"
+		exit_echo_build_manually "$t_log_con $ECHO_FAIL"
+	fi
+}
+
+
+###### 创建数据库
+run_create_mysql_db ()
+{
+    t_sql_mysql=(
+		db_desc_swan_soft.sql
+    )
+
+	t_log_con="create MySQL Database"
+	echo_log_prefix -n "$t_log_con ..."
+
+	if ! cd $PATH_TMP_INSTALL_SQL >> $LOG_INSTALL 2>&1;then
+		echo_log -e "$ECHO_FAIL"
+		exit_echo_build_manually "$t_log_con $ECHO_FAIL"
+	fi
+
+	eval "t_sql_file=\${t_sql_mysql[@]}"
+	if cat $t_sql_file | $PATH_OPT_MYSQL/bin/mysql --defaults-file=$PATH_OPT_ETC/my.cnf -uroot >> $LOG_INSTALL 2>&1
+	then
+		echo_log -e "$ECHO_OK"
+	else
+		echo_log -e "$ECHO_FAIL"
+		exit_echo_build_manually "$t_log_con $ECHO_FAIL"
+	fi
+}
+
+###### 停止 mysql
+run_stop_mysql ()
+{
+	t_log_con="stop MySQL"
+	echo_log_prefix -n "$t_log_con ..."
+	if $PATH_APP_SBIN/swan_soft stop mysql >> $LOG_INSTALL 2>&1; then
+		echo_log -e "$ECHO_OK"
+	else
+		echo_log -e "$ECHO_FAIL"
+		exit_echo_build_manually "$t_log_con $ECHO_FAIL"
+	fi
+}
+
+
+###### 设置启动服务脚本
+run_set_initd ()
+{
+    t_log_con="set swan_soft for /etc/init.d/swan_soft and /usr/bin/swan_soft"
+    echo_log_prefix -n "$t_log_con ..."
+
+    t_path_swan_soft="$PATH_APP_SBIN/swan_soft"
+    t_path_sw_initd="/etc/init.d/swan_soft"
+    t_path_sw_usrbin="/usr/bin/swan_soft"
+    rm -f $t_path_sw_initd >> $LOG_INSTALL 2>&1
+    ln -s $t_path_swan_soft $t_path_sw_initd >> $LOG_INSTALL 2>&1
+    rm -f $t_path_sw_usrbin >> $LOG_INSTALL 2>&1
+    ln -s $t_path_swan_soft $t_path_sw_usrbin >> $LOG_INSTALL 2>&1
+    $CMD_CHKCONFIG swan_soft off >> $LOG_INSTALL 2>&1
+
+    echo_log -e "$ECHO_OK"
+}
+
+
+###### start
+log_init "start"
+
+
+##### run
+run_check_exec_user
+run_check_mysql_port
+run_build_dirs
+run_init_mysql_db
+run_start_mysql
+run_create_mysql_db
+run_stop_mysql
+run_set_initd
+
+###### finish
+log_init "finish"
+

@@ -1,4 +1,10 @@
 --  vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4 foldmethod=marker:
+-- 
+-- Current Database: `swan_soft`-- 
+
+CREATE DATABASE /*!32312 IF NOT EXISTS*/ `swan_soft` /*!40100 DEFAULT CHARACTER SET utf8 */;
+
+USE `swan_soft`;
 
 -- {{{  table sequence_global
 

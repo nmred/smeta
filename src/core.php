@@ -104,7 +104,7 @@ require_once PATH_SWAN_LIB . 'sw_config.class.php';
 require_once PATH_SWAN_LIB . 'sw_db.class.php';
 require_once PATH_SWAN_BASE . '/global.func.php';
 
-require_once PATH_SWAN_LIB . 'sw_orm.class.php';
+require_once PATH_SWAN_LIB . 'sw_member.class.php';
 //初始化时区
 date_default_timezone_set(SWAN_TIMEZONE_DEFAULT);
 sw_language::set_gettext();

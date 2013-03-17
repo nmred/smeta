@@ -1,0 +1,128 @@
+#!/bin/sh
+# vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4 foldmethod=marker: #
+# +---------------------------------------------------------------------------
+# | SWAN [ $_SWANBR_SLOGAN_$ ]
+# +---------------------------------------------------------------------------
+# | Copyright $_SWANBR_COPYRIGHT_$
+# +---------------------------------------------------------------------------
+# | Version  $_SWANBR_VERSION_$
+# +---------------------------------------------------------------------------
+# | Licensed ( $_SWANBR_LICENSED_URL_$ )
+# +---------------------------------------------------------------------------
+# | $_SWANBR_WEB_DOMAIN_$
+# +---------------------------------------------------------------------------
+#
+# swansoft 初始化系统目录脚本
+#
+
+# {{{ 配置部分
+
+# 路径配置
+PATH_SWAN="/usr/local/swan"
+PATH_PWD=`pwd`
+
+DIR_OWER="swan:swan"
+DIR_MOD="755"
+
+
+# 基本路径配置
+ARRAY_DIRS=(
+    "tmp"
+    "log"
+        "log/stdout"
+        "log/backup"
+            "log/backup/archive"
+            "log/backup/error"
+            "log/backup/large"
+        "log/httpd"
+    "plugins"
+    "data"
+        "data/mysql"
+        "data/rrd"
+    "run"
+    "template"
+        "template/tpl"
+        "template/tpl_c"
+)
+
+# 需要 chown 的目录 ( [是否需要递归. 1 | 0] [路径] )
+ARRAY_CHOWN=(
+    "1" "tmp"
+    "1" "log"
+    "1" "data"
+    "1" "run"
+    "1" "template/tpl_c"
+)
+
+# 需要 chmod 的目录 ( [权限] [是否需要递归. 1 | 0] [路径] )
+ARRAY_CHMOD=(
+    "777" "1" "template/tpl_c"
+)
+
+# }}}
+
+# {{{ functions
+
+# 创建一般目录
+build_dirs ()
+{
+    for i in "${ARRAY_DIRS[@]}"; do
+        mkdir -p "$PATH_SWAN/$i"
+    done
+}
+
+# 执行 chwon
+dir_chown ()
+{
+    n=1
+    for i in "${ARRAY_CHOWN[@]}"; do
+        let "n_mod = n % 2"
+
+        if test "1" = "$n_mod"; then
+            is_recursive=$i 
+        else
+            if test "1" = "$is_recursive"; then
+                chown $DIR_OWER $PATH_SWAN/$i -R
+            else
+                chown $DIR_OWER $PATH_SWAN/$i
+            fi
+        fi
+
+        let "n = n + 1"
+    done
+}
+
+# 执行 chmod
+dir_chmod ()
+{
+    n=1
+    for i in "${ARRAY_CHMOD[@]}"; do
+        let "n_mod = n % 3"
+
+        if test "1" = "$n_mod"; then
+            dir_mod=$i 
+        elif test "2" = "$n_mod"; then
+            is_recursive=$i
+        else
+            if test "1" = "$is_recursive"; then
+                chmod $dir_mod $PATH_SWAN/$i -R
+            else
+                chmod $dir_mod $PATH_SWAN/$i
+            fi
+        fi
+
+        let "n = n + 1"
+    done
+}
+
+# }}} end functions
+
+# {{{ 执行
+
+build_dirs
+
+dir_chown
+
+dir_chmod
+
+# }}}
