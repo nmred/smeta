@@ -68,9 +68,9 @@ class configure
 	 * @access public
 	 * @return void
 	 */
-	public function run()
+	public function run($dir_name)
 	{
-		$this->_create_makefile();	
+		$this->_create_makefile($dir_name);	
 	}
 
 	// }}}
@@ -83,15 +83,16 @@ class configure
 	 * @return void
 	 * @throw Exception
 	 */
-	protected function _create_makefile()
+	protected function _create_makefile($root_name)
 	{
+		echo $dir_name;
 		$make_dirs = $this->_get_dirs();
 		$current_dir = getcwd();
 		foreach ($make_dirs as $dir_name) {
 			$path_all = rtrim($this->__root_dir, '/') . '/' .  $dir_name;
 			chdir($path_all);
 			$make_file = sw_create_makefile::factory('common');
-			$make_file->run();
+			$make_file->set_root_dir($root_name)->run();
 			chdir($current_dir);
 		}
 	}
@@ -124,9 +125,31 @@ class configure
 	// }}}
 }
 
-try {
-	$test = new configure();
-	$test->run();
-} catch (Exception $e) {
-	echo $e->getMessage() . "\n";	
+$help = <<<EOL
+configure 用法
+	-h help
+	-m jjcm 批量执行jjcm
+	-m build_rpm 打包的时候会用 !!!开发的时候慎用!!!
+
+EOL;
+
+$opts = getopt("hm:");
+if (isset($opts['m']) && !isset($opts['h'])) {
+	if ($opts['m'] === 'jjcm') {
+		$dir_name = '/usr/local/swan/';	
+	} else if ($opts['m'] === 'build_rpm') {
+		$dir_name = '/usr/local/tmp_swan_git/';	
+	} else {
+		echo $help . PHP_EOL;	
+		exit(0);
+	}
+
+	try {
+		$test = new configure();
+		$test->run($dir_name);
+	} catch (Exception $e) {
+		echo $e->getMessage() . PHP_EOL;	
+	}
+} else {
+	echo $help . PHP_EOL;	
 }
