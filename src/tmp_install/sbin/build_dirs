@@ -52,6 +52,7 @@ ARRAY_CHOWN=(
     "1" "data"
     "1" "run"
     "1" "template/tpl_c"
+    "1" "opt/etc"
 )
 
 # 需要 chmod 的目录 ( [权限] [是否需要递归. 1 | 0] [路径] )
