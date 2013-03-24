@@ -14,6 +14,7 @@
  
 namespace lib\db\adapter;
 use lib\config\sw_config as sw_config;
+use lib\db\profiler\sw_profiler as sw_profiler;
 use lib\db\adapter\exception\sw_exception as sw_exception;
 /**
 +------------------------------------------------------------------------------
@@ -38,6 +39,14 @@ class sw_abstract
 	 */
 	protected $__config = array();
 
+	/**
+	 *  SQL 语句操作分析器对象 
+	 * 
+	 * @var lib\db\profiler\sw_profiler
+	 * @access protected
+	 */
+	protected $__profiler = null;
+
 	// }}}
 	// {{{ functions
 	// {{{ public function __construct()
@@ -60,7 +69,7 @@ class sw_abstract
 		}	
 
 		// 开启 SQL 分析器
-
+		$this->set_profiler(true);
 	}
 
 	// }}}
@@ -87,6 +96,41 @@ class sw_abstract
 		if (!array_key_exists('password', $config)) {
 			throw new sw_exception('Configuration array must have a key for `password` that names the database instance');	
 		}
+	}
+
+	// }}}
+	// {{{ public function set_profiler()
+
+	/**
+	 * 设置和创建 SQL 分析器对象 
+	 * 
+	 * @param boolean $enable 
+	 * @access public
+	 * @return lib\db\adapter\sw_abstract
+	 */
+	public function set_profiler($enable = false)
+	{
+		if (!isset($this->__profiler)) {
+			$this->__profiler = new sw_profiler($enable);	
+			return $this;
+		}
+
+		$this->__profiler->set_enabled($enable);
+		return $this;
+	}
+
+	// }}}
+	// {{{ public function get_profiler()
+
+	/**
+	 *  获取 SQL 分析器对象 
+	 * 
+	 * @access public
+	 * @return lib\db\profiler\sw_profiler
+	 */
+	public function get_profiler()
+	{
+		return $this->__profiler;	
 	}
 
 	// }}}
