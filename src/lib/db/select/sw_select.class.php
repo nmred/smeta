@@ -11,58 +11,29 @@
 // +---------------------------------------------------------------------------
 // | $_SWANBR_WEB_DOMAIN_$
 // +---------------------------------------------------------------------------
+
+namespace lib\db\select;
  
-namespace lib\db\adapter;
-use lib\db\adapter\sw_abstract as sw_abstract;
 /**
 +------------------------------------------------------------------------------
-* sw_mysql 
+* sw_select 
 +------------------------------------------------------------------------------
 * 
-* @package lib
+* @package 
 * @version $_SWANBR_VERSION_$
 * @copyright $_SWANBR_COPYRIGHT_$
 * @author $_SWANBR_AUTHOR_$ 
 +------------------------------------------------------------------------------
 */
-class sw_mysql extends sw_abstract
+class sw_select
 {
-	// {{{ members
-
-	/**
-	 * PDO 驱动的类型 
-	 * 
-	 * @var string
-	 * @access protected
-	 */
-	protected $__pdo_type = 'mysql';
-
-	// }}}
 	// {{{ functions
-	// {{{ protected function _dsn()
+	// {{{ public function assemble()
 
-	/**
-	 * 生成连接数据库的 dsn 字符串 
-	 * 
-	 * @access protected
-	 * @return string
-	 */
-	protected function _dsn()
+	public function assemble()
 	{
-		$dsn = $this->__config;
-		
-		$dsn_arr = array();
-		if (isset($dsn['unix_socket']) && '' !== $dsn['unix_socket']) {
-			$dsn_arr['unix_socket'] = 'unix_socket=' . $dsn['unix_socket'];
-		} else if (isset($dsn['host'])) {
-			$dsn_arr['host'] = 'host=' . $dsn['host'];	
-		}
-
-		if (isset($dsn['dbname']) && '' !== $dsn['dbname']) {
-			$dsn_arr['dbname'] = 'dbname=' . $dsn['dbname'];	
-		}
-
-		return $this->__pdo_type . ':' . implode(';', $dsn_arr);
+		//todo
+		return 'test todo';	
 	}
 
 	// }}}
