@@ -71,12 +71,12 @@ class sw_abstract
 	/**
 	 * SQL 语句列名的显示方式 
 	 *  
-	 * PDO::CASE_NATURAL,PDO::CASE_LOWER,PDO::CASE_UPPER 
+	 * sw_db::CASE_NATURAL,sw_db::CASE_LOWER,sw_db::CASE_UPPER 
 	 * 
 	 * @var int
 	 * @access protected
 	 */
-	protected $__case_folding = PDO::CASE_NATURAL;
+	protected $__case_folding = sw_db::CASE_NATURAL;
 
 	/**
 	 * 执行 quote 操作的类型 map 
@@ -89,6 +89,14 @@ class sw_abstract
 		sw_db::BIGINT_TYPE => sw_db::BIGINT_TYPE,
 		sw_db::FLOAT_TYPE  => sw_db::FLOAT_TYPE,
 	);
+
+	/**
+	 * 默认 stmt 处理对象 
+	 * 
+	 * @var string
+	 * @access protected
+	 */
+	protected $__default_stmt_class = 'lib\db\statement\sw_standard';
 
 	// }}}
 	// {{{ functions
@@ -174,6 +182,36 @@ class sw_abstract
 	public function get_profiler()
 	{
 		return $this->__profiler;	
+	}
+
+	// }}}
+	// {{{ public function get_statement_class()
+
+	/**
+	 * 获取 statement 处理类名 
+	 * 
+	 * @access public
+	 * @return string
+	 */
+	public function get_statement_class()
+	{
+		return $this->__default_stmt_class;	
+	}
+
+	// }}}
+	// {{{ public function set_statement_class()
+
+	/**
+	 * 设置 statement 处理类名 
+	 * 
+	 * @params string $class
+	 * @access public
+	 * @return lib\db\adpater\sw_abstract
+	 */
+	public function set_statement_class($class)
+	{
+		$this->__default_stmt_class = $class;
+		return $this;
 	}
 
 	// }}}
@@ -496,6 +534,56 @@ class sw_abstract
 	}
 
 	// }}}
+	// {{{ public function quote_table_as()
+
+	/**
+	 * 为表名添加标识符 
+	 * 
+	 * @param string|array|sw_expr $ident 
+	 * @param string $alias 
+	 * @param boolean $auto 
+	 * @access public
+	 * @return string
+	 */
+	public function quote_table_as($ident, $alias = null, $auto = false)
+	{
+		return $this->_quote_identifier_as($ident, $alias, $auto);
+	}
+
+	// }}}
+	// {{{ public function quote_column_as()
+
+	/**
+	 * 为列名添加标识符 
+	 * 
+	 * @param string|array|sw_expr $ident 
+	 * @param string $alias 
+	 * @param boolean $auto 
+	 * @access public
+	 * @return string
+	 */
+	public function quote_column_as($ident, $alias = null, $auto = false)
+	{
+		return $this->_quote_identifier_as($ident, $alias, $auto);
+	}
+
+	// }}}
+	// {{{ public function quote_indentifier()
+
+	/**
+	 * 添加标识符 
+	 * 
+	 * @param string|array|sw_expr $ident 
+	 * @param boolean $auto 
+	 * @access public
+	 * @return string
+	 */
+	public function quote_indentifier($ident, $auto = false)
+	{
+		return $this->_quote_identifier_as($ident, null, $auto);
+	}
+
+	// }}}
 	// {{{ protected function _quote_identifier()
 
 	/**
@@ -528,6 +616,125 @@ class sw_abstract
 	public function get_quote_indentifier_symbol()
 	{
 		return '"';	
+	}
+
+	// }}}
+	// {{{ protected function _quote_identifier_as()
+
+	/**
+	 * 添加标识符 
+	 * 
+	 * @param mixed $ident 
+	 * @param string $alias 
+	 * @param boolean $auto 
+	 * @param string $as 
+	 * @access protected
+	 * @return string
+	 */
+	protected function _quote_identifier_as($ident, $alias = null, $auto = false, $as = ' AS ')
+	{
+		if ($ident instanceof sw_expr) {
+			$quoted = $ident->__toString();	
+		} else if ($ident instanceof sw_select) {
+			$quoted = '(' . $ident->assemble() . ')';	
+		} else {
+			if (is_string($ident)) {
+				$ident = explode('.', $ident);	
+			}
+
+			if (is_array($ident)) {
+				$segments = array();
+				foreach ($ident as $segment) {
+					if ($segment instanceof sw_expr) {
+						$segments[] = $segment->__toString();	
+					} else {
+						$segments[] = $this->_quote_identifier($segment, $auto);	
+					}
+				}
+
+				if ($alias !== null && end($ident) == $alias) {
+					$alias = null;	
+				}
+				$quoted = implode('.', $segments);
+			} else {
+				$quoted = $this->_quote_identifier($ident, $auto);	
+			}
+		}
+
+		if (null !== $alias) {
+			$quoted .= $as . $this->_quote_identifier($alias, $auto);	
+		}
+		return $quoted;
+	}
+
+	// }}}
+	// {{{ public function fold_case()
+
+	/**
+	 * 转换大小写 
+	 * 
+	 * @param string $key 
+	 * @access public
+	 * @return string
+	 */
+	public function fold_case($key)
+	{
+		var_dump($this->__case_folding);
+		var_dump(sw_db::CASE_LOWER);
+		switch ($this->__case_folding) {
+			case sw_db::CASE_LOWER:
+				$value = strtolower((string) $key);
+				break;
+			case sw_db::CASE_UPPER:
+				$value = strtoupper((string) $key);
+				break;
+			case sw_db::CASE_NATURAL:
+			default:
+				$value = (string) $key;
+		}	
+
+		return $value;
+	}
+
+	// }}}
+	// {{{ public function supports_parameters()
+
+	/**
+	 * 判断某种绑定方式是否支持 
+	 * 
+	 * @param string $type 
+	 * @access public
+	 * @return boolean
+	 */
+	public function supports_parameters($type)
+	{
+		$supports = array ('named', 'positional');
+		return in_array($type, $supports);
+	}
+
+	// }}}
+	// {{{ public function get_server_version()
+
+	/**
+	 * 获取服务器的版本 
+	 * 
+	 * @access public
+	 * @return string
+	 */
+	public function get_server_version()
+	{
+		$this->_connect();
+		try {
+			$version = $this->__connection->getAttribute(PDO::ATTR_SERVER_VERSION);	
+		} catch (PDOException $e) {
+			return null;	
+		}
+		$matches = null;
+		if (preg_match('/((?:[0-9]{1,2}\.){1,3}[0-9]{1,2})/', $version, $matches)) {
+			return $matches[1];
+		} else {
+			return null;	
+		}
 	}
 
 	// }}}

@@ -4,7 +4,6 @@ require_once 'core.php';
 use lib\db\adapter\sw_mysql as sw_mysql;
 
 $db = new sw_mysql();
-P($db);
 $__db = $db->get_connection();
 $arr = array(
 	'dsdsd\'dsdsds',
@@ -22,3 +21,10 @@ use lib\db\sw_db as sw_db;
 
 //P($db->quote_into('device_id = ? AND device_name = ?', '3', null, 1));
 //P($db->quote_into('device_id = ? AND device_name = ?', '3'));
+//P($db->quote_table_as(new sw_expr('count(*)'), 'id'));
+//P($db->quote_table_as(new sw_expr('count(*)'), 'id'));
+//P($db->quote_indentifier('aaa'));
+//P($db->fold_case('SS'));
+P($db->supports_parameters('named1'));
+P($db->get_server_version());
+

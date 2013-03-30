@@ -13,6 +13,7 @@
 // +---------------------------------------------------------------------------
 
 namespace lib\db;
+use PDO;
 
 /**
 +------------------------------------------------------------------------------
@@ -43,6 +44,21 @@ class sw_db
 	 * 执行 quote 操作时传递的第二个参数  
 	 */
 	const FLOAT_TYPE = 2;
+
+	/**
+	 * 强制列名小写
+	 */
+	 const CASE_LOWER = PDO::CASE_LOWER;
+
+	/**
+	 * 强制列名大写
+	 */
+	 const CASE_UPPER = PDO::CASE_UPPER;
+
+	/**
+	 * 不强制转换
+	 */
+	 const CASE_NATURAL = PDO::CASE_NATURAL;
 
 	// }}}	
 }

@@ -66,5 +66,19 @@ class sw_mysql extends sw_abstract
 	}
 
 	// }}}
+	// {{{ public function get_quote_indentifier_symbol()
+
+	/**
+	 * 获取标识符 
+	 * 
+	 * @access public
+	 * @return string
+	 */
+	public function get_quote_indentifier_symbol()
+	{
+		return '`';	
+	}
+
+	// }}}
 	// }}}	
 }
