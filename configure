@@ -1,4 +1,4 @@
-#!/usr/local/swan/opt/php/bin/php
+#!/usr/local/dev_swan/opt/php/bin/php
 <?php
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4 foldmethod=marker: */
 // +---------------------------------------------------------------------------
@@ -14,8 +14,8 @@
 // +---------------------------------------------------------------------------
 
 require_once 'dev_core.php';
-require_once D_PATH_SWAN_LIB . 'iterator/sw_iterator_fetch_dir.class.php';
-require_once D_PATH_SWAN_LIB . 'sw_create_makefile.class.php';
+require_once PATH_DSWAN_LIB . 'iterator/sw_iterator_fetch_dir.class.php';
+require_once PATH_DSWAN_LIB . 'sw_create_makefile.class.php';
 
 /**
 +------------------------------------------------------------------------------
