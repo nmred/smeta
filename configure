@@ -147,8 +147,11 @@ if (isset($opts['m']) && !isset($opts['h'])) {
 		$test = new configure();
 		$test->run($dir_name);
 	} catch (Exception $e) {
+		echo $e;
 		echo $e->getMessage() . PHP_EOL;	
+		exit(127);
 	}
 } else {
 	echo $help . PHP_EOL;	
+	exit(1);
 }
