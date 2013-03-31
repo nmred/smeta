@@ -85,7 +85,6 @@ class configure
 	 */
 	protected function _create_makefile($root_name)
 	{
-		echo $dir_name;
 		$make_dirs = $this->_get_dirs();
 		$current_dir = getcwd();
 		foreach ($make_dirs as $dir_name) {

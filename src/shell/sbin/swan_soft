@@ -18,6 +18,7 @@
 # 此脚本将控制如下进程, 如果进程列表有变化, 则必须更新 Start, Stop 和 Watch:
 #   Httpd
 #   MySQL
+#   Snmpd
 #   CRON_ETC
 #
 # 返回代码
@@ -32,6 +33,7 @@ PATH_OPT="$PATH_SWAN/opt"
 PATH_OPT_ETC="$PATH_OPT/etc"
 PATH_OPT_MYSQL="$PATH_OPT/mysql"
 PATH_OPT_HTTP="$PATH_OPT/apache2"
+PATH_OPT_SNMP="$PATH_OPT/snmp"
 PATH_RUN="$PATH_SWAN/run"
 PATH_LOG="$PATH_SWAN/log"
 PATH_INITLOG="$PATH_LOG/init.out"
@@ -41,6 +43,7 @@ PATH_SW_CROND="/etc/cron.d/swan_soft"
 
 PIDF_MYSQL="$PATH_RUN/sw_mysql.pid"
 PIDF_HTTPD="$PATH_RUN/sw_httpd.pid"
+PIDF_SNMPD="$PATH_RUN/sw_snmpd.pid"
 
 ECHO_LINE="------------------------------"
 ECHO_FAIL="\033[0;31mFAIL\033[0m"
@@ -377,6 +380,7 @@ watch_proc ()
 {
     array_watch_common=(
         httpd
+		snmpd
     )
 
     t_proc_name_watch="$1"
@@ -575,6 +579,21 @@ start_httpd ()
     let "init_res = 0 || $?"
 }
 
+start_snmpd ()
+{
+    init_res=0
+    init_msg=""
+
+    watch_proc snmpd
+    if test "0" = "$watch_res"; then
+        init_res=2
+        return
+    fi
+
+    $PATH_OPT_SNMP/sbin/snmpd -c $PATH_OPT_ETC/snmp.conf -p $PIDF_SNMPD
+    let "init_res = 0 || $?"
+}
+
 start_cron_etc ()
 {
     init_res=0
@@ -593,6 +612,7 @@ start_cron_etc ()
 stop_proc ()
 {
     array_stop_common=(
+		snmpd
     )
 
     t_proc_name_stop="$1"

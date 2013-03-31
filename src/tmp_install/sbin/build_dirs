@@ -39,6 +39,7 @@ ARRAY_DIRS=(
     "data"
         "data/mysql"
         "data/rrd"
+        "data/snmp"
     "run"
     "template"
         "template/tpl"
