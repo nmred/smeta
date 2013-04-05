@@ -12,6 +12,7 @@
 // | $_SWANBR_WEB_DOMAIN_$
 // +---------------------------------------------------------------------------
  
+
 /**
 +------------------------------------------------------------------------------
 * 核心处理程序 全局变量
@@ -131,27 +132,13 @@ define('SWAN_TBN_PROJECT_ARCHIVE', 'project_archive');
 // }}}
 // {{{ autoload 管理
 
-function sw_lib_autoloader($class_name) {
-	$parts = array();
-	if (false !== strpos($class_name, '\\')) {
-		$parts = explode('\\', $class_name);
-	}
+require_once PATH_SWAN_LIB . 'loader/sw_standard_auto_loader.class.php';
+$autoloader = new lib\loader\sw_standard_auto_loader(array(
+	'namespaces' => array(
+		'lib' => PATH_SWAN_BASE,
+	),
+));
 
-	if (!isset($parts[0]) || 'lib' !== $parts[0]) {
-		trigger_error("$class_name is not std lib, so disable autoload.", E_USER_ERROR);	
-	}
-
-	array_shift($parts);
-	$last_part = array_pop($parts);
-	$class_path = PATH_SWAN_LIB . implode($parts, '/') . '/' . $last_part . '.class.php';
-
-	if (!file_exists($class_path)) {
-		trigger_error("load `$class_name` is faild, `$class_path` is not exists.", E_USER_ERROR);	
-	}
-
-	require_once $class_path;
-}
-
-spl_autoload_register('sw_lib_autoloader');
+$autoloader->register();
 
 // }}}
