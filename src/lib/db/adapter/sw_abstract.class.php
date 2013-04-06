@@ -19,7 +19,6 @@ use lib\db\profiler\sw_profiler as sw_profiler;
 use lib\db\select\sw_select as sw_select;
 use lib\db\sw_db_expr as sw_expr;
 use lib\db\adapter\exception\sw_exception as sw_exception;
-use PDO;
 
 /**
 +------------------------------------------------------------------------------
@@ -236,17 +235,17 @@ class sw_abstract
 		}
 
 		// 检查 PDO 驱动是否存在
-		if (!in_array($this->__pdo_type, PDO::getAvailableDrivers())) {
+		if (!in_array($this->__pdo_type, \PDO::getAvailableDrivers())) {
 			throw new sw_exception('The ' . $this->__pdo_type . ' driver is not currently installed');	
 		}
 
 		$q = $this->__profiler->query_start('connect', sw_profiler::CONNECT);
 		if (isset($this->__config['persistent']) && ($this->__config['persistent'] == true)) {
-			$this->__config['driver_options'][PDO::ATTR_PERSISTENT] = true;	
+			$this->__config['driver_options'][\PDO::ATTR_PERSISTENT] = true;	
 		}
 
 		try {
-			$this->__connection = new PDO(
+			$this->__connection = new \PDO(
 				$dsn,
 				$this->__config['username'],
 				$this->__config['password'],
@@ -254,8 +253,8 @@ class sw_abstract
 			);
 
 			$this->__profiler->query_end($q);
-			$this->__connection->setAttribute(PDO::ATTR_CASE, $this->__case_folding);
-			$this->__connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			$this->__connection->setAttribute(\PDO::ATTR_CASE, $this->__case_folding);
+			$this->__connection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 		} catch (PDOException $e) {
 			throw new sw_exception($e->getMessage(), $e->getCode(), $e);
 		} 
@@ -287,7 +286,7 @@ class sw_abstract
 	 */
 	public function is_connected()
 	{
-		return ((bool) ($this->__connection instanceof PDO));
+		return ((bool) ($this->__connection instanceof \PDO));
 	}
 
 	// }}}
@@ -725,7 +724,7 @@ class sw_abstract
 	{
 		$this->_connect();
 		try {
-			$version = $this->__connection->getAttribute(PDO::ATTR_SERVER_VERSION);	
+			$version = $this->__connection->getAttribute(\PDO::ATTR_SERVER_VERSION);	
 		} catch (PDOException $e) {
 			return null;	
 		}
