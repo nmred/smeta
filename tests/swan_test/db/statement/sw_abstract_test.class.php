@@ -13,10 +13,9 @@
 // +---------------------------------------------------------------------------
  
 namespace swan_test\db\statement;
-use lib\db\adapter\sw_mysql;
+use lib\test\sw_test_db;
 use lib\db\statement\sw_standard;
 use lib\db\statement\exception\sw_exception;
-use lib\db\sw_db;
 
 /**
 +------------------------------------------------------------------------------
@@ -29,52 +28,11 @@ use lib\db\sw_db;
 * @group sw_db
 +------------------------------------------------------------------------------
 */
-class sw_abstract_test extends \PHPUnit_Extensions_Database_TestCase
+class sw_abstract_test extends sw_test_db
 {
 	// {{{ members
-
-	/**
-	 * __db 
-	 * 
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $__db = null;
-
 	// }}}
 	// {{{ functions
-	// {{{ public function setUp()
-
-	/**
-	 * setUp 
-	 * 
-	 * @access public
-	 * @return void
-	 */
-	public function setUp()
-	{
-		$this->__db = new sw_mysql();	
-		$this->__data_set = $this->getConnection()->createDataSet(array('guestbook'));
-		parent::setUp();
-	}
-
-	// }}}
-	// {{{ public function tearDown()
-
-	/**
-	 * setUp 
-	 * 
-	 * @access public
-	 * @return void
-	 */
-	public function tearDown()
-	{
-		$this->getDatabaseTester()->setDataSet($this->__data_set);
-		parent::tearDown();
-		$this->__db = null;
-	}
-
-	// }}}
 	// {{{ public function test_construct()
 
 	/**
@@ -86,34 +44,7 @@ class sw_abstract_test extends \PHPUnit_Extensions_Database_TestCase
 	public function test_construct()
 	{
 		try {
-			$stmt = new sw_standard($this->__db, 'select * from guestbook where id > ?;');
-			$id = 1;
-			$stmt->bind_param(1, $id);
-			var_dump($stmt->execute());
-			$a = $stmt->fetch_all();
-			var_dump($a);
-		} catch (sw_exception $e) {
-		//	$this->assertContains('param error', $e->getMessage());	
-		}
-
-		$this->assertEquals(2, $this->getConnection()->getRowCount('guestbook'), "Pre-Condition");
-
-		$this->assertEquals(2, $this->getConnection()->getRowCount('guestbook'), "Inserting failed");
-	}
-
-	// }}}
-	// {{{ public function test_construct1()
-
-	/**
-	 * test_construct 
-	 * 
-	 * @access public
-	 * @return void
-	 */
-	public function test_construct1()
-	{
-		try {
-			$stmt = new sw_standard($this->__db, 'select * from guestbook where id > ?;');
+			$stmt = new sw_standard($this->__db, 'select * from unit_host where host_id > ?;');
 			$id = 2;
 			$stmt->bind_param(1, $id);
 			var_dump($stmt->execute());
@@ -123,39 +54,23 @@ class sw_abstract_test extends \PHPUnit_Extensions_Database_TestCase
 		//	$this->assertContains('param error', $e->getMessage());	
 		}
 
-		$this->assertEquals(2, $this->getConnection()->getRowCount('guestbook'), "Pre-Condition");
+		$this->assertEquals(2, $this->getConnection()->getRowCount('unit_host'), "Pre-Condition");
 
-		$this->assertEquals(2, $this->getConnection()->getRowCount('guestbook'), "Inserting failed");
+		$this->assertEquals(2, $this->getConnection()->getRowCount('unit_host'), "Inserting failed");
 	}
 
 	// }}}
-	// {{{ public function getConnection()
-	
-	/**
-	 * 获取数据库连接 
-	 * 
-	 * @access public
-	 * @return \PHPUnit_Extensions_Database_DB_IDatabaseConnection
-	 */
-	public function getConnection()
-	{
-		$conn = $this->__db->get_connection();	
-		return $this->createDefaultDBConnection($conn);
-	}
-
-	// }}}
-	// {{{ public function getDataSet()
+	// {{{ public function get_data_set()
 
 	/**
 	 * 获取数据集 
 	 * 
 	 * @access public
-	 * @return \PHPUnit_Extensions_Database_DataSet_IDataSet
+	 * @return mixed
 	 */
-	public function getDataSet()
+	public function get_data_set()
 	{
-		$data =  $this->createXMLDataSet(dirname(__FILE__) . '/_files/guestbook.xml');		
-		return $data;
+		return dirname(__FILE__) . '/_files/unit_host.xml';
 	}
 
 	// }}}

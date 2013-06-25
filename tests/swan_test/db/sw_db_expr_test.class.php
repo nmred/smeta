@@ -13,6 +13,7 @@
 // +---------------------------------------------------------------------------
 
 namespace swan_test\db;
+use lib\test\sw_test;
 use lib\db\sw_db_expr;
 
 /**
@@ -26,7 +27,7 @@ use lib\db\sw_db_expr;
 * @group sw_db 
 +------------------------------------------------------------------------------
 */
-class sw_db_expr_test extends \PHPUnit_FrameWork_TestCase
+class sw_db_expr_test extends sw_test
 {
 	// {{{ functions
 	

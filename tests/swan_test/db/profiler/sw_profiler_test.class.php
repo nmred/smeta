@@ -13,6 +13,7 @@
 // +---------------------------------------------------------------------------
  
 namespace swan_test\db\profiler;
+use lib\test\sw_test;
 use lib\db\profiler\sw_profiler;
 use lib\db\profiler\exception\sw_exception;
 
@@ -27,7 +28,7 @@ use lib\db\profiler\exception\sw_exception;
 * @group sw_db
 +------------------------------------------------------------------------------
 */
-class sw_profiler_test extends \PHPunit_FrameWork_TestCase
+class sw_profiler_test extends sw_test
 {
 	// {{{ members
 

@@ -11,20 +11,21 @@
 // +---------------------------------------------------------------------------
 // | $_SWANBR_WEB_DOMAIN_$
 // +---------------------------------------------------------------------------
-
-namespace lib\test;
-
+ 
+namespace lib\db\adapter\exception;
+use lib\exception\sw_exception as sw_ex;
 /**
 +------------------------------------------------------------------------------
-* sw_db 
+* sw_exception 
 +------------------------------------------------------------------------------
 * 
-* @package 
+* @uses Exception
+* @package lib 
 * @version $_SWANBR_VERSION_$
 * @copyright $_SWANBR_COPYRIGHT_$
 * @author $_SWANBR_AUTHOR_$ 
 +------------------------------------------------------------------------------
 */
-abstract class sw_test extends \PHPUnit_FrameWork_TestCase 
+class sw_exception extends sw_ex
 {
 }

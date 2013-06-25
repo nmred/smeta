@@ -14,6 +14,7 @@
  
 namespace swan_test\config;
 use \lib\config;
+use \lib\test\sw_test;
 
 /**
 +------------------------------------------------------------------------------
@@ -26,7 +27,7 @@ use \lib\config;
 +------------------------------------------------------------------------------
 * @group sw_config
 */
-class sw_config_test extends \PHPUnit_FrameWork_TestCase
+class sw_config_test extends sw_test
 {
 	/**
 	 * test_success 

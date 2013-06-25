@@ -13,6 +13,7 @@
 // +---------------------------------------------------------------------------
  
 namespace swan_test\loader;
+use lib\test\sw_test;
 use lib\loader\sw_standard_auto_loader;
 use lib\loader\exception\sw_invalid_argument_exception;
 
@@ -27,7 +28,7 @@ use lib\loader\exception\sw_invalid_argument_exception;
 +------------------------------------------------------------------------------
 * @group sw_loader
 */
-class sw_standard_auto_loader_test extends \PHPUnit_FrameWork_TestCase
+class sw_standard_auto_loader_test extends sw_test 
 {
 	// {{{ members
 	

@@ -13,6 +13,7 @@
 // +---------------------------------------------------------------------------
  
 namespace swan_test\db\adapter;
+use lib\test\sw_test;
 use lib\db\adapter\sw_mysql;
 use lib\db\adapter\exception\sw_exception;
 use lib\db\sw_db;
@@ -28,7 +29,7 @@ use lib\db\sw_db;
 * @group sw_db
 +------------------------------------------------------------------------------
 */
-class sw_abstract_test extends \PHPunit_FrameWork_TestCase
+class sw_abstract_test extends sw_test
 {
 	// {{{ members
 

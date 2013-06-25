@@ -200,7 +200,6 @@ class sw_standard_auto_loader implements sw_spl_auto_loader
 		foreach ($this->{$attribute} as $leader => $path) {
 			if (0 === strpos($class, $leader)) {
 				$filename = $this->_transform_classname_to_filename($class, $path);
-				
 				if (file_exists($filename)) {
 					return require_once $filename;	
 				}

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4 foldmethod=marker: */
+*
+* DATABASE schame
+-->
+
+<!-- {{{ databases -->
+
+<databases>
+    <!-- {{{ database swansoft -->
+    <database name="swan_soft">
+        <charset>utf8</charset>
+        <!-- {{{ tables -->
+        <tables>
+            <!-- {{{ table unit_host -->
+
+            <table name="unit_host">
+                <desc> 单元测试 host 表 </desc>
+                <engine>InnoDB</engine>
+                <charset>utf8</charset>
+                <columns>
+                    <column name="host_id">
+                        <desc>主机 id</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+						<unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                    <column name="group_id">
+                        <desc>主机组 ID </desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+						<unsigned>true</unsigned>
+                        <default>0</default>
+                    </column>
+
+                    <column name="host_name">
+                        <desc> 主机名称</desc>
+                        <type>varchar</type>
+                        <nullable>false</nullable>
+                        <precision>32</precision>
+                        <default></default>
+                    </column>
+
+                </columns>
+
+                <keys>
+                    <key name="">
+						<desc></desc>
+                        <type>primary</type>
+                        <fields>
+                            <field name="host_id"></field>
+                        </fields>
+                    </key>
+
+                </keys>
+            </table>
+
+            <!-- }}} -->
+        </tables>
+        <!-- }}} end tables -->
+    </database>
+    <!-- }}} end database swansoft -->
+</databases>
+<!-- }}} end databases -->
