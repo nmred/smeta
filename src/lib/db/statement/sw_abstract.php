@@ -50,6 +50,14 @@ abstract class sw_abstract
 	 */
 	protected $__query_id = null;
 
+	/**
+	 * 预处理对象 
+	 * 
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $__stmt = null;
+
 	// }}}
 	// {{{ functions
 	// {{{ public function __construct()
@@ -74,11 +82,111 @@ abstract class sw_abstract
 	// }}}
 	// {{{ protected function _prepare()
 
-	protected function _prepare($sql:)
+	/**
+	 * 预处理命令 
+	 * 
+	 * @param string $sql 
+	 * @access protected
+	 * @return sw_abstract
+	 */
+	protected function _prepare($sql)
 	{
 		try {
 			$this->__stmt = $this->__adapter->get_connection()->prepare($sql);	
+		} catch (PDOException $e) {
+			throw new sw_exception($e->getMessage(), $e->getCode(), $e);
 		}	
+	}
+
+	// }}}
+	// {{{ public function bind_column()
+
+	/**
+	 * 绑定查询字段 
+	 * 
+	 * @param string $column 
+	 * @param mixed $param 
+	 * @param integer $type 
+	 * @access public
+	 * @return boolean
+	 */
+	public function bind_column($column, &$param, $type = null)
+	{
+		try {
+			if (null === $type) {
+				return $this->__stmt->bindColumn($column, $param);	
+			} else {
+				return $this->__stmt->bindColumn($column, $param, $type);	
+			}
+		} catch (PDOException $e) {
+			throw new sw_exception($e->getMessage(), $e->getCode(), $e);
+		}
+	}
+
+	// }}}
+	// {{{ public function bind_param()
+
+	/**
+	 * 绑定参数 
+	 * 
+	 * @param mixed $parameter 
+	 * @param mixed $variable 
+	 * @param mixed $type 
+	 * @param integer $length 
+	 * @param mixed $options 
+	 * @access public
+	 * @return boolean
+	 */
+	public function bind_param($parameter, &$variable, $type = null, $length = null, $options = null)
+	{
+		$this->__bind_param[$parameter] = &$variable;
+		try {
+			if ($type === null) {
+				if (is_bool($variable)) {
+					$type = PDO::PARAM_BOOL;	
+				} elseif ($variable === null) {
+					$type = PDO::PARAM_NULL;	
+				} elseif (is_integer($variable)) {
+					$type = PDO::PARAM_INT;	
+				} else {
+					$type = PDO::PARAM_STR;	
+				}
+			}
+
+			return $this->__stmt->bindParam($parameter, $variable, $type, $length);
+		} catch (PDOException $e) {
+			throw new sw_exception($e->getMessage(), $e->getCode(), $e);
+		}
+	}
+	// }}}
+	// {{{ public function bind_value()
+
+	/**
+	 * 直接为占位符绑定值，推荐用 bind_param 
+	 * 
+	 * @param mixed $parameter 
+	 * @param mixed $value 
+	 * @param mixed $type 
+	 * @access public
+	 * @return void
+	 */
+	public function bind_value($parameter, $value, $type = null)
+	{
+		if (is_string($parameter) && $parameter[0] != ':') {
+			$parameter = ":$parameter";	
+		}
+
+		$this->__bind_param[$parameter] = $value;
+
+		try {
+			if ($type === null) {
+				return $this->__stmt->bindValue($parameter, $value);	
+			} else {
+				return $this->__stmt->bindValue($parameter, $value, $type);	
+			}
+		} catch (PDOException $e) {
+			throw new sw_exception($e->getMessage(), $e->getCode(), $e);
+		}
 	}
 
 	// }}}
