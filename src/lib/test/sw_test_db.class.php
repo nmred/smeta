@@ -88,7 +88,7 @@ abstract class sw_test_db extends \PHPUnit_Extensions_Database_TestCase
 		}
 		
 		if (is_array($xml_data)) {
-			$composite_ds = new \PHPUnit_Extensions_Database_DataSet_CompositeDataSet();	
+			$composite_ds = new \PHPUnit_Extensions_Database_DataSet_CompositeDataSet(array());	
 			foreach ($xml_data as $file_path) {
 				$ds = $this->createXMLDataSet($file_path);
 				$composite_ds->addDataSet($ds);

@@ -19,6 +19,7 @@ use lib\db\select\sw_select;
 use lib\db\sw_db_expr;
 use lib\db\statement\exception\sw_exception;
 use PDO;
+use PDOException;
 
 /**
 +------------------------------------------------------------------------------
@@ -112,7 +113,7 @@ abstract class sw_abstract
 		try {
 			$this->__stmt = $this->__adapter->get_connection()->prepare($sql);	
 		} catch (PDOException $e) {
-			throw new sw_exception($e->getMessage(), $e->getCode(), $e);
+			throw new sw_exception($e->getMessage());
 		}	
 	}
 
@@ -137,7 +138,7 @@ abstract class sw_abstract
 				return $this->__stmt->bindColumn($column, $param, $type);	
 			}
 		} catch (PDOException $e) {
-			throw new sw_exception($e->getMessage(), $e->getCode(), $e);
+			throw new sw_exception($e->getMessage());
 		}
 	}
 
@@ -173,7 +174,7 @@ abstract class sw_abstract
 
 			return $this->__stmt->bindParam($parameter, $variable, $type, $length);
 		} catch (PDOException $e) {
-			throw new sw_exception($e->getMessage(), $e->getCode(), $e);
+			throw new sw_exception($e->getMessage());
 		}
 	}
 	// }}}
@@ -203,7 +204,7 @@ abstract class sw_abstract
 				return $this->__stmt->bindValue($parameter, $value, $type);	
 			}
 		} catch (PDOException $e) {
-			throw new sw_exception($e->getMessage(), $e->getCode(), $e);
+			throw new sw_exception($e->getMessage());
 		}
 	}
 
@@ -264,7 +265,7 @@ abstract class sw_abstract
 				$this->__stmt->execute($params);
 			}
 		} catch (PDOException $e) {
-			throw new sw_exception($e->getMessage(), $e->getCode(), $e);
+			throw new sw_exception($e->getMessage());
 		}
 	}
 
@@ -288,7 +289,7 @@ abstract class sw_abstract
 		try {
 			return $this->__stmt->fetch($style, $cursor, $offset);	
 		} catch (PDOException $e) {
-			throw new sw_exception($e->getMessage(), $e->getCode(), $e);
+			throw new sw_exception($e->getMessage());
 		}
 	}
 
@@ -320,7 +321,7 @@ abstract class sw_abstract
 				return $this->__stmt->fetchAll($style);	
 			}
 		} catch (PDOException $e) {
-			throw new sw_exception($e->getMessage(), $e->getCode(), $e);	
+			throw new sw_exception($e->getMessage());	
 		}
 	}
 
@@ -339,7 +340,7 @@ abstract class sw_abstract
 		try {
 			return $this->__stmt->fetchColumn($col);	
 		} catch (PDOException $e) {
-			throw new sw_exception($e->getMessage(), $e->getCode(), $e);
+			throw new sw_exception($e->getMessage());
 		}
 	}
 
@@ -358,7 +359,7 @@ abstract class sw_abstract
 		try {
 			return $this->__stmt->getAttribute($key);	
 		} catch (PDOException $e) {
-			throw new sw_exception($e->getMessage(), $e->getCode(), $e);
+			throw new sw_exception($e->getMessage());
 		}
 	}
 
@@ -378,7 +379,7 @@ abstract class sw_abstract
 		try {
 			return $this->__stmt->setAttribute($key, $val);	
 		} catch (PDOException $e) {
-			throw new sw_exception($e->getMessage(), $e->getCode(), $e);
+			throw new sw_exception($e->getMessage());
 		}
 	}
 
@@ -398,7 +399,7 @@ abstract class sw_abstract
 		try {
 			return $this->__stmt->setFetchMode($mode);
 		} catch (PDOException $e) {
-			throw new sw_exception($e->getMessage(), $e->getCode(), $e);
+			throw new sw_exception($e->getMessage());
 		}
 	}
 
@@ -444,7 +445,7 @@ abstract class sw_abstract
 		try {
 			return $this->__stmt->columnCount();	
 		} catch (PDOException $e) {
-			throw new sw_exception($e->getMessage(), $e->getCode(), $e);
+			throw new sw_exception($e->getMessage());
 		}
 	}
 
