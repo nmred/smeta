@@ -4,9 +4,8 @@ php:
     - 5.4
     - 5.5
 before_script:
-    - cd tests
     - mysql -e 'create database swan_soft;'
-    - mysql -uroot swan_soft < tests/db_desc_swan_soft.sql
+    - sh -c "mysql -u root swan_soft < tests/db_desc_swan_soft.sql"
     - pear config-set auto_discover 1
     - pear install pear.phpunit.de/PHPUnit
     - pear install phpunit/DbUnit
@@ -23,6 +22,7 @@ before_script:
             'driver_options' => array(),
             ),
     );" > src/inc/conf/config.php 
+    - cd tests
 
 script: phpunit -v
 notifications:
