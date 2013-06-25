@@ -5,22 +5,10 @@ php:
     - 5.5
 before_script:
     - mysql -e 'create database swan_soft;'
+    - mysql -u root swan_soft tests/db_desc_swan_soft.sql
     - pear config-set auto_discover 1
     - pear install pear.phpunit.de/PHPUnit
     - pear install phpunit/DbUnit
-    - echo "<?php
-    return array(
-    'db' => array(
-            'type' => 'mysql',
-            'dbname' => 'swan_soft',
-            'username' => 'root',
-            'password' => '',
-            'host' => '127.0.0.1',
-            'port' => '3306',
-            //  'unix_socket' => '/usr/local/dev_swan/run/mysql.sock',
-            'driver_options' => array(),
-            ),
-    );" > src/inc/conf/config.php
     - cd tests
 
 script: phpunit -v
