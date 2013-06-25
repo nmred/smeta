@@ -13,12 +13,12 @@
 // +---------------------------------------------------------------------------
  
 namespace lib\db\adapter;
-use lib\db\sw_db as sw_db;
-use lib\config\sw_config as sw_config;
-use lib\db\profiler\sw_profiler as sw_profiler;
-use lib\db\select\sw_select as sw_select;
-use lib\db\sw_db_expr as sw_expr;
-use lib\db\adapter\exception\sw_exception as sw_exception;
+use lib\db\sw_db;
+use lib\config\sw_config;
+use lib\db\profiler\sw_profiler;
+use lib\db\select\sw_select;
+use lib\db\sw_db_expr;
+use lib\db\adapter\exception\sw_exception;
 
 /**
 +------------------------------------------------------------------------------
@@ -31,7 +31,7 @@ use lib\db\adapter\exception\sw_exception as sw_exception;
 * @author $_SWANBR_AUTHOR_$ 
 +------------------------------------------------------------------------------
 */
-class sw_abstract
+abstract class sw_abstract
 {
 	// {{{ members
 
@@ -97,6 +97,14 @@ class sw_abstract
 	 */
 	protected $__default_stmt_class = 'lib\db\statement\sw_standard';
 
+	/**
+	 * 是否自动添加表识符 
+	 * 
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $__auto_quote_indentifiers = false;
+
 	// }}}
 	// {{{ functions
 	// {{{ public function __construct()
@@ -123,29 +131,17 @@ class sw_abstract
 	}
 
 	// }}}
-	// {{{ protected function _check_required_options()
-
+	// {{{ public function get_config()
+	
 	/**
-	 * 创建对象时对参数进行必要的检测
+	 * 获取配置 
 	 * 
-	 * @param array $config 
-	 * @access protected
-	 * @return void
-	 * @throws lib\db\adapter\exception\sw_exception
+	 * @access public
+	 * @return array
 	 */
-	protected function _check_required_options(array $config)
+	public function get_config()
 	{
-		if (!array_key_exists('dbname', $config)) {
-			throw new sw_exception('Configuration array must have a key for `dbname` that names the database instance');	
-		}
-
-		if (!array_key_exists('username', $config)) {
-			throw new sw_exception('Configuration array must have a key for `username` that names the database instance');	
-		}
-
-		if (!array_key_exists('password', $config)) {
-			throw new sw_exception('Configuration array must have a key for `password` that names the database instance');	
-		}
+		return $this->__config;	
 	}
 
 	// }}}
@@ -214,53 +210,6 @@ class sw_abstract
 	}
 
 	// }}}
-	// {{{ pprotected function _connect()
-
-	/**
-	 * 连接数据库 
-	 * 
-	 * @access protected
-	 * @return void
-	 */
-	protected function _connect()
-	{
-		if ($this->__connection) {
-			return;	
-		}	
-
-		$dsn = $this->_dsn();
-		
-		if (!extension_loaded('pdo')) {
-			throw new sw_exception('The PDO extension is required for this adapter but the extension is not loaded');
-		}
-
-		// 检查 PDO 驱动是否存在
-		if (!in_array($this->__pdo_type, \PDO::getAvailableDrivers())) {
-			throw new sw_exception('The ' . $this->__pdo_type . ' driver is not currently installed');	
-		}
-
-		$q = $this->__profiler->query_start('connect', sw_profiler::CONNECT);
-		if (isset($this->__config['persistent']) && ($this->__config['persistent'] == true)) {
-			$this->__config['driver_options'][\PDO::ATTR_PERSISTENT] = true;	
-		}
-
-		try {
-			$this->__connection = new \PDO(
-				$dsn,
-				$this->__config['username'],
-				$this->__config['password'],
-				$this->__config['driver_options']
-			);
-
-			$this->__profiler->query_end($q);
-			$this->__connection->setAttribute(\PDO::ATTR_CASE, $this->__case_folding);
-			$this->__connection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-		} catch (PDOException $e) {
-			throw new sw_exception($e->getMessage(), $e->getCode(), $e);
-		} 
-	}
-
-	// }}}
 	// {{{ public function get_connection()
 	
 	/**
@@ -301,20 +250,6 @@ class sw_abstract
 	public function close_connection()
 	{
 		$this->__connection = null;	
-	}
-
-	// }}}
-	// {{{ public function get_config()
-	
-	/**
-	 * 获取配置 
-	 * 
-	 * @access public
-	 * @return array
-	 */
-	public function get_config()
-	{
-		return $this->__config;	
 	}
 
 	// }}}
@@ -372,70 +307,6 @@ class sw_abstract
 	}
 
 	// }}}
-	// {{{ protected function _begin_transaction()
-
-	/**
-	 * 开启事务 
-	 * 
-	 * @access protected
-	 * @return void
-	 */
-	protected function _begin_transaction()
-	{
-		$this->_connect();
-		$this->__connection->beginTransaction();	
-	}
-
-	// }}}
-	// {{{ protected function _commit()
-
-	/**
-	 * 开启事务 
-	 * 
-	 * @access protected
-	 * @return void
-	 */
-	protected function _commit()
-	{
-		$this->_connect();
-		$this->__connection->commit();	
-	}
-
-	// }}}
-	//adapter {{{ protected function _rollback()
-	
-	/**
-	 * 事务回滚 
-	 * 
-	 * @access protected
-	 * @return void
-	 */
-	protected function _rollback()
-	{
-		$this->_connect();
-		$this->__connection->rollBack();	
-	}
-
-	// }}}
-	// {{{ protected function _quote()
-
-	/**
-	 * 转义 SQL 语句 
-	 * 
-	 * @param mixed $value 
-	 * @access protected
-	 * @return mixed
-	 */
-	protected function _quote($value)
-	{
-		if (is_int($value) || is_float($value)) {
-			return $value;	
-		}	
-		$this->_connect();
-		return $this->__connection->quote($value);
-	}
-
-	// }}}
 	// {{{ public function quote()
 
 	/**
@@ -459,7 +330,7 @@ class sw_abstract
 			return '(' . $value->assemble() . ')';			
 		}
 		
-		if ($value instanceof sw_expr) {
+		if ($value instanceof sw_db_expr) {
 			return $value->__toString();	
 		}	
 
@@ -538,7 +409,7 @@ class sw_abstract
 	/**
 	 * 为表名添加标识符 
 	 * 
-	 * @param string|array|sw_expr $ident 
+	 * @param string|array|sw_db_expr $ident 
 	 * @param string $alias 
 	 * @param boolean $auto 
 	 * @access public
@@ -555,7 +426,7 @@ class sw_abstract
 	/**
 	 * 为列名添加标识符 
 	 * 
-	 * @param string|array|sw_expr $ident 
+	 * @param string|array|sw_db_expr $ident 
 	 * @param string $alias 
 	 * @param boolean $auto 
 	 * @access public
@@ -572,7 +443,7 @@ class sw_abstract
 	/**
 	 * 添加标识符 
 	 * 
-	 * @param string|array|sw_expr $ident 
+	 * @param string|array|sw_db_expr $ident 
 	 * @param boolean $auto 
 	 * @access public
 	 * @return string
@@ -580,27 +451,6 @@ class sw_abstract
 	public function quote_indentifier($ident, $auto = false)
 	{
 		return $this->_quote_identifier_as($ident, null, $auto);
-	}
-
-	// }}}
-	// {{{ protected function _quote_identifier()
-
-	/**
-	 * 将一个字符串两端加标识符 
-	 * 
-	 * @param string $value 
-	 * @param boolean $auto 
-	 * @access protected
-	 * @return string
-	 */
-	protected function _quote_identifier($value, $auto = false)
-	{
-		if ($auto === false || $this->__auto_quote_indentifiers === true) {
-			$q = $this->get_quote_indentifier_symbol();
-			return ($q . str_replace("$q", "$q$q", $value) . $q);	
-		}	
-		
-		return $value;
 	}
 
 	// }}}
@@ -618,55 +468,6 @@ class sw_abstract
 	}
 
 	// }}}
-	// {{{ protected function _quote_identifier_as()
-
-	/**
-	 * 添加标识符 
-	 * 
-	 * @param mixed $ident 
-	 * @param string $alias 
-	 * @param boolean $auto 
-	 * @param string $as 
-	 * @access protected
-	 * @return string
-	 */
-	protected function _quote_identifier_as($ident, $alias = null, $auto = false, $as = ' AS ')
-	{
-		if ($ident instanceof sw_expr) {
-			$quoted = $ident->__toString();	
-		} else if ($ident instanceof sw_select) {
-			$quoted = '(' . $ident->assemble() . ')';	
-		} else {
-			if (is_string($ident)) {
-				$ident = explode('.', $ident);	
-			}
-
-			if (is_array($ident)) {
-				$segments = array();
-				foreach ($ident as $segment) {
-					if ($segment instanceof sw_expr) {
-						$segments[] = $segment->__toString();	
-					} else {
-						$segments[] = $this->_quote_identifier($segment, $auto);	
-					}
-				}
-
-				if ($alias !== null && end($ident) == $alias) {
-					$alias = null;	
-				}
-				$quoted = implode('.', $segments);
-			} else {
-				$quoted = $this->_quote_identifier($ident, $auto);	
-			}
-		}
-
-		if (null !== $alias) {
-			$quoted .= $as . $this->_quote_identifier($alias, $auto);	
-		}
-		return $quoted;
-	}
-
-	// }}}
 	// {{{ public function fold_case()
 
 	/**
@@ -678,8 +479,6 @@ class sw_abstract
 	 */
 	public function fold_case($key)
 	{
-		var_dump($this->__case_folding);
-		var_dump(sw_db::CASE_LOWER);
 		switch ($this->__case_folding) {
 			case sw_db::CASE_LOWER:
 				$value = strtolower((string) $key);
@@ -734,6 +533,213 @@ class sw_abstract
 		} else {
 			return null;	
 		}
+	}
+
+	// }}}
+	// {{{ protected function _check_required_options()
+
+	/**
+	 * 创建对象时对参数进行必要的检测
+	 * 
+	 * @param array $config 
+	 * @access protected
+	 * @return void
+	 * @throws lib\db\adapter\exception\sw_exception
+	 */
+	protected function _check_required_options(array $config)
+	{
+		if (!array_key_exists('dbname', $config)) {
+			throw new sw_exception('Configuration array must have a key for `dbname` that names the database instance');	
+		}
+
+		if (!array_key_exists('username', $config)) {
+			throw new sw_exception('Configuration array must have a key for `username` that names the database instance');	
+		}
+
+		if (!array_key_exists('password', $config)) {
+			throw new sw_exception('Configuration array must have a key for `password` that names the database instance');	
+		}
+	}
+
+	// }}}
+	// {{{ pprotected function _connect()
+
+	/**
+	 * 连接数据库 
+	 * 
+	 * @access protected
+	 * @return void
+	 */
+	protected function _connect()
+	{
+		if ($this->__connection) {
+			return;	
+		}	
+
+		$dsn = $this->_dsn();
+		
+		if (!extension_loaded('pdo')) {
+			throw new sw_exception('The PDO extension is required for this adapter but the extension is not loaded');
+		}
+
+		// 检查 PDO 驱动是否存在
+		if (!in_array($this->__pdo_type, \PDO::getAvailableDrivers())) {
+			throw new sw_exception('The ' . $this->__pdo_type . ' driver is not currently installed');	
+		}
+
+		$q = $this->__profiler->query_start('connect', sw_profiler::CONNECT);
+		if (isset($this->__config['persistent']) && ($this->__config['persistent'] == true)) {
+			$this->__config['driver_options'][\PDO::ATTR_PERSISTENT] = true;	
+		}
+
+		try {
+			$this->__connection = new \PDO(
+				$dsn,
+				$this->__config['username'],
+				$this->__config['password'],
+				$this->__config['driver_options']
+			);
+
+			$this->__profiler->query_end($q);
+			$this->__connection->setAttribute(\PDO::ATTR_CASE, $this->__case_folding);
+			$this->__connection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+		} catch (PDOException $e) {
+			throw new sw_exception($e->getMessage(), $e->getCode(), $e);
+		} 
+	}
+
+	// }}}
+	// {{{ protected function _begin_transaction()
+
+	/**
+	 * 开启事务 
+	 * 
+	 * @access protected
+	 * @return void
+	 */
+	protected function _begin_transaction()
+	{
+		$this->_connect();
+		$this->__connection->beginTransaction();	
+	}
+
+	// }}}
+	// {{{ protected function _commit()
+
+	/**
+	 * 开启事务 
+	 * 
+	 * @access protected
+	 * @return void
+	 */
+	protected function _commit()
+	{
+		$this->_connect();
+		$this->__connection->commit();	
+	}
+
+	// }}}
+	// {{{ protected function _rollback()
+	
+	/**
+	 * 事务回滚 
+	 * 
+	 * @access protected
+	 * @return void
+	 */
+	protected function _rollback()
+	{
+		$this->_connect();
+		$this->__connection->rollBack();	
+	}
+
+	// }}}
+	// {{{ protected function _quote()
+
+	/**
+	 * 转义 SQL 语句 
+	 * 
+	 * @param mixed $value 
+	 * @access protected
+	 * @return mixed
+	 */
+	protected function _quote($value)
+	{
+		if (is_int($value) || is_float($value)) {
+			return $value;	
+		}	
+		$this->_connect();
+		return $this->__connection->quote($value);
+	}
+
+	// }}}
+	// {{{ protected function _quote_identifier()
+
+	/**
+	 * 将一个字符串两端加标识符 
+	 * 
+	 * @param string $value 
+	 * @param boolean $auto 
+	 * @access protected
+	 * @return string
+	 */
+	protected function _quote_identifier($value, $auto = false)
+	{
+		if ($auto === false || $this->__auto_quote_indentifiers === true) {
+			$q = $this->get_quote_indentifier_symbol();
+			return ($q . str_replace("$q", "$q$q", $value) . $q);	
+		}	
+		
+		return $value;
+	}
+
+	// }}}
+	// {{{ protected function _quote_identifier_as()
+
+	/**
+	 * 添加标识符 
+	 * 
+	 * @param mixed $ident 
+	 * @param string $alias 
+	 * @param boolean $auto 
+	 * @param string $as 
+	 * @access protected
+	 * @return string
+	 */
+	protected function _quote_identifier_as($ident, $alias = null, $auto = false, $as = ' AS ')
+	{
+		if ($ident instanceof sw_db_expr) {
+			$quoted = $ident->__toString();	
+		} else if ($ident instanceof sw_select) {
+			$quoted = '(' . $ident->assemble() . ')';	
+		} else {
+			if (is_string($ident)) {
+				$ident = explode('.', $ident);	
+			}
+
+			if (is_array($ident)) {
+				$segments = array();
+				foreach ($ident as $segment) {
+					if ($segment instanceof sw_db_expr) {
+						$segments[] = $segment->__toString();	
+					} else {
+						$segments[] = $this->_quote_identifier($segment, $auto);	
+					}
+				}
+
+				if ($alias !== null && end($ident) == $alias) {
+					$alias = null;	
+				}
+				$quoted = implode('.', $segments);
+			} else {
+				$quoted = $this->_quote_identifier($ident, $auto);	
+			}
+		}
+
+		if (null !== $alias) {
+			$quoted .= $as . $this->_quote_identifier($alias, $auto);	
+		}
+		return $quoted;
 	}
 
 	// }}}

@@ -6,6 +6,7 @@
 	verbose="true"
 	convertNoticesToExceptions="true"
 	convertWarningsToExceptions="true"
+	reportDirectory="./aa"
 	stopOnError="false"
 	stopOnFailure="false"
 	stopOnIncomplete="false"
