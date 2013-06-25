@@ -5,7 +5,8 @@ php:
     - 5.5
 before_script:
     - mysql -e 'create database swan_soft;'
-    - mysql -e 'use swan_soft;source tests/db_desc_swan_soft.sql'
+    - mysql -e 'use swan_soft;'
+    - mysql -e 'source tests/db_desc_swan_soft.sql;'
     - pear config-set auto_discover 1
     - pear install pear.phpunit.de/PHPUnit
     - pear install phpunit/DbUnit
