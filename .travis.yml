@@ -5,3 +5,6 @@ php:
 before_script:
     - cd tests
 script: phpunit -v
+notifications:
+    email:
+        - nmred_2008@126.com
