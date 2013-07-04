@@ -6,8 +6,8 @@ return array(
 		'username' => 'root',
 		'password' => '',
 		'host' => 'localhost',
-		'port' => '3306',
-		'unix_socket' => '/usr/local/swan/run/sw_mysql.sock',
+		'port' => '3307',
+		'unix_socket' => '/usr/local/dev_swan/run/mysql.sock',
 		'driver_options' => array(),
 	),
 );
