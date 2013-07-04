@@ -2,8 +2,10 @@ language: php
 php:
     - 5.3
     - 5.4
+    - 5.5
 before_script:
     - cd tests
+    - mysql -e 'create database swan_soft;'
 script: phpunit -v
 notifications:
     email:
