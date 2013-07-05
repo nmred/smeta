@@ -21,7 +21,7 @@ before_script:
                 //'unix_socket' => '/usr/local/dev_swan/run/mysql.sock',
                 'driver_options' => array(),
                 ),
-        );" > src/inc/conf/config.php
+        );" > ./src/inc/conf/config.php
 
 script: phpunit -v
 notifications:
