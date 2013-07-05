@@ -6,7 +6,7 @@
 	verbose="true"
 	convertNoticesToExceptions="true"
 	convertWarningsToExceptions="true"
-	reportDirectory="./aa"
+	reportDirectory=""
 	stopOnError="false"
 	stopOnFailure="false"
 	stopOnIncomplete="false"
@@ -16,6 +16,10 @@
 			<directory suffix="test.class.php">./swan_test</directory>
 		</testsuite>
 	</testsuites>
+
+	<groups>
+	</groups>
+
 	<filter>
 		<blacklist>
 			<directory suffix=".php">PEAR_INSTALL_DIR</directory>
