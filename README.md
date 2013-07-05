@@ -1,6 +1,6 @@
 # SWANSOFT TEAM
 
-master:"!https://travis-ci.org/nmred/swansoft.png!":https://travis-ci.org/nmred/swansoft
+Master: [![Build Status](https://secure.travis-ci.org/nmred/swansoft.png?branch=master)](http://travis-ci.org/nmred/swansoft)
 
 Everything in order to facilitate ! 一切为了方便！
 
