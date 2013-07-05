@@ -12,7 +12,7 @@
 // | $_SWANBR_WEB_DOMAIN_$
 // +---------------------------------------------------------------------------
 
-namespace lib\db;
+namespace lib\test;
 use PDO;
 
 /**
@@ -26,41 +26,24 @@ use PDO;
 * @author $_SWANBR_AUTHOR_$ 
 +------------------------------------------------------------------------------
 */
-class sw_db
+class sw_db extends \PHPUnit_Extensions_Database_TestCase
 {
-	// {{{ const
+	// {{{ members
+
+	protected $__xml_path =	
+	// }}}
+	// {{{ functions
 
 	/**
-	 * 执行 quote 操作时传递的第二个参数  
+	 * 获取 
+	 * 
+	 * @access public
+	 * @return void
 	 */
-	const INT_TYPE = 0;
+	public function getConnection()
+	{
+		
+	}
 
-	/**
-	 * 执行 quote 操作时传递的第二个参数  
-	 */
-	const BIGINT_TYPE = 1;
-
-	/**
-	 * 执行 quote 操作时传递的第二个参数  
-	 */
-	const FLOAT_TYPE = 2;
-
-	/**
-	 * 强制列名小写
-	 */
-	 const CASE_LOWER = PDO::CASE_LOWER;
-
-	/**
-	 * 强制列名大写
-	 */
-	 const CASE_UPPER = PDO::CASE_UPPER;
-
-	/**
-	 * 不强制转换
-	 */
-	 const CASE_NATURAL = PDO::CASE_NATURAL;
-
-	// }}}	
-	// {{{ 
 	// }}}
 }

@@ -12,6 +12,9 @@
 // | $_SWANBR_WEB_DOMAIN_$
 // +---------------------------------------------------------------------------
  
+namespace lib\db\statement;
+use lib\db\statement\exception\sw_exception;
+
 /**
 +------------------------------------------------------------------------------
 * sw_standard 

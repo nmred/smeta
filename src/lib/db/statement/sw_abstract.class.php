@@ -18,6 +18,7 @@ use lib\db\profiler\sw_profiler;
 use lib\db\select\sw_select;
 use lib\db\sw_db_expr;
 use lib\db\statement\exception\sw_exception;
+use PDO;
 
 /**
 +------------------------------------------------------------------------------
@@ -87,6 +88,7 @@ abstract class sw_abstract
 	public function __construct($adapter, $sql)
 	{
 		$this->__adapter = $adapter;
+
 		if ($sql instanceof sw_select) {
 			$sql = $sql->assemble();		
 		}
@@ -153,7 +155,7 @@ abstract class sw_abstract
 	 * @access public
 	 * @return boolean
 	 */
-	public function bind_param($parameter, &$variable, $type = null, $length = null, $options = null)
+	public function bind_param($parameter, &$variable = null, $type = null, $length = null, $options = null)
 	{
 		$this->__bind_param[$parameter] = &$variable;
 		try {
@@ -229,9 +231,9 @@ abstract class sw_abstract
 		}
 
 		if ($params !== null) {
-			$qp->bind_param($params);	
+			$qp->bind_params($params);	
 		} else {
-			$qp->bind_param($this->__bind_param);	
+			$qp->bind_params($this->__bind_param);	
 		}
 
 		$qp->start($this->__query_id);
@@ -241,6 +243,29 @@ abstract class sw_abstract
 		$prof->query_end($this->__query_id);
 
 		return $retval;
+	}
+
+	// }}}
+	// {{{ protected function _execute()
+
+	/**
+	 * execute 
+	 * 
+	 * @param array $params 
+	 * @access protected
+	 * @return void
+	 */
+	protected function _execute(array $params = null)
+	{
+		try {
+			if (null === $params) {
+				$this->__stmt->execute();
+			} else {
+				$this->__stmt->execute($params);
+			}
+		} catch (PDOException $e) {
+			throw new sw_exception($e->getMessage(), $e->getCode(), $e);
+		}
 	}
 
 	// }}}
@@ -254,7 +279,7 @@ abstract class sw_abstract
 	 * @access public
 	 * @return void
 	 */
-	public function fetch($style = null; $cursor = null, $offset = null)
+	public function fetch($style = null, $cursor = null, $offset = null)
 	{
 		if ($style === null) {
 			$style = $this->__fetch_mode;	

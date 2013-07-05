@@ -12,8 +12,7 @@
 // | $_SWANBR_WEB_DOMAIN_$
 // +---------------------------------------------------------------------------
 
-namespace lib\db;
-use PDO;
+namespace lib\test;
 
 /**
 +------------------------------------------------------------------------------
@@ -26,41 +25,6 @@ use PDO;
 * @author $_SWANBR_AUTHOR_$ 
 +------------------------------------------------------------------------------
 */
-class sw_db
+class sw_test extends \PHPUnit_FrameWork_TestCase 
 {
-	// {{{ const
-
-	/**
-	 * 执行 quote 操作时传递的第二个参数  
-	 */
-	const INT_TYPE = 0;
-
-	/**
-	 * 执行 quote 操作时传递的第二个参数  
-	 */
-	const BIGINT_TYPE = 1;
-
-	/**
-	 * 执行 quote 操作时传递的第二个参数  
-	 */
-	const FLOAT_TYPE = 2;
-
-	/**
-	 * 强制列名小写
-	 */
-	 const CASE_LOWER = PDO::CASE_LOWER;
-
-	/**
-	 * 强制列名大写
-	 */
-	 const CASE_UPPER = PDO::CASE_UPPER;
-
-	/**
-	 * 不强制转换
-	 */
-	 const CASE_NATURAL = PDO::CASE_NATURAL;
-
-	// }}}	
-	// {{{ 
-	// }}}
 }
