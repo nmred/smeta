@@ -450,6 +450,77 @@ abstract class sw_abstract
 	}
 
 	// }}}
-	// {{{ 
+	// {{{ public function error_code()
+	
+	/**
+	 * 获取错误码 
+	 * 
+	 * @access public
+	 * @return string
+	 */
+	public function error_code()
+	{
+		try {
+			return $this->__stmt->errorCode();	
+		} catch (PDOException $e) {
+			throw new sw_exception($e->getMessage());
+		}
+	}
+	 
+	// }}}
+	// {{{ public function error_info()
+
+	/**
+	 * 获取stmt对象的错误信息 
+	 * 
+	 * @access public
+	 * @return string
+	 */
+	public function error_info()
+	{
+		try {
+			return $this->__stmt->errorInfo();	
+		} catch (PDOException $e) {
+			throw new sw_exception($e->getMessage());
+		}
+	}
+
+	// }}}
+	// {{{ public function next_rowset()
+
+	/**
+	 * 获取下一个结果集 
+	 * 
+	 * @access public
+	 * @return boolean
+	 */
+	public function next_rowset()
+	{
+		try {
+			return $this->__stmt->nextRowSet();	
+		} catch (PDOException $e) {
+			throw new sw_exception($e->getMessage());
+		}
+	}
+
+	// }}}
+	// {{{ public function row_count()
+
+	/**
+	 * 获取记录个数 
+	 * 
+	 * @access public
+	 * @return int
+	 */
+	public function row_count()
+	{
+		try {
+			return $this->__stmt->rowCount();	
+		} catch (PDOException $e) {
+			throw sw_exception($e->getMessage());	
+		}
+	}
+
+	// }}}
 	// }}}
 }

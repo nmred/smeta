@@ -60,7 +60,7 @@ define('SWANBR_RELEASE', 'beta');
 define('SWANBR_SLOGAN', 'Everything in order to facilitate');
 
 //版权声明
-define('SWANBR_COPYRIGHT', '© 2011-2012 swanlinux');
+define('SWANBR_COPYRIGHT', '© 2011-2013 swanlinux');
 
 //许可协议 
 define('SWANBR_LICENSED_URL', 'BSD');
