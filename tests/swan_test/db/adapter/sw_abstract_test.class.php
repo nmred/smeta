@@ -146,7 +146,9 @@ class sw_abstract_test extends sw_test
 	 */
 	public function test_quote()
 	{
-		$sw_select = $this->getMock('lib\db\select\sw_select');
+		$sw_select = $this->getMockBuilder('lib\db\select\sw_select')
+						  ->setConstructorArgs(array($this->__db))
+						  ->getMock();
 		$sw_select->expects($this->any())
 				  ->method('assemble')
 				  ->will($this->returnValue('user_id >= 1'));
@@ -230,7 +232,9 @@ class sw_abstract_test extends sw_test
 		$rev = $this->__db->quote_table_as($sw_expr);
 		$this->assertEquals('aa', $rev);
 
-		$sw_select = $this->getMock('lib\db\select\sw_select');
+		$sw_select = $this->getMockBuilder('lib\db\select\sw_select')
+						  ->setConstructorArgs(array($this->__db))
+						  ->getMock();
 		$sw_select->expects($this->any())
 				  ->method('assemble')
 				  ->will($this->returnValue('user_id >= 1'));

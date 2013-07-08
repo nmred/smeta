@@ -11,29 +11,69 @@
 // +---------------------------------------------------------------------------
 // | $_SWANBR_WEB_DOMAIN_$
 // +---------------------------------------------------------------------------
-
-error_reporting( E_ALL | E_STRICT );
-require_once dirname(__DIR__) . '/src/core.php';
-require_once PATH_SWAN_LIB . 'loader/sw_standard_auto_loader.class.php';
+ 
+namespace mock\db\select;
+use lib\db\select\sw_select as sw_mock_select;
 
 /**
 +------------------------------------------------------------------------------
-* 测试引导脚本 
+* sw_mock_select 
 +------------------------------------------------------------------------------
 * 
+* @uses sw_mock_select
 * @package 
 * @version $_SWANBR_VERSION_$
 * @copyright $_SWANBR_COPYRIGHT_$
 * @author $_SWANBR_AUTHOR_$ 
 +------------------------------------------------------------------------------
 */
-require_once PATH_SWAN_LIB . 'loader/sw_standard_auto_loader.class.php';
-$autoloader = new lib\loader\sw_standard_auto_loader(array(
-    'namespaces' => array(
-        'lib' => PATH_SWAN_BASE,
-		'swan_test' => './',
-		'mock' => dirname(__FILE__),
-    ),
-));
+class sw_select extends sw_mock_select
+{
+	// {{{ functions
+	// {{{ public function get_parts()
 
-$autoloader->register();
+	/**
+	 * get_parts 
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function get_parts()
+	{
+		return $this->__parts;	
+	}
+
+	// }}}
+	// {{{ public function get_init_part()
+
+	/**
+	 * 获取初始化 select 
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function get_init_part()
+	{
+		return self::$__parts_init;	
+	}
+
+	// }}}
+	// {{{ public function mock_table_cols()
+
+	/**
+	 * mock_table_cols 
+	 * 
+	 * @param mixed $correlation_name 
+	 * @param mixed $cols 
+	 * @param mixed $after_correlation_name 
+	 * @access public
+	 * @return void
+	 */
+	public function mock_table_cols($correlation_name, $cols, $after_correlation_name = null)
+	{
+		$this->_table_cols($correlation_name, $cols, $after_correlation_name);	
+	}
+
+	// }}}
+	// }}}	
+}
