@@ -172,7 +172,48 @@ class sw_select
 	}
 
 	// }}}
-	// {{{ public function 
+	// {{{ public function columns()
+
+	/**
+	 * 处理查询的字段 
+	 * 
+	 * @param array|string|sw_db_expr $cols 
+	 * @param string $correlation_name 
+	 * @access public
+	 * @return sw_select object
+	 */
+	public function columns($cols = '*', $correlation_name = null)
+	{
+		if ($correlation_name === null && count($this->__parts[self::FROM])) {
+			$correlation_name_keys = array_keys($this->__parts[self::FROM]);				$correlation_name = current($correlation_name_keys);
+		}
+
+		if (!array_key_exists($correlation_name, $this->__parts[self::FROM])) {
+			throw new sw_exception("No table has been specified for the FROM clause");	
+		}
+
+		$this->_table_cols($correlation_name, $cols);
+
+		return $this;
+	}
+
+	// }}}
+	// {{{ public function from()
+
+	/**
+	 * 装饰 FROM 子句 
+	 * 
+	 * @param array|string|sw_db_expr $name 
+	 * @param array|string|sw_db_expr $cols 
+	 * @param string $schema 
+	 * @access public
+	 * @return sw_select
+	 */
+	public function from($name, $cols = '*', $schema = null)
+	{
+		return $this->_join(self::FROM, $name, null, $cols, $schema);			
+	}
+
 	// }}}
 	// {{{ public function get_adapter()
 
@@ -185,6 +226,107 @@ class sw_select
 	public function get_adapter()
 	{
 		return $this->__adapter;
+	}
+
+	// }}}
+	// {{{ protected function _join()
+
+	/**
+	 * 装饰 JOIN 
+	 * 
+	 * @param null|string $type 指定类型
+	 * @param array|string|sw_db_expr $name 指定表名 
+	 * @param string $cond 指定 JOIN 的条件
+	 * @param array|string $cols 指定查询字段
+	 * @param string $schema 指定数据库名称
+	 * @access protected
+	 * @return sw_select
+	 */
+	protected function _join($type, $name, $cond, $cols, $schema = null)
+	{
+		if (!in_array($type, self::$__join_types) && $type !== self::FROM) {
+			throw new sw_exception("Invalid join type '$type'");	
+		}
+
+		if (count($this->__parts[self::UNION])) {
+			throw new sw_exception("Invalid use of table with " . self::SQL_UNION);	
+		}
+
+		if (empty($name)) {
+			$correlation_name = $table_name = '';
+		} else if (is_array($name)) {
+			// 必须是 array($correlationName => $tableName) 或 array($ident, ...)
+			foreach ($name as $_correlation_name => $_table_name) {
+				if (is_string($_correlation_name)) {
+					// 在 name的结构中假设 key是表别名， value是表名称
+					$table_name = $_table_name;
+					$correlation_name = $_correlation_name;	
+				} else {
+					$table_name = $_table_name;
+					$correlation_name = $this->_unique_correlation($table_name);
+				}
+				break;
+			}
+		} else if ($name instanceof sw_db_expr || $name instanceof sw_select) {
+			$table_name = $name;
+			$correlation_name = $this->_unique_correlation('t');	
+		} else if (preg_match('/^(.+)\s+AS\s+(.+)$/i', $name, $m)) {
+			$table_name = $m[1];
+			$correlation_name = $m[2];	
+		} else {
+			$table_name = $name;
+			$correlation_name = $this->_unique_correlation($table_name);	
+		}
+
+		// 处理带有数据库名称的
+		if (!is_object($table_name) && false !== strpos($table_name, '.')) {
+			list($schema, $table_name) = explode('.', $table_name);	
+		}
+
+		$last_from_correlation_name = null;
+		if (!empty($correlation_name)) {
+			if (array_key_exists($correlation_name, $this->__parts[self::FROM])) {
+				throw new sw_exception("You cannot define a correlation name '$correlation_name' more than once");
+			}
+
+			if (self::FROM === $type) {
+				// 将 from 类型的追加到 self::FROM 的 from类型最后
+				$tmp_from_parts = $this->__parts[self::FROM];
+				$this->__parts[self::FROM] = array();
+				
+				// 移动所有的 FROM 栈
+				while($tmp_from_parts) {
+					$current_correlation_name = key($tmp_from_parts);
+					if ($tmp_from_parts[$current_correlation_name]['join_type'] != self::FROM) {
+						break;	
+					}
+					$last_from_correlation_name = $current_correlation_name;
+					$this->__parts[self::FROM][$current_correlation_name] = array_shift($tmp_from_parts);
+				}	
+			} else {
+				$tmp_from_parts = array();	
+			}
+
+			$this->__parts[self::FROM][$correlation_name] = array(
+				'join_type'      => $type,
+				'schema'         => $schema,
+				'table_name'     => $table_name,
+				'join_condition' => $cond,
+			);
+
+			while ($tmp_from_parts) {
+				$current_correlation_name = key($tmp_from_parts);
+				$this->__parts[self::FROM][$current_correlation_name] = array_shift($tmp_from_parts);
+			}
+		}
+
+		// 添加查询字段
+		if (self::FROM === $type && $last_from_correlation_name == null) {
+			$last_from_correlation_name = true; // 一定要保证 from 类型的字段在最前面	
+		}
+
+		$this->_table_cols($correlation_name, $cols, $last_from_correlation_name);
+		return $this;
 	}
 
 	// }}}
@@ -260,12 +402,61 @@ class sw_select
 	}
 
 	// }}}
+	// {{{ protected function _unique_correlation()
+
+	/**
+	 * 获取唯一的数据表别名 
+	 * 
+	 * @param string|array $name 
+	 * @access protected
+	 * @return string
+	 */
+	protected function _unique_correlation($name)
+	{
+		if (is_array($name)) {
+			$k = key($name);
+			$c = is_string($k) ? $k : end($name);	
+			$name = $k;
+		} else {
+			$dot = strrpos($name, '.');
+			$c   = ($dot === false) ? $name : substr($name, $dot + 1);	
+		}
+
+		for ($i = 2; array_key_exists($c, $this->__parts[self::FROM]); $i++) {
+			$c = $name . '_' . (string) $i;	
+		}
+
+		return $c;
+	}
+
+	// }}}
 	// {{{ public function assemble()
 
 	public function assemble()
 	{
 		//todo
 		return 'test todo';	
+	}
+
+	// }}}
+	// {{{ public function __toString()
+
+	/**
+	 * __toString 
+	 * 
+	 * @access public
+	 * @return string
+	 */
+	public function __toString()
+	{
+		try {
+			$sql = $this->assemble();	
+		} catch (sw_exception $e) {
+			trigger_error($e->getMessage(), E_USER_WARNING);
+			$sql = '';	
+		}
+
+		return (string) $sql;
 	}
 
 	// }}}

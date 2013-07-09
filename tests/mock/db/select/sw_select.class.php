@@ -44,6 +44,40 @@ class sw_select extends sw_mock_select
 	}
 
 	// }}}
+	// {{{ public function set_parts()
+
+	/**
+	 * 设置参数 
+	 * 
+	 * @param string $name 
+	 * @param mixed $value 
+	 * @access public
+	 * @return void
+	 */
+	public function set_parts($name, $value)
+	{
+		if (isset($this->__parts[$name])) {
+			$this->__parts[$name] = $value;	
+		}
+	}
+
+	// }}}
+	// {{{ public function init_parts()
+
+	/**
+	 * 初始化参数 
+	 * 
+	 * @param string $name 
+	 * @param mixed $value 
+	 * @access public
+	 * @return void
+	 */
+	public function init_parts()
+	{
+		$this->__parts = self::$__parts_init;
+	}
+
+	// }}}
 	// {{{ public function get_init_part()
 
 	/**
@@ -72,6 +106,39 @@ class sw_select extends sw_mock_select
 	public function mock_table_cols($correlation_name, $cols, $after_correlation_name = null)
 	{
 		$this->_table_cols($correlation_name, $cols, $after_correlation_name);	
+	}
+
+	// }}}
+	// {{{ public function mock_unique_correlation()
+
+	/**
+	 * mock_unique_correlation 
+	 * 
+	 * @param mixed $name 
+	 * @access public
+	 * @return void
+	 */
+	public function mock_unique_correlation($name)
+	{
+		return $this->_unique_correlation($name);	
+	}
+
+	// }}}
+	// {{{ public function mock_join()
+
+	/**
+	 * mock_join 
+	 * 
+	 * @param mixed $type 
+	 * @param mixed $name 
+	 * @param mixed $cols 
+	 * @param mixed $schema 
+	 * @access public
+	 * @return void
+	 */
+	public function mock_join($type, $name, $cols, $schema = null)
+	{
+		$this->_join($type, $name, $cols, $schema);	
 	}
 
 	// }}}
