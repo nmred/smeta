@@ -103,7 +103,7 @@ abstract class sw_abstract
 	 * @var mixed
 	 * @access protected
 	 */
-	protected $__auto_quote_indentifiers = false;
+	protected $__auto_quote_indentifiers = true;
 
 	// }}}
 	// {{{ functions

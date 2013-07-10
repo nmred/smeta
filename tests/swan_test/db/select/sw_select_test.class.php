@@ -45,12 +45,12 @@ class sw_select_test extends sw_test
 	const LIMIT_OFFSET   = 'limit_offset';
 	const FOR_UPDATE     = 'for_update';
 
-	const INNER_JOIN     = 'inner_join';
-	const LEFT_JOIN      = 'left_join';
-	const RIGHT_JOIN     = 'right_join';
-	const FULL_JOIN      = 'full_join';
-	const CROSS_JOIN     = 'cross_join';
-	const NATURAL_JOIN   = 'natural_join';
+	const INNER_JOIN     = 'inner join';
+	const LEFT_JOIN      = 'left join';
+	const RIGHT_JOIN     = 'right join';
+	const FULL_JOIN      = 'full join';
+	const CROSS_JOIN     = 'cross join';
+	const NATURAL_JOIN   = 'natural join';
 
 	const SQL_WILDCARD   = '*';
 	const SQL_SELECT     = 'SELECT';
@@ -1062,6 +1062,83 @@ class sw_select_test extends sw_test
 
 		$rev = $mock->get_part(self::FROM);
 		$this->assertEquals(array(), $rev);
+	}
+
+	// }}}
+	// {{{ public function test__get_quoted_schema()
+
+	/**
+	 * test__get_quoted_schema 
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function test__get_quoted_schema()
+	{
+		$mock = new sw_select($this->__db);
+		$rev = $mock->mock_get_quoted_schema('user');
+		$this->assertEquals('`user`.', $rev);
+	}
+
+	// }}}
+	// {{{ public function test__get_quoted_table()
+
+	/**
+	 * test__get_quoted_table 
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function test__get_quoted_table()
+	{
+		$mock = new sw_select($this->__db);
+		$rev = $mock->mock_get_quoted_table('user', 'U');
+		$this->assertEquals('`user` AS `U`', $rev);
+	}
+
+	// }}}
+	// {{{ public function test__render_columns()
+
+	/**
+	 * test__render_columns 
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function test__render_columns()
+	{
+		$mock = new sw_select($this->__db);
+
+		// 1
+		$rev = $mock->mock_render_columns('select');
+		$this->assertEquals(null, $rev);
+		
+		// 2
+		$mock->init_parts();
+		$mock->set_parts(self::FROM, array('user' => array()));
+		$mock->columns(array('id', 'name'));
+		$rev = $mock->mock_render_columns('select');
+		$this->assertEquals('select `user`.`id`, `user`.`name`', $rev);
+
+		// 3
+		$mock->init_parts();
+		$mock->set_parts(self::FROM, array('user' => array()));
+		$mock->columns();
+		$rev = $mock->mock_render_columns('select');
+		$this->assertEquals('select `user`.*', $rev);
+
+		// 4
+		$mock->init_parts();
+		$sw_expr = $this->getMockBuilder('lib\db\sw_db_expr')
+						  ->setConstructorArgs(array('group_id = group + 1'))
+						  ->getMock();
+		$sw_expr->expects($this->once())
+				  ->method('__toString')
+				  ->will($this->returnValue('group_id = group + 1'));
+		$mock->set_parts(self::FROM, array('user' => array()));
+		$mock->columns($sw_expr);
+		$rev = $mock->mock_render_columns('select');
+		$this->assertEquals('select group_id = group + 1', $rev);
 	}
 
 	// }}}

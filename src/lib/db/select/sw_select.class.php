@@ -44,12 +44,12 @@ class sw_select
 	const LIMIT_OFFSET   = 'limit_offset';
 	const FOR_UPDATE     = 'for_update';
 
-	const INNER_JOIN     = 'inner_join';
-	const LEFT_JOIN      = 'left_join';
-	const RIGHT_JOIN     = 'right_join';
-	const FULL_JOIN      = 'full_join';
-	const CROSS_JOIN     = 'cross_join';
-	const NATURAL_JOIN   = 'natural_join';
+	const INNER_JOIN     = 'inner join';
+	const LEFT_JOIN      = 'left join';
+	const RIGHT_JOIN     = 'right join';
+	const FULL_JOIN      = 'full join';
+	const CROSS_JOIN     = 'cross join';
+	const NATURAL_JOIN   = 'natural join';
 
 	const SQL_WILDCARD   = '*';
 	const SQL_SELECT     = 'SELECT';
@@ -224,7 +224,8 @@ class sw_select
 	public function columns($cols = '*', $correlation_name = null)
 	{
 		if ($correlation_name === null && count($this->__parts[self::FROM])) {
-			$correlation_name_keys = array_keys($this->__parts[self::FROM]);				$correlation_name = current($correlation_name_keys);
+			$correlation_name_keys = array_keys($this->__parts[self::FROM]);
+			$correlation_name      = current($correlation_name_keys);
 		}
 
 		if (!array_key_exists($correlation_name, $this->__parts[self::FROM])) {
@@ -1001,6 +1002,240 @@ class sw_select
 		}
 
 		return $cond . "($condition)";
+	}
+
+	// }}}
+	// {{{ protected function _get_dummy_table()
+
+	/**
+	 * 获取一个空表 
+	 * 
+	 * @access protected
+	 * @return array
+	 */
+	protected function _get_dummy_table()
+	{
+		return array();	
+	}
+
+	// }}}
+	// {{{ protected function _get_quoted_schema()
+
+	/**
+	 * 格式化一个数据库名称 
+	 * 
+	 * @param string|null $schema 
+	 * @access protected
+	 * @return string|null
+	 */
+	protected function _get_quoted_schema($schema = null)
+	{
+		if ($schema === null) {
+			return null;	
+		}
+
+		return $this->__adapter->quote_indentifier($schema, true) . '.';
+	}
+
+	// }}}
+	// {{{ protected function _get_quoted_table()
+
+	/**
+	 * 格式化表名 
+	 * 
+	 * @param string $table_name 
+	 * @param string $correlation_name 
+	 * @access protected
+	 * @return void
+	 */
+	protected function _get_quoted_table($table_name, $correlation_name = null)
+	{
+		return $this->__adapter->quote_table_as($table_name, $correlation_name, true);	
+	}
+
+	// }}}
+	// {{{ protected function _render_distinct()
+
+	/**
+	 * 拼装 DISTINCT 子句 
+	 * 
+	 * @param string $sql 
+	 * @access protected
+	 * @return string
+	 */
+	protected function _render_distinct($sql)
+	{
+		if ($this->__parts[self::DISTINCT]) {
+			$sql .= ' ' . self::SQL_DISTINCT;	
+		}
+		
+		return $sql;	
+	}
+
+	// }}}
+	// {{{ protected function _render_columns()
+
+	/**
+	 * 拼装 COLUMNS 子句 
+	 * 
+	 * @param string $sql 
+	 * @access protected
+	 * @return string
+	 */
+	protected function _render_columns($sql)
+	{
+		if (!count($this->__parts[self::COLUMNS])) {
+			return null;	
+		}
+
+		$columns = array();
+		foreach ($this->__parts[self::COLUMNS] as $column_entry) {
+			list($correlation_name, $column, $alias) = $column_entry;
+			if ($column instanceof sw_db_expr) {
+				$columns[] = $this->__adapter->quote_column_as($column, $alias, true);	
+			} else {
+				if ($column == self::SQL_WILDCARD) {
+					$column = new sw_db_expr(self::SQL_WILDCARD);
+					$alias  = null;	
+				}
+
+				if (empty($correlation_name)) {
+					$columns[] = $this->__adapter->quote_column_as($column, $alias, true);	
+				} else {
+					$columns[] = $this->__adapter->quote_column_as(array($correlation_name, $column), $alias, true);	
+				}
+			}
+		}
+
+		return $sql .= ' ' . implode(', ', $columns);
+	}
+
+	// }}}
+	// {{{ protected function _render_from()
+
+	/**
+	 * 拼装 FROM 和 JOIN 子句 
+	 * 
+	 * @access protected
+	 * @return string
+	 */
+	protected function _render_from($sql)
+	{
+		if (empty($this->__parts[self::FROM])) {
+			$this->__parts[self::FROM] = $this->_get_dummy_table();	
+		}
+		
+		$from = array();
+
+		foreach ($this->__parts[self::FROM] as $correlation_name => $table) {
+			$tmp = '';
+			$join_type = ($table['join_type'] === self::FROM) ? self::INNER_JOIN : $table['join_type'];
+			if (!empty($from)) {
+				$tmp .= ' ' . strtoupper($join_type) . ' ';	
+			}	
+
+			$tmp .= $this->_get_quoted_schema($table['schema']);
+			$tmp .= $this->_get_quoted_table($table['table_name'], $correlation_name);
+
+			if (!empty($from) && !empty($table['join_condition'])) {
+				$tmp .= ' ' . self::SQL_ON . ' ' . $table['join_condition'];	
+			}
+
+			$from[] = $tmp;
+		}
+
+		if (!empty($from)) {
+			$sql .= ' ' . self::SQL_FROM . ' ' . implode("\n", $from);	
+		}
+
+		return $sql;
+	}
+
+	// }}}
+	// {{{ protected function _render_union()
+
+	/**
+	 * 拼装 UNION 子句 
+	 * 
+	 * @param string $sql 
+	 * @access protected
+	 * @return string
+	 */
+	protected function _render_union($sql)
+	{
+		if ($this->__parts[self::UNION]) {
+			$parts = count($this->__parts[self::UNION]);
+			foreach ($this->__parts[self::UNION] as $cnt => $union) {
+				list($target, $type) = $union;
+				if ($target instanceof sw_select) {
+					$target = $target->assemble();	
+				}
+
+				$sql .= $target;
+				if ($cnt < $parts - 1) {
+					$sql .= ' ' . $type . ' ';	
+				}
+			}
+		}
+
+		return $sql;
+	}
+
+	// }}}
+	// {{{ protected function _render_where()
+
+	/**
+	 * 拼装 WHERE 子句 
+	 * 
+	 * @param string $sql 
+	 * @access protected
+	 * @return string
+	 */
+	protected function _render_where($sql)
+	{
+		if ($this->__parts[self::FROM] && $this->__parts[self::WHERE]) {
+			$sql .= ' ' . self::SQL_WHERE . ' ' . implode(' ', $this->__parts[self::WHERE]);	
+		}
+
+		return $sql;
+	}
+
+	// }}}
+	// {{{ protected function _render_group()
+
+	/**
+	 * 拼装 GROUP 子句 
+	 * 
+	 * @param string $sql 
+	 * @access protected
+	 * @return string
+	 */
+	protected function _render_group($sql)
+	{
+		if ($this->__parts[self::FROM] && $this->__parts[self::GROUP]) {
+			$group = array();
+			foreach ($this->__parts[self::GROUP] as $term) {
+				$group[] = $this->__adapter->quote_indentifier($term, true);	
+			}
+			$sql .= ' ' . self::SQL_GROUP_BY . ' ' . implode(",\n\t", $group);
+		}
+
+		return $sql;
+	}
+
+	// }}}
+	// {{{ protected function _render_having()
+
+	/**
+	 * _render_having 
+	 * 
+	 * @param mixed $sql 
+	 * @access protected
+	 * @return void
+	 */
+	protected function _render_having($sql)
+	{
+		
 	}
 
 	// }}}

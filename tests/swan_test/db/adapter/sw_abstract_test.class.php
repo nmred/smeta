@@ -260,7 +260,7 @@ class sw_abstract_test extends sw_test
 
 		$str = 'user';
 		$rev = $this->__db->quote_table_as($str, null, true);
-		$this->assertEquals('user', $rev);
+		$this->assertEquals('`user`', $rev);
 	}
 
 	// }}}

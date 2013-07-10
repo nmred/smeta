@@ -160,5 +160,46 @@ class sw_select extends sw_mock_select
 	}
 
 	// }}}
+	// {{{ public function mock_get_quoted_schema()
+
+	/**
+	 * mock_get_quoted_schema 
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function mock_get_quoted_schema($schema = null)
+	{
+		return $this->_get_quoted_schema($schema);
+	}
+
+	// }}}
+	// {{{ public function mock_get_quoted_table()
+
+	/**
+	 * mock_get_quoted_table
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function mock_get_quoted_table($table_name, $correlation_name = null)
+	{
+		return $this->_get_quoted_table($table_name, $correlation_name);
+	}
+
+	// }}}
+	// {{{ public function mock_render_columns()
+
+	/**
+	 * mock_render_columns 
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function mock_render_columns($sql)
+	{
+		return $this->_render_columns($sql);
+	}
+
 	// }}}	
 }
