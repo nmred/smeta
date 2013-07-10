@@ -16,16 +16,16 @@ namespace lib\db\select;
 use lib\db\adapter\sw_abstract;
 use lib\db\sw_db_expr;
 use lib\db\select\exception\sw_exception;
- 
+
 /**
 +------------------------------------------------------------------------------
-* sw_select 
+* sw_select
 +------------------------------------------------------------------------------
-* 
-* @package 
+*
+* @package
 * @version $_SWANBR_VERSION_$
 * @copyright $_SWANBR_COPYRIGHT_$
-* @author $_SWANBR_AUTHOR_$ 
+* @author $_SWANBR_AUTHOR_$
 +------------------------------------------------------------------------------
 */
 class sw_select
@@ -73,16 +73,16 @@ class sw_select
 	// {{{ members
 
 	/**
-	 * lib\db\sw_abstract 对象 
-	 * 
+	 * lib\db\sw_abstract 对象
+	 *
 	 * @var object
 	 * @access protected
 	 */
 	protected $__adapter;
 
 	/**
-	 * 属性初始化数组 
-	 * 
+	 * 属性初始化数组
+	 *
 	 * 注意：
 	 * 在每次进行 SELECT 查询之前必须进行 self::$__parts 的初始化
 	 * 否则可能会有意想不到的错误，这对于 FRO_UPDATE 尤其重要
@@ -105,8 +105,8 @@ class sw_select
 	);
 
 	/**
-	 * 允许使用的 JOIN 类型 
-	 * 
+	 * 允许使用的 JOIN 类型
+	 *
 	 * @var array
 	 * @access protected
 	 */
@@ -116,36 +116,44 @@ class sw_select
 		self::RIGHT_JOIN,
 		self::FULL_JOIN,
 		self::CROSS_JOIN,
-		self::NATURAL_JOIN,	
+		self::NATURAL_JOIN,
 	);
 
 	/**
-	 * 允许使用 UNION 的类型 
-	 * 
+	 * 允许使用 UNION 的类型
+	 *
 	 * @var array
 	 * @access protected
 	 */
-	protected $__union_types = array(
+	protected static $__union_types = array(
 		self::SQL_UNION,
 		self::SQL_UNION_ALL,
 	);
 
 	/**
-	 * SELECT 查询的各个装饰部分 
-	 * 
+	 * SELECT 查询的各个装饰部分
+	 *
 	 * @var array
 	 * @access protected
 	 */
 	protected $parts = array();
+
+	/**
+	 *  查询绑定参数 
+	 * 
+	 * @var array
+	 * @access protected
+	 */
+	protected $__bind = array();
 
 	// }}}
 	// {{{ functions
 	// {{{ public function __construct()
 
 	/**
-	 * __construct 
-	 * 
-	 * @param \lib\db\adapter\sw_abstract $adapter 
+	 * __construct
+	 *
+	 * @param \lib\db\adapter\sw_abstract $adapter
 	 * @access public
 	 * @return void
 	 */
@@ -156,12 +164,43 @@ class sw_select
 	}
 
 	// }}}
+	// {{{ public function get_bind()
+
+	/**
+	 * 获取绑定的参数 
+	 * 
+	 * @access public
+	 * @return array
+	 */
+	public function get_bind()
+	{
+		return $this->__bind;
+	}
+
+	// }}}
+	// {{{ public function bind()
+
+	/**
+	 * 绑定参数 
+	 * 
+	 * @param array $bind 
+	 * @access public
+	 * @return sw_select
+	 */
+	public function bind($bind)
+	{
+		$this->__bind = $bind;
+
+		return $this;
+	}
+
+	// }}}
 	// {{{ public function distinct()
 
 	/**
-	 * 装饰 SELECT DISTINCT 查询 
-	 * 
-	 * @param boolean $flag 
+	 * 装饰 SELECT DISTINCT 查询
+	 *
+	 * @param boolean $flag
 	 * @access public
 	 * @return sw_select
 	 */
@@ -175,10 +214,10 @@ class sw_select
 	// {{{ public function columns()
 
 	/**
-	 * 处理查询的字段 
-	 * 
-	 * @param array|string|sw_db_expr $cols 
-	 * @param string $correlation_name 
+	 * 处理查询的字段
+	 *
+	 * @param array|string|sw_db_expr $cols
+	 * @param string $correlation_name
 	 * @access public
 	 * @return sw_select object
 	 */
@@ -189,7 +228,7 @@ class sw_select
 		}
 
 		if (!array_key_exists($correlation_name, $this->__parts[self::FROM])) {
-			throw new sw_exception("No table has been specified for the FROM clause");	
+			throw new sw_exception("No table has been specified for the FROM clause");
 		}
 
 		$this->_table_cols($correlation_name, $cols);
@@ -201,17 +240,453 @@ class sw_select
 	// {{{ public function from()
 
 	/**
-	 * 装饰 FROM 子句 
-	 * 
-	 * @param array|string|sw_db_expr $name 
-	 * @param array|string|sw_db_expr $cols 
-	 * @param string $schema 
+	 * 装饰 FROM 子句
+	 *
+	 * @param array|string|sw_db_expr $name
+	 * @param array|string|sw_db_expr $cols
+	 * @param string $schema
 	 * @access public
 	 * @return sw_select
 	 */
 	public function from($name, $cols = '*', $schema = null)
 	{
-		return $this->_join(self::FROM, $name, null, $cols, $schema);			
+		return $this->_join(self::FROM, $name, null, $cols, $schema);
+	}
+
+	// }}}
+	// {{{ public function union()
+
+	/**
+	 * 装饰 UNION 子句
+	 *
+	 * @param array $select 数组中的元素是 SQL 语句或 sw_select 对象
+	 * @param string $type
+	 * @access public
+	 * @return sw_select
+	 */
+	public function union($select = array(), $type = self::SQL_UNION)
+	{
+		if (!is_array($select)) {
+			throw new sw_exception('union() only accepts an array of sw_select instances of sql query strings.');
+		}
+
+		if (!in_array($type, self::$__union_types)) {
+			throw new sw_exception("Invalid union type '{$type}'");
+		}
+
+		foreach ($select as $target) {
+			$this->__parts[self::UNION][] = array($target, $type);
+		}
+
+		return $this;
+	}
+
+	// }}}
+	// {{{ public function join()
+
+	/**
+	 * 装饰 JOIN 子句
+	 *
+	 * @param array|string|sw_db_expr $name
+	 * @param string $cond
+	 * @param string|array $cols
+	 * @param string $schema
+	 * @access public
+	 * @return sw_select
+	 */
+	public function join($name, $cond, $cols = self::SQL_WILDCARD, $schema = null)
+	{
+		return $this->join_inner($name, $cond, $cols, $schema);
+	}
+
+	// }}}
+	// {{{ public function join_inner()
+
+	/**
+	 * 装饰 JOIN INNER子句
+	 *
+	 * @param array|string|sw_db_expr $name
+	 * @param string $cond
+	 * @param string|array $cols
+	 * @param string $schema
+	 * @access public
+	 * @return sw_select
+	 */
+	public function join_inner($name, $cond, $cols = self::SQL_WILDCARD, $schema = null)
+	{
+		return $this->_join(self::INNER_JOIN, $name, $cond, $cols, $schema);
+	}
+
+	// }}}
+	// {{{ public function join_left()
+
+	/**
+	 * 装饰 JOIN LEFT子句
+	 *
+	 * @param array|string|sw_db_expr $name
+	 * @param string $cond
+	 * @param string|array $cols
+	 * @param string $schema
+	 * @access public
+	 * @return sw_select
+	 */
+	public function join_left($name, $cond, $cols = self::SQL_WILDCARD, $schema = null)
+	{
+		return $this->_join(self::LEFT_JOIN, $name, $cond, $cols, $schema);
+	}
+
+	// }}}
+	// {{{ public function join_right()
+
+	/**
+	 * 装饰 JOIN RIGHT子句
+	 *
+	 * @param array|string|sw_db_expr $name
+	 * @param string $cond
+	 * @param string|array $cols
+	 * @param string $schema
+	 * @access public
+	 * @return sw_select
+	 */
+	public function join_right($name, $cond, $cols = self::SQL_WILDCARD, $schema = null)
+	{
+		return $this->_join(self::RIGHT_JOIN, $name, $cond, $cols, $schema);
+	}
+
+	// }}}
+	// {{{ public function join_full()
+
+	/**
+	 * 装饰 JOIN FULL子句
+	 *
+	 * @param array|string|sw_db_expr $name
+	 * @param string $cond
+	 * @param string|array $cols
+	 * @param string $schema
+	 * @access public
+	 * @return sw_select
+	 */
+	public function join_full($name, $cond, $cols = self::SQL_WILDCARD, $schema = null)
+	{
+		return $this->_join(self::FULL_JOIN, $name, $cond, $cols, $schema);
+	}
+
+	// }}}
+	// {{{ public function join_cross()
+
+	/**
+	 * 装饰 JOIN CROSS子句
+	 *
+	 * @param array|string|sw_db_expr $name
+	 * @param string $cond
+	 * @param string|array $cols
+	 * @param string $schema
+	 * @access public
+	 * @return sw_select
+	 */
+	public function join_cross($name, $cond, $cols = self::SQL_WILDCARD, $schema = null)
+	{
+		return $this->_join(self::CROSS_JOIN, $name, $cond, $cols, $schema);
+	}
+
+	// }}}
+	// {{{ public function join_natural()
+
+	/**
+	 * 装饰 JOIN NATURAL子句
+	 *
+	 * @param array|string|sw_db_expr $name
+	 * @param string $cond
+	 * @param string|array $cols
+	 * @param string $schema
+	 * @access public
+	 * @return sw_select
+	 */
+	public function join_natural($name, $cond, $cols = self::SQL_WILDCARD, $schema = null)
+	{
+		return $this->_join(self::NATURAL_JOIN, $name, $cond, $cols, $schema);
+	}
+
+	// }}}
+	// {{{ public function where()
+
+	/**
+	 * 装饰 WHERE 子句
+	 *
+	 * <code>
+	 * // simplest but non-secure
+	 * $select->where("id = $id");
+	 *
+	 * // secure (ID is quoted but matched anyway)
+	 * $select->where('id = ?', $id);
+	 *
+	 * // alternatively, with named binding
+	 * $select->where('id = :id');
+	 * </code>
+	 *
+	 * Note that it is more correct to use named bindings in your
+	 * queries for values other than strings. When you use named
+	 * bindings, don't forget to pass the values when actually
+	 * making a query:
+	 *
+	 * <code>
+	 * $db->fetch_all($select, array('id' => 5));
+	 * </code>
+	 * @param string $cond  WHERE 条件
+	 * @param mixed $value
+	 * @param int $type 调用quote的类型参数 sw_db::INT_TYPE ....
+	 * @access public
+	 * @return sw_select
+	 */
+	public function where($cond, $value = null, $type = null)
+	{
+		$this->__parts[self::WHERE][] = $this->_where($cond, $value, $type, true);
+
+		return $this;
+	}
+
+	// }}}
+	// {{{ public function or_where()
+
+	/**
+	 * 装饰 OR WHERE 子句
+	 *
+	 * @param string $cond  WHERE 条件
+	 * @param mixed $value
+	 * @param int $type 调用quote的类型参数 sw_db::INT_TYPE ....
+	 * @access public
+	 * @return sw_select
+	 */
+	public function or_where($cond, $value = null, $type = null)
+	{
+		$this->__parts[self::WHERE][] = $this->_where($cond, $value, $type, false);
+
+		return $this;
+	}
+
+	// }}}
+	// {{{ public function group()
+
+	/**
+	 * 装饰 GROUP 子句
+	 *
+	 * @param array|string $spec
+	 * @access public
+	 * @return sw_select
+	 */
+	public function group($spec)
+	{
+		if (!is_array($spec)) {
+			$spec = array($spec);
+		}
+
+		foreach ($spec as $val) {
+			if (preg_match('/\(.*\)/', (string) $val)) {
+				$val = new sw_db_expr($val);
+			}
+
+			$this->__parts[self::GROUP][] = $val;
+		}
+
+		return $this;
+	}
+
+	// }}}
+	// {{{ public function having()
+
+	/**
+	 * 装饰 HAVING 条件子句 
+	 * 
+	 * @param string $cond 
+	 * @param mixed $value 
+	 * @param int $type 
+	 * @access public
+	 * @return sw_select
+	 */
+	public function having($cond, $value = null, $type = null)
+	{
+		if (null !== $value) {
+			$cond = $this->__adapter->quote_into($cond, $value, $type);
+		}
+
+		if ($this->__parts[self::HAVING]) {
+			$this->__parts[self::HAVING][] = self::SQL_AND . " ($cond)";	
+		} else {
+			$this->__parts[self::HAVING][] = "($cond)";	
+		}
+
+		return $this;
+	}
+
+	// }}}
+	// {{{ public function or_having()
+
+	/**
+	 * 装饰 OR HAVING 条件子句 
+	 * 
+	 * @param string $cond 
+	 * @param mixed $value 
+	 * @param int $type 
+	 * @access public
+	 * @return sw_select
+	 */
+	public function or_having($cond, $value = null, $type = null)
+	{
+		if (null !== $value) {
+			$cond = $this->__adapter->quote_into($cond, $value, $type);
+		}
+
+		if ($this->__parts[self::HAVING]) {
+			$this->__parts[self::HAVING][] = self::SQL_OR . " ($cond)";	
+		} else {
+			$this->__parts[self::HAVING][] = "($cond)";	
+		}
+
+		return $this;
+	}
+
+	// }}}
+	// {{{ public function order()
+
+	/**
+	 * 装饰 ORDER 子句 
+	 * 
+	 * @param string|array $spec 
+	 * @access public
+	 * @return void
+	 */
+	public function order($spec)
+	{
+		if (!is_array($spec)) {
+			$spec = array($spec);
+		}
+
+		// 强制 'ASC' 或 'DESC' , 默认是 ASC
+		foreach ($spec as $val) {
+			if ($val instanceof sw_db_expr) {
+				$expr = $val->__toString();
+				if (empty($expr)) {
+					continue;	
+				}
+				$this->__parts[self::ORDER][] = $val;
+			} else {
+				if (empty($val)) {
+					continue;	
+				}
+
+				$direction = self::SQL_ASC;
+				if (preg_match('/(.*\W)(' . self::SQL_ASC . '|' . self::SQL_DESC . ')\b/si', $val, $matches)) {
+					$val = trim($matches[1]);
+					$direction = $matches[2];	
+				}
+				if (preg_match('/\(.*\)/', $val)) {
+					$val = new sw_db_expr($val);	
+				}
+				$this->__parts[self::ORDER][] = array($val, $direction);
+			}
+		}
+
+		return $this;
+	}
+
+	// }}}
+	// {{{ public function limit()
+
+	/**
+	 * 装饰 LIMIT 子句 
+	 * 
+	 * @param int $count 
+	 * @param int $offset 
+	 * @access public
+	 * @return sw_select
+	 */
+	public function limit($count = null, $offset = null)
+	{
+		$this->__parts[self::LIMIT_COUNT]  = (int) $count;
+		$this->__parts[self::LIMIT_OFFSET] = (int) $offset;
+		return $this;
+	}
+
+	// }}}
+	// {{{ public function limit_page()
+
+	/**
+	 * 装饰 分页方式的 LIMIT 子句 
+	 * 
+	 * @access public
+	 * @return sw_select
+	 */
+	public function limit_page($page, $row_count)
+	{
+		$page      = ($page > 0) ? $page : 1;
+		$row_count = ($row_count > 0) ? $row_count : 1;
+
+		$this->__parts[self::LIMIT_COUNT]  = (int) $page;
+		$this->__parts[self::LIMIT_OFFSET] = (int) $row_count;
+
+		return $this;
+	}
+
+	// }}}
+	// {{{ public function for_update()
+
+	/**
+	 * 装饰 FOR UPDATE 子句 
+	 * 
+	 * @param boolean $flag 
+	 * @access public
+	 * @return sw_select
+	 */
+	public function for_update($flag = true)
+	{
+		$this->__parts[self::FOR_UPDATE] = (bool) $flag;
+		return $this;	
+	}
+
+	// }}}
+	// {{{ public function get_part()
+
+	/**
+	 * 返回当前查询的子句 
+	 * 
+	 * @param string $part 
+	 * @access public
+	 * @return mixed
+	 */
+	public function get_part($part)
+	{
+		$part = strtolower($part);
+		if (!array_key_exists($part, $this->__parts)) {
+			throw new sw_exception("Invalid Select part '$part'");	
+		}
+
+		return $this->__parts[$part];
+	}
+
+	// }}}
+	// {{{ public function query()
+
+	/**
+	 * 执行查询 
+	 * 
+	 * @param integer $fetch_mode 
+	 * @param array $bind 
+	 * @access public
+	 * @return PDO_Statement|\lib\statement\sw_standard
+	 */
+	public function query($fetch_mode = null, $bind = array())
+	{
+		if (!empty($bind)) {
+			$this->bind($bind);	
+		}
+
+		$stmt = $this->__adapter->query($this);
+		if ($fetch_mode == null) {
+			$fetch_mode = $this->__adapter->get_fetch_mode();	
+		}
+
+		$stmt->set_fetch_mode($fetch_mode);
+		return $stmt;
 	}
 
 	// }}}
@@ -219,7 +694,7 @@ class sw_select
 
 	/**
 	 * 获取 \lib\db\adapter\sw_abstract
-	 * 
+	 *
 	 * @access public
 	 * @return void
 	 */
@@ -229,13 +704,77 @@ class sw_select
 	}
 
 	// }}}
+	// {{{ public function assemble()
+
+	/**
+	 * 将该对象转化为 SQL 语句 
+	 * 
+	 * @access public
+	 * @return string|null
+	 */
+	public function assemble()
+	{
+		$sql = self::SQL_SELECT;
+		foreach (array_keys(self::$__parts_init) as $part) {
+			$method = '_render_' . strtolower($part);
+			if (method_exists($this, $method)) {
+				$sql = $this->$method($sql);	
+			}
+		}
+
+		return $sql;
+	}
+
+	// }}}
+	// {{{ public function reset()
+
+	/**
+	 * 重置 part 的设置 
+	 * 
+	 * @param string part 
+	 * @access public
+	 * @return sw_select
+	 */
+	public function reset($part = null)
+	{
+		if ($part == null) {
+			$this->__parts = self::$__parts_init;	
+		} else if (array_key_exists($part, self::$__parts_init)) {
+			$this->__parts[$part] = self::$__parts_init[$part];	
+		}
+
+		return $this;
+	}
+
+	// }}}
+	// {{{ public function __toString()
+
+	/**
+	 * __toString
+	 *
+	 * @access public
+	 * @return string
+	 */
+	public function __toString()
+	{
+		try {
+			$sql = $this->assemble();
+		} catch (sw_exception $e) {
+			trigger_error($e->getMessage(), E_USER_WARNING);
+			$sql = '';
+		}
+
+		return (string) $sql;
+	}
+
+	// }}}
 	// {{{ protected function _join()
 
 	/**
-	 * 装饰 JOIN 
-	 * 
+	 * 装饰 JOIN
+	 *
 	 * @param null|string $type 指定类型
-	 * @param array|string|sw_db_expr $name 指定表名 
+	 * @param array|string|sw_db_expr $name 指定表名
 	 * @param string $cond 指定 JOIN 的条件
 	 * @param array|string $cols 指定查询字段
 	 * @param string $schema 指定数据库名称
@@ -245,11 +784,11 @@ class sw_select
 	protected function _join($type, $name, $cond, $cols, $schema = null)
 	{
 		if (!in_array($type, self::$__join_types) && $type !== self::FROM) {
-			throw new sw_exception("Invalid join type '$type'");	
+			throw new sw_exception("Invalid join type '$type'");
 		}
 
 		if (count($this->__parts[self::UNION])) {
-			throw new sw_exception("Invalid use of table with " . self::SQL_UNION);	
+			throw new sw_exception("Invalid use of table with " . self::SQL_UNION);
 		}
 
 		if (empty($name)) {
@@ -260,7 +799,7 @@ class sw_select
 				if (is_string($_correlation_name)) {
 					// 在 name的结构中假设 key是表别名， value是表名称
 					$table_name = $_table_name;
-					$correlation_name = $_correlation_name;	
+					$correlation_name = $_correlation_name;
 				} else {
 					$table_name = $_table_name;
 					$correlation_name = $this->_unique_correlation($table_name);
@@ -269,18 +808,18 @@ class sw_select
 			}
 		} else if ($name instanceof sw_db_expr || $name instanceof sw_select) {
 			$table_name = $name;
-			$correlation_name = $this->_unique_correlation('t');	
+			$correlation_name = $this->_unique_correlation('t');
 		} else if (preg_match('/^(.+)\s+AS\s+(.+)$/i', $name, $m)) {
 			$table_name = $m[1];
-			$correlation_name = $m[2];	
+			$correlation_name = $m[2];
 		} else {
 			$table_name = $name;
-			$correlation_name = $this->_unique_correlation($table_name);	
+			$correlation_name = $this->_unique_correlation($table_name);
 		}
 
 		// 处理带有数据库名称的
 		if (!is_object($table_name) && false !== strpos($table_name, '.')) {
-			list($schema, $table_name) = explode('.', $table_name);	
+			list($schema, $table_name) = explode('.', $table_name);
 		}
 
 		$last_from_correlation_name = null;
@@ -293,18 +832,18 @@ class sw_select
 				// 将 from 类型的追加到 self::FROM 的 from类型最后
 				$tmp_from_parts = $this->__parts[self::FROM];
 				$this->__parts[self::FROM] = array();
-				
+
 				// 移动所有的 FROM 栈
 				while($tmp_from_parts) {
 					$current_correlation_name = key($tmp_from_parts);
 					if ($tmp_from_parts[$current_correlation_name]['join_type'] != self::FROM) {
-						break;	
+						break;
 					}
 					$last_from_correlation_name = $current_correlation_name;
 					$this->__parts[self::FROM][$current_correlation_name] = array_shift($tmp_from_parts);
-				}	
+				}
 			} else {
-				$tmp_from_parts = array();	
+				$tmp_from_parts = array();
 			}
 
 			$this->__parts[self::FROM][$correlation_name] = array(
@@ -322,7 +861,7 @@ class sw_select
 
 		// 添加查询字段
 		if (self::FROM === $type && $last_from_correlation_name == null) {
-			$last_from_correlation_name = true; // 一定要保证 from 类型的字段在最前面	
+			$last_from_correlation_name = true; // 一定要保证 from 类型的字段在最前面
 		}
 
 		$this->_table_cols($correlation_name, $cols, $last_from_correlation_name);
@@ -334,9 +873,9 @@ class sw_select
 
 	/**
 	 * 添加内部的 table-to-column MAP 对应关系
-	 * 
-	 * @param string $correlation_name 
-	 * @param string|array $cols 
+	 *
+	 * @param string $correlation_name
+	 * @param string|array $cols
 	 * @param bool|string $after_correlation_name 如果是 true 将处理的新的字段添加到 sekf::$__parts[self::COLUMNS] 的最前面
 	 * 如果是字符串则插入到该子段的后面
 	 * @access protected
@@ -345,11 +884,11 @@ class sw_select
 	protected function _table_cols($correlation_name, $cols, $after_correlation_name = null)
 	{
 		if (!is_array($cols)) {
-			$cols = array($cols);	
-		}	
+			$cols = array($cols);
+		}
 
 		if ($correlation_name == null) {
-			$correlation_name = '';	
+			$correlation_name = '';
 		}
 
 		$column_values = array();
@@ -361,14 +900,14 @@ class sw_select
 				// 检查 column 是否是 "<column> AS <alias>" 形式，并且提取 alias 名称
 				if (preg_match('/^(.+)\s+' . self::SQL_AS . '\s+(.+)$/i', $col, $m)) {
 					$col = $m[1];
-					$alias = $m[2];	
+					$alias = $m[2];
 				}
 				// 检查 column 是否是 SQL 函数，如果是转化为 sw_db_expr
 				if (preg_match ('/\(.*\)/', $col)) {
-					$col = new sw_db_expr($col);	
+					$col = new sw_db_expr($col);
 				} elseif (preg_match('/(.+)\.(.+)/', $col, $m)) {
 					$current_correlation_name = $m[1];
-					$col = $m[2];	
+					$col = $m[2];
 				}
 			}
 			$column_values[] = array($current_correlation_name, $col, isset($alias) ? $alias : null);
@@ -379,24 +918,24 @@ class sw_select
 				$tmp_columns = $this->__parts[self::COLUMNS];
 				$this->__parts[self::COLUMNS] = array();
 			} else {
-				$tmp_columns = array();	
+				$tmp_columns = array();
 			}
 
 			if (is_string($after_correlation_name)) {
 				while ($tmp_columns) {
 					$this->__parts[self::COLUMNS][] = $current_column = array_shift($tmp_columns);
 					if ($current_column[0] == $after_correlation_name) {
-						break;	
-					}	
+						break;
+					}
 				}
 			}
 
 			foreach ($column_values as $column_value) {
-				array_push($this->__parts[self::COLUMNS], $column_value);	
+				array_push($this->__parts[self::COLUMNS], $column_value);
 			}
 
 			while ($tmp_columns) {
-				array_push($this->__parts[self::COLUMNS], array_shift($tmp_columns));	
+				array_push($this->__parts[self::COLUMNS], array_shift($tmp_columns));
 			}
 		}
 	}
@@ -405,9 +944,9 @@ class sw_select
 	// {{{ protected function _unique_correlation()
 
 	/**
-	 * 获取唯一的数据表别名 
-	 * 
-	 * @param string|array $name 
+	 * 获取唯一的数据表别名
+	 *
+	 * @param string|array $name
 	 * @access protected
 	 * @return string
 	 */
@@ -415,50 +954,55 @@ class sw_select
 	{
 		if (is_array($name)) {
 			$k = key($name);
-			$c = is_string($k) ? $k : end($name);	
+			$c = is_string($k) ? $k : end($name);
 			$name = $k;
 		} else {
 			$dot = strrpos($name, '.');
-			$c   = ($dot === false) ? $name : substr($name, $dot + 1);	
+			$c   = ($dot === false) ? $name : substr($name, $dot + 1);
 		}
 
 		for ($i = 2; array_key_exists($c, $this->__parts[self::FROM]); $i++) {
-			$c = $name . '_' . (string) $i;	
+			$c = $name . '_' . (string) $i;
 		}
 
 		return $c;
 	}
 
 	// }}}
-	// {{{ public function assemble()
-
-	public function assemble()
-	{
-		//todo
-		return 'test todo';	
-	}
-
-	// }}}
-	// {{{ public function __toString()
+	// {{{ protected function _where()
 
 	/**
-	 * __toString 
-	 * 
-	 * @access public
+	 * 装饰 WHERE 子句
+	 *
+	 * @param string $condition
+	 * @param mixed $where
+	 * @param string $type
+	 * @param boolean $bool
+	 * @access protected
 	 * @return string
 	 */
-	public function __toString()
+	protected function _where($condition, $value = null, $type = null, $bool = null)
 	{
-		try {
-			$sql = $this->assemble();	
-		} catch (sw_exception $e) {
-			trigger_error($e->getMessage(), E_USER_WARNING);
-			$sql = '';	
+		if (count($this->__parts[self::UNION])) {
+			throw new sw_exception("Invalid use of where clause with " . self::SQL_UNION);
 		}
 
-		return (string) $sql;
+		if (null !== $value) {
+			$condition = $this->__adapter->quote_into($condition, $value, $type);
+		}
+
+		$cond = "";
+		if ($this->__parts[self::WHERE]) {
+			if (true === $bool) {
+				$cond = self::SQL_AND . ' ';
+			} else {
+				$cond = self::SQL_OR . ' ';
+			}
+		}
+
+		return $cond . "($condition)";
 	}
 
 	// }}}
-	// }}}	
+	// }}}
 }

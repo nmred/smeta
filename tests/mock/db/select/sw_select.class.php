@@ -142,5 +142,23 @@ class sw_select extends sw_mock_select
 	}
 
 	// }}}
+	// {{{ public function mock_where()
+
+	/**
+	 * mock_where 
+	 * 
+	 * @param mixed $condition 
+	 * @param mixed $value 
+	 * @param mixed $type 
+	 * @param mixed $bool 
+	 * @access public
+	 * @return void
+	 */
+	public function mock_where($condition, $value = null, $type = null, $bool = true)
+	{
+		return $this->_where($condition, $value, $type, $bool);
+	}
+
+	// }}}
 	// }}}	
 }

@@ -115,6 +115,25 @@ class sw_select_test extends sw_test
 	}
 
 	// }}}
+	// {{{ public function test_bind()
+
+	/**
+	 * test_bind 
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function test_bind()
+	{
+		$mock = new sw_select($this->__db);
+		
+		// 1
+		$mock->bind(array('test'));
+		$rev = $mock->get_bind();
+		$this->assertEquals(array('test'), $rev);
+	}
+
+	// }}}
 	// {{{ public function test_get_adapter()
 
 	/**
@@ -176,6 +195,262 @@ class sw_select_test extends sw_test
 			array('user', 'name', null),
 		);
 		$this->assertEquals($expect, $rev[self::COLUMNS]);
+	}
+
+	// }}}
+	// {{{ public function test_from()
+
+	/**
+	 * test_from 
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function test_from()
+	{
+		$mock = new sw_select($this->__db);
+		$mock->init_parts();
+		$mock->from(array('user', 'group'), array('name', 'id'));
+		$rev = $mock->get_parts();
+		$expect_column = array(
+			array('user', 'name', null),
+			array('user', 'id', null),
+		);
+		$expect_from = array(
+			'user' => array(
+				'join_type'      => self::FROM,
+				'schema'         => null,
+				'table_name'     => 'user',
+				'join_condition' => null,
+			),
+		);
+		$this->assertEquals($expect_column, $rev[self::COLUMNS]);
+		$this->assertEquals($expect_from, $rev[self::FROM]);
+	}
+
+	// }}}
+	// {{{ public function test_union()
+
+	/**
+	 * test_union 
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function test_union()
+	{
+		$mock = new sw_select($this->__db);
+		$mock->init_parts();
+		$select = array('select * from unit_host');
+		$mock->union($select);
+		$rev = $mock->get_parts();
+		$expect = array(
+			array(
+				'select * from unit_host',
+				self::SQL_UNION,	
+			),
+		);
+		$this->assertEquals($expect, $rev[self::UNION]);
+
+		$mock->init_parts();
+		$select = 'select * from unit_host';
+		try {
+			$mock->union($select);
+			$rev = $mock->get_parts();
+		} catch (sw_exception $e) {
+			$this->assertContains('union() only accepts an array of sw_select', $e->getMessage());		
+		}
+
+		$mock->init_parts();
+		$select = array('select * from unit_host');
+		try {
+			$mock->union($select, 'invalid type');
+			$rev = $mock->get_parts();
+		} catch (sw_exception $e) {
+			$this->assertContains('Invalid union type', $e->getMessage());		
+		}
+	}
+
+	// }}}
+	// {{{ public function test_join()
+
+	/**
+	 * test_join 
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function test_join()
+	{
+		$mock = new sw_select($this->__db);
+		$mock->init_parts();
+		$mock->join(array('user'), 'user.id = group.id');
+		$rev = $mock->get_parts();
+		$expect_from = array(
+			'user' => array(
+				'join_type'      => self::INNER_JOIN,
+				'schema'         => null,
+				'table_name'     => 'user',
+				'join_condition' => 'user.id = group.id',
+			),
+		);
+		$this->assertEquals($expect_from, $rev[self::FROM]);
+	}
+
+	// }}}
+	// {{{ public function test_join_inner()
+
+	/**
+	 * test_join_inner
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function test_join_inner()
+	{
+		$mock = new sw_select($this->__db);
+		$mock->init_parts();
+		$mock->join_inner(array('user'), 'user.id = group.id');
+		$rev = $mock->get_parts();
+		$expect_from = array(
+			'user' => array(
+				'join_type'      => self::INNER_JOIN,
+				'schema'         => null,
+				'table_name'     => 'user',
+				'join_condition' => 'user.id = group.id',
+			),
+		);
+		$this->assertEquals($expect_from, $rev[self::FROM]);
+	}
+
+	// }}}
+	// {{{ public function test_join_left()
+
+	/**
+	 * test_join_left
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function test_join_left()
+	{
+		$mock = new sw_select($this->__db);
+		$mock->init_parts();
+		$mock->join_left(array('user'), 'user.id = group.id');
+		$rev = $mock->get_parts();
+		$expect_from = array(
+			'user' => array(
+				'join_type'      => self::LEFT_JOIN,
+				'schema'         => null,
+				'table_name'     => 'user',
+				'join_condition' => 'user.id = group.id',
+			),
+		);
+		$this->assertEquals($expect_from, $rev[self::FROM]);
+	}
+
+	// }}}
+	// {{{ public function test_join_right()
+
+	/**
+	 * test_join_right
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function test_join_right()
+	{
+		$mock = new sw_select($this->__db);
+		$mock->init_parts();
+		$mock->join_right(array('user'), 'user.id = group.id');
+		$rev = $mock->get_parts();
+		$expect_from = array(
+			'user' => array(
+				'join_type'      => self::RIGHT_JOIN,
+				'schema'         => null,
+				'table_name'     => 'user',
+				'join_condition' => 'user.id = group.id',
+			),
+		);
+		$this->assertEquals($expect_from, $rev[self::FROM]);
+	}
+
+	// }}}
+	// {{{ public function test_join_full()
+
+	/**
+	 * test_join_full
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function test_join_full()
+	{
+		$mock = new sw_select($this->__db);
+		$mock->init_parts();
+		$mock->join_full(array('user'), 'user.id = group.id');
+		$rev = $mock->get_parts();
+		$expect_from = array(
+			'user' => array(
+				'join_type'      => self::FULL_JOIN,
+				'schema'         => null,
+				'table_name'     => 'user',
+				'join_condition' => 'user.id = group.id',
+			),
+		);
+		$this->assertEquals($expect_from, $rev[self::FROM]);
+	}
+
+	// }}}
+	// {{{ public function test_join_cross()
+
+	/**
+	 * test_join_cross
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function test_join_cross()
+	{
+		$mock = new sw_select($this->__db);
+		$mock->init_parts();
+		$mock->join_cross(array('user'), 'user.id = group.id');
+		$rev = $mock->get_parts();
+		$expect_from = array(
+			'user' => array(
+				'join_type'      => self::CROSS_JOIN,
+				'schema'         => null,
+				'table_name'     => 'user',
+				'join_condition' => 'user.id = group.id',
+			),
+		);
+		$this->assertEquals($expect_from, $rev[self::FROM]);
+	}
+
+	// }}}
+	// {{{ public function test_join_natural()
+
+	/**
+	 * test_join_natural
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function test_join_natural()
+	{
+		$mock = new sw_select($this->__db);
+		$mock->init_parts();
+		$mock->join_natural(array('user'), 'user.id = group.id');
+		$rev = $mock->get_parts();
+		$expect_from = array(
+			'user' => array(
+				'join_type'      => self::NATURAL_JOIN,
+				'schema'         => null,
+				'table_name'     => 'user',
+				'join_condition' => 'user.id = group.id',
+			),
+		);
+		$this->assertEquals($expect_from, $rev[self::FROM]);
 	}
 
 	// }}}
@@ -468,6 +743,325 @@ class sw_select_test extends sw_test
 			),
 		);
 		$this->assertEquals($expect_from, $rev[self::FROM]);
+	}
+
+	// }}}
+	// {{{ public function test__where()
+
+	/**
+	 * test__where 
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function test__where()
+	{
+		$mock = new sw_select($this->__db);
+		// 1
+		$mock->set_parts(self::UNION, array('test union'));
+		try {
+			$mock->mock_where('name > ?', 2);	
+		} catch (sw_exception $e) {
+			$this->assertContains('Invalid use of where clause with', $e->getMessage());	
+		}
+
+		// 2
+		$mock->init_parts();
+		$rev = $mock->mock_where('name > ?', 'test');
+		$this->assertEquals('(name > \'test\')', $rev);
+
+		// 3
+		$mock->init_parts();
+		$rev = $mock->mock_where('name > 3');
+		$this->assertEquals('(name > 3)', $rev);
+
+		// 4
+		$mock->set_parts(self::WHERE, array('(id > 2)'));
+		$rev = $mock->mock_where('name > 3');
+		$this->assertEquals('AND (name > 3)', $rev);
+	}
+
+	// }}}
+	// {{{ public function test_where()
+
+	/**
+	 * where 
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function test_where()
+	{
+		$mock = new sw_select($this->__db);
+		// 1
+		$mock->init_parts();
+		$mock->where('name > ?', 'test');
+		$mock->where('name > 3');
+		$expect = array(
+			'(name > \'test\')',
+			'AND (name > 3)',
+		);
+		$rev = $mock->get_parts();
+		$this->assertEquals($expect, $rev[self::WHERE]);
+	}
+
+	// }}}
+	// {{{ public function test_or_where()
+
+	/**
+	 * or_where 
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function test_where_or()
+	{
+		$mock = new sw_select($this->__db);
+		// 1
+		$mock->init_parts();
+		$mock->or_where('name > ?', 'test');
+		$mock->or_where('name > 3');
+		$expect = array(
+			'(name > \'test\')',
+			'OR (name > 3)',
+		);
+		$rev = $mock->get_parts();
+		$this->assertEquals($expect, $rev[self::WHERE]);
+	}
+
+	// }}}
+	// {{{ public function test_group()
+
+	/**
+	 * test_group 
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function test_group()
+	{
+		$mock = new sw_select($this->__db);
+		// 1
+		$mock->init_parts();
+		$group = array(
+			'user',
+		);
+		$mock->group($group);
+		$rev = $mock->get_parts();
+		$this->assertEquals(array('user'), $rev[self::GROUP]);
+
+		$mock->init_parts();
+		$group = array(
+			'(id = id + 1)',
+		);
+		$mock->group($group);
+		$rev = $mock->get_parts();
+		$this->assertInstanceOf('\lib\db\sw_db_expr', $rev[self::GROUP][0]);
+	}
+
+	// }}}
+	// {{{ public function test_having()
+
+	/**
+	 * having
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function test_having()
+	{
+		$mock = new sw_select($this->__db);
+		// 1
+		$mock->init_parts();
+		$mock->having('name > ?', 'test');
+		$mock->having('name > 3');
+		$expect = array(
+			'(name > \'test\')',
+			'AND (name > 3)',
+		);
+		$rev = $mock->get_parts();
+		$this->assertEquals($expect, $rev[self::HAVING]);
+	}
+
+	// }}}
+	// {{{ public function test_or_having()
+
+	/**
+	 * or_having 
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function test_or_having()
+	{
+		$mock = new sw_select($this->__db);
+		// 1
+		$mock->init_parts();
+		$mock->or_having('name > ?', 'test');
+		$mock->or_having('name > 3');
+		$expect = array(
+			'(name > \'test\')',
+			'OR (name > 3)',
+		);
+		$rev = $mock->get_parts();
+		$this->assertEquals($expect, $rev[self::HAVING]);
+	}
+
+	// }}}
+	// {{{ public function test_order()
+
+	/**
+	 * test_order 
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function test_order()
+	{
+		$mock = new sw_select($this->__db);
+		// 1
+		$mock->init_parts();
+		$order = array(
+			'name',
+		);
+		$mock->order($order);
+		$rev = $mock->get_parts();
+		$this->assertEquals(array(array('name', self::SQL_ASC)), $rev[self::ORDER]);
+
+		// 2
+		$mock->init_parts();
+		$order = array(
+			'(id = id + 1)',
+		);
+		$mock->order($order);
+		$rev = $mock->get_parts();
+		$this->assertInstanceOf('\lib\db\sw_db_expr', $rev[self::ORDER][0][0]);
+	}
+
+	// }}}
+	// {{{ public function test_limit()
+
+	/**
+	 * test_limit 
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function test_limit()
+	{
+		$mock = new sw_select($this->__db);
+		$mock->limit(1, 20);
+		$rev = $mock->get_parts();
+		$this->assertEquals(1, $rev[self::LIMIT_COUNT]);
+		$this->assertEquals(20, $rev[self::LIMIT_OFFSET]);
+	}
+
+	// }}}
+	// {{{ public function test_limit_page()
+
+	/**
+	 * test_limit_page
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function test_limit_page()
+	{
+		$mock = new sw_select($this->__db);
+		$mock->limit_page(1, 20);
+		$rev = $mock->get_parts();
+		$this->assertEquals(1, $rev[self::LIMIT_COUNT]);
+		$this->assertEquals(20, $rev[self::LIMIT_OFFSET]);
+	}
+
+	// }}}
+	// {{{ public function test_for_update()
+
+	/**
+	 * test_for_update 
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function test_for_update()
+	{
+		$mock = new sw_select($this->__db);
+		$mock->for_update(false);
+		$rev = $mock->get_parts();
+		$this->assertEquals(false, $rev[self::FOR_UPDATE]);
+	}
+
+	// }}}
+	// {{{ public function test_get_part()
+
+	/**
+	 * 获取子句 
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function test_get_part()
+	{
+		$mock = new sw_select($this->__db);
+		
+		// 1
+		$mock->set_parts(self::FROM, array('test'));
+		$rev = $mock->get_part(self::FROM);
+		$this->assertEquals(array('test'), $rev);
+
+		// 2
+		try {
+			$mock->get_part('invalid');	
+		} catch (sw_exception $e) {
+			$this->assertContains('Invalid Select part', $e->getMessage());	
+		}
+	}
+
+	// }}}
+	// {{{ public function test_query()
+	
+	/**
+	 * test_query 
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function test_query()
+	{
+		
+	}
+	 
+	// }}}
+	// {{{ public function test_assemble()
+
+	/**
+	 * test_assemble 
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function test_assemble()
+	{
+	}
+
+	// }}}
+	// {{{ public function test_reset()
+
+	/**
+	 * test_reset 
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function test_reset()
+	{
+		$mock = new sw_select($this->__db);
+
+		$mock->set_parts(self::FROM, array('test'));
+		$mock->reset(self::FROM);
+
+		$rev = $mock->get_part(self::FROM);
+		$this->assertEquals(array(), $rev);
 	}
 
 	// }}}
