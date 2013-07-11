@@ -1,0 +1,6 @@
+[submodule "sf"]
+	path = sf
+	url = git@github.com:nmred/sf1.git
+[submodule "src/sf"]
+	path = src/sf
+	url = git@github.com:nmred/sf1.git
