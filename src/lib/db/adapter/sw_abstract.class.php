@@ -19,6 +19,7 @@ use lib\db\profiler\sw_profiler;
 use lib\db\select\sw_select;
 use lib\db\sw_db_expr;
 use lib\db\adapter\exception\sw_exception;
+use PDO;
 
 /**
 +------------------------------------------------------------------------------
@@ -96,6 +97,14 @@ abstract class sw_abstract
 	 * @access protected
 	 */
 	protected $__default_stmt_class = 'lib\db\statement\sw_standard';
+
+	/**
+	 * 遍历结果集的模式 
+	 * 
+	 * @var int
+	 * @access protected
+	 */
+	protected $__fetch_mode = \PDO::FETCH_ASSOC;
 
 	/**
 	 * 是否自动添加表识符 
@@ -210,6 +219,51 @@ abstract class sw_abstract
 	}
 
 	// }}}
+	// {{{ public function get_fetch_mode()
+
+	/**
+	 * 获取结果集的遍历模式 
+	 * 
+	 * @access public
+	 * @return int
+	 */
+	public function get_fetch_mode()
+	{
+		return $this->__fetch_mode;	
+	}
+
+	// }}}
+	// {{{ public function set_fetch_mode()
+
+	/**
+	 * 设置遍历结果集的模式 
+	 * 
+	 * @param int $mode 
+	 * @access public
+	 * @return void
+	 */
+	public function set_fetch_mode($mode)
+	{
+		if (!extension_loaded('pdo')) {
+			throw new sw_exception('The PDO extension is required for this adapter but the extension is not loaded');	
+		}
+
+		switch ($mode) {
+			case PDO::FETCH_LAZY:
+			case PDO::FETCH_ASSOC:
+			case PDO::FETCH_NUM:
+			case PDO::FETCH_BOTH:
+			case PDO::FETCH_NAMED:
+			case PDO::FETCH_OBJ:
+				$this->__fetch_mode = $mode;
+				break;
+			default:
+				throw new sw_exception("Invalid fetch mode '$mode' specified");
+				break;	
+		}
+	}
+
+	// }}}
 	// {{{ public function get_connection()
 	
 	/**
@@ -252,6 +306,60 @@ abstract class sw_abstract
 		$this->__connection = null;	
 	}
 
+	// }}}
+	// {{{ public function prepare()
+
+	/**
+	 * 预处理 
+	 * 
+	 * @param string $sql 
+	 * @access public
+	 * @return PDOStatement
+	 */
+	public function prepare($sql)
+	{
+		$this->_connect();
+		$stmt_class = $this->__default_stmt_class;
+
+		$stmt = new $stmt_class($this, $sql);
+		$stmt->set_fetch_mode($this->__fetch_mode);
+
+		return $stmt;
+	}
+
+	// }}}
+	// {{{ public function query()
+	
+	/**
+	 *  执行查询 
+	 * 
+	 * @param string|sw_select $sql 
+	 * @param array $bind 
+	 * @access public
+	 * @return \lib\db\statement\sw_standard
+	 */
+	public function query($sql, $bind = array())
+	{
+		$this->_connect();
+		if ($sql instanceof sw_select) {
+			if (empty($bind)) {
+				$bind = $sql->get_bind();	
+			}
+
+			$sql = $sql->assemble();
+		}
+
+		if (!is_array($bind)) {
+			$bind = array($bind);	
+		}
+
+		$stmt = $this->prepare($sql);
+		$stmt->execute($bind);
+		$stmt->set_fetch_mode($this->__fetch_mode);
+
+		return $stmt;
+	}
+	 
 	// }}}
 	// {{{ public function begin_transaction()
 

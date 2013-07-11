@@ -202,4 +202,89 @@ class sw_select extends sw_mock_select
 	}
 
 	// }}}	
+	// {{{ public function mock_render_from()
+
+	/**
+	 * mock_render_from 
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function mock_render_from($sql)
+	{
+		return $this->_render_from($sql);
+	}
+
+	// }}}	
+	// {{{ public function mock_render_union()
+
+	/**
+	 * mock_render_union 
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function mock_render_union($sql)
+	{
+		return $this->_render_union($sql);
+	}
+
+	// }}}	
+	// {{{ public function mock_render_where()
+
+	/**
+	 * mock_render_where 
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function mock_render_where($sql)
+	{
+		return $this->_render_where($sql);
+	}
+
+	// }}}	
+	// {{{ public function mock_render_group()
+
+	/**
+	 * mock_render_group 
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function mock_render_group($sql)
+	{
+		return $this->_render_group($sql);
+	}
+
+	// }}}	
+	// {{{ public function mock_render_having()
+
+	/**
+	 * mock_render_having 
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function mock_render_having($sql)
+	{
+		return $this->_render_having($sql);
+	}
+
+	// }}}	
+	// {{{ public function mock_render_order()
+
+	/**
+	 * mock_render_order 
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function mock_render_order($sql)
+	{
+		return $this->_render_order($sql);
+	}
+
+	// }}}	
+	// }}}
 }
