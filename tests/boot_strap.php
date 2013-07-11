@@ -30,7 +30,7 @@ require_once PATH_SWAN_LIB . 'loader/sw_standard_auto_loader.class.php';
 require_once PATH_SWAN_LIB . 'loader/sw_standard_auto_loader.class.php';
 $autoloader = new lib\loader\sw_standard_auto_loader(array(
     'namespaces' => array(
-        'lib' => PATH_SWAN_BASE,
+        'lib' => PATH_SWAN_SF,
 		'swan_test' => './',
 		'mock' => dirname(__FILE__),
     ),

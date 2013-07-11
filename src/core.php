@@ -26,7 +26,7 @@
 
 // {{{  绝对路劲
 define('PATH_SWAN_BASE', realpath(dirname(__FILE__)));
-    define('PATH_SWAN_LIB', PATH_SWAN_BASE . '/lib/');
+	define('PATH_SWAN_SF', PATH_SWAN_BASE . '/sf/');
     define('PATH_SWAN_HELP', PATH_SWAN_BASE . '/help/');
     define('PATH_SWAN_SHELL', PATH_SWAN_BASE . '/shell/');
     define('PATH_SWAN_TPL', PATH_SWAN_BASE . '/tpl/');
@@ -131,11 +131,15 @@ define('SWAN_TBN_PROJECT_ARCHIVE', 'project_archive');
 
 // }}}
 // {{{ autoload 管理
+// 引入 sf 框架
+
+require_once PATH_SWAN_SF . 'sf_core.php';
+define('PATH_SWAN_LIB', PATH_SF_LIB);
 
 require_once PATH_SWAN_LIB . 'loader/sw_standard_auto_loader.class.php';
 $autoloader = new lib\loader\sw_standard_auto_loader(array(
 	'namespaces' => array(
-		'lib' => PATH_SWAN_BASE,
+		'lib' => PATH_SWAN_SF,
 	),
 ));
 
