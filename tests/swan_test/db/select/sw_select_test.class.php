@@ -1142,5 +1142,221 @@ class sw_select_test extends sw_test
 	}
 
 	// }}}
+	// {{{ public function test__render_from()
+
+	/**
+	 * test__render_from 
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function test__render_from()
+	{
+		$mock = new sw_select($this->__db);
+
+		// 1
+		$rev = $mock->mock_render_from('select version();');
+		$this->assertEquals('select version();', $rev);
+
+		// 2
+		$mock->from('user AS U', array('id', 'name'));
+		$rev = $mock->mock_render_from('select `user`.`id`');
+		$this->assertEquals('select `user`.`id` FROM `user` AS `U`', $rev);
+
+		// 3
+		$mock->init_parts();
+		$mock->from('user AS U', array('id', 'name'))
+			 ->columns()
+			 ->join('group AS G', 'group.id = user.id');
+		$rev = $mock->mock_render_from('select `user`.`id`');
+		$this->assertEquals("select `user`.`id` FROM `user` AS `U`\n INNER JOIN `group` AS `G` ON group.id = user.id", $rev);
+	}
+
+	// }}}
+	// {{{ public function test__render_union()
+
+	/**
+	 * test__render_union 
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function test__render_union()
+	{
+		$mock = new sw_select($this->__db);
+		
+		// 1
+		$sw_select = $this->getMockBuilder('lib\db\select\sw_select')
+						  ->setConstructorArgs(array($this->__db))
+						  ->getMock();
+		$sw_select->expects($this->any())
+				  ->method('assemble')
+				  ->will($this->returnValue('user_id >= 1'));
+		$union = array(
+			$sw_select,
+			'select * from group',
+		);
+		$mock->union($union);
+		$rev = $mock->mock_render_union('select ');
+		$this->assertEquals('select user_id >= 1 UNION select * from group', $rev);
+	}
+
+	// }}}
+	// {{{ public function test__render_where()
+
+	/**
+	 * test__render_where 
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function test__render_where()
+	{
+		$mock = new sw_select($this->__db);
+		
+		$mock->from('user', array('id', 'name'));
+		$mock->where('id > ? ', '4')->where('name = ?', 'lily');
+		$rev = $mock->mock_render_where('select * from `user` ');
+		$this->assertEquals("select * from `user`  WHERE (id > '4' ) AND (name = 'lily')", $rev);	
+	}
+
+	// }}}
+	// {{{ public function test__render_group()
+
+	/**
+	 * test__render_group 
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function test__render_group()
+	{
+		$mock = new sw_select($this->__db);
+
+		// 1
+		$mock->from('foo', 'COUNT(id)');
+		$mock->group('bar');
+		$rev = $mock->mock_render_group(' ');
+		$this->assertEquals('  GROUP BY `bar`', $rev);
+
+		// 2
+		$mock->init_parts();
+		$mock->from('foo', 'COUNT(id)');
+		$mock->group(array('bar', 'baz'));
+		$rev = $mock->mock_render_group(' ');
+		$this->assertEquals("  GROUP BY `bar`,\n\t`baz`", $rev);
+	}
+
+	// }}}
+	// {{{ public function test__render_having()
+
+	/**
+	 * test__render_having 
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function test__render_having()
+	{
+		$mock = new sw_select($this->__db);
+
+		// 1
+		$mock->from('foo', 'COUNT(id)');
+		$mock->group('bar');
+		$mock->having('id > ? ', 2);
+		$rev = $mock->mock_render_having(' ');
+		$this->assertEquals('  HAVING (id > 2 )', $rev);
+	}
+
+	// }}}
+	// {{{ public function test__render_order()
+
+	/**
+	 * test__render_order 
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function test__render_order()
+	{
+		$mock = new sw_select($this->__db);
+
+		// 1
+		$mock->from('foo', 'COUNT(id)');
+		$mock->order('id');
+		$mock->order('name DESC');
+		$rev = $mock->mock_render_order(' ');
+		$this->assertEquals('  ORDER BY `id` ASC, `name` DESC', $rev);
+	}
+
+	// }}}
+	// {{{ public function test__render_limit()
+	
+	/**
+	 * test__render_limit 
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function test__render_limit()
+	{	
+	}
+
+	// }}} 
+	// {{{ public function test___call()
+
+	/**
+	 * test___call 
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function test___call()
+	{	
+		$mock = new sw_select($this->__db);
+
+		// 1
+		try {
+			$mock->join_xxx_using();	
+		} catch (sw_exception $e) {
+			$this->assertContains('Unrecognized method ', $e->getMessage());
+		}
+
+		// 2
+		try {
+			$mock->join_cross_using();	
+		} catch (sw_exception $e) {
+			$this->assertContains('Cannot perform a join_using with method', $e->getMessage());
+		}
+
+		// 3
+		try {
+			$mock->join_inner_using('table2', array('id', 'name'));	
+		} catch (sw_exception $e) {
+			$this->assertContains('You can only perform a joinUsing after specifying a FROM table', $e->getMessage());
+		}
+
+		// 4 
+		$mock->init_parts();
+		$mock->from('table1');
+		$mock->join_inner_using('table2', array('id', 'name'));
+		$expect = array(
+			'table1' => array(
+				'join_type'  => self::FROM,
+				'schema'     => null,
+				'table_name' => 'table1',
+				'join_condition' => null,
+			),
+			'table2' => array(
+				'join_type'  => self::INNER_JOIN,
+				'schema'     => null,
+				'table_name' => 'table2',
+				'join_condition' => '`table2`.id = `table1`.id AND `table2`.name = `table1`.name',
+			),
+		);
+		$this->assertEquals($expect, $mock->get_part(self::FROM));
+	}
+
+	// }}}
 	// }}}
 }

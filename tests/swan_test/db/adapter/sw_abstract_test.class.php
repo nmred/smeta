@@ -96,6 +96,45 @@ class sw_abstract_test extends sw_test
 	}
 
 	// }}}
+	// {{{ public function test_get_statement_class()
+
+	/**
+	 * test_get_statement_class 
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function test_get_statement_class()
+	{
+		$this->__db->set_statement_class('standard_class');
+		$rev = $this->__db->get_statement_class();
+		$this->assertEquals('standard_class', $rev);
+	}
+
+	// }}}
+	// {{{ public function test_get_fetch_mode()
+
+	/**
+	 * test_get_fetch_mode 
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function test_get_fetch_mode()
+	{
+		$this->__db->set_fetch_mode(\PDO::FETCH_ASSOC);
+		$rev = $this->__db->get_fetch_mode();
+		
+		$this->assertEquals(\PDO::FETCH_ASSOC, $rev);	
+
+		try {
+			$this->__db->set_fetch_mode('ww');	
+		} catch (sw_exception $e) {
+			$this->assertContains('Invalid fetch mode', $e->getMessage());	
+		}
+	}
+
+	// }}}
 	// {{{ public function test_is_connected()
 
 	/**

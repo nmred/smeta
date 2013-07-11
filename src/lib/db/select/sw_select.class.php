@@ -748,6 +748,40 @@ class sw_select
 	}
 
 	// }}}
+	// {{{ public function __call()
+
+	/**
+	 * __call 
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function __call($method, array $args)
+	{
+		$matches = array();
+
+		if (preg_match('/^join_([a-z]*?)_using$/', $method, $matches)) {
+			$type = strtolower($matches[1]);
+			if ($type) {
+				$type .= ' join';
+				if (!in_array($type, self::$__join_types)) {
+					throw new sw_exception("Unrecognized method '$method()'");	
+				}
+				if (in_array($type, array(self::CROSS_JOIN, self::NATURAL_JOIN))) {
+					throw new sw_exception("Cannot perform a join_using with method '$method()'");	
+				}
+			} else {
+				$type = self::INNER_JOIN;	
+			}
+			array_unshift($args, $type);
+
+			return call_user_func_array(array($this, '_join_using'), $args);
+		}
+
+		throw new sw_exception("Unrecognized method '$method()'");
+	}
+
+	// }}}
 	// {{{ public function __toString()
 
 	/**
@@ -967,6 +1001,42 @@ class sw_select
 		}
 
 		return $c;
+	}
+
+	// }}}
+	// {{{ protected function _join_using()
+
+	/**
+	 * 装饰 JOIN .... Using ... 子句 
+	 * 
+	 * <code>
+	 * $select = $db->select()->from('table1')
+	 *                        ->joinUsing('table2', 'column1');
+	 *
+	 * // SELECT * FROM table1 JOIN table2 ON table1.column1 = table2.column2
+	 * </code>
+	 *
+	 * @access protected
+	 * @return void
+	 */
+	protected function _join_using($type, $name, $cond, $cols = '*', $schema = null)
+	{	
+		if (empty($this->__parts[self::FROM])) {
+			throw new sw_exception("You can only perform a joinUsing after specifying a FROM table");
+		}
+
+		$join = $this->__adapter->quote_indentifier(key($this->__parts[self::FROM]), true);
+		$from = $this->__adapter->quote_indentifier($this->_unique_correlation($name), true);
+		
+		$join_cond = array();
+		foreach ((array) $cond as $field_name) {
+			$cond1 = $from . '.' . $field_name;
+			$cond2 = $join . '.' . $field_name;
+			$join_cond[] = $cond1 . ' = ' . $cond2;	
+		}
+		$cond = implode(' ' . self::SQL_AND . ' ', $join_cond);
+
+		return $this->_join($type, $name, $cond, $cols, $schema);
 	}
 
 	// }}}
@@ -1227,15 +1297,102 @@ class sw_select
 	// {{{ protected function _render_having()
 
 	/**
-	 * _render_having 
+	 * 拼装 HAVING 子句 
 	 * 
-	 * @param mixed $sql 
+	 * @param string $sql 
 	 * @access protected
-	 * @return void
+	 * @return string
 	 */
 	protected function _render_having($sql)
 	{
+		if ($this->__parts[self::FROM] && $this->__parts[self::HAVING]) {
+			$sql .= ' ' . self::SQL_HAVING . ' ' . implode(' ', $this->__parts[self::HAVING]);	
+		}
+
+		return $sql;
+	}
+
+	// }}}
+	// {{{ protected function _render_order()
+
+	/**
+	 * 拼装 ORDER 子句 
+	 * 
+	 * @access protected
+	 * @return string
+	 */
+	protected function _render_order($sql)
+	{
+		if ($this->__parts[self::ORDER]) {
+			$order = array();
+			foreach ($this->__parts[self::ORDER] as $term) {
+				if (is_array($term)) {
+					if (is_numeric($term[0]) && strval(intval($term[0])) == $term[0]) {
+						$order[] = (int) trim($term[0]) . ' ' . $term[1];	
+					} else {
+						$order[] = $this->__adapter->quote_indentifier($term[0], true) . ' ' . $term[1];	
+					}
+				} else if (is_numeric($term) && strval(intval($term)) == $term) {
+					$order[] = (int)trim($term);
+				} else {
+					$order[] = $this->__adapter->quote_indentifier($term, true);	
+				}
+			}
+
+			$sql .= ' ' . self::SQL_ORDER_BY . ' ' . implode(', ', $order);
+		}	
+
+		return $sql;
+	}
+
+	// }}}
+	// {{{ protected function _render_limit_offset()
+
+	/**
+	 * 拼装 LIMIT 子句 
+	 * 
+	 * @param string $sql 
+	 * @access protected
+	 * @return string
+	 */
+	protected function _render_limit_offset($sql)
+	{
+		$count = 0;
+		$offset = 0;
 		
+		if (!empty($this->__parts[self::LIMIT_OFFSET])) {
+			$offset = (int) $this->__parts[self::LIMIT_OFFSET];
+			$count  = PHP_INT_MAX;	
+		}	
+
+		if (!empty($this->__parts[self::LIMIT_COUNT])) {
+			$count = (int) $this->__parts[self::LIMIT_COUNT];	
+		}
+
+		if ($count > 0) {
+			$sql = trim($this->__adapter->limit($sql, $count, $offset));	
+		}
+
+		return $sql;
+	}
+
+	// }}}
+	// {{{ protected function _render_for_update()
+
+	/**
+	 * 拼装 FOR UPDATE 子句 
+	 * 
+	 * @param string $sql 
+	 * @access protected
+	 * @return string
+	 */
+	protected function _render_for_update($sql)
+	{
+		if ($this->__parts[self::FOR_UPDATE]) {
+			$sql .= ' ' . self::FOR_UPDATE;	
+		}
+
+		return $sql;
 	}
 
 	// }}}
