@@ -9,27 +9,27 @@
 # 需要启动的进程
 ARRAY_START=(
     mysql
-	snmpd
     redis
 	memcached
+	rsyslogd
     cron_etc
 )
 
 # 需要停止的进程
 ARRAY_STOP=(
     cron_etc
+	rsyslogd
 	memcached
 	redis
-	snmpd
     mysql
 )
 
 # 需要检查的进程
 ARRAY_WATCH=(
     mysql "mysqld_safe,mysqld"
-	snmpd "snmpd"
 	redis "redis-server"
 	memcached "memcached"
+	rsyslogd "rsyslogd"
     cron_etc "crond_etc"
 )
 

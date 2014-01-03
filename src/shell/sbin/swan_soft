@@ -34,6 +34,9 @@ PATH_OPT_ETC="$PATH_OPT/etc"
 PATH_OPT_MYSQL="$PATH_OPT/mysql"
 PATH_OPT_HTTP="$PATH_OPT/apache2"
 PATH_OPT_SNMP="$PATH_OPT/snmp"
+PATH_OPT_REDIS="$PATH_OPT/redis"
+PATH_OPT_MEMCAHED="$PATH_OPT/memcached"
+PATH_OPT_RSYSLOG="$PATH_OPT/rsyslogd"
 PATH_RUN="$PATH_SWAN/run"
 PATH_LOG="$PATH_SWAN/log"
 PATH_INITLOG="$PATH_LOG/init.out"
@@ -45,6 +48,7 @@ PIDF_MYSQL="$PATH_RUN/sw_mysql.pid"
 PIDF_HTTPD="$PATH_RUN/sw_httpd.pid"
 PIDF_REDIS="$PATH_RUN/sw_redis.pid"
 PIDF_MEMCACHED="$PATH_RUN/sw_memcached.pid"
+PIDF_RSYSLOGD="$PATH_RUN/sw_rsyslogd.pid"
 PIDF_SNMPD="$PATH_RUN/sw_snmpd.pid"
 
 ECHO_LINE="------------------------------"
@@ -385,6 +389,7 @@ watch_proc ()
 		snmpd
 		redis
 		memcached
+		rsyslogd
     )
 
     t_proc_name_watch="$1"
@@ -609,7 +614,22 @@ start_memcached ()
         return
     fi
 
-    $PATH_OPT_MEMCAHED/bin/memcached -d -u swan -m 512 127.0.0.1 -p 11211 -P $PIDF_MEMCACHED 
+    $PATH_OPT_MEMCAHED/bin/memcached -d -u swan -m 512 127.0.0.1 -p 11212 -P $PIDF_MEMCACHED 
+    let "init_res = 0 || $?"
+}
+
+start_rsyslogd ()
+{
+    init_res=0
+    init_msg=""
+
+    watch_proc rsyslogd
+    if test "0" = "$watch_res"; then
+        init_res=2
+        return
+    fi
+
+    $PATH_OPT_RSYSLOG/sbin/rsyslogd -f $PATH_OPT_ETC/rsyslogd.conf -i $PIDF_RSYSLOGD 
     let "init_res = 0 || $?"
 }
 
@@ -648,6 +668,7 @@ stop_proc ()
     array_stop_common=(
 		snmpd
 		memcached
+		rsyslogd
     )
 
     t_proc_name_stop="$1"
