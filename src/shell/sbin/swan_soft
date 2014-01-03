@@ -43,6 +43,8 @@ PATH_SW_CROND="/etc/cron.d/swan_soft"
 
 PIDF_MYSQL="$PATH_RUN/sw_mysql.pid"
 PIDF_HTTPD="$PATH_RUN/sw_httpd.pid"
+PIDF_REDIS="$PATH_RUN/sw_redis.pid"
+PIDF_MEMCACHED="$PATH_RUN/sw_memcached.pid"
 PIDF_SNMPD="$PATH_RUN/sw_snmpd.pid"
 
 ECHO_LINE="------------------------------"
@@ -381,6 +383,8 @@ watch_proc ()
     array_watch_common=(
         httpd
 		snmpd
+		redis
+		memcached
     )
 
     t_proc_name_watch="$1"
@@ -579,6 +583,36 @@ start_httpd ()
     let "init_res = 0 || $?"
 }
 
+start_redis ()
+{
+    init_res=0
+    init_msg=""
+
+    watch_proc redis
+    if test "0" = "$watch_res"; then
+        init_res=2
+        return
+    fi
+
+    $PATH_OPT_REDIS/bin/redis-server  $PATH_OPT_ETC/redis.conf
+    let "init_res = 0 || $?"
+}
+
+start_memcached ()
+{
+    init_res=0
+    init_msg=""
+
+    watch_proc memcached
+    if test "0" = "$watch_res"; then
+        init_res=2
+        return
+    fi
+
+    $PATH_OPT_MEMCAHED/bin/memcached -d -u swan -m 512 127.0.0.1 -p 11211 -P $PIDF_MEMCACHED 
+    let "init_res = 0 || $?"
+}
+
 start_snmpd ()
 {
     init_res=0
@@ -613,6 +647,7 @@ stop_proc ()
 {
     array_stop_common=(
 		snmpd
+		memcached
     )
 
     t_proc_name_stop="$1"
@@ -672,6 +707,15 @@ stop_httpd ()
     init_msg=""
 
     $PATH_OPT_HTTP/bin/apachectl -f $PATH_OPT_ETC/httpd.conf -k stop
+    let "init_res = 0 || $?"
+}
+
+stop_redis ()
+{
+    init_res=0
+    init_msg=""
+
+    $PATH_OPT_REDIS/bin/redis-cli shutdown
     let "init_res = 0 || $?"
 }
 
