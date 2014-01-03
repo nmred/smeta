@@ -9,7 +9,6 @@
 # 需要启动的进程
 ARRAY_START=(
     mysql
-    httpd
 	snmpd
     redis
 	memcached
@@ -22,14 +21,12 @@ ARRAY_STOP=(
 	memcached
 	redis
 	snmpd
-    httpd
     mysql
 )
 
 # 需要检查的进程
 ARRAY_WATCH=(
     mysql "mysqld_safe,mysqld"
-    httpd "httpd"
 	snmpd "snmpd"
 	redis "redis-server"
 	memcached "memcached"
