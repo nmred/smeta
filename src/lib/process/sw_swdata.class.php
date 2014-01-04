@@ -13,6 +13,8 @@
 // +---------------------------------------------------------------------------
  
 namespace lib\process;
+use \swan\controller\sw_controller;
+
 /**
 +------------------------------------------------------------------------------
 * sw_swdata 
@@ -99,7 +101,15 @@ class sw_swdata extends sw_abstract
      * @var float
      * @access protected
      */
-    protected $__loop_timeout = 1;
+    protected $__loop_timeout = 60;
+
+	/**
+	 * 加载的模块 
+	 * 
+	 * @var array
+	 * @access protected
+	 */
+	protected $__modules = array();
 
     // }}} end members
     // {{{ functions
@@ -129,6 +139,14 @@ class sw_swdata extends sw_abstract
                 $this->$var_name = $this->__proc_config[$config_name];
             }
         }
+
+		// 初始化模块
+		foreach ($this->__proc_config as $key => $value) {
+			if (0 === strpos($key, 'module')) {
+				$this->__modules[] = $value;					
+			}	
+		}
+		var_dump($this->__modules);
 
         $this->__event_base = new \EventBase();
     }
@@ -180,9 +198,31 @@ class sw_swdata extends sw_abstract
      */
     protected function _set_callback()
     {
-		echo "dsds";
-        $this->__http->set_default_callback(array($this, 'test_callback'));
-		echo "dsds";
+		//use ui\router\sw_router;
+		//$controller = sw_controller::get_instance();
+
+		//// 添加控制器命名空间
+		//$controller->add_controller_namespace('\ui\action\user',
+		//		'user');
+
+		//// 设置路由
+		//$road_map = array(
+		//		'user' => array('default' => true),
+		//		);
+		//sw_router::set_road_map($road_map);
+		//$router = new sw_router();
+		//$controller->get_router()->add_route('user',
+		//		$router);
+
+		//// 分发
+		//$controller->dispatch();
+		foreach ($this->__modules as $path) {
+			$path = trim($path, '/');
+			$path = '/' . $path . '/';	
+
+			// 回调函数待定
+			$this->__http->set_callback($path, array($this, 'test_callback'));
+		}
     }
 
     // }}}
@@ -207,32 +247,36 @@ class sw_swdata extends sw_abstract
                          ->set_timeout($this->__timeout)
                          ->set_max_body_size($this->__max_body);
             $this->_set_callback();
-        } catch (\lib\sw_exception $e) {
+        } catch (exception $e) {
             $this->log($e->getMessage(), __FILE__, __LINE__, LOG_INFO);
             exit(1);
         }
 
-        $is_exit = $this->__event_base->exit($this->__loop_timeout);
-        if (false === $is_exit) {
-            $log = "set loop exit timeout fail, timeout: {$this->__loop_timeout}.";
-            $this->log($log, __FILE__, __LINE__, LOG_INFO);
-            exit(1);
-        }
+		while (1) {
+			$is_exit = $this->__event_base->exit($this->__loop_timeout);
+			if (false === $is_exit) {
+				$log = "set loop exit timeout fail, timeout: {$this->__loop_timeout}.";
+				$this->log($log, __FILE__, __LINE__, LOG_INFO);
+				exit(1);
+			}
 
-        $is_loop = $this->__event_base->loop(\EventBase::NO_CACHE_TIME);
-        if (false === $is_loop) {
-            $log = "loop return fail, timeout: {$this->__loop_timeout}.";
-            $this->log($log, __FILE__, __LINE__, LOG_INFO);
-            exit(1);
-        }
+			$is_loop = $this->__event_base->loop(\EventBase::NO_CACHE_TIME);
+			if (false === $is_loop) {
+				$log = "loop return fail, timeout: {$this->__loop_timeout}.";
+				$this->log($log, __FILE__, __LINE__, LOG_INFO);
+				exit(1);
+			}
+		}
     }
 
     // }}}
 	// {{{ public function test_callback()
 
-	public function test_callback()
+	public function test_callback($request)
 	{
-	//	echo "hello swan ehttp server";	
+		$request->sendReply('200', 'OK');
+		$log ="debug";
+            $this->log($log, LOG_INFO);
 	}
 
 	// }}}

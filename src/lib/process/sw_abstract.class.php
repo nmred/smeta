@@ -52,7 +52,7 @@ abstract class sw_abstract
 	 * @var array
 	 * @access protected
 	 */
-	protected $__process_cfg = array();
+	protected $__proc_config = array();
 
 	// }}}
 	// {{{ functions
@@ -114,7 +114,7 @@ abstract class sw_abstract
 	 */
 	public function set_proc_config($config)
 	{
-		$this->__process_cfg = $config;	
+		$this->__proc_config = $config;	
 	}
 
 	// }}}
