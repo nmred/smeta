@@ -27,7 +27,7 @@
 // {{{  绝对路劲
 define('PATH_SWAN_BASE', realpath(dirname(__FILE__)));
 	define('PATH_SWAN_SF', PATH_SWAN_BASE . '/sf/');
-    define('PATH_SWAN_HELP', PATH_SWAN_BASE . '/help/');
+	define('PATH_SWAN_LIB', PATH_SWAN_BASE . '/lib/');
     define('PATH_SWAN_SHELL', PATH_SWAN_BASE . '/shell/');
     define('PATH_SWAN_TPL', PATH_SWAN_BASE . '/tpl/');
     define('PATH_SWAN_WEB', PATH_SWAN_BASE . '/web/');
@@ -40,8 +40,6 @@ define('PATH_SWAN_BASE', realpath(dirname(__FILE__)));
         define('PATH_SWAN_CONF', PATH_SWAN_INC . '/conf/'); // 系统配置文件， 由 etc 下的 ini自动生成
     define('PATH_SWAN_RUN', PATH_SWAN_BASE . '/run/'); //系统运行过程中产生的文件，一般是pid文件
     define('PATH_SWAN_DATA', PATH_SWAN_BASE . '/data/'); // 存放数据目录
-		define('PATH_SWAN_RRA', PATH_SWAN_DATA . 'rrd/'); //rrdtool数据库文件
-define('PATH_SNMP_BIN', '/usr/bin/');
 // }}}
 // {{{ 参数配置
 
@@ -51,7 +49,7 @@ define('PATH_SNMP_BIN', '/usr/bin/');
 define('SWAN_SOFTNAME', 'swansoft');
 
 // 软件版本号
-define('SWAN_VERSION', '0.2.0');
+define('SWAN_VERSION', '0.2.1');
 
 // 软件发行号
 define('SWANBR_RELEASE', 'beta');
@@ -60,7 +58,7 @@ define('SWANBR_RELEASE', 'beta');
 define('SWANBR_SLOGAN', 'Everything in order to facilitate');
 
 //版权声明
-define('SWANBR_COPYRIGHT', '© 2011-2013 swanlinux');
+define('SWANBR_COPYRIGHT', '© 2012-2014 swanlinux');
 
 //许可协议 
 define('SWANBR_LICENSED_URL', 'BSD');
@@ -101,45 +99,22 @@ define('RRD_NL', "\\\n");
 
 // }}}
 // {{{ 系统初始化
-//require_once PATH_SWAN_LIB . 'sw_language.class.php';
-//require_once PATH_SWAN_LIB . 'sw_config.class.php';
-//require_once PATH_SWAN_LIB . 'sw_db.class.php';
-require_once PATH_SWAN_BASE . '/global.func.php';
 
-//require_once PATH_SWAN_LIB . 'sw_member.class.php';
-//require_once PATH_SWAN_LIB . 'sw_sequence.class.php';
 //初始化时区
 date_default_timezone_set(SWAN_TIMEZONE_DEFAULT);
-//sw_language::set_gettext();
-//fb
-//require_once PATH_SWAN_LIB . 'firephp/FirePHPCore/fb.php';
 
 // }}}
-// }}}
-// {{{ 数据库表定义
-
-define('SWAN_TBN_SEQUENCE_GLOBAL', 'sequence_global');
-define('SWAN_TBN_SEQUENCE_DEVICE', 'sequence_device');
-define('SWAN_TBN_SEQUENCE_PROJECT', 'sequence_project');
-define('SWAN_TBN_DEVICE_KEY', 'device_key');
-define('SWAN_TBN_DEVICE_BASIC', 'device_basic');
-define('SWAN_TBN_DEVICE_SNMP', 'device_snmp');
-define('SWAN_TBN_PROJECT_KEY', 'project_key');
-define('SWAN_TBN_PROJECT_BASIC', 'project_key');
-define('SWAN_TBN_PROJECT_DATA_SOURCE', 'project_data_source');
-define('SWAN_TBN_PROJECT_ARCHIVE', 'project_archive');
-
 // }}}
 // {{{ autoload 管理
 // 引入 sf 框架
 
-require_once PATH_SWAN_SF . 'sf_core.php';
-define('PATH_SWAN_LIB', PATH_SF_LIB);
+require_once PATH_SWAN_SF . 'swanphp.php';
 
-require_once PATH_SWAN_LIB . 'loader/sw_standard_auto_loader.class.php';
-$autoloader = new lib\loader\sw_standard_auto_loader(array(
+require_once PATH_SF_LIB . 'loader/sw_standard_auto_loader.class.php';
+$autoloader = new \swan\loader\sw_standard_auto_loader(array(
 	'namespaces' => array(
-		'lib' => PATH_SWAN_SF,
+		'swan' => PATH_SF_LIB,
+		'lib' => PATH_SWAN_BASE,
 	),
 ));
 
