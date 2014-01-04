@@ -29,6 +29,8 @@ define('PATH_SWAN_BASE', realpath(dirname(__FILE__)));
 	define('PATH_SWAN_SF', PATH_SWAN_BASE . '/sf/');
 	define('PATH_SWAN_LIB', PATH_SWAN_BASE . '/lib/');
     define('PATH_SWAN_SHELL', PATH_SWAN_BASE . '/shell/');
+    define('PATH_SWAN_ETC', PATH_SWAN_BASE . '/etc/');
+		define('PATH_INI_PHPD', PATH_SWAN_ETC . 'em_phpd.ini');
     define('PATH_SWAN_TPL', PATH_SWAN_BASE . '/tpl/');
     define('PATH_SWAN_WEB', PATH_SWAN_BASE . '/web/');
 		define('PATH_SWAN_RRDPNG', PATH_SWAN_WEB . 'rrdpng/');
@@ -96,6 +98,9 @@ define('SW_RIGHT_DELIMITER', '}}-->');
 
 //RRD相关
 define('RRD_NL', "\\\n");
+
+define('SWAN_EXEC_UID', 'swan');
+define('SWAN_EXEC_GID', 'swan');
 
 // }}}
 // {{{ 系统初始化
