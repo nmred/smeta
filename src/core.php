@@ -30,7 +30,7 @@ define('PATH_SWAN_BASE', realpath(dirname(__FILE__)));
 	define('PATH_SWAN_LIB', PATH_SWAN_BASE . '/lib/');
     define('PATH_SWAN_SHELL', PATH_SWAN_BASE . '/shell/');
     define('PATH_SWAN_ETC', PATH_SWAN_BASE . '/etc/');
-		define('PATH_INI_PHPD', PATH_SWAN_ETC . 'em_phpd.ini');
+		define('PATH_INI_PHPD', PATH_SWAN_ETC . 'sw_phpd.ini');
     define('PATH_SWAN_TPL', PATH_SWAN_BASE . '/tpl/');
     define('PATH_SWAN_WEB', PATH_SWAN_BASE . '/web/');
 		define('PATH_SWAN_RRDPNG', PATH_SWAN_WEB . 'rrdpng/');
@@ -118,7 +118,7 @@ require_once PATH_SWAN_SF . 'swanphp.php';
 require_once PATH_SF_LIB . 'loader/sw_standard_auto_loader.class.php';
 $autoloader = new \swan\loader\sw_standard_auto_loader(array(
 	'namespaces' => array(
-		'swan' => PATH_SF_LIB,
+		'swan' => PATH_SF_BASE,
 		'lib' => PATH_SWAN_BASE,
 	),
 ));

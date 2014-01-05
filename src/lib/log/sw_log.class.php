@@ -31,6 +31,7 @@ class sw_log extends \swan\log\sw_log
 	// {{{ consts
 
 	const LOG_DEFAULT_ID = 1;
+	const LOG_PHPD_ID    = 2;
 
 	// }}}
 	// {{{ members
