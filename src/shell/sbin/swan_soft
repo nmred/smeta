@@ -30,6 +30,8 @@
 # {{{
 PATH_SWAN="/usr/local/swan"
 PATH_OPT="$PATH_SWAN/opt"
+PATH_SBIN="$PATH_SWAN/app/sbin"
+PATH_SBIN_PHPD="$PATH_SBIN/sw_phpd"
 PATH_OPT_ETC="$PATH_OPT/etc"
 PATH_OPT_MYSQL="$PATH_OPT/mysql"
 PATH_OPT_HTTP="$PATH_OPT/apache2"
@@ -47,6 +49,7 @@ PATH_SW_CROND="/etc/cron.d/swan_soft"
 PIDF_MYSQL="$PATH_RUN/sw_mysql.pid"
 PIDF_HTTPD="$PATH_RUN/sw_httpd.pid"
 PIDF_REDIS="$PATH_RUN/sw_redis.pid"
+PIDF_PHPD="$PATH_RUN/sw_phpd.pid"
 PIDF_MEMCACHED="$PATH_RUN/sw_memcached.pid"
 PIDF_RSYSLOGD="$PATH_RUN/sw_rsyslogd.pid"
 PIDF_SNMPD="$PATH_RUN/sw_snmpd.pid"
@@ -390,6 +393,7 @@ watch_proc ()
 		redis
 		memcached
 		rsyslogd
+		phpd
     )
 
     t_proc_name_watch="$1"
@@ -603,6 +607,21 @@ start_redis ()
     let "init_res = 0 || $?"
 }
 
+start_phpd ()
+{
+    init_res=0
+    init_msg=""
+
+    watch_proc phpd
+    if test "0" = "$watch_res"; then
+        init_res=2
+        return
+    fi
+
+    $PATH_SBIN_PHPD -k start
+    let "init_res = 0 || $?"
+}
+
 start_memcached ()
 {
     init_res=0
@@ -728,6 +747,15 @@ stop_httpd ()
     init_msg=""
 
     $PATH_OPT_HTTP/bin/apachectl -f $PATH_OPT_ETC/httpd.conf -k stop
+    let "init_res = 0 || $?"
+}
+
+stop_phpd ()
+{
+    init_res=0
+    init_msg=""
+
+	$PATH_SBIN_PHPD -k stop
     let "init_res = 0 || $?"
 }
 
