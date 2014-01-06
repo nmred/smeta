@@ -12,24 +12,18 @@
 // | $_SWANBR_WEB_DOMAIN_$
 // +---------------------------------------------------------------------------
  
-namespace lib\swdata\action;
-use swan\controller\sw_action;
+namespace lib\swdata\action\test\exception;
+use \lib\exception\sw_exception as sw_ex;
 
 /**
-+------------------------------------------------------------------------------
-* sw_abatract 
-+------------------------------------------------------------------------------
+* sw_exception 
 * 
-* @uses sw
-* @uses _action
-* @package 
+* @uses Exception
+* @package swan 
 * @version $_SWANBR_VERSION_$
 * @copyright $_SWANBR_COPYRIGHT_$
 * @author $_SWANBR_AUTHOR_$ 
-+------------------------------------------------------------------------------
 */
-abstract class sw_abstract extends sw_action
+class sw_exception extends sw_ex
 {
-	// {{{ functions
-	// }}}	
 }

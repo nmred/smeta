@@ -31,6 +31,7 @@ define('PATH_SWAN_BASE', realpath(dirname(__FILE__)));
     define('PATH_SWAN_SHELL', PATH_SWAN_BASE . '/shell/');
     define('PATH_SWAN_ETC', PATH_SWAN_BASE . '/etc/');
 		define('PATH_INI_PHPD', PATH_SWAN_ETC . 'sw_phpd.ini');
+		define('PATH_INI_SWDATA', PATH_SWAN_ETC . 'sw_swdata.ini');
     define('PATH_SWAN_TPL', PATH_SWAN_BASE . '/tpl/');
     define('PATH_SWAN_WEB', PATH_SWAN_BASE . '/web/');
 		define('PATH_SWAN_RRDPNG', PATH_SWAN_WEB . 'rrdpng/');

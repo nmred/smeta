@@ -12,7 +12,7 @@
 // | $_SWANBR_WEB_DOMAIN_$
 // +---------------------------------------------------------------------------
 
-namespace lib\process\router;
+namespace lib\swdata\router;
 
 /**
 * 路由-默认路由
@@ -126,33 +126,24 @@ class sw_router extends \swan\controller\router\route\sw_abstract
 	 */
 	public function match(\swan\controller\request\sw_abstract $request)
 	{
-		$module = trim($request->get_pathinfo(), '/');
-		if (empty($module)) {
-			$module = 'user';		
-		}
+		$module = $request->get_module_name();
 		$map = self::get_road_map();
 		if (!isset($map[$module])) {
 			return false;	
 		}	
 
-		$q = $request->get_query('q', 'index');
-		if (!isset($map[$module][$q])) {
+		$pathinfo = $request->get_pathinfo();
+		list($controller, $action) = explode('/', ltrim($pathinfo, '/'), 2);
+		if (!isset($map[$module][$controller][$action])) {
 			return false;	
 		}
 
-		$path = $map[$module][$q];
+		$path = $map[$module][$controller][$action];
 		if (false === $path) {
 			return false;	
 		}
 
-		$action = 'action_';
-		if (false === ($pos = strpos($q, '.'))) {
-			$controller = $q;
-			$action .= 'default';	
-		} else {
-			$controller = substr($q, 0, $pos);
-			$action     .= str_replace('.', '_', substr($q, $pos+1));	
-		}
+		$action = 'action_' . $action;	
 
 		$res = array(
 			$request->get_action_key() => $action,

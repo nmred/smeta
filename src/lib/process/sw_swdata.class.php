@@ -14,6 +14,8 @@
  
 namespace lib\process;
 use \swan\controller\sw_controller;
+use \lib\swdata\router\sw_router;
+use \lib\process\exception\sw_exception;
 
 /**
 +------------------------------------------------------------------------------
@@ -86,7 +88,7 @@ class sw_swdata extends sw_abstract
      * @var float
      * @access protected
      */
-    protected $__timeout = 30;
+    protected $__timeout = 3;
 
     /**
      * 侦听的起始端口
@@ -104,12 +106,28 @@ class sw_swdata extends sw_abstract
     protected $__loop_timeout = 60;
 
 	/**
-	 * 加载的模块 
+	 * 控制器的命名空间 
 	 * 
 	 * @var array
 	 * @access protected
 	 */
-	protected $__modules = array();
+	protected $__controller_namespace = array();
+
+	/**
+	 * 控制 action 
+	 * 
+	 * @var array
+	 * @access protected
+	 */
+	protected $__action = array();
+
+	/**
+	 * __router 
+	 * 
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $__router = null;
 
     // }}} end members
     // {{{ functions
@@ -139,14 +157,6 @@ class sw_swdata extends sw_abstract
                 $this->$var_name = $this->__proc_config[$config_name];
             }
         }
-
-		// 初始化模块
-		foreach ($this->__proc_config as $key => $value) {
-			if (0 === strpos($key, 'module')) {
-				$this->__modules[] = $value;					
-			}	
-		}
-		var_dump($this->__modules);
 
         $this->__event_base = new \EventBase();
     }
@@ -198,30 +208,16 @@ class sw_swdata extends sw_abstract
      */
     protected function _set_callback()
     {
-		//use ui\router\sw_router;
-		//$controller = sw_controller::get_instance();
+		$this->_load_action_config();
 
-		//// 添加控制器命名空间
-		//$controller->add_controller_namespace('\ui\action\user',
-		//		'user');
+		// 设置路由
+		sw_router::set_road_map($this->__action);
+		$this->__router = new sw_router();
 
-		//// 设置路由
-		//$road_map = array(
-		//		'user' => array('default' => true),
-		//		);
-		//sw_router::set_road_map($road_map);
-		//$router = new sw_router();
-		//$controller->get_router()->add_route('user',
-		//		$router);
-
-		//// 分发
-		//$controller->dispatch();
-		foreach ($this->__modules as $path) {
-			$path = trim($path, '/');
-			$path = '/' . $path . '/';	
-
-			// 回调函数待定
-			$this->__http->set_callback($path, array($this, 'test_callback'));
+		// 添加控制器命名空间
+		foreach ($this->__controller_namespace as $module => $namespace) {
+			$path = '/' . $module . '/';	
+			$this->__http->set_callback($path, array($this, 'request_callback'), $module);
 		}
     }
 
@@ -270,13 +266,62 @@ class sw_swdata extends sw_abstract
     }
 
     // }}}
-	// {{{ public function test_callback()
+	// {{{ protected function _load_action_config()
 
-	public function test_callback($request)
+	/**
+	 * 加载解析 action 的配置 
+	 * 
+	 * @access protected
+	 * @return array
+	 */
+	protected function _load_action_config()
 	{
-		$request->sendReply('200', 'OK');
-		$log ="debug";
-            $this->log($log, LOG_INFO);
+		$cfg = parse_ini_file(PATH_INI_SWDATA, true);		
+		if (!$cfg) {
+			throw new sw_exception('swdata config is not exists.');	
+		}
+
+		$namespace_format = "\\lib\\swdata\\action\\%s";
+		foreach ($cfg as $module => $config) {
+			$this->__controller_namespace[$module] = sprintf($namespace_format, $module);
+			foreach ($config as $key => $value) {
+				if (false === strpos($key, '.')) {
+					continue;		
+				}
+				
+				list($action, $func) = explode('.', $key, 2);	
+				$actions[$action][$func] = $value; 
+			}
+			$this->__action[$module] = $actions;
+		}
+	}
+
+	// }}}
+	// {{{ public function request_callback()
+
+	/**
+	 * request_callback 
+	 * 
+	 * @param mixed $request 
+	 * @access public
+	 * @return void
+	 */
+	public function request_callback($erequest, $module)
+	{
+		// 添加控制器命名空间
+		try {
+			$controller = sw_controller::get_instance();
+			$request = \swan\ehttp\sw_request::get_instance();
+			$request->init($erequest);
+			$erequest = new \swan\controller\request\sw_ehttp($request);
+			$eresponse = new \swan\controller\response\sw_ehttp($request);
+			$erequest->set_module_name($module);
+			$controller->add_controller_namespace($this->__controller_namespace[$module], $module);
+			$controller->get_router()->add_route($module, $this->__router);
+			$controller->dispatch($erequest, $eresponse);
+		} catch (\swan\sw_exception $e) {
+            $this->log($e->getMessage(), LOG_INFO);
+		}
 	}
 
 	// }}}

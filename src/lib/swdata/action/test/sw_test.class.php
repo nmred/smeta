@@ -11,25 +11,37 @@
 // +---------------------------------------------------------------------------
 // | $_SWANBR_WEB_DOMAIN_$
 // +---------------------------------------------------------------------------
- 
-namespace lib\swdata\action;
-use swan\controller\sw_action;
+
+namespace lib\swdata\action\test;
+use \lib\swdata\action\sw_abstract;
 
 /**
 +------------------------------------------------------------------------------
-* sw_abatract 
+* sw_test 
 +------------------------------------------------------------------------------
 * 
 * @uses sw
-* @uses _action
+* @uses _abstract
 * @package 
 * @version $_SWANBR_VERSION_$
 * @copyright $_SWANBR_COPYRIGHT_$
 * @author $_SWANBR_AUTHOR_$ 
 +------------------------------------------------------------------------------
 */
-abstract class sw_abstract extends sw_action
+class sw_test extends sw_abstract
 {
 	// {{{ functions
-	// }}}	
+
+	/**
+	 * action_default 
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function action_default()
+	{
+		return $this->json_stdout(array('swan server!'));
+	}
+
+	// }}}
 }
