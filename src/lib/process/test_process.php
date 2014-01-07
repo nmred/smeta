@@ -16,8 +16,6 @@ $config = array(
 		"timeout" => 30,
 		"max_body" => 1048576,
 		"max_header" => 8192,
-		'module#0' => 'test',
-		'module#1' => 'test1',
 );
 $process = new \lib\process\sw_swdata();
 $process->set_log($log);
