@@ -116,10 +116,8 @@ date_default_timezone_set(SWAN_TIMEZONE_DEFAULT);
 
 require_once PATH_SWAN_SF . 'swanphp.php';
 
-require_once PATH_SF_LIB . 'loader/sw_standard_auto_loader.class.php';
-$autoloader = new \swan\loader\sw_standard_auto_loader(array(
+$autoloader = \swan\loader\sw_auto::get_instance(array(
 	'namespaces' => array(
-		'swan' => PATH_SF_BASE,
 		'lib' => PATH_SWAN_BASE,
 	),
 ));

@@ -100,7 +100,7 @@
             <!-- }}} -->
             <!-- {{{ table monitor_basic -->
 
-            <table name="">
+            <table name="monitor_basic">
                 <desc>监控器管理</desc>
                 <engine>InnoDB</engine>
                 <charset>utf8</charset>
@@ -146,7 +146,7 @@
             <!-- }}} -->
             <!-- {{{ table monitor_attribute -->
 
-            <table name="">
+            <table name="monitor_attribute">
                 <desc>监控器属性管理</desc>
                 <engine>InnoDB</engine>
                 <charset>utf8</charset>
