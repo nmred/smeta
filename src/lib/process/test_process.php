@@ -1,7 +1,9 @@
 <?php
 require_once 'core.php';
 use \lib\log\sw_log;
-$writer = sw_log::writer_factory('logsvr', array('log_id' => 2));
+$options = \lib\log\sw_log::get_logsvr_config();
+$options = array_merge($options, array('log_id' => 2));
+$writer = sw_log::writer_factory('logsvr', $options);
 $message = sw_log::message_factory('phpd');
 $message->message = 'swdata';
 $log = new \lib\log\sw_log();

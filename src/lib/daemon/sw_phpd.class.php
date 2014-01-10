@@ -42,7 +42,7 @@ class sw_phpd extends \swan\daemon\sw_base
 	{
 		$this->__log_id = \lib\log\sw_log::LOG_PHPD_ID;
 		$this->__proc_name = 'phpd';	
-
+		$this->__log_options = \lib\log\sw_log::get_logsvr_config();
 		$this->_init_log('phpd', true);
 	}
 

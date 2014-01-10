@@ -111,7 +111,7 @@ date_default_timezone_set(SWAN_TIMEZONE_DEFAULT);
 
 // }}}
 // }}}
-// {{{ autoload 管理
+// {{{  框架初始化
 // 引入 sf 框架
 
 require_once PATH_SWAN_SF . 'swanphp.php';
@@ -123,5 +123,9 @@ $autoloader = \swan\loader\sw_auto::get_instance(array(
 ));
 
 $autoloader->register();
+
+// 初始化配置
+
+\swan\config\sw_config::set_config(PATH_SWAN_CONF . '/config.php');
 
 // }}}
