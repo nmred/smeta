@@ -12,8 +12,8 @@
 // | $_SWANBR_WEB_DOMAIN_$
 // +---------------------------------------------------------------------------
  
-namespace lib\member\operater;
-use \lib\member\operater\exception\sw_exception;
+namespace lib\member\operator;
+use \lib\member\operator\exception\sw_exception;
 
 /**
 +------------------------------------------------------------------------------
@@ -27,12 +27,12 @@ use \lib\member\operater\exception\sw_exception;
 * @author $_SWANBR_AUTHOR_$ 
 +------------------------------------------------------------------------------
 */
-abstract class sw_abstract
+abstract class sw_abstract extends \swan\operator\sw_abstract
 {
 	// {{{ members
 
 	/**
-	 * operater 子类会用到该类的对象 
+	 * operator 子类会用到该类的对象 
 	 * 
 	 * @var mixed
 	 * @access protected
@@ -45,7 +45,7 @@ abstract class sw_abstract
 	 * @var string
 	 * @access protected
 	 */
-	protected $__namespace = "\lib\member\operater\\";
+	protected $__namespace = "\lib\member\operator\\";
 
 	/**
 	 * 允许获取的子类名称，此属性必须有实现者来覆盖 
@@ -53,7 +53,7 @@ abstract class sw_abstract
 	 * @var array
 	 * @access protected
 	 */
-	protected $__operater_types = array();
+	protected $__operator_types = array();
 
 	// }}}		
 	// {{{ functions
@@ -71,7 +71,7 @@ abstract class sw_abstract
 	}
 
 	// }}}
-	// {{{ public function get_operater()
+	// {{{ public function get_operator()
 
 	/**
 	 * 获取子类的对象 
@@ -80,9 +80,9 @@ abstract class sw_abstract
 	 * @access public
 	 * @return void
 	 */
-	public function get_operater($type)
+	public function get_operator($type)
 	{
-		if (!array_key_exists($type, $this->__operater_types)) {
+		if (!array_key_exists($type, $this->__operator_types)) {
 			throw new sw_exception("Invalid operator type `$type`");	
 		}		
 
@@ -97,14 +97,14 @@ abstract class sw_abstract
 	/**
 	 * 添加成员对象 
 	 * 
-	 * @param string $operater_type 
+	 * @param string $operator_type 
 	 * @access public
 	 * @return void
 	 */
-	public function add_operator_types($operater_type)
+	public function add_operator_types($operator_type)
 	{
-		$operater_type = (string) $operater_type;
-		$this->__operater_types[$operater_type] = true;	
+		$operator_type = (string) $operator_type;
+		$this->__operator_types[$operator_type] = true;	
 	}
 
 	// }}}
@@ -113,15 +113,15 @@ abstract class sw_abstract
 	/**
 	 * 删除成员对象 
 	 * 
-	 * @param string $operater_type 
+	 * @param string $operator_type 
 	 * @access public
 	 * @return void
 	 */
-	public function del_operator_types($operater_type)
+	public function del_operator_types($operator_type)
 	{
-		$operater_type = (string) $operater_type;
-		if (isset($this->__operater_types[$operater_type])) {
-			unset($this->__operater_types[$operater_type]);	
+		$operator_type = (string) $operator_type;
+		if (isset($this->__operator_types[$operator_type])) {
+			unset($this->__operator_types[$operator_type]);	
 		}
 	}
 

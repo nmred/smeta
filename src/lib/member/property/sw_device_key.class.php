@@ -12,74 +12,57 @@
 // | $_SWANBR_WEB_DOMAIN_$
 // +---------------------------------------------------------------------------
  
-namespace lib\member;
-use \swan\member\exception\sw_exception;
+namespace lib\member\property;
+use \lib\member\property\exception\sw_exception;
 
 /**
 +------------------------------------------------------------------------------
-* sw_member 
+* sw_device_key 
 +------------------------------------------------------------------------------
 * 
+* @uses sw_abstract
 * @package 
 * @version $_SWANBR_VERSION_$
 * @copyright $_SWANBR_COPYRIGHT_$
 * @author $_SWANBR_AUTHOR_$ 
 +------------------------------------------------------------------------------
 */
-class sw_member
+class sw_device_key extends sw_abstract
 {
+	// {{{ members
+
+	/**
+	 * 允许设置的元素列表 
+	 * 
+	 * @var array
+	 * @access protected
+	 */
+	protected $__allow_attributes = array(
+		'device_id'           => true,
+		'device_name'         => true,
+	);
+
+	/**
+	 * 主键 
+	 * 
+	 * @var string
+	 * @access protected
+	 */
+	protected $__key_attributes = array('device_id');
+
+	// }}}		
 	// {{{ functions
-	// {{{ public static function property_factory()
+	// {{{ public function check()
 
 	/**
-	 * 属性工厂 
+	 * 检查参数 
 	 * 
-	 * @param mixed $type 
-	 * @param array $params 
-	 * @static
 	 * @access public
 	 * @return void
 	 */
-	public static function property_factory($type, array $params = array())
+	public function check()
 	{
-		\swan\member\sw_member::set_namespace("\\lib\\");
-		return \swan\member\sw_member::property_factory('member', $type, $params);
-	}
-
-	// }}}
-	// {{{ public static function condition_factory()
-
-	/**
-	 * 条件工厂 
-	 * 
-	 * @param string $type 
-	 * @param array $params 
-	 * @static
-	 * @access public
-	 * @return void
-	 */
-	public static function condition_factory($type, array $params = array())
-	{
-		\swan\member\sw_member::set_namespace("\\lib\\");
-		return \swan\member\sw_member::condition_factory('member', $type, $params);
-	}
-
-	// }}}
-	// {{{ public static function operator_factory()
-
-	/**
-	 * 属性工厂 
-	 * 
-	 * @param mixed $type 
-	 * @param array $params 
-	 * @static
-	 * @access public
-	 * @return void
-	 */
-	public static function operator_factory($type, $params = array())
-	{
-		\swan\member\sw_member::set_namespace("\\lib\\");
-		return \swan\member\sw_member::operator_factory('member', $type, $params);
+		parent::check();
 	}
 
 	// }}}

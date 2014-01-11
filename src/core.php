@@ -131,6 +131,9 @@ $autoloader->register();
 // }}}
 // {{{ 数据库常量
 
+define('SWAN_TBN_SEQUENCE_GLOBAL', 'sequence_global');
+define('SWAN_TBN_SEQUENCE_DEVICE', 'sequence_device');
+define('SWAN_TBN_SEQUENCE_MONITOR', 'sequence_monitor');
 define('SWAN_TBN_DEVICE_KEY', 'device_key');
 define('SWAN_TBN_DEVICE_BASIC', 'device_basic');
 // }}}

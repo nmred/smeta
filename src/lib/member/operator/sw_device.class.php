@@ -12,8 +12,8 @@
 // | $_SWANBR_WEB_DOMAIN_$
 // +---------------------------------------------------------------------------
  
-namespace lib\member\operater;
-use \lib\member\operater\exception\sw_exception;
+namespace lib\member\operator;
+use \lib\member\operator\exception\sw_exception;
 
 /**
 +------------------------------------------------------------------------------
@@ -38,7 +38,7 @@ class sw_device extends sw_abstract
 	 * @var string
 	 * @access protected
 	 */
-	protected $__namespace = "\lib\member\operater\device\\";
+	protected $__namespace = "\lib\member\operator\device\\";
 
 	/**
 	 * device key
@@ -54,9 +54,9 @@ class sw_device extends sw_abstract
 	 * @var array
 	 * @access protected
 	 */
-	protected $__operater_types = array(
+	protected $__operator_types = array(
 		'key'   => true,
-		'basic' => true,__operater_types
+		'basic' => true,__operator_types
 	);
 
 	// }}}		
@@ -72,6 +72,20 @@ class sw_device extends sw_abstract
 	public function __construct(\lib\member\property\sw_device_key $property)
 	{
 		$this->__property_key = $property;	
+	}
+
+	// }}}
+	// {{{ public function get_device_key_property()
+
+	/**
+	 * 获取设备 key 的属性 
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function get_device_key_property()
+	{
+		return $this->__property_key;	
 	}
 
 	// }}}

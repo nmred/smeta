@@ -12,8 +12,8 @@
 // | $_SWANBR_WEB_DOMAIN_$
 // +---------------------------------------------------------------------------
 
-namespace lib\member\operater\device;
-use \lib\member\operater\device\exception\sw_exception;
+namespace lib\member\operator\device;
+use \lib\member\operator\device\exception\sw_exception;
 
 /**
 +------------------------------------------------------------------------------
@@ -42,42 +42,45 @@ class sw_basic extends sw_abstract
 	 */
 	public function add_basic(\lib\member\property\sw_device_basic $basic_property)
 	{
-		$property = $this->get_device_operater()->get_device_key_property();
-		$key_attribute = $property->attributes();
+		$property_key = $this->get_device_operator()->get_device_key_property();
+		$key_attributes = $property_key->attributes();
 
-		if (!isset($key_attribute['device_id'])) 
+        if (!isset($key_attributes['device_id'])) {
+            throw new sw_exception('Unknow device id.');
+        }
 
-		self::$__db->insert(SWAN_TBN_DEVICE_KEY, $attributes);
+        // 判断是否已经存在
+        if ($this->exists($attributes['device_id'])) {
+            throw new sw_exception('device already exists');
+        }
+        
+        $attributes = $basic_property->attributes();
+        $attributes['device_id'] = $key_attributes['device_id'];
+        $require_fields = array('device_id', 'device_display_name');
+        $this->_check_require($attributes, $require_fields);
+
+        $this->__db->insert(SWAN_TBN_DEVICE_BASIC, $attributes);
 	}
 	
 	// }}}
-	// {{{ protected function _validate()
+    // {{{ public function exists()
 
-	/**
-	 * _validate 
-	 * 
-	 * @param mixed $device_name 
-	 * @access protected
-	 * @return void
-	 */
-	protected function _validate($device_name)
-	{
-		return true;
-		$parrent = '/^[a-zA-Z]+[0-9a-zA-Z_]{5,}$/is';
-		if (!preg_match($parrent, $device_name)) {
-			throw new sw_exception("设备名的格式必须是首个字符是字母，由数字、字母、下划线组成,并且至少6位");  
-		}
+    /**
+     * 查看是否存在该设备的基本信息 
+     * 
+     * @param int $device_id 
+     * @access public
+     * @return boolean
+     */     
+    public function exists($device_id)
+    {
+        $select = $this->__db->select()
+                             ->from(SWAN_TBN_DEVICE_BASIC, 'count(*)')
+                             ->where('device_id=?')
+        return $this->__db->fetch_one($select, $device_id) > 0;
+    }
 
-		$is_exists = self::$__db->fetch_one(self::$__db->select()
-								->from(SWAN_TBN_DEVICE_KEY, array('device_id'))
-								->where('device_name= ?'), $device_name);
-
-		if ($is_exists) {
-			throw new sw_exception("`$device_name` device name already exists.");
-		}
-	}
-
-	// }}}
+    // }}}
 	// {{{ public function add_device_handler()
 
 	/**

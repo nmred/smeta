@@ -14,6 +14,139 @@
         <charset>utf8</charset>
         <!-- {{{ tables -->
         <tables>
+            <!-- {{{ table sequence_global -->
+
+            <table name="sequence_global">
+                <desc>维护全局的数据表的唯一序列号</desc>
+                <engine>InnoDB</engine>
+                <charset>utf8</charset>
+                <columns>
+                    <column name="table_name">
+                        <desc>维护序列号的表名称</desc>
+                        <type>varchar</type>
+                        <nullable>false</nullable>
+                        <precision>64</precision>
+                        <default></default>
+                    </column>
+
+                    <column name="sequence_id">
+                        <desc>自增长 ID</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+						<unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                </columns>
+
+                <keys>
+                    <key name="">
+						<desc></desc>
+                        <type>primary</type>
+                        <fields>
+                            <field name="table_name"></field>
+                        </fields>
+                    </key>
+
+                </keys>
+            </table>
+
+            <!-- }}} -->
+            <!-- {{{ table sequence_device -->
+
+            <table name="sequence_device">
+                <desc>设备成员数据表的唯一序列号</desc>
+                <engine>InnoDB</engine>
+                <charset>utf8</charset>
+                <columns>
+                    <column name="device_id">
+                        <desc>设备 ID</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+						<unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                    <column name="table_name">
+                        <desc>维护序列号的表名称</desc>
+                        <type>varchar</type>
+                        <nullable>false</nullable>
+                        <precision>64</precision>
+                        <default></default>
+                    </column>
+
+                    <column name="sequence_id">
+                        <desc>自增长 ID</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+						<unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+                </columns>
+
+                <keys>
+                    <key name="">
+						<desc></desc>
+                        <type>primary</type>
+                        <fields>
+                            <field name="device_id"></field>
+                            <field name="table_name"></field>
+                        </fields>
+                    </key>
+                </keys>
+            </table>
+
+            <!-- }}} -->
+            <!-- {{{ table sequence_monitor -->
+
+            <table name="sequence_monitor">
+                <desc>监控器数据表的唯一序列号</desc>
+                <engine>InnoDB</engine>
+                <charset>utf8</charset>
+                <columns>
+                    <column name="monitor_id">
+                        <desc>设备 ID</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+						<unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                    <column name="table_name">
+                        <desc>维护序列号的表名称</desc>
+                        <type>varchar</type>
+                        <nullable>false</nullable>
+                        <precision>64</precision>
+                        <default></default>
+                    </column>
+
+                    <column name="sequence_id">
+                        <desc>自增长 ID</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+						<unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+                </columns>
+
+                <keys>
+                    <key name="">
+						<desc></desc>
+                        <type>primary</type>
+                        <fields>
+                            <field name="monitor_id"></field>
+                            <field name="table_name"></field>
+                        </fields>
+                    </key>
+                </keys>
+            </table>
+
+            <!-- }}} -->
             <!-- {{{ table device_key -->
 
             <table name="device_key">
@@ -28,7 +161,6 @@
                         <precision>11</precision>
                         <unsigned>true</unsigned>
                         <default></default>
-                        <auto>true</auto>
                     </column>
 
                     <column name="device_name">
@@ -97,7 +229,7 @@
                 <engine>InnoDB</engine>
                 <charset>utf8</charset>
                 <columns>
-                    <column name="moniter_id">
+                    <column name="monitor_id">
                         <desc>监控器 id</desc>
                         <type>int</type>
                         <nullable>false</nullable>
@@ -130,7 +262,7 @@
                         <desc></desc>
                         <type>primary</type>
                         <fields>
-                            <field name="moniter_id"></field>
+                            <field name="monitor_id"></field>
                         </fields>
                     </key>
                 </keys>
@@ -154,7 +286,7 @@
                         <auto>true</auto>
                     </column>
 
-                    <column name="moniter_id">
+                    <column name="monitor_id">
                         <desc>监控器 id</desc>
                         <type>int</type>
                         <nullable>false</nullable>
@@ -195,7 +327,7 @@
                         <type>primary</type>
                         <fields>
                             <field name="attr_id"></field>
-                            <field name="moniter_id"></field>
+                            <field name="monitor_id"></field>
                         </fields>
                     </key>
                 </keys>
@@ -227,7 +359,7 @@
                         <default></default>
                     </column>
 
-                    <column name="moniter_id">
+                    <column name="monitor_id">
                         <desc>监控器 id</desc>
                         <type>int</type>
                         <nullable>false</nullable>
@@ -253,7 +385,7 @@
                         <fields>
                             <field name="value_id"></field>
                             <field name="attr_id"></field>
-                            <field name="moniter_id"></field>
+                            <field name="monitor_id"></field>
                         </fields>
                     </key>
                 </keys>

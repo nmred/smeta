@@ -12,8 +12,8 @@
 // | $_SWANBR_WEB_DOMAIN_$
 // +---------------------------------------------------------------------------
  
-namespace lib\member\operater\device\exception;
-use \lib\exception\member\operater\sw_exception as sw_ex;
+namespace lib\sequence\exception;
+use \lib\exception\sw_exception as sw_ex;
 
 /**
 * sw_exception 
