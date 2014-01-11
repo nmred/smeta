@@ -18,7 +18,7 @@ USE `swan_soft`;
 
 DROP TABLE IF EXISTS `device_key`;
 CREATE TABLE `device_key` (
-	`device_id` int(11) UNSIGNED NOT NULL ,
+	`device_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT ,
 	`device_name` varchar(255) NOT NULL ,
 	PRIMARY KEY (`device_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -33,14 +33,11 @@ CREATE TABLE `device_key` (
 -- 	设备 id
 -- device_display_name
 -- 	设备显示名称
--- moniter_id
--- 	监视器 ID
 
 DROP TABLE IF EXISTS `device_basic`;
 CREATE TABLE `device_basic` (
 	`device_id` int(11) UNSIGNED NOT NULL ,
 	`device_display_name` varchar(255) NOT NULL ,
-	`moniter_id` int(11) UNSIGNED NOT NULL ,
 	PRIMARY KEY (`device_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -59,7 +56,7 @@ CREATE TABLE `device_basic` (
 
 DROP TABLE IF EXISTS `monitor_basic`;
 CREATE TABLE `monitor_basic` (
-	`moniter_id` int(11) UNSIGNED NOT NULL ,
+	`moniter_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT ,
 	`moniter_name` varchar(255) NOT NULL ,
 	`moniter_display_name` varchar(255) NOT NULL ,
 	PRIMARY KEY (`moniter_id`)
@@ -84,7 +81,7 @@ CREATE TABLE `monitor_basic` (
 
 DROP TABLE IF EXISTS `monitor_attribute`;
 CREATE TABLE `monitor_attribute` (
-	`attr_id` int(11) UNSIGNED NOT NULL ,
+	`attr_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT ,
 	`moniter_id` int(11) UNSIGNED NOT NULL ,
 	`attr_name` varchar(255) NOT NULL ,
 	`attr_display_name` varchar(255) NOT NULL ,
@@ -109,7 +106,7 @@ CREATE TABLE `monitor_attribute` (
 
 DROP TABLE IF EXISTS `monitor_params`;
 CREATE TABLE `monitor_params` (
-	`value_id` int(11) UNSIGNED NOT NULL ,
+	`value_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT ,
 	`attr_id` int(11) UNSIGNED NOT NULL ,
 	`moniter_id` int(11) UNSIGNED NOT NULL ,
 	`value` varchar(255) NOT NULL ,

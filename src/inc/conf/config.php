@@ -7,7 +7,7 @@ return array(
 		'password' => '',
 		'host' => '127.0.0.1',
 		'port' => '3306',
-		'unix_socket' => '/usr/local/swan/run/mysql.sock',
+		'unix_socket' => '/usr/local/swan/run/sw_mysql.sock',
 		'driver_options' => array(),
 	),
 	'log' => array(

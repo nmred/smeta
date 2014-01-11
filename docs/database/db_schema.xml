@@ -28,6 +28,7 @@
                         <precision>11</precision>
                         <unsigned>true</unsigned>
                         <default></default>
+                        <auto>true</auto>
                     </column>
 
                     <column name="device_name">
@@ -75,15 +76,6 @@
                         <default></default>
                     </column>
 
-                    <column name="moniter_id">
-                        <desc>监视器 ID</desc>
-                        <type>int</type>
-                        <nullable>false</nullable>
-                        <precision>11</precision>
-                        <unsigned>true</unsigned>
-                        <default></default>
-                    </column>
-
                 </columns>
 
                 <keys>
@@ -112,6 +104,7 @@
                         <precision>11</precision>
                         <unsigned>true</unsigned>
                         <default></default>
+                        <auto>true</auto>
                     </column>
 
                     <column name="moniter_name">
@@ -158,6 +151,7 @@
                         <precision>11</precision>
                         <unsigned>true</unsigned>
                         <default></default>
+                        <auto>true</auto>
                     </column>
 
                     <column name="moniter_id">
@@ -222,6 +216,7 @@
                         <precision>11</precision>
                         <unsigned>true</unsigned>
                         <default></default>
+                        <auto>true</auto>
                     </column>
                     <column name="attr_id">
                         <desc>监控器属性 id</desc>

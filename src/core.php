@@ -129,3 +129,8 @@ $autoloader->register();
 \swan\config\sw_config::set_config(PATH_SWAN_CONF . '/config.php');
 
 // }}}
+// {{{ 数据库常量
+
+define('SWAN_TBN_DEVICE_KEY', 'device_key');
+define('SWAN_TBN_DEVICE_BASIC', 'device_basic');
+// }}}
