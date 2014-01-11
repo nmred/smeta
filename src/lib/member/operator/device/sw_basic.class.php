@@ -50,7 +50,7 @@ class sw_basic extends sw_abstract
         }
 
         // 判断是否已经存在
-        if ($this->exists($attributes['device_id'])) {
+        if ($this->exists($key_attributes['device_id'])) {
             throw new sw_exception('device already exists');
         }
         
@@ -62,6 +62,70 @@ class sw_basic extends sw_abstract
         $this->__db->insert(SWAN_TBN_DEVICE_BASIC, $attributes);
 	}
 	
+	// }}}
+	// {{{ public function get_basic()
+
+	/**
+	 * get_basic 
+	 * 
+	 * @param \lib\member\condition\sw_get_device_basic $condition 
+	 * @access public
+	 * @return void
+	 */
+	public function get_basic(\lib\member\condition\sw_get_device_basic $condition)
+	{
+		$condition->check_params();
+		$select = $this->__db->select()
+							 ->from(SWAN_TBN_DEVICE_BASIC);
+		$condition->where($select, true);
+		return $this->_get($select, $condition->params());	
+	}
+
+	// }}}
+	// {{{ public function mod_basic()
+
+	/**
+	 * mod_basic 
+	 * 
+	 * @param \lib\member\condition\sw_mod_device_basic $condition 
+	 * @access public
+	 * @return void
+	 */
+	public function mod_basic(\lib\member\condition\sw_mod_device_basic $condition)
+	{
+		$condition->check_params();
+		$params = $condition->params();
+		$attributes = $condition->get_property()->prepared_attributes();
+
+		$where = $condition->where();
+		if (!$where || !$attributes) {
+			return; 
+		}
+
+		$this->__db->update(SWAN_TBN_DEVICE_BASIC, $attributes, $where);
+	}
+
+	// }}}
+	// {{{ public function del_basic()
+
+	/**
+	 * 删除 device 设备信息 
+	 * 
+	 * @param \lib\member\condition\sw_del_device_basic $condition 
+	 * @access public
+	 * @return void
+	 */
+	public function del_basic(\lib\member\condition\sw_del_device_basic $condition)
+	{
+		$condition->check_params();
+		$where = $condition->where();
+		if (!$where) {
+			return; 
+		}
+
+		$this->__db->delete(SWAN_TBN_DEVICE_BASIC, $where);
+	}
+
 	// }}}
     // {{{ public function exists()
 
@@ -76,7 +140,7 @@ class sw_basic extends sw_abstract
     {
         $select = $this->__db->select()
                              ->from(SWAN_TBN_DEVICE_BASIC, 'count(*)')
-                             ->where('device_id=?')
+                             ->where('device_id=?');
         return $this->__db->fetch_one($select, $device_id) > 0;
     }
 

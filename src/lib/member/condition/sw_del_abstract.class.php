@@ -12,18 +12,22 @@
 // | $_SWANBR_WEB_DOMAIN_$
 // +---------------------------------------------------------------------------
  
-namespace lib\member\operator\exception;
-use \lib\member\exception\sw_exception as sw_ex;
+namespace lib\member\condition;
+use \lib\member\condition\exception\sw_exception;
 
 /**
-* sw_exception 
++------------------------------------------------------------------------------
+* sw_del_abstract 
++------------------------------------------------------------------------------
 * 
-* @uses Exception
-* @package swan 
+* @abstract
+* @package 
 * @version $_SWANBR_VERSION_$
 * @copyright $_SWANBR_COPYRIGHT_$
 * @author $_SWANBR_AUTHOR_$ 
++------------------------------------------------------------------------------
 */
-class sw_exception extends sw_ex
+abstract class sw_del_abstract extends \swan\condition\sw_del_abstract
 {
+	
 }

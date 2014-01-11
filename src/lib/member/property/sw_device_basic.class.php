@@ -12,80 +12,57 @@
 // | $_SWANBR_WEB_DOMAIN_$
 // +---------------------------------------------------------------------------
  
-namespace lib\member\operator;
-use \lib\member\operator\exception\sw_exception;
+namespace lib\member\property;
+use \lib\member\property\exception\sw_exception;
 
 /**
 +------------------------------------------------------------------------------
-* sw_device 
+* sw_device_key 
 +------------------------------------------------------------------------------
 * 
-* @uses sw
-* @uses _abstract
+* @uses sw_abstract
 * @package 
 * @version $_SWANBR_VERSION_$
 * @copyright $_SWANBR_COPYRIGHT_$
 * @author $_SWANBR_AUTHOR_$ 
 +------------------------------------------------------------------------------
 */
-class sw_device extends sw_abstract
+class sw_device_basic extends sw_abstract
 {
 	// {{{ members
 
 	/**
-	 * 子类的命名空间 
-	 * 
-	 * @var string
-	 * @access protected
-	 */
-	protected $__namespace = "\lib\member\operator\device\\";
-
-	/**
-	 * device key
-	 * 
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $__property_key = null;
-
-	/**
-	 * 允许创建的子类 
+	 * 允许设置的元素列表 
 	 * 
 	 * @var array
 	 * @access protected
 	 */
-	protected $__operator_types = array(
-		'key'   => true,
-		'basic' => true,
+	protected $__allow_attributes = array(
+		'device_id'           => true,
+		'device_display_name' => true,
 	);
+
+	/**
+	 * 主键 
+	 * 
+	 * @var string
+	 * @access protected
+	 */
+	protected $__key_attributes = array('device_id');
 
 	// }}}		
 	// {{{ functions
-	// {{{ public function __construct()
+	// {{{ public function check()
 
 	/**
-	 * __construct 
+	 * 检查参数 
 	 * 
 	 * @access public
 	 * @return void
 	 */
-	public function __construct($property = null)
+	public function check()
 	{
-		$this->__property_key = $property;	
-	}
-
-	// }}}
-	// {{{ public function get_device_key_property()
-
-	/**
-	 * 获取设备 key 的属性 
-	 * 
-	 * @access public
-	 * @return void
-	 */
-	public function get_device_key_property()
-	{
-		return $this->__property_key;	
+		parent::check();
 	}
 
 	// }}}

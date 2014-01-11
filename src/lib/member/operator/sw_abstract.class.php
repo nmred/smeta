@@ -88,7 +88,9 @@ abstract class sw_abstract extends \swan\operator\sw_abstract
 
 		$class_name = $this->__namespace . "sw_$type";
 
-		return new $class_name($this);
+		$operator =  new $class_name($this);
+		$operator->set_db(\swan\db\sw_db::singleton());
+		return $operator;
 	}
 
 	// }}}

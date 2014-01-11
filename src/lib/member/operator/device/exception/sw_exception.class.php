@@ -13,7 +13,7 @@
 // +---------------------------------------------------------------------------
  
 namespace lib\member\operator\device\exception;
-use \lib\exception\member\operator\sw_exception as sw_ex;
+use \lib\member\operator\exception\sw_exception as sw_ex;
 
 /**
 * sw_exception 
