@@ -317,6 +317,14 @@
                         <default></default>
                     </column>
 
+                    <column name="form_data">
+                        <desc>属性表单数据</desc>
+                        <type>varchar</type>
+                        <nullable>false</nullable>
+                        <precision>255</precision>
+                        <default></default>
+                    </column>
+
                 </columns>
 
                 <keys>
