@@ -109,16 +109,16 @@ CREATE TABLE `device_basic` (
 -- 
 -- monitor_id
 -- 	监控器 id
--- moniter_name
+-- monitor_name
 -- 	监控器名称
--- moniter_display_name
+-- monitor_display_name
 -- 	监控器显示名称
 
 DROP TABLE IF EXISTS `monitor_basic`;
 CREATE TABLE `monitor_basic` (
-	`monitor_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT ,
-	`moniter_name` varchar(255) NOT NULL ,
-	`moniter_display_name` varchar(255) NOT NULL ,
+	`monitor_id` int(11) UNSIGNED NOT NULL ,
+	`monitor_name` varchar(255) NOT NULL ,
+	`monitor_display_name` varchar(255) NOT NULL ,
 	PRIMARY KEY (`monitor_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -141,7 +141,7 @@ CREATE TABLE `monitor_basic` (
 
 DROP TABLE IF EXISTS `monitor_attribute`;
 CREATE TABLE `monitor_attribute` (
-	`attr_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT ,
+	`attr_id` int(11) UNSIGNED NOT NULL ,
 	`monitor_id` int(11) UNSIGNED NOT NULL ,
 	`attr_name` varchar(255) NOT NULL ,
 	`attr_display_name` varchar(255) NOT NULL ,
@@ -166,7 +166,7 @@ CREATE TABLE `monitor_attribute` (
 
 DROP TABLE IF EXISTS `monitor_params`;
 CREATE TABLE `monitor_params` (
-	`value_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT ,
+	`value_id` int(11) UNSIGNED NOT NULL ,
 	`attr_id` int(11) UNSIGNED NOT NULL ,
 	`monitor_id` int(11) UNSIGNED NOT NULL ,
 	`value` varchar(255) NOT NULL ,

@@ -236,10 +236,9 @@
                         <precision>11</precision>
                         <unsigned>true</unsigned>
                         <default></default>
-                        <auto>true</auto>
                     </column>
 
-                    <column name="moniter_name">
+                    <column name="monitor_name">
                         <desc>监控器名称</desc>
                         <type>varchar</type>
                         <nullable>false</nullable>
@@ -247,7 +246,7 @@
                         <default></default>
                     </column>
 
-                    <column name="moniter_display_name">
+                    <column name="monitor_display_name">
                         <desc>监控器显示名称</desc>
                         <type>varchar</type>
                         <nullable>false</nullable>
@@ -283,7 +282,6 @@
                         <precision>11</precision>
                         <unsigned>true</unsigned>
                         <default></default>
-                        <auto>true</auto>
                     </column>
 
                     <column name="monitor_id">
@@ -348,7 +346,6 @@
                         <precision>11</precision>
                         <unsigned>true</unsigned>
                         <default></default>
-                        <auto>true</auto>
                     </column>
                     <column name="attr_id">
                         <desc>监控器属性 id</desc>

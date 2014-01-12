@@ -177,13 +177,12 @@ class sw_key extends sw_abstract
 	 */
 	protected function _validate($device_name)
 	{
-		return true;
 		$parrent = '/^[a-zA-Z]+[0-9a-zA-Z_]{5,}$/is';
 		if (!preg_match($parrent, $device_name)) {
 			throw new sw_exception("设备名的格式必须是首个字符是字母，由数字、字母、下划线组成,并且至少6位");  
 		}
 
-		$is_exists = self::$__db->fetch_one(self::$__db->select()
+		$is_exists = $this->__db->fetch_one($this->__db->select()
 								->from(SWAN_TBN_DEVICE_KEY, array('device_id'))
 								->where('device_name= ?'), $device_name);
 
