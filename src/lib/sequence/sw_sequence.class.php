@@ -236,7 +236,7 @@ class sw_sequence
 		//判断是否是合法的 monitor_id
 		try {
 			$monitor_id = $db->fetch_one($db->select()
-							  ->from(SWAN_TBN_MONITOR, array('monitor_id'))
+							  ->from(SWAN_TBN_MONITOR_BASIC, array('monitor_id'))
 							  ->where('monitor_id= ?'), $monitor_id);
 		} catch (sw_exception $e) {
 			throw new sw_exception('invalid monitor id, get sequence faild. ');	

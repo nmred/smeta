@@ -29,5 +29,46 @@ use \lib\member\property\exception\sw_exception;
 */
 abstract class sw_abstract extends \swan\property\sw_abstract
 {
-	
+	// {{{ members
+
+	/**
+	 * 允许设置的元素列表 
+	 * 
+	 * @var array
+	 * @access protected
+	 */
+	protected $__allow_attributes = array(
+		'attr_id'           => true,
+		'attr_name'         => true,
+		'attr_display_name' => true,
+		'monitor_id'        => true,
+		'form_type'         => true,
+		'form_data'         => true,
+	);
+
+	/**
+	 * 主键 
+	 * 
+	 * @var string
+	 * @access protected
+	 */
+	protected $__key_attributes = array('attr_id');
+
+	// }}}		
+	// {{{ functions
+	// {{{ public function check()
+
+	/**
+	 * 检查参数 
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function check()
+	{
+		parent::check();
+	}
+
+	// }}}
+	// }}}
 }

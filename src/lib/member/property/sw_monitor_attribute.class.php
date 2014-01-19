@@ -40,7 +40,7 @@ class sw_monitor_attribute extends sw_abstract
 	protected $__allow_attributes = array(
 		'attr_id'           => true,
 		'monitor_id'        => true,
-		'attr_name_name'    => true,
+		'attr_name'         => true,
 		'attr_display_name' => true,
 		'form_type'         => true,
 		'form_data'         => true,

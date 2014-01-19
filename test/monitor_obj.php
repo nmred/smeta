@@ -4,9 +4,10 @@ require_once 'core.php';
 use \lib\member\sw_member;
 
 // 添加 monitor basic
-//$monitor_basic_property = sw_member::property_factory('monitor_basic', array('monitor_name' => 'testsss'));
-//$monitor = sw_member::operator_factory('monitor', $monitor_basic_property);
-//$monitor_id = $monitor->get_operator('basic')->add_basic();
+$monitor_basic_property = sw_member::property_factory('monitor_basic', array('monitor_name' => 'testsss1'));
+$monitor = sw_member::operator_factory('monitor', $monitor_basic_property);
+$monitor_id = $monitor->get_operator('basic')->add_basic();
+var_dump($monitor_id);
 
 // 获取 monitor basic
 //$condition = sw_member::condition_factory('get_monitor_basic');
