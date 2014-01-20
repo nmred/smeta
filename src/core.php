@@ -136,6 +136,7 @@ define('SWAN_TBN_SEQUENCE_DEVICE', 'sequence_device');
 define('SWAN_TBN_SEQUENCE_MONITOR', 'sequence_monitor');
 define('SWAN_TBN_DEVICE_KEY', 'device_key');
 define('SWAN_TBN_DEVICE_BASIC', 'device_basic');
+define('SWAN_TBN_DEVICE_MONITOR', 'monitor_params');
 define('SWAN_TBN_MONITOR_BASIC', 'monitor_basic');
 define('SWAN_TBN_MONITOR_ATTRIBUTE', 'monitor_attribute');
 

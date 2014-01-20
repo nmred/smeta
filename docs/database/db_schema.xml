@@ -364,6 +364,15 @@
                         <default></default>
                     </column>
 
+                    <column name="device_id">
+                        <desc>设备 id</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+                        <unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
                     <column name="monitor_id">
                         <desc>监控器 id</desc>
                         <type>int</type>

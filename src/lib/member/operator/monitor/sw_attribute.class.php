@@ -91,16 +91,16 @@ class sw_attribute extends sw_abstract
 	}
 
 	// }}}
-	// {{{ public function mod_basic()
+	// {{{ public function mod_attribute()
 
 	/**
-	 * mod_basic 
+	 * mod_attribute 
 	 * 
-	 * @param \lib\member\condition\sw_mod_monitor_basic $condition 
+	 * @param \lib\member\condition\sw_mod_monitor_attribute $condition 
 	 * @access public
 	 * @return void
 	 */
-	public function mod_basic(\lib\member\condition\sw_mod_monitor_basic $condition)
+	public function mod_attribute(\lib\member\condition\sw_mod_monitor_attribute $condition)
 	{
 		$condition->check_params();
 		$params = $condition->params();
@@ -111,20 +111,20 @@ class sw_attribute extends sw_abstract
 			return; 
 		}
 
-		$this->__db->update(SWAN_TBN_MONITOR_BASIC, $attributes, $where);
+		$this->__db->update(SWAN_TBN_MONITOR_ATTRIBUTE, $attributes, $where);
 	}
 
 	// }}}
-	// {{{ public function del_basic()
+	// {{{ public function del_attribute()
 
 	/**
-	 * 删除 monitor 设备信息 
+	 * 删除 monitor 属性 
 	 * 
-	 * @param \lib\member\condition\sw_del_monitor_basic $condition 
+	 * @param \lib\member\condition\sw_del_monitor_attribute $condition 
 	 * @access public
 	 * @return void
 	 */
-	public function del_basic(\lib\member\condition\sw_del_monitor_basic $condition)
+	public function del_attribute(\lib\member\condition\sw_del_monitor_attribute $condition)
 	{
 		$condition->check_params();
 		$where = $condition->where();
@@ -132,7 +132,7 @@ class sw_attribute extends sw_abstract
 			return; 
 		}
 
-		$this->__db->delete(SWAN_TBN_MONITOR_BASIC, $where);
+		$this->__db->delete(SWAN_TBN_MONITOR_ATTRIBUTE, $where);
 	}
 
 	// }}}

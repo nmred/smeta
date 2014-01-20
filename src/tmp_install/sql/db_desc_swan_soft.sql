@@ -138,6 +138,8 @@ CREATE TABLE `monitor_basic` (
 -- 	属性显示名称
 -- form_type
 -- 	属性表单类型
+-- form_data
+-- 	属性表单数据
 
 DROP TABLE IF EXISTS `monitor_attribute`;
 CREATE TABLE `monitor_attribute` (
@@ -146,6 +148,7 @@ CREATE TABLE `monitor_attribute` (
 	`attr_name` varchar(255) NOT NULL ,
 	`attr_display_name` varchar(255) NOT NULL ,
 	`form_type` varchar(255) NOT NULL ,
+	`form_data` varchar(255) NOT NULL ,
 	PRIMARY KEY (`attr_id`,`monitor_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -159,6 +162,8 @@ CREATE TABLE `monitor_attribute` (
 -- 	属性值 id
 -- attr_id
 -- 	监控器属性 id
+-- device_id
+-- 	设备 id
 -- monitor_id
 -- 	监控器 id
 -- value
@@ -168,6 +173,7 @@ DROP TABLE IF EXISTS `monitor_params`;
 CREATE TABLE `monitor_params` (
 	`value_id` int(11) UNSIGNED NOT NULL ,
 	`attr_id` int(11) UNSIGNED NOT NULL ,
+	`device_id` int(11) UNSIGNED NOT NULL ,
 	`monitor_id` int(11) UNSIGNED NOT NULL ,
 	`value` varchar(255) NOT NULL ,
 	PRIMARY KEY (`value_id`,`attr_id`,`monitor_id`)
