@@ -4,11 +4,11 @@ require_once 'core.php';
 use \lib\member\sw_member;
 
 // 添加 monitor attribute
-//$monitor_basic_property = sw_member::property_factory('monitor_basic', array('monitor_id' => 6));
-//$monitor_attribute_property = sw_member::property_factory('monitor_attribute', array('attr_name' => 'testsss1', 'form_type' => 1));
-//$monitor = sw_member::operator_factory('monitor', $monitor_basic_property);
-//$attr_id = $monitor->get_operator('attribute')->add_attribute($monitor_attribute_property);
-//var_dump($attr_id);
+$monitor_basic_property = sw_member::property_factory('monitor_basic', array('monitor_id' => 1));
+$monitor_attribute_property = sw_member::property_factory('monitor_attribute', array('attr_name' => 'testsss1', 'form_type' => 1));
+$monitor = sw_member::operator_factory('monitor', $monitor_basic_property);
+$attr_id = $monitor->get_operator('attribute')->add_attribute($monitor_attribute_property);
+var_dump($attr_id);
 
 // 获取 monitor attribute
 //$condition = sw_member::condition_factory('get_monitor_attribute');

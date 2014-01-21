@@ -4,10 +4,15 @@ require_once 'core.php';
 use \lib\member\sw_member as sw_mem;
 
 // 添加 device key
-$device_property_key = sw_mem::property_factory('device_key', array('device_name' => 'testsss'));
+$device_property_key    = sw_mem::property_factory('device_key', array('device_id' => '1'));
+$device_property_monitor    = sw_mem::property_factory('device_monitor', array('value' => 'data'));
+$monitor_property_basic = sw_mem::property_factory('monitor_basic', array('monitor_id' => '1'));
+$monitor_property_attribute = sw_mem::property_factory('monitor_attribute', array('attr_id' => '1'));
+$device_property_monitor->set_monitor_basic($monitor_property_basic);
+$device_property_monitor->set_monitor_attribute($monitor_property_attribute);
 $device = sw_mem::operator_factory('device', $device_property_key);
-$device_key = $device->get_operator('key')->add_key();
-var_dump($device_key);
+$device_monitor = $device->get_operator('monitor')->add_monitor($device_monitor_property);
+var_dump($device_monitor);
 
 // 删除 device key
 //$condition = sw_mem::condition_factory('del_device_key', array('device_id' => 16));

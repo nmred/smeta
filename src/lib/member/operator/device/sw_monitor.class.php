@@ -56,7 +56,7 @@ class sw_monitor extends sw_abstract
         $attributes		    = $monitor_property->attributes();
 
         // 判断是否已经存在
-		$this->exists($attributes['device_id'], $monitor_basic['monitor_id'], $monitor_attributes['attr_id']);
+		$this->exists($key_attributes['device_id'], $monitor_basic['monitor_id'], $monitor_attributes['attr_id']);
 
 		if (!isset($attributes['attr_id'])) {
 			$value_id = \lib\sequence\sw_sequence::get_next_device($key_attributes['device_id'], SWAN_TBN_DEVICE_MONITOR);	
@@ -75,59 +75,80 @@ class sw_monitor extends sw_abstract
 	}
 	
 	// }}}
-	// {{{ public function get_basic()
+	// {{{ public function get_monitor()
 
 	/**
-	 * get_basic 
+	 * get_monitor 
 	 * 
-	 * @param \lib\member\condition\sw_get_device_basic $condition 
+	 * @param \lib\member\condition\sw_get_device_monitor $condition 
 	 * @access public
 	 * @return void
 	 */
-	public function get_basic(\lib\member\condition\sw_get_device_basic $condition)
+	public function get_monitor(\lib\member\condition\sw_get_device_monitor $condition)
 	{
 		$condition->check_params();
 		$select = $this->__db->select()
-							 ->from(SWAN_TBN_DEVICE_BASIC);
+							 ->from(SWAN_TBN_DEVICE_MONITOR);
 		$condition->where($select, true);
 		return $this->_get($select, $condition->params());	
 	}
 
 	// }}}
-	// {{{ public function mod_basic()
+	// {{{ public function mod_monitor()
 
 	/**
-	 * mod_basic 
+	 * mod_monitor 
 	 * 
-	 * @param \lib\member\condition\sw_mod_device_basic $condition 
+	 * @param \lib\member\condition\sw_mod_device_monitor $condition 
 	 * @access public
 	 * @return void
 	 */
-	public function mod_basic(\lib\member\condition\sw_mod_device_basic $condition)
+	public function mod_monitor(\lib\member\condition\sw_mod_device_monitor $condition)
 	{
 		$condition->check_params();
 		$params = $condition->params();
-		$attributes = $condition->get_property()->prepared_attributes();
+		$monitor_property = $condition->get_property();
+		$attributes = $monitor_property->prepared_attributes();
 
 		$where = $condition->where();
 		if (!$where || !$attributes) {
 			return; 
 		}
 
-		$this->__db->update(SWAN_TBN_DEVICE_BASIC, $attributes, $where);
+		$property_key = $this->get_device_operator()->get_device_key_property();
+		$key_attributes = $property_key->attributes();
+
+        if (!isset($key_attributes['device_id'])) {
+            throw new sw_exception('Unknow device id.');
+        }
+
+		$monitor_basic_property		= $monitor_property->get_monitor_basic();
+		$monitor_attribute_property = $monitor_property->get_monitor_attribute(); 
+		$monitor_basic		= $monitor_basic_property->attributes();
+		$monitor_attributes = $monitor_attribute_property->attributes();
+        $attributes		    = $monitor_property->attributes();
+
+        // 判断是否已经存在
+		$this->exists($key_attributes['device_id'], $monitor_basic['monitor_id'], $monitor_attributes['attr_id']);
+
+        $attributes['device_id']  = $key_attributes['device_id'];
+        $attributes['monitor_id'] = $monitor_basic['monitor_id'];
+        $attributes['attr_id']    = $monitor_attributes['attr_id'];
+
+		$this->__db->update(SWAN_TBN_DEVICE_MONITOR, $attributes, $where);
 	}
 
 	// }}}
-	// {{{ public function del_basic()
+	// {{{ public function del_monitor()
 
 	/**
 	 * 删除 device 设备信息 
 	 * 
-	 * @param \lib\member\condition\sw_del_device_basic $condition 
+	 * @param \lib\member\condition\sw_del_device_monitor $condition 
 	 * @access public
 	 * @return void
 	 */
-	public function del_basic(\lib\member\condition\sw_del_device_basic $condition)
+	public function del_monitor(\lib\member\condition\sw_del_device_monitor $condition)
 	{
 		$condition->check_params();
 		$where = $condition->where();
@@ -135,7 +156,7 @@ class sw_monitor extends sw_abstract
 			return; 
 		}
 
-		$this->__db->delete(SWAN_TBN_DEVICE_BASIC, $where);
+		$this->__db->delete(SWAN_TBN_DEVICE_MONITOR, $where);
 	}
 
 	// }}}
