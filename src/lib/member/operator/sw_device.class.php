@@ -57,6 +57,7 @@ class sw_device extends sw_abstract
 	protected $__operator_types = array(
 		'key'   => true,
 		'basic' => true,
+		'monitor' => true,
 	);
 
 	// }}}		

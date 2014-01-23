@@ -58,6 +58,13 @@ class sw_monitor extends sw_abstract
         // 判断是否已经存在
 		$this->exists($key_attributes['device_id'], $monitor_basic['monitor_id'], $monitor_attributes['attr_id']);
 
+        $select = $this->__db->select()
+                             ->from(SWAN_TBN_DEVICE_MONITOR, 'count(*)')
+                             ->where('device_id=? AND monitor_id=? AND attr_id=?');
+        if ($this->__db->fetch_one($select, array($key_attributes['device_id'], $monitor_basic['monitor_id'], $monitor_attributes['attr_id'])) > 0) {
+			throw new sw_exception('already exists this item.');	
+		}
+
 		if (!isset($attributes['attr_id'])) {
 			$value_id = \lib\sequence\sw_sequence::get_next_device($key_attributes['device_id'], SWAN_TBN_DEVICE_MONITOR);	
 		} else {
@@ -67,11 +74,12 @@ class sw_monitor extends sw_abstract
         $attributes['device_id']  = $key_attributes['device_id'];
         $attributes['monitor_id'] = $monitor_basic['monitor_id'];
         $attributes['attr_id']    = $monitor_attributes['attr_id'];
-        $attributes['value_id']   = $attributes['value_id'];
+        $attributes['value_id']   = $value_id;
         $require_fields = array('value_id', 'device_id', 'monitor_id', 'attr_id', 'value');
         $this->_check_require($attributes, $require_fields);
 
         $this->__db->insert(SWAN_TBN_DEVICE_MONITOR, $attributes);
+		return $value_id;
 	}
 	
 	// }}}
@@ -188,7 +196,7 @@ class sw_monitor extends sw_abstract
 		}
 
         $select = $this->__db->select()
-                             ->from(SWAN_TBN_MONITOR_ATRRIBUTE, 'count(*)')
+                             ->from(SWAN_TBN_MONITOR_ATTRIBUTE, 'count(*)')
                              ->where('attr_id=?');
         if (false == $this->__db->fetch_one($select, $attr_id) > 0) {
 			throw new sw_exception('attribute id not exists.');	
