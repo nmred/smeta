@@ -90,5 +90,28 @@ class sw_device extends sw_abstract
 	}
 
 	// }}}
+	// {{{ public function get_device()
+	
+	/**
+	 * 获取设备列表 
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function get_device(\lib\member\condition\sw_get_device $condition)
+	{	
+		$condition->check_params();
+		$params = $condition->params();
+		if (isset($params['is_count']) && $params['is_count']) {
+			$key_columns = 'count(*)';	
+		} else {		
+		}
+		$select = $this->__db->select()
+							 ->from(array('k' => SWAN_TBN_DEVICE_KEY));
+		$condition->where($select, true);
+		return $this->_get($select, $condition->params());	
+	}
+
+	// }}}
 	// }}}
 }

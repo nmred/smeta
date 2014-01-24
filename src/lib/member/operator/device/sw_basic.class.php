@@ -60,6 +60,7 @@ class sw_basic extends sw_abstract
         $this->_check_require($attributes, $require_fields);
 
         $this->__db->insert(SWAN_TBN_DEVICE_BASIC, $attributes);
+		return $key_attributes['device_id'];
 	}
 	
 	// }}}

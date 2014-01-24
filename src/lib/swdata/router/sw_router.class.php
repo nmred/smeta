@@ -133,7 +133,7 @@ class sw_router extends \swan\controller\router\route\sw_abstract
 		}	
 
 		$pathinfo = $request->get_pathinfo();
-		list($controller, $action) = explode('/', ltrim($pathinfo, '/'));
+		list($controller, $action) = explode('.', ltrim($pathinfo, '/'));
 		if (!isset($map[$module][$controller][$action])) {
 			return false;	
 		}

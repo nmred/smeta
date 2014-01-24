@@ -217,6 +217,7 @@ class sw_swdata extends sw_abstract
 		// 添加控制器命名空间
 		foreach ($this->__controller_namespace as $module => $namespace) {
 			$path = '/' . $module . '/';	
+            $this->log("start response module `$path`.", LOG_DEBUG);
 			$this->__http->set_callback($path, array($this, 'request_callback'), $module);
 		}
     }
@@ -319,7 +320,7 @@ class sw_swdata extends sw_abstract
 			$controller->add_controller_namespace($this->__controller_namespace[$module], $module);
 			$controller->get_router()->add_route($module, $this->__router);
 			$controller->dispatch($erequest, $eresponse);
-		} catch (\swan\sw_exception $e) {
+		} catch (\swan\exception\sw_exception $e) {
             $this->log($e->getMessage(), LOG_INFO);
 		}
 	}

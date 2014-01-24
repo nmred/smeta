@@ -31,5 +31,73 @@ use swan\controller\sw_action;
 abstract class sw_abstract extends sw_action
 {
 	// {{{ functions
+	// {{{ public function render_json()
+	
+	/**
+	 * 格式化返回的格式 
+	 * 
+	 * @param array $data 
+	 * @param string $code 
+	 * @param string $msg 
+	 * @access public
+	 * @return void
+	 */
+	public function render_json($data, $code, $msg = null)
+	{
+		$result = array(
+			'code' => $code,
+			'msg'  => $msg,
+			'data' => $data,
+		);	
+
+		return $this->json_stdout($result);
+	}
+
 	// }}}	
+	// {{{ protected function _begin_transaction()
+	
+	/**
+	 * 开启事务 
+	 * 
+	 * @access protected
+	 * @return void
+	 */
+	protected function _begin_transaction()
+	{
+		$db = \swan\db\sw_db::singleton();	
+		$db->begin_transaction();
+	}
+
+	// }}}	
+	// {{{ protected function _commit()
+	
+	/**
+	 * 提交事务 
+	 * 
+	 * @access protected
+	 * @return void
+	 */
+	protected function _commit()
+	{
+		$db = \swan\db\sw_db::singleton();	
+		$db->commit();
+	}
+
+	// }}}	
+	// {{{ protected function _rollback()
+	
+	/**
+	 * 回滚事务 
+	 * 
+	 * @access protected
+	 * @return void
+	 */
+	protected function _rollback()
+	{
+		$db = \swan\db\sw_db::singleton();	
+		$db->rollback();
+	}
+
+	// }}}	
+	// }}}
 }

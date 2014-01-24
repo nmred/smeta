@@ -11,37 +11,54 @@
 // +---------------------------------------------------------------------------
 // | $_SWANBR_WEB_DOMAIN_$
 // +---------------------------------------------------------------------------
-
-namespace lib\swdata\action\test;
-use \lib\swdata\action\sw_abstract;
+ 
+namespace lib\member\condition;
+use \lib\member\condition\exception\sw_exception;
 
 /**
 +------------------------------------------------------------------------------
-* sw_test 
+* sw_get_device 
 +------------------------------------------------------------------------------
 * 
-* @uses sw
-* @uses _abstract
+* @uses sw_get_abstract
 * @package 
 * @version $_SWANBR_VERSION_$
 * @copyright $_SWANBR_COPYRIGHT_$
 * @author $_SWANBR_AUTHOR_$ 
 +------------------------------------------------------------------------------
 */
-class sw_test extends sw_abstract
+class sw_get_device extends sw_get_abstract
 {
-	// {{{ functions
+	// {{{ members
 
 	/**
-	 * action_default 
+	 * 允许设置的参数 
 	 * 
-	 * @access public
-	 * @return void
+	 * @var array
+	 * @access protected
 	 */
-	public function action_default()
-	{
-		return $this->json_stdout(array('swan server!'));
-	}
+	protected $__allow_params = array(
+		'device_id'   => true,
+		'device_display_name' => true,
+	);
 
+	/**
+	 * 查询字段 
+	 * 
+	 * @var array
+	 * @access protected
+	 */
+	protected $__columns = array(
+		'device_id'   => SWAN_TBN_DEVICE_KEY,		
+		'device_name' => SWAN_TBN_DEVICE_KEY,		
+		'device_display_name' => SWAN_TBN_DEVICE_BASIC,		
+		'monitor_id'  => SWAN_TBN_DEVICE_MONITOR,		
+		'attr_id'     => SWAN_TBN_DEVICE_MONITOR,		
+		'value_id'    => SWAN_TBN_DEVICE_MONITOR,		
+		'value'    => SWAN_TBN_DEVICE_MONITOR,		
+	);
+
+	// }}}
+	// {{{ functions
 	// }}}
 }
