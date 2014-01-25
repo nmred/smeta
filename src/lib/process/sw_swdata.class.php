@@ -284,6 +284,7 @@ class sw_swdata extends sw_abstract
 
 		$namespace_format = "\\lib\\swdata\\action\\%s";
 		foreach ($cfg as $module => $config) {
+			$actions = array();
 			$this->__controller_namespace[$module] = sprintf($namespace_format, $module);
 			foreach ($config as $key => $value) {
 				if (false === strpos($key, '.')) {
@@ -319,6 +320,7 @@ class sw_swdata extends sw_abstract
 			$erequest->set_module_name($module);
 			$controller->add_controller_namespace($this->__controller_namespace[$module], $module);
 			$controller->get_router()->add_route($module, $this->__router);
+			$eresponse->render_exceptions(true);
 			$controller->dispatch($erequest, $eresponse);
 		} catch (\swan\exception\sw_exception $e) {
             $this->log($e->getMessage(), LOG_INFO);

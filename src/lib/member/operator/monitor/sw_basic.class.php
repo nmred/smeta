@@ -76,7 +76,7 @@ class sw_basic extends sw_abstract
 	{
 		$condition->check_params();
 		$select = $this->__db->select()
-							 ->from(SWAN_TBN_MONITOR_BASIC);
+							 ->from(SWAN_TBN_MONITOR_BASIC, null);
 		$condition->where($select, true);
 		return $this->_get($select, $condition->params());	
 	}
