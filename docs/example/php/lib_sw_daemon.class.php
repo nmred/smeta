@@ -1,4 +1,4 @@
-#!/usr/local/swan/opt/php/bin/php 
+#!/usr/local/swan/opt/bin/php 
 <?php
 require_once 'core.php';
 require_once PATH_SWAN_LIB . 'daemon/sw_daemon.class.php';
