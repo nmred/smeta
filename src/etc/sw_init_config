@@ -10,7 +10,6 @@
 ARRAY_START=(
     mysql
     redis
-	memcached
 	rsyslogd
 	phpd
     cron_etc
@@ -21,7 +20,6 @@ ARRAY_STOP=(
     cron_etc
 	phpd
 	rsyslogd
-	memcached
 	redis
     mysql
 )
@@ -30,7 +28,6 @@ ARRAY_STOP=(
 ARRAY_WATCH=(
     mysql "mysqld_safe,mysqld"
 	redis "redis-server"
-	memcached "memcached"
 	rsyslogd "rsyslogd"
     cron_etc "crond_etc"
 	phpd "sw_phpd"
