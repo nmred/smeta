@@ -29,6 +29,9 @@ define('PATH_SWAN_BASE', realpath(dirname(__FILE__)));
 	define('PATH_SWAN_SF', PATH_SWAN_BASE . '/sf/');
 	define('PATH_SWAN_LIB', PATH_SWAN_BASE . '/lib/');
     define('PATH_SWAN_SHELL', PATH_SWAN_BASE . '/shell/');
+    define('PATH_SWAN_ETC', PATH_SWAN_BASE . '/etc/');
+		define('PATH_INI_PHPD', PATH_SWAN_ETC . 'sw_phpd.ini');
+		define('PATH_INI_SWDATA', PATH_SWAN_ETC . 'sw_swdata.ini');
     define('PATH_SWAN_TPL', PATH_SWAN_BASE . '/tpl/');
     define('PATH_SWAN_WEB', PATH_SWAN_BASE . '/web/');
 		define('PATH_SWAN_RRDPNG', PATH_SWAN_WEB . 'rrdpng/');
@@ -97,6 +100,9 @@ define('SW_RIGHT_DELIMITER', '}}-->');
 //RRD相关
 define('RRD_NL', "\\\n");
 
+define('SWAN_EXEC_UID', 'swan');
+define('SWAN_EXEC_GID', 'swan');
+
 // }}}
 // {{{ 系统初始化
 
@@ -105,19 +111,33 @@ date_default_timezone_set(SWAN_TIMEZONE_DEFAULT);
 
 // }}}
 // }}}
-// {{{ autoload 管理
+// {{{  框架初始化
 // 引入 sf 框架
 
 require_once PATH_SWAN_SF . 'swanphp.php';
 
-require_once PATH_SF_LIB . 'loader/sw_standard_auto_loader.class.php';
-$autoloader = new \swan\loader\sw_standard_auto_loader(array(
+$autoloader = \swan\loader\sw_auto::get_instance(array(
 	'namespaces' => array(
-		'swan' => PATH_SF_LIB,
 		'lib' => PATH_SWAN_BASE,
 	),
 ));
 
 $autoloader->register();
+
+// 初始化配置
+
+\swan\config\sw_config::set_config(PATH_SWAN_CONF . '/config.php');
+
+// }}}
+// {{{ 数据库常量
+
+define('SWAN_TBN_SEQUENCE_GLOBAL', 'sequence_global');
+define('SWAN_TBN_SEQUENCE_DEVICE', 'sequence_device');
+define('SWAN_TBN_SEQUENCE_MONITOR', 'sequence_monitor');
+define('SWAN_TBN_DEVICE_KEY', 'device_key');
+define('SWAN_TBN_DEVICE_BASIC', 'device_basic');
+define('SWAN_TBN_DEVICE_MONITOR', 'monitor_params');
+define('SWAN_TBN_MONITOR_BASIC', 'monitor_basic');
+define('SWAN_TBN_MONITOR_ATTRIBUTE', 'monitor_attribute');
 
 // }}}

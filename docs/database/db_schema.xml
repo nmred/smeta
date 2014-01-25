@@ -100,24 +100,15 @@
             </table>
 
             <!-- }}} -->
-            <!-- {{{ table sequence_project -->
+            <!-- {{{ table sequence_monitor -->
 
-            <table name="sequence_project">
-                <desc>项目成员数据表的唯一序列号</desc>
+            <table name="sequence_monitor">
+                <desc>监控器数据表的唯一序列号</desc>
                 <engine>InnoDB</engine>
                 <charset>utf8</charset>
                 <columns>
-                    <column name="device_id">
+                    <column name="monitor_id">
                         <desc>设备 ID</desc>
-                        <type>int</type>
-                        <nullable>false</nullable>
-                        <precision>11</precision>
-						<unsigned>true</unsigned>
-                        <default></default>
-                    </column>
-
-                    <column name="project_id">
-                        <desc>项目 ID</desc>
                         <type>int</type>
                         <nullable>false</nullable>
                         <precision>11</precision>
@@ -148,8 +139,7 @@
 						<desc></desc>
                         <type>primary</type>
                         <fields>
-                            <field name="device_id"></field>
-                            <field name="project_id"></field>
+                            <field name="monitor_id"></field>
                             <field name="table_name"></field>
                         </fields>
                     </key>
@@ -218,40 +208,6 @@
                         <default></default>
                     </column>
 
-                    <column name="host">
-                        <desc>设备的主机名</desc>
-                        <type>varchar</type>
-                        <nullable>false</nullable>
-                        <precision>32</precision>
-                        <charset>latin1</charset>
-                        <default></default>
-                    </column>
-
-                    <column name="port">
-                        <desc>设备的端口号，默认是  SNMP 的默认端口：161</desc>
-                        <type>smallint</type>
-                        <nullable>true</nullable>
-                        <precision>6</precision>
-                        <unsigned>true</unsigned>
-                        <default>161</default>
-                    </column>
-
-                    <column name="is_delete">
-                        <desc>是否是已经删除的设备</desc>
-                        <type>tinyint</type>
-                        <nullable>true</nullable>
-                        <precision>1</precision>
-                        <unsigned>true</unsigned>
-                        <default>0</default>
-                    </column>
-
-                    <column name="delete_time">
-                        <desc>设备删除时间</desc>
-                        <type>int</type>
-                        <nullable>false</nullable>
-                        <precision>10</precision>
-                        <unsigned>true</unsigned>
-                    </column>
                 </columns>
 
                 <keys>
@@ -266,13 +222,148 @@
             </table>
 
             <!-- }}} -->
-            <!-- {{{ table device_snmp -->
+            <!-- {{{ table monitor_basic -->
 
-            <table name="device_snmp">
-                <desc>监控的设备 SNMP 信息表</desc>
+            <table name="monitor_basic">
+                <desc>监控器管理</desc>
                 <engine>InnoDB</engine>
                 <charset>utf8</charset>
                 <columns>
+                    <column name="monitor_id">
+                        <desc>监控器 id</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+                        <unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                    <column name="monitor_name">
+                        <desc>监控器名称</desc>
+                        <type>varchar</type>
+                        <nullable>false</nullable>
+                        <precision>255</precision>
+                        <default></default>
+                    </column>
+
+                    <column name="monitor_display_name">
+                        <desc>监控器显示名称</desc>
+                        <type>varchar</type>
+                        <nullable>false</nullable>
+                        <precision>255</precision>
+                        <default></default>
+                    </column>
+
+                </columns>
+
+                <keys>
+                    <key name="">
+                        <desc></desc>
+                        <type>primary</type>
+                        <fields>
+                            <field name="monitor_id"></field>
+                        </fields>
+                    </key>
+                </keys>
+            </table>
+
+            <!-- }}} -->
+            <!-- {{{ table monitor_attribute -->
+
+            <table name="monitor_attribute">
+                <desc>监控器属性管理</desc>
+                <engine>InnoDB</engine>
+                <charset>utf8</charset>
+                <columns>
+                    <column name="attr_id">
+                        <desc>监控器属性 id</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+                        <unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                    <column name="monitor_id">
+                        <desc>监控器 id</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+                        <unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                    <column name="attr_name">
+                        <desc>属性名称</desc>
+                        <type>varchar</type>
+                        <nullable>false</nullable>
+                        <precision>255</precision>
+                        <default></default>
+                    </column>
+
+                    <column name="attr_display_name">
+                        <desc>属性显示名称</desc>
+                        <type>varchar</type>
+                        <nullable>false</nullable>
+                        <precision>255</precision>
+                        <default></default>
+                    </column>
+
+                    <column name="form_type">
+                        <desc>属性表单类型</desc>
+                        <type>varchar</type>
+                        <nullable>false</nullable>
+                        <precision>255</precision>
+                        <default></default>
+                    </column>
+
+                    <column name="form_data">
+                        <desc>属性表单数据</desc>
+                        <type>varchar</type>
+                        <nullable>false</nullable>
+                        <precision>255</precision>
+                        <default></default>
+                    </column>
+
+                </columns>
+
+                <keys>
+                    <key name="">
+                        <desc></desc>
+                        <type>primary</type>
+                        <fields>
+                            <field name="attr_id"></field>
+                            <field name="monitor_id"></field>
+                        </fields>
+                    </key>
+                </keys>
+            </table>
+
+            <!-- }}} -->
+            <!-- {{{ table monitor_params -->
+
+            <table name="monitor_params">
+                <desc>监控器参数</desc>
+                <engine>InnoDB</engine>
+                <charset>utf8</charset>
+                <columns>
+                    <column name="value_id">
+                        <desc>属性值 id</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+                        <unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+                    <column name="attr_id">
+                        <desc>监控器属性 id</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+                        <unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
                     <column name="device_id">
                         <desc>设备 id</desc>
                         <type>int</type>
@@ -282,107 +373,20 @@
                         <default></default>
                     </column>
 
-                    <column name="snmp_version">
-                        <desc>SNMP 协议的版本 0:VERSION_1, 1:VERSION_2 2:VERSION_3</desc>
-                        <type>tinyint</type>
-                        <nullable>true</nullable>
-                        <precision>2</precision>
-                        <unsigned>true</unsigned>
-                        <default>0</default>
-                    </column>
-
-                    <column name="snmp_method">
-                        <desc>通过 SNMP 获取数据的方式 0: EXEC 方式即直接是系统调用 1: EXT 方式( PHP 的内置扩展，需要有扩展支持)</desc>
-                        <type>tinyint</type>
-                        <nullable>true</nullable>
-                        <precision>2</precision>
-                        <unsigned>true</unsigned>
-                        <default>0</default>
-                    </column>
-
-                    <column name="snmp_protocol">
-                        <desc> SNMP 的通讯协议 0: NET 方式 1: UDP 方式</desc>
-                        <type>tinyint</type>
-                        <nullable>true</nullable>
-                        <precision>2</precision>
-                        <unsigned>true</unsigned>
-                        <default>0</default>
-                    </column>
-
-                    <column name="snmp_community">
-                        <desc> SNMP 的共同体，只有 V1 和 V2 版本有效，默认 public</desc>
-                        <type>varchar</type>
-                        <nullable>true</nullable>
-                        <precision>32</precision>
-                        <default>public</default>
-                    </column>
-
-                    <column name="snmp_timeout">
-                        <desc> SNMP 连接超时时间，单位是微秒，默认是 5s</desc>
+                    <column name="monitor_id">
+                        <desc>监控器 id</desc>
                         <type>int</type>
-                        <nullable>true</nullable>
-                        <precision>6</precision>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
                         <unsigned>true</unsigned>
-                        <default>5000</default>
-                    </column>
-
-                    <column name="snmp_retries">
-                        <desc> SNMP 连接失败后重试次数，默认 3 次</desc>
-                        <type>tinyint</type>
-                        <nullable>true</nullable>
-                        <precision>2</precision>
-                        <unsigned>true</unsigned>
-                        <default>3</default>
-                    </column>
-
-                    <column name="security_name">
-                        <desc> 认证的用户名</desc>
-                        <type>varchar</type>
-                        <nullable>true</nullable>
-                        <precision>32</precision>
                         <default></default>
                     </column>
 
-                    <column name="security_level">
-                        <desc> 认证的安全等级 0: noAuthNoPriv 1:authNoPriv 2:authPriv</desc>
-                        <type>tinyint</type>
-                        <nullable>true</nullable>
-                        <precision>2</precision>
-                        <unsigned>true</unsigned>
-                        <default>0</default>
-                    </column>
-
-                    <column name="auth_protocol">
-                        <desc> 认证的协议算法 0: MD5  1: SHA</desc>
-                        <type>tinyint</type>
-                        <nullable>true</nullable>
-                        <precision>2</precision>
-                        <unsigned>true</unsigned>
-                        <default>0</default>
-                    </column>
-
-                    <column name="auth_passphrase">
-                        <desc> 认证的公钥 </desc>
+                    <column name="value">
+                        <desc>属性值</desc>
                         <type>varchar</type>
-                        <nullable>true</nullable>
-                        <precision>32</precision>
-                        <default></default>
-                    </column>
-
-                    <column name="priv_protocol">
-                        <desc> 密钥的协议算法 0: DES  1: AES</desc>
-                        <type>tinyint</type>
-                        <nullable>true</nullable>
-                        <precision>2</precision>
-                        <unsigned>true</unsigned>
-                        <default>0</default>
-                    </column>
-
-                    <column name="priv_passphrase">
-                        <desc> 认证密钥 </desc>
-                        <type>varchar</type>
-                        <nullable>true</nullable>
-                        <precision>32</precision>
+                        <nullable>false</nullable>
+                        <precision>255</precision>
                         <default></default>
                     </column>
 
@@ -393,543 +397,11 @@
                         <desc></desc>
                         <type>primary</type>
                         <fields>
-                            <field name="device_id"></field>
+                            <field name="value_id"></field>
+                            <field name="attr_id"></field>
+                            <field name="monitor_id"></field>
                         </fields>
                     </key>
-                </keys>
-            </table>
-
-            <!-- }}} -->
-            <!-- {{{ table project_key -->
-
-            <table name="project_key">
-                <desc>记录监控设备的项目关键表</desc>
-                <engine>InnoDB</engine>
-                <charset>utf8</charset>
-                <columns>
-                    <column name="project_id">
-                        <desc>项目 id</desc>
-                        <type>int</type>
-                        <nullable>false</nullable>
-                        <precision>11</precision>
-						<unsigned>true</unsigned>
-                        <default></default>
-                    </column>
-
-                    <column name="project_name">
-                        <desc>监控设备项目名称</desc>
-                        <type>varchar</type>
-                        <nullable>false</nullable>
-                        <precision>64</precision>
-                        <default></default>
-                    </column>
-
-                    <column name="device_id">
-                        <desc>关联 device_key.device_id</desc>
-                        <type>int</type>
-                        <nullable>false</nullable>
-                        <precision>11</precision>
-						<unsigned>true</unsigned>
-                        <default>0</default>
-                    </column>
-
-                </columns>
-
-                <keys>
-                    <key name="">
-						<desc></desc>
-                        <type>primary</type>
-                        <fields>
-                            <field name="device_id"></field>
-                            <field name="project_name"></field>
-                        </fields>
-                    </key>
-                </keys>
-            </table>
-
-            <!-- }}} -->
-            <!-- {{{ table project_basic -->
-
-            <table name="project_basic">
-                <desc>记录监控设备的项目基本信息表</desc>
-                <engine>InnoDB</engine>
-                <charset>utf8</charset>
-                <columns>
-                    <column name="project_id">
-                        <desc>项目 id</desc>
-                        <type>int</type>
-                        <nullable>false</nullable>
-                        <precision>11</precision>
-						<unsigned>true</unsigned>
-                        <default></default>
-                    </column>
-
-                    <column name="device_id">
-                        <desc>关联 device_id.device_id</desc>
-                        <type>int</type>
-                        <nullable>false</nullable>
-                        <precision>11</precision>
-						<unsigned>true</unsigned>
-                        <default>0</default>
-                    </column>
-
-                    <column name="step">
-                        <desc> rrd刷新周期 默认值 300s </desc>
-                        <type>int</type>
-                        <nullable>true</nullable>
-                        <precision>6</precision>
-						<unsigned>true</unsigned>
-                        <default>300</default>
-                    </column>
-
-                    <column name="start_time">
-                        <desc> 数据库的起始时间 默认是now() - 10s </desc>
-                        <type>int</type>
-                        <nullable>true</nullable>
-                        <precision>11</precision>
-						<unsigned>true</unsigned>
-                        <default></default>
-                    </column>
-
-                    <column name="is_delete">
-                        <desc>是否是已经删除的项目</desc>
-                        <type>tinyint</type>
-                        <nullable>true</nullable>
-                        <precision>1</precision>
-                        <unsigned>true</unsigned>
-                        <default>0</default>
-                    </column>
-
-                    <column name="delete_time">
-                        <desc>项目删除时间</desc>
-                        <type>int</type>
-                        <nullable>false</nullable>
-                        <precision>10</precision>
-                        <unsigned>true</unsigned>
-                    </column>
-                </columns>
-
-                <keys>
-                    <key name="">
-						<desc></desc>
-                        <type>primary</type>
-                        <fields>
-                            <field name="device_id"></field>
-                            <field name="project_id"></field>
-                        </fields>
-                    </key>
-                </keys>
-            </table>
-
-            <!-- }}} -->
-            <!-- {{{ table project_data_source -->
-
-            <table name="project_data_source">
-                <desc> 记录每个监控项目对应的所有数据源 </desc>
-                <engine>InnoDB</engine>
-                <charset>utf8</charset>
-                <columns>
-                    <column name="ds_id">
-                        <desc>DS id</desc>
-                        <type>int</type>
-                        <nullable>false</nullable>
-                        <precision>11</precision>
-						<unsigned>true</unsigned>
-                        <default></default>
-                    </column>
-
-                    <column name="ds_name">
-                        <desc> 属性名 规则和变量命名一样，限制不能输入中文，这个是有意义的字段 </desc>
-                        <type>varchar</type>
-                        <nullable>false</nullable>
-                        <precision>64</precision>
-                        <default></default>
-                    </column>
-
-                    <column name="project_id">
-                        <desc>关联 project_key.project_id</desc>
-                        <type>int</type>
-                        <nullable>false</nullable>
-                        <precision>11</precision>
-						<unsigned>true</unsigned>
-                        <default>0</default>
-                    </column>
-
-                    <column name="device_id">
-                        <desc>关联 device_key.device_id (可能以后会有意义)</desc>
-                        <type>int</type>
-                        <nullable>false</nullable>
-                        <precision>11</precision>
-						<unsigned>true</unsigned>
-                        <default>0</default>
-                    </column>
-
-                    <column name="get_method">
-                        <desc> 数据获取方式 0 :通过 SNMP 协议获取 1:通过其他方式，例如脚本等 </desc>
-                        <type>tinyint</type>
-                        <nullable>true</nullable>
-                        <precision>2</precision>
-						<unsigned>true</unsigned>
-                        <default>0</default>
-                    </column>
-
-                    <column name="object_type">
-                        <desc> 如果使用SNMP协议 传递的object类型 </desc>
-                        <type>char</type>
-                        <nullable>true</nullable>
-                        <precision>32</precision>
-                        <default></default>
-                    </column>
-
-                    <column name="object_id">
-                        <desc> 如果使用SNMP协议 传递的object ids </desc>
-                        <type>varchar</type>
-                        <nullable>true</nullable>
-                        <precision>255</precision>
-                        <default></default>
-                    </column>
-
-                    <column name="source_type">
-                        <desc> 决定最后写入数据后rrd的运算规则 0 : GAUGE（默认值） 1 : COUNTER 2 : DERIVE 3 : ABSOLUTE </desc>
-                        <type>tinyint</type>
-                        <nullable>true</nullable>
-                        <precision>2</precision>
-						<unsigned>true</unsigned>
-                        <default>0</default>
-                    </column>
-
-                    <column name="heart_time">
-                        <desc> 心跳时间 ，如果超过这个时间还没有数据传递则默认赋值为 (UN) --UNKNOWN </desc>
-                        <type>int</type>
-                        <nullable>true</nullable>
-                        <precision>11</precision>
-						<unsigned>true</unsigned>
-                        <default>300</default>
-                    </column>
-
-                    <column name="min">
-                        <desc> 传递数据的最小限制 默认不限制</desc>
-                        <type>varchar</type>
-                        <nullable>true</nullable>
-                        <precision>32</precision>
-                        <default>U</default>
-                    </column>
-
-                    <column name="max">
-                        <desc> 传递数据的最大限制 默认不限制</desc>
-                        <type>varchar</type>
-                        <nullable>true</nullable>
-                        <precision>32</precision>
-                        <default>U</default>
-                    </column>
-
-                </columns>
-
-                <keys>
-                    <key name="">
-						<desc></desc>
-                        <type>primary</type>
-                        <fields>
-                            <field name="ds_name"></field>
-                            <field name="project_id"></field>
-                            <field name="device_id"></field>
-                        </fields>
-                    </key>
-                </keys>
-            </table>
-
-            <!-- }}} -->
-            <!-- {{{ table project_archive -->
-
-            <table name="project_archive">
-                <desc> 记录每个监控项目对数据的归档规则(合并数据的规则) </desc>
-                <engine>InnoDB</engine>
-                <charset>utf8</charset>
-                <columns>
-                    <column name="rra_id">
-                        <desc>RRA id</desc>
-                        <type>int</type>
-                        <nullable>false</nullable>
-                        <precision>11</precision>
-						<unsigned>true</unsigned>
-                        <default></default>
-                    </column>
-
-                    <column name="project_id">
-                        <desc>关联 project_key.project_id</desc>
-                        <type>int</type>
-                        <nullable>false</nullable>
-                        <precision>11</precision>
-						<unsigned>true</unsigned>
-                        <default>0</default>
-                    </column>
-
-                    <column name="device_id">
-                        <desc>关联 device_key.device_id (可能以后会有意义)</desc>
-                        <type>int</type>
-                        <nullable>false</nullable>
-                        <precision>11</precision>
-						<unsigned>true</unsigned>
-                        <default>0</default>
-                    </column>
-
-                    <column name="rra_cf">
-                        <desc> 归档策略算法 0 : AVERAGE 1:MIN 2:MAX 3:LAST  </desc>
-                        <type>tinyint</type>
-                        <nullable>true</nullable>
-                        <precision>2</precision>
-						<unsigned>true</unsigned>
-                        <default>0</default>
-                    </column>
-
-                    <column name="rra_xff">
-                        <desc> xfiles factor 和unkown数据有关，很多资料都取0.5 (待研究)</desc>
-                        <type>float</type>
-                        <nullable>true</nullable>
-                        <precision>11</precision>
-                        <default>0.5</default>
-                    </column>
-
-                    <column name="steps">
-                        <desc> 决定多少步长进行归档一次 </desc>
-                        <type>int</type>
-                        <nullable>false</nullable>
-                        <precision>11</precision>
-						<unsigned>true</unsigned>
-                        <default></default>
-                    </column>
-
-                    <column name="rows">
-                        <desc> 归档的条数 </desc>
-                        <type>int</type>
-                        <nullable>false</nullable>
-                        <precision>11</precision>
-						<unsigned>true</unsigned>
-                        <default></default>
-                    </column>
-
-                </columns>
-
-                <keys>
-                    <key name="">
-						<desc></desc>
-                        <type>primary</type>
-                        <fields>
-                            <field name="rra_id"></field>
-                            <field name="project_id"></field>
-                        </fields>
-                    </key>
-                </keys>
-            </table>
-
-            <!-- }}} -->
-
-            <!-- {{{ table rrd_cdef -->
-
-            <table name="rrd_cdef">
-                <desc> 记录绘制的图片规则中的中间变量运算 </desc>
-                <engine>InnoDB</engine>
-                <charset>utf8</charset>
-                <columns>
-                    <column name="cdef_id">
-                        <desc>CDEF id</desc>
-                        <type>int</type>
-                        <nullable>false</nullable>
-                        <precision>11</precision>
-						<unsigned>true</unsigned>
-                        <default></default>
-                    </column>
-
-                    <column name="graph_id">
-                        <desc>关联 rrd_graph.graph_id </desc>
-                        <type>int</type>
-                        <nullable>false</nullable>
-                        <precision>11</precision>
-						<unsigned>true</unsigned>
-                        <default>0</default>
-                    </column>
-
-                    <column name="define_name">
-                        <desc> 变量名称 </desc>
-                        <type>varchar</type>
-                        <nullable>false</nullable>
-                        <precision>32</precision>
-                        <default></default>
-                    </column>
-
-                    <column name="cdef_cf">
-                        <desc> 算法该字段存取的逆波兰表达式 (当前先就这样了，以后尽量优化的不让用户直接输入逆波兰表达式)</desc>
-                        <type>varchar</type>
-                        <nullable>false</nullable>
-                        <precision>255</precision>
-                        <default></default>
-                    </column>
-
-                </columns>
-
-                <keys>
-                    <key name="">
-						<desc></desc>
-                        <type>primary</type>
-                        <fields>
-                            <field name="cdef_id"></field>
-                        </fields>
-                    </key>
-
-                    <key name="ik_0">
-                        <desc> 快速查询某个图片定义的变量运算规则 </desc>
-                        <type>index</type>
-                        <fields>
-                            <field name="graph_id"></field>
-                        </fields>
-                    </key>
-
-                </keys>
-            </table>
-
-            <!-- }}} -->
-            <!-- {{{ table rrd_line_area -->
-
-            <table name="rrd_line_area">
-                <desc> 记录绘制的图片规则中的线条定义 </desc>
-                <engine>InnoDB</engine>
-                <charset>utf8</charset>
-                <columns>
-                    <column name="line_id">
-                        <desc>线条ID id</desc>
-                        <type>int</type>
-                        <nullable>false</nullable>
-                        <precision>11</precision>
-						<unsigned>true</unsigned>
-                        <default></default>
-                    </column>
-
-                    <column name="graph_id">
-                        <desc>关联 rrd_graph.graph_id </desc>
-                        <type>int</type>
-                        <nullable>false</nullable>
-                        <precision>11</precision>
-						<unsigned>true</unsigned>
-                        <default>0</default>
-                    </column>
-
-                    <column name="line_cate">
-                        <desc> 线条类型 0：AREA 1: LINE1 2: LINE2 3: LINE3 4: STACK </desc>
-                        <type>tinyint</type>
-                        <nullable>false</nullable>
-                        <precision>2</precision>
-						<unsigned>true</unsigned>
-                        <default>0</default>
-                    </column>
-
-                    <column name="define_name">
-                        <desc> 变量名称 </desc>
-                        <type>varchar</type>
-                        <nullable>false</nullable>
-                        <precision>32</precision>
-                        <default></default>
-                    </column>
-
-                    <column name="color">
-                        <desc> 线条颜色 </desc>
-                        <type>varchar</type>
-                        <nullable>false</nullable>
-                        <precision>32</precision>
-                        <default></default>
-                    </column>
-
-                    <column name="legend">
-                        <desc> 线条注释 对该颜色的提示，最后会写在图上的</desc>
-                        <type>varchar</type>
-                        <nullable>false</nullable>
-                        <precision>32</precision>
-                        <default></default>
-                    </column>
-
-                </columns>
-
-                <keys>
-                    <key name="">
-						<desc></desc>
-                        <type>primary</type>
-                        <fields>
-                            <field name="line_id"></field>
-                        </fields>
-                    </key>
-
-                    <key name="ik_0">
-                        <desc> 快速查询某个图片定义的绘制线条 </desc>
-                        <type>index</type>
-                        <fields>
-                            <field name="graph_id"></field>
-                        </fields>
-                    </key>
-
-                </keys>
-            </table>
-
-            <!-- }}} -->
-            <!-- {{{ table rrd_gprint -->
-
-            <table name="rrd_gprint">
-                <desc> 记录线条中的这个极限值 </desc>
-                <engine>InnoDB</engine>
-                <charset>utf8</charset>
-                <columns>
-                    <column name="gprint_id">
-                        <desc>GPRINT id</desc>
-                        <type>int</type>
-                        <nullable>false</nullable>
-                        <precision>11</precision>
-						<unsigned>true</unsigned>
-                        <default></default>
-                    </column>
-
-                    <column name="line_id">
-                        <desc>关联 rrd_line_area.line_id </desc>
-                        <type>int</type>
-                        <nullable>false</nullable>
-                        <precision>11</precision>
-						<unsigned>true</unsigned>
-                        <default>0</default>
-                    </column>
-
-                    <column name="line_cf">
-                        <desc> 线条运算算法 0：AVERAGE 1: MIN 2: MAX 3: LAST </desc>
-                        <type>tinyint</type>
-                        <nullable>false</nullable>
-                        <precision>2</precision>
-						<unsigned>true</unsigned>
-                        <default>0</default>
-                    </column>
-
-                    <column name="format">
-                        <desc> 线条极限值注释 对该颜色的提示，最后会写在图上的</desc>
-                        <type>varchar</type>
-                        <nullable>false</nullable>
-                        <precision>32</precision>
-                        <default></default>
-                    </column>
-
-                </columns>
-
-                <keys>
-                    <key name="">
-						<desc></desc>
-                        <type>primary</type>
-                        <fields>
-                            <field name="gprint_id"></field>
-                        </fields>
-                    </key>
-
-                    <key name="ik_0">
-                        <desc> 快速查询某个图片定义的绘制线条 </desc>
-                        <type>index</type>
-                        <fields>
-                            <field name="line_id"></field>
-                        </fields>
-                    </key>
-
                 </keys>
             </table>
 

@@ -59,6 +59,7 @@ ARRAY_CHOWN=(
 # 需要 chmod 的目录 ( [权限] [是否需要递归. 1 | 0] [路径] )
 ARRAY_CHMOD=(
     "777" "1" "template/tpl_c"
+    "755" "0" "app/sbin/sw_phpd"
 )
 
 # }}}

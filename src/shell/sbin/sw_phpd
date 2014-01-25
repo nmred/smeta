@@ -1,0 +1,116 @@
+#!/usr/local/swan/opt/php/bin/php
+<?php
+/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4 foldmethod=marker: */
+// +---------------------------------------------------------------------------
+// | SWAN [ $_SWANBR_SLOGAN_$ ]
+// +---------------------------------------------------------------------------
+// | Copyright $_SWANBR_COPYRIGHT_$
+// +---------------------------------------------------------------------------
+// | Version  $_SWANBR_VERSION_$
+// +---------------------------------------------------------------------------
+// | Licensed ( $_SWANBR_LICENSED_URL_$ )
+// +---------------------------------------------------------------------------
+// | $_SWANBR_WEB_DOMAIN_$
+// +---------------------------------------------------------------------------
+ 
+/**
++------------------------------------------------------------------------------
+* sw_phpd 启动管理脚本 
++------------------------------------------------------------------------------
+* 
+* @package 
+* @version $_SWANBR_VERSION_$
+* @copyright $_SWANBR_COPYRIGHT_$
+* @author $_SWANBR_AUTHOR_$ 
++------------------------------------------------------------------------------
+*/
+
+require_once 'core.php';
+use \lib\daemon\sw_phpd;
+
+$PATH_SWAN_RUN = PATH_SWAN_RUN;
+$PATH_INI_PHPD = PATH_INI_PHPD;
+$SWAN_EXEC_UID = SWAN_EXEC_UID;
+$SWAN_EXEC_GID = SWAN_EXEC_GID;
+$SCRIPT = basename(__FILE__);
+
+// {{{ help
+$help = <<<EOT
+Usage: ./$SCRIPT [options]
+
+options:
+    -k <start|stop|watch>
+    -c <file> sw_phpd.ini 文件路径 仅-k start时有效，默认为：{$PATH_INI_PHPD}
+    -p <file> pid文件，默认为：{$PATH_INI_PHPD}{$SCRIPT}.pid
+    -u <user:group> 指定执行用户，默认为{$SWAN_EXEC_UID}:{$SWAN_EXEC_GID}
+    -h show this message
+
+
+EOT;
+// }}}
+
+$opts = getopt('k:c:p:u:h');
+
+// {{{ init
+if (isset($opts['h'])) {
+    echo $help;
+    exit(0);
+}
+
+if (!isset($opts['k'])) {
+    $opts['k'] = 'start';
+}
+
+if (!isset($opts['c'])) {
+    $opts['c'] = $PATH_INI_PHPD;
+}
+
+if (!isset($opts['p'])) {
+    $opts['p'] = $PATH_SWAN_RUN . $SCRIPT . '.pid';
+}
+
+if (isset($opts['u'])) {
+    list($SWAN_EXEC_UID, $SWAN_EXEC_GID) = explode(':', $opts['u']);
+}
+
+// }}}
+
+$daemon = new sw_phpd();
+
+set_error_handler(array($daemon, 'error_handle'));
+set_exception_handler(array($daemon, 'exception_handle'));
+
+$daemon->set_ini_file($opts['c']);
+$daemon->set_pid_file($opts['p']);
+
+
+declare(ticks = 1);
+switch ($opts['k']) {
+    case 'start':
+        $daemon->log('starting...', LOG_DEBUG);
+        $daemon->set_exec_user($SWAN_EXEC_UID, $SWAN_EXEC_GID);
+        $daemon->run();
+        break;
+
+    case 'stop':
+        $daemon->log('stopping...', LOG_DEBUG);
+        $daemon->set_exec_user($SWAN_EXEC_UID, $SWAN_EXEC_GID);
+        $daemon->stop();
+        echo "+OK\n";
+        break;
+
+    case 'watch':
+        $daemon->set_exec_user($SWAN_EXEC_UID, $SWAN_EXEC_GID);
+        try {
+            $data = $daemon->watch($opts['t']);
+            echo "+OK, " . $data . "\n";
+        } catch (exception $e) {
+            echo "-ERR, " . $e->getMessage() . "\n";
+            exit(1);
+        }
+        break;
+
+    default:
+        echo $help;
+        exit;
+}
