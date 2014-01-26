@@ -100,7 +100,41 @@ class sw_device extends sw_abstract
 	 */
 	public function action_json()
 	{			
+		// 获取设备
+		$page = $this->__request->get_post('page', 1);
+		$page_count = $this->__request->get_post('page_count', 10);
+		$count = 0;
+		try {
+			$condition = sw_member::condition_factory('get_monitor_basic'); 
+			$condition->set_is_count(true);
+			$monitor = sw_member::operator_factory('monitor');
+			$count   = $monitor->get_operator('basic')->get_basic($condition_basic);
+		} catch (\swan\exception\sw_exception $e) {
+			return $this->render_json(null, 10001, $e->getMessage());	
+		}
+
+		if (!$count) {
+			return $this->render_json(array('count' => $count), 10001, 'no data.');	
+		}
+
+		try {
+			$condition_basic->set_is_count(false);
+			$condition_basic->set_columns('*');
+			$condition_basic->set_limit_page(array('page' => $page, 'rows_count' => $page_count));
+			$monitor = sw_member::operator_factory('monitor');
+			$data   = $monitor->get_operator('basic')->get_basic($condition_basic);
+		} catch (\swan\exception\sw_exception $e) {
+			return $this->render_json(null, 10001, $e->getMessage());	
+		}
+
+		$result = array(
+			'result' => $data,
+			'count'  => $count,
+		);
+
+		return $this->render_json($result, 10000, 'get monitor success.');
 	}
 
+	// }}}
 	// }}}
 }

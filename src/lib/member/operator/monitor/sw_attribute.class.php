@@ -85,7 +85,7 @@ class sw_attribute extends sw_abstract
 	{
 		$condition->check_params();
 		$select = $this->__db->select()
-							 ->from(SWAN_TBN_MONITOR_ATTRIBUTE);
+							 ->from(SWAN_TBN_MONITOR_ATTRIBUTE, null);
 		$condition->where($select, true);
 		return $this->_get($select, $condition->params());	
 	}

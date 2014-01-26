@@ -152,8 +152,32 @@ class sw_monitor extends sw_abstract
 	 * @return void
 	 */
 	public function action_mod()
-	{
-		
+	{	
+		$monitor_name = $this->__request->get_post('name', '');
+		$monitor_id   = $this->__request->get_post('mid', '');
+		$monitor_display_name = $this->__request->get_post('display_name', '');
+		if (!$monitor_name && !$monitor_id) {
+			return $this->render_json(null, 10001, '`name` or `mid` not allow is empty.');
+		}
+
+		// 修改 monitor basic
+		try {
+			$property_basic = sw_member::property_factory('monitor_basic', array('monitor_display_name' => $monitor_display_name)); 
+			if ($monitor_id) {
+				$condition = sw_member::condition_factory('mod_monitor_basic', array('monitor_id' => $monitor_id));
+				$condition->set_in('monitor_id');
+			} else {
+				$condition = sw_member::condition_factory('mod_monitor_basic', array('monitor_name' => $monitor_name));
+				$condition->set_in('monitor_name');
+			}
+			$condition->set_property($property_basic);
+			$monitor = sw_member::operator_factory('monitor');
+			$monitor->get_operator('basic')->mod_basic($condition);
+		} catch (\swan\exception\sw_exception $e) {
+			return $this->render_json(null, 10002, $e->getMessage());	
+		}
+
+		return $this->render_json(null, 10000, 'mod monitor success.');
 	}
 
 	// }}}

@@ -29,8 +29,15 @@ function call($url, $type = 'GET', $params = array())
 //$rev = json_decode($rev, true);
 //var_dump($rev);
 
+// 修改 monitor
+$url = '127.0.0.1:9080/dev/?/monitor.mod';
+$rev = call($url, 'POST', array('mid' => '2', 'display_name' =>
+'43333333333'));
+$rev = json_decode($rev, true);
+var_dump($rev);
+
 // 获取 monitor
 $url = '127.0.0.1:9080/dev/?/monitor.json';
-$rev = call($url, 'POST', array('page' => '2', 'page_count' => 2));
+$rev = call($url, 'POST', array('page' => '1', 'page_count' => 20));
 $rev = json_decode($rev, true);
 var_dump($rev);

@@ -102,12 +102,12 @@ class sw_device extends sw_abstract
 	{	
 		$condition->check_params();
 		$params = $condition->params();
-		if (isset($params['is_count']) && $params['is_count']) {
-			$key_columns = 'count(*)';	
-		} else {		
-		}
+		$key_columns   = $condition->columns(SWAN_TBN_DEVICE_KEY);
+		$basic_columns = $condition->columns(SWAN_TBN_DEVICE_BASIC);
 		$select = $this->__db->select()
-							 ->from(array('k' => SWAN_TBN_DEVICE_KEY));
+							 ->from(array('k' => SWAN_TBN_DEVICE_KEY), $key_columns)
+							 ->join(array('b' => SWAN_TBN_DEVICE_BASIC), "k.device_id = b.device_id", $basic_columns);
+		$condition->set_columns(null);
 		$condition->where($select, true);
 		return $this->_get($select, $condition->params());	
 	}

@@ -4,10 +4,10 @@ require_once 'core.php';
 use \lib\member\sw_member as sw_mem;
 
 // 添加 device key
-$device_property_key = sw_mem::property_factory('device_key', array('device_name' => 'testsss'));
-$device = sw_mem::operator_factory('device', $device_property_key);
-$device_key = $device->get_operator('key')->add_key();
-var_dump($device_key);
+//$device_property_key = sw_mem::property_factory('device_key', array('device_name' => 'testsss'));
+//$device = sw_mem::operator_factory('device', $device_property_key);
+//$device_key = $device->get_operator('key')->add_key();
+//var_dump($device_key);
 
 // 删除 device key
 //$condition = sw_mem::condition_factory('del_device_key', array('device_id' => 16));
@@ -48,4 +48,11 @@ var_dump($device_key);
 //$condition->set_in('device_id');
 //$device = sw_mem::operator_factory('device');
 //$device_basic = $device->get_operator('basic')->del_basic($condition);
+
+// 获取 device list
+$condition = sw_mem::condition_factory('get_device');
+$condition->set_columns(array('device_id'));
+$device = sw_mem::operator_factory('device');
+$device_key = $device->get_device($condition);
+var_dump($device_key);
 

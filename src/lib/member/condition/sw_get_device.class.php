@@ -39,7 +39,7 @@ class sw_get_device extends sw_get_abstract
 	 */
 	protected $__allow_params = array(
 		'device_id'   => true,
-		'device_display_name' => true,
+		'device_name' => true,
 	);
 
 	/**
@@ -52,10 +52,6 @@ class sw_get_device extends sw_get_abstract
 		'device_id'   => SWAN_TBN_DEVICE_KEY,		
 		'device_name' => SWAN_TBN_DEVICE_KEY,		
 		'device_display_name' => SWAN_TBN_DEVICE_BASIC,		
-		'monitor_id'  => SWAN_TBN_DEVICE_MONITOR,		
-		'attr_id'     => SWAN_TBN_DEVICE_MONITOR,		
-		'value_id'    => SWAN_TBN_DEVICE_MONITOR,		
-		'value'    => SWAN_TBN_DEVICE_MONITOR,		
 	);
 
 	// }}}
