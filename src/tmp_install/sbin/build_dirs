@@ -35,15 +35,9 @@ ARRAY_DIRS=(
             "log/backup/error"
             "log/backup/large"
         "log/httpd"
-    "plugins"
     "data"
         "data/mysql"
-        "data/rrd"
-        "data/snmp"
     "run"
-    "template"
-        "template/tpl"
-        "template/tpl_c"
 )
 
 # 需要 chown 的目录 ( [是否需要递归. 1 | 0] [路径] )
@@ -52,13 +46,10 @@ ARRAY_CHOWN=(
     "1" "log"
     "1" "data"
     "1" "run"
-    "1" "template/tpl_c"
-    "1" "opt/etc"
 )
 
 # 需要 chmod 的目录 ( [权限] [是否需要递归. 1 | 0] [路径] )
 ARRAY_CHMOD=(
-    "777" "1" "template/tpl_c"
     "755" "0" "app/sbin/sw_phpd"
 )
 
