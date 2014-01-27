@@ -174,16 +174,17 @@ class sw_swdata extends sw_abstract
     {
         set_error_handler(create_function('$a, $b, $c, $d', 'return;'));
         $port_max = $this->__listen_port + $this->__proc_num;
-        for ($port = $this->__listen_port; $port <= $port_max; $port++) {
+        for ($port = $this->__listen_port; $port < $port_max; $port++) {
             $params = array('server_host' => "{$this->__listen_host}:$port");
             $http = new \swan\ehttp\sw_ehttp($this->__event_base, $params);
             $bind = $http->bind();
-            $this->log("try to create server and listen {$this->__listen_host}", LOG_DEBUG);
+            $this->log("try to create server and listen {$this->__listen_host}:{$port}", LOG_DEBUG);
             if ($bind) {
-                $this->log("create server and listen {$this->__listen_host}:{$this->__listen_port} success", LOG_DEBUG);
+                $this->log("create server and listen {$this->__listen_host}:{$port} success", LOG_DEBUG);
+				usleep(1000);
                 break;
             } else {
-                $this->log("create server and listen {$this->__listen_host} fail", LOG_DEBUG);
+                $this->log("create server and listen {$this->__listen_host}:{$port} fail", LOG_DEBUG);
             }
         }
         restore_error_handler();
