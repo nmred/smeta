@@ -104,10 +104,13 @@ class sw_device extends sw_abstract
 		$params = $condition->params();
 		$key_columns   = $condition->columns(SWAN_TBN_DEVICE_KEY);
 		$basic_columns = $condition->columns(SWAN_TBN_DEVICE_BASIC);
+		if (empty($basic_columns)) { // 没有指定查询关联的字段
+			$basic_columns = null;	
+		}
 		$select = $this->__db->select()
 							 ->from(array('k' => SWAN_TBN_DEVICE_KEY), $key_columns)
 							 ->join(array('b' => SWAN_TBN_DEVICE_BASIC), "k.device_id = b.device_id", $basic_columns);
-		$condition->set_columns(null);
+		$condition->set_columns(array());
 		$condition->where($select, true);
 		return $this->_get($select, $condition->params());	
 	}

@@ -51,7 +51,7 @@ use \lib\member\sw_member as sw_mem;
 
 // 获取 device list
 $condition = sw_mem::condition_factory('get_device');
-$condition->set_columns(array('device_id'));
+$condition->set_is_count(true);
 $device = sw_mem::operator_factory('device');
 $device_key = $device->get_device($condition);
 var_dump($device_key);

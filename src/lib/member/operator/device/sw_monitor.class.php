@@ -96,7 +96,7 @@ class sw_monitor extends sw_abstract
 	{
 		$condition->check_params();
 		$select = $this->__db->select()
-							 ->from(SWAN_TBN_DEVICE_MONITOR);
+							 ->from(SWAN_TBN_DEVICE_MONITOR, null);
 		$condition->where($select, true);
 		return $this->_get($select, $condition->params());	
 	}
@@ -122,26 +122,6 @@ class sw_monitor extends sw_abstract
 		if (!$where || !$attributes) {
 			return; 
 		}
-
-		$property_key = $this->get_device_operator()->get_device_key_property();
-		$key_attributes = $property_key->attributes();
-
-        if (!isset($key_attributes['device_id'])) {
-            throw new sw_exception('Unknow device id.');
-        }
-
-		$monitor_basic_property		= $monitor_property->get_monitor_basic();
-		$monitor_attribute_property = $monitor_property->get_monitor_attribute(); 
-		$monitor_basic		= $monitor_basic_property->attributes();
-		$monitor_attributes = $monitor_attribute_property->attributes();
-        $attributes		    = $monitor_property->attributes();
-
-        // 判断是否已经存在
-		$this->exists($key_attributes['device_id'], $monitor_basic['monitor_id'], $monitor_attributes['attr_id']);
-
-        $attributes['device_id']  = $key_attributes['device_id'];
-        $attributes['monitor_id'] = $monitor_basic['monitor_id'];
-        $attributes['attr_id']    = $monitor_attributes['attr_id'];
 
 		$this->__db->update(SWAN_TBN_DEVICE_MONITOR, $attributes, $where);
 	}

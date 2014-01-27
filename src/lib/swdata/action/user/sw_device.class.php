@@ -86,7 +86,66 @@ class sw_device extends sw_abstract
 	 */
 	public function action_del()
 	{
-		return $this->render_json(array('swan server!'), 10000);
+		$did = $this->__request->get_post('did', '');
+		if (!$did) {
+			return $this->render_json(null, 10001, '`did` not allow is empty.');
+		}
+
+		$db = \swan\db\sw_db::singleton();
+		$db->begin_transaction();
+		// 删除设备
+		$device = sw_member::operator_factory('device');
+		try {
+			$condition = sw_member::condition_factory('del_device_key', array('device_id' => $did)); 
+			$condition->set_in('device_id');
+			$device->get_operator('key')->del_key($condition);
+		} catch (\swan\exception\sw_exception $e) {
+			$db->rollback();
+			return $this->render_json(null, 10002, $e->getMessage());	
+		}
+
+		try {
+			$condition = sw_member::condition_factory('del_device_basic', array('device_id' => $did)); 
+			$condition->set_in('device_id');
+			$device->get_operator('basic')->del_basic($condition);
+		} catch (\swan\exception\sw_exception $e) {
+			$db->rollback();
+			return $this->render_json(null, 10003, $e->getMessage());	
+		}
+		$db->commit();
+		return $this->render_json(null, 10000, 'delete device success.');
+	}
+
+	// }}}
+	// {{{ public function action_mod()
+
+	/**
+	 * 修改设备 
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function action_mod()
+	{	
+		$did = $this->__request->get_post('did', '');
+		$display_name = $this->__request->get_post('display_name', '');
+		if (!$did) {
+			return $this->render_json(null, 10001, '`did` not allow is empty.');
+		}
+
+		// 修改 device basic
+		try {
+			$property_basic = sw_member::property_factory('device_basic', array('device_display_name' => $display_name)); 
+			$condition = sw_member::condition_factory('mod_device_basic', array('device_id' => $did));
+			$condition->set_in('device_id');
+			$condition->set_property($property_basic);
+			$device = sw_member::operator_factory('device');
+			$device->get_operator('basic')->mod_basic($condition);
+		} catch (\swan\exception\sw_exception $e) {
+			return $this->render_json(null, 10002, $e->getMessage());	
+		}
+
+		return $this->render_json(null, 10000, 'mod device success.');
 	}
 
 	// }}}
@@ -105,10 +164,10 @@ class sw_device extends sw_abstract
 		$page_count = $this->__request->get_post('page_count', 10);
 		$count = 0;
 		try {
-			$condition = sw_member::condition_factory('get_monitor_basic'); 
+			$condition = sw_member::condition_factory('get_device'); 
 			$condition->set_is_count(true);
-			$monitor = sw_member::operator_factory('monitor');
-			$count   = $monitor->get_operator('basic')->get_basic($condition_basic);
+			$device = sw_member::operator_factory('device');
+			$count  = $device->get_device($condition);
 		} catch (\swan\exception\sw_exception $e) {
 			return $this->render_json(null, 10001, $e->getMessage());	
 		}
@@ -118,11 +177,10 @@ class sw_device extends sw_abstract
 		}
 
 		try {
-			$condition_basic->set_is_count(false);
-			$condition_basic->set_columns('*');
-			$condition_basic->set_limit_page(array('page' => $page, 'rows_count' => $page_count));
-			$monitor = sw_member::operator_factory('monitor');
-			$data   = $monitor->get_operator('basic')->get_basic($condition_basic);
+			$condition = sw_member::condition_factory('get_device'); 
+			$condition->set_is_count(false);
+			$condition->set_limit_page(array('page' => $page, 'rows_count' => $page_count));
+			$data = $device->get_device($condition);
 		} catch (\swan\exception\sw_exception $e) {
 			return $this->render_json(null, 10001, $e->getMessage());	
 		}
@@ -132,7 +190,7 @@ class sw_device extends sw_abstract
 			'count'  => $count,
 		);
 
-		return $this->render_json($result, 10000, 'get monitor success.');
+		return $this->render_json($result, 10000, 'get device success.');
 	}
 
 	// }}}
