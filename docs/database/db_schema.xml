@@ -406,6 +406,80 @@
             </table>
 
             <!-- }}} -->
+            <!-- {{{ table monitor_metric -->
+
+            <table name="monitor_metric">
+                <desc>监控器收集数据项</desc>
+                <engine>InnoDB</engine>
+                <charset>utf8</charset>
+                <columns>
+                    <column name="metric_id">
+                        <desc>数据项 id</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+                        <unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                    <column name="metric_name">
+                        <desc>数据项名称</desc>
+                        <type>varchar</type>
+                        <nullable>false</nullable>
+                        <precision>255</precision>
+                        <default></default>
+                    </column>
+
+                    <column name="monitor_id">
+                        <desc>监控器 id</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+                        <unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                    <column name="collect_every">
+                        <desc>轮询周期</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+                        <unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                    <column name="time_threshold">
+                        <desc>收集数据超时</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+                        <unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                    <column name="title">
+                        <desc>数据项标题</desc>
+                        <type>varchar</type>
+                        <nullable>false</nullable>
+                        <precision>255</precision>
+                        <default></default>
+                    </column>
+
+                </columns>
+
+                <keys>
+                    <key name="">
+                        <desc></desc>
+                        <type>primary</type>
+                        <fields>
+                            <field name="metric_id"></field>
+                            <field name="monitor_id"></field>
+                        </fields>
+                    </key>
+                </keys>
+            </table>
+
+            <!-- }}} -->
         </tables>
         <!-- }}} end tables -->
     </database>

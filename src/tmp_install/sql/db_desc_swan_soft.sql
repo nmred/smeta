@@ -180,3 +180,33 @@ CREATE TABLE `monitor_params` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --  }}} 
+-- {{{  table monitor_metric
+
+-- 
+-- 监控器收集数据项
+-- 
+-- metric_id
+-- 	数据项 id
+-- metric_name
+-- 	数据项名称
+-- monitor_id
+-- 	监控器 id
+-- collect_every
+-- 	轮询周期
+-- time_threshold
+-- 	收集数据超时
+-- title
+-- 	数据项标题
+
+DROP TABLE IF EXISTS `monitor_metric`;
+CREATE TABLE `monitor_metric` (
+	`metric_id` int(11) UNSIGNED NOT NULL ,
+	`metric_name` varchar(255) NOT NULL ,
+	`monitor_id` int(11) UNSIGNED NOT NULL ,
+	`collect_every` int(11) UNSIGNED NOT NULL ,
+	`time_threshold` int(11) UNSIGNED NOT NULL ,
+	`title` varchar(255) NOT NULL ,
+	PRIMARY KEY (`metric_id`,`monitor_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--  }}} 
