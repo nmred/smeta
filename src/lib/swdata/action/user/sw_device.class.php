@@ -72,7 +72,7 @@ class sw_device extends sw_abstract
 		}
 
 		$db->commit();
-		return $this->render_json(array('device_id' => $device_id), 10000);
+		return $this->render_json(array('device_id' => $device_id), 10000, "add device $device_name success.");
 	}
 
 	// }}}

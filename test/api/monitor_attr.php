@@ -18,10 +18,10 @@ function call($url, $type = 'GET', $params = array())
 }
 
 // 添加 monitor
-//$url = '127.0.0.1:9080/dev/?/monitor_attr.add';
-//$rev = call($url, 'POST', array('name' => 'ss21222' . time(), 'form_type' => '1', 'mid' => 1, 'display_name' => 'eeee'));
-//$rev = json_decode($rev, true);
-//var_dump($rev);
+$url = '127.0.0.1:9080/dev/?/monitor_attr.add';
+$rev = call($url, 'POST', array('name' => 'ss21222' . time(), 'form_type' => '1', 'mid' => 1, 'display_name' => 'eeee'));
+$rev = json_decode($rev, true);
+var_dump($rev);
 
 // 删除 monitor
 //$url = '127.0.0.1:9080/dev/?/monitor_attr.del';
