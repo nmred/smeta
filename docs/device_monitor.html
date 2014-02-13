@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>设备监控器管理 API | Swan</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="/css/style.css">
+  <link href="//fonts.googleapis.com/css?family=Lato:300,700" rel="stylesheet" type="text/css">
+  <link href='http://fonts.googleapis.com/css?family=Source+Code+Pro:400,700' rel='stylesheet' type='text/css'>
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+</head>
+
+
+<body class="page">
+  <header id="header">
+  <div class="outer">
+    <div class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Swan</a>
+      </h1>
+      <nav id="main-nav">
+        <ul id="main-nav-list">
+          
+            <li class="main-nav-item">
+              <a href="/" class="main-nav-link">主页</a>
+            </li>
+          
+            <li class="main-nav-item">
+              <a href="/docs/" class="main-nav-link current">文档</a>
+            </li>
+          
+            <li class="main-nav-item">
+              <a href="https://github.com/nmred/sf1" class="main-nav-link">仓库</a>
+            </li>
+          
+        </ul>
+      </nav>
+    </div>
+  </div>
+</header>
+
+  <article class="page">
+  <header id="page-banner">
+  <div class="outer">
+    <div class="inner">
+      <h1 class="page-title">设备监控器管理 API</h1>
+    </div>
+  </div>
+</header>
+  <div class="outer">
+    <div class="inner">
+  <select id="page-mobile-menu">
+    <option value="">Navigate...</option>
+    
+      <optgroup label="Inner Api">
+        
+          <option value="/docs/inner_api.html">介绍</option>
+        
+          <option value="/docs/device.html">设备管理</option>
+        
+          <option value="/docs/device_monitor.html">设备监控器管理</option>
+        
+          <option value="/docs/monitor.html">监控器管理</option>
+        
+          <option value="/docs/monitor_attr.html">监控器属性管理</option>
+        
+      </optgroup>
+    
+  </select>
+</div>
+    <div class="page-content">
+      <div class="toc-wrap">
+        <strong class="toc-title">Contents</strong>
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#-device_monitor-add-"><span class="toc-number">1.</span> <span class="toc-text">添加设备监控器(device_monitor.add)</span></a></li><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#-url-add_url-"><span class="toc-number">1.1.</span> <span class="toc-text">URL</a></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-add_post-"><span class="toc-number">1.2.</span> <span class="toc-text">请求方式</a></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-add_json-"><span class="toc-number">1.3.</span> <span class="toc-text">支持格式</a></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-add_param-"><span class="toc-number">1.4.</span> <span class="toc-text">请求参数</a></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-add_notice-"><span class="toc-number">1.5.</span> <span class="toc-text">注意事项</a></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-add_example-"><span class="toc-number">1.6.</span> <span class="toc-text">调用样例</a></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-add_result-"><span class="toc-number">1.7.</span> <span class="toc-text">返回结果</a></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-add_result_dis-"><span class="toc-number">1.8.</span> <span class="toc-text">返回字段说明</a></span></a></li></ol><li class="toc-item toc-level-3"><a class="toc-link" href="#-device-mod-"><span class="toc-number">2.</span> <span class="toc-text">修改设备监控器(device.mod)</span></a></li><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#-url-mod_url-"><span class="toc-number">2.1.</span> <span class="toc-text">URL</a></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-mod_post-"><span class="toc-number">2.2.</span> <span class="toc-text">请求方式</a></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-mod_json-"><span class="toc-number">2.3.</span> <span class="toc-text">支持格式</a></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-mod_param-"><span class="toc-number">2.4.</span> <span class="toc-text">请求参数</a></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-mod_notice-"><span class="toc-number">2.5.</span> <span class="toc-text">注意事项</a></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-mod_example-"><span class="toc-number">2.6.</span> <span class="toc-text">调用样例</a></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-mod_result-"><span class="toc-number">2.7.</span> <span class="toc-text">返回结果</a></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-mod_result_dis-"><span class="toc-number">2.8.</span> <span class="toc-text">返回字段说明</a></span></a></li></ol><li class="toc-item toc-level-3"><a class="toc-link" href="#-device_monitor-del-"><span class="toc-number">3.</span> <span class="toc-text">删除设备监控器(device_monitor.del)</span></a></li><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#-url-del_url-"><span class="toc-number">3.1.</span> <span class="toc-text">URL</a></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-del_post-"><span class="toc-number">3.2.</span> <span class="toc-text">请求方式</a></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-del_json-"><span class="toc-number">3.3.</span> <span class="toc-text">支持格式</a></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-del_param-"><span class="toc-number">3.4.</span> <span class="toc-text">请求参数</a></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-del_notice-"><span class="toc-number">3.5.</span> <span class="toc-text">注意事项</a></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-del_example-"><span class="toc-number">3.6.</span> <span class="toc-text">调用样例</a></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-del_result-"><span class="toc-number">3.7.</span> <span class="toc-text">返回结果</a></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-del_result_dis-"><span class="toc-number">3.8.</span> <span class="toc-text">返回字段说明</a></span></a></li></ol><li class="toc-item toc-level-3"><a class="toc-link" href="#-device_monitor-json-"><span class="toc-number">4.</span> <span class="toc-text">获取设备监控器(device_monitor.json)</span></a></li><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#-url-json_url-"><span class="toc-number">4.1.</span> <span class="toc-text">URL</a></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-json_post-"><span class="toc-number">4.2.</span> <span class="toc-text">请求方式</a></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-json_json-"><span class="toc-number">4.3.</span> <span class="toc-text">支持格式</a></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-json_param-"><span class="toc-number">4.4.</span> <span class="toc-text">请求参数</a></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-json_notice-"><span class="toc-number">4.5.</span> <span class="toc-text">注意事项</a></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-json_example-"><span class="toc-number">4.6.</span> <span class="toc-text">调用样例</a></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-json_result-"><span class="toc-number">4.7.</span> <span class="toc-text">返回结果</a></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-json_result_dis-"><span class="toc-number">4.8.</span> <span class="toc-text">返回字段说明</a></span></a></li></ol>
+      </div>
+      <div class="page-entry">
+        <h3 id="-device_monitor-add-">添加设备监控器(device_monitor.add)</h3>
+<h4 id="-url-add_url-"><a href="#add_url">URL</a></h4>
+<p><a href="http://127.0.0.1/user/?/device_monitor.add" target="_blank">http://127.0.0.1/user/?/device_monitor.add</a></p>
+<h4 id="-add_post-"><a href="#add_post">请求方式</a></h4>
+<p>POST</p>
+<h4 id="-add_json-"><a href="#add_json">支持格式</a></h4>
+<p>JSON </p>
+<h4 id="-add_param-"><a href="#add_param">请求参数</a></h4>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>必选</th>
+<th>类型及范围</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>did</code></td>
+<td>true</td>
+<td>int</td>
+<td>设备 ID</td>
+</tr>
+<tr>
+<td><code>mid</code></td>
+<td>true</td>
+<td>int</td>
+<td>监控器 ID</td>
+</tr>
+<tr>
+<td><code>aid</code></td>
+<td>true</td>
+<td>int</td>
+<td>监控器属性 ID</td>
+</tr>
+<tr>
+<td><code>value</code></td>
+<td>false</td>
+<td>mixed</td>
+<td>监控器属性值，不传递默认是空字符串</td>
+</tr>
+</tbody>
+</table>
+<h4 id="-add_notice-"><a href="#add_notice">注意事项</a></h4>
+<p>无</p>
+<h4 id="-add_example-"><a href="#add_example">调用样例</a></h4>
+<figure class="highlight"><pre><span class="php"><span class="preprocessor">&lt;?php</span>
+<span class="variable">$url</span> = <span class="string">'127.0.0.1:9080/user/?/device_monitor.add'</span>;
+<span class="variable">$rev</span> = call(<span class="variable">$url</span>, <span class="string">'POST'</span>, <span class="keyword">array</span>(<span class="string">'aid'</span> =&gt; <span class="string">'1'</span>, <span class="string">'mid'</span> =&gt; <span class="number">1</span>, <span class="string">'did'</span> =&gt; <span class="number">3</span>, <span class="string">'value'</span> =&gt; <span class="string">'50'</span>));
+<span class="variable">$rev</span> = json_decode(<span class="variable">$rev</span>, <span class="keyword">true</span>);
+var_dump(<span class="variable">$rev</span>);</span>
+</pre></figure>
+
+<h4 id="-add_result-"><a href="#add_result">返回结果</a></h4>
+<figure class="highlight json"><pre>{
+  "<span class="attribute">code</span>": <span class="value"><span class="number">10000</span></span>,
+  "<span class="attribute">msg</span>": <span class="value"><span class="string">"add device monitor attributes success."</span></span>,
+  "<span class="attribute">data</span>": <span class="value">{
+    "<span class="attribute">did</span>": <span class="value"><span class="string">"3"</span></span>,
+    "<span class="attribute">aid</span>": <span class="value"><span class="string">"1"</span></span>,
+    "<span class="attribute">vid</span>": <span class="value"><span class="string">"2"</span></span>,
+    "<span class="attribute">mid</span>": <span class="value"><span class="string">"1"</span>
+  </span>}
+</span>}
+</pre></figure>
+
+<h4 id="-add_result_dis-"><a href="#add_result_dis">返回字段说明</a></h4>
+<table>
+<thead>
+<tr>
+<th>返回值字段</th>
+<th>字段类型</th>
+<th>字段说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>code</code></td>
+<td>string</td>
+<td>返回接口的状态码具体的状态码见 <a href="api_errno.html">接口错误码说明</a> </td>
+</tr>
+<tr>
+<td><code>msg</code></td>
+<td>string</td>
+<td>接口的返回描述信息</td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td>array NULL</td>
+<td>返回的数据，如果错误返回 NULL</td>
+</tr>
+<tr>
+<td><code>did</code></td>
+<td>int</td>
+<td>返回设备 ID</td>
+</tr>
+<tr>
+<td><code>aid</code></td>
+<td>int</td>
+<td>返回监控器属性 ID</td>
+</tr>
+<tr>
+<td><code>vid</code></td>
+<td>int</td>
+<td>返回监控器属性值 ID</td>
+</tr>
+<tr>
+<td><code>mid</code></td>
+<td>int</td>
+<td>返回监控器 ID</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="-device-mod-">修改设备监控器(device.mod)</h3>
+<h4 id="-url-mod_url-"><a href="#mod_url">URL</a></h4>
+<p><a href="http://127.0.0.1/user/?/device_monitor.mod" target="_blank">http://127.0.0.1/user/?/device_monitor.mod</a></p>
+<h4 id="-mod_post-"><a href="#mod_post">请求方式</a></h4>
+<p>POST</p>
+<h4 id="-mod_json-"><a href="#mod_json">支持格式</a></h4>
+<p>JSON </p>
+<h4 id="-mod_param-"><a href="#mod_param">请求参数</a></h4>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>必选</th>
+<th>类型及范围</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>vid</code></td>
+<td>true</td>
+<td>int</td>
+<td>监控器属性值 ID</td>
+</tr>
+<tr>
+<td><code>value</code></td>
+<td>false</td>
+<td>mixed</td>
+<td>监控器属性值</td>
+</tr>
+</tbody>
+</table>
+<h4 id="-mod_notice-"><a href="#mod_notice">注意事项</a></h4>
+<p>无</p>
+<h4 id="-mod_example-"><a href="#mod_example">调用样例</a></h4>
+<figure class="highlight"><pre><span class="php"><span class="preprocessor">&lt;?php</span>
+<span class="variable">$url</span> = <span class="string">'127.0.0.1:9080/user/?/device_monitor.mod'</span>;
+<span class="variable">$rev</span> = call(<span class="variable">$url</span>, <span class="string">'POST'</span>, <span class="keyword">array</span>(<span class="string">'vid'</span> =&gt; <span class="string">'3'</span>, <span class="string">'value'</span> =&gt; <span class="string">'60'</span>));
+<span class="variable">$rev</span> = json_decode(<span class="variable">$rev</span>, <span class="keyword">true</span>);
+var_dump(<span class="variable">$rev</span>);</span>
+</pre></figure>
+
+<h4 id="-mod_result-"><a href="#mod_result">返回结果</a></h4>
+<figure class="highlight json"><pre>
+  {
+    "<span class="attribute">code</span>": <span class="value"><span class="number">10000</span></span>,
+    "<span class="attribute">msg</span>": <span class="value"><span class="string">"mod device monitor success."</span></span>,
+    "<span class="attribute">data</span>": <span class="value">Null 
+  </span>}
+</pre></figure>
+
+<h4 id="-mod_result_dis-"><a href="#mod_result_dis">返回字段说明</a></h4>
+<table>
+<thead>
+<tr>
+<th>返回值字段</th>
+<th>字段类型</th>
+<th>字段说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>code</code></td>
+<td>string</td>
+<td>返回接口的状态码具体的状态码见 <a href="api_errno.html">接口错误码说明</a> </td>
+</tr>
+<tr>
+<td><code>msg</code></td>
+<td>string</td>
+<td>接口的返回描述信息</td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td>array NULL</td>
+<td>不返回数据</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="-device_monitor-del-">删除设备监控器(device_monitor.del)</h3>
+<h4 id="-url-del_url-"><a href="#del_url">URL</a></h4>
+<p><a href="http://127.0.0.1/user/?/device_monitor.del" target="_blank">http://127.0.0.1/user/?/device_monitor.del</a></p>
+<h4 id="-del_post-"><a href="#del_post">请求方式</a></h4>
+<p>POST</p>
+<h4 id="-del_json-"><a href="#del_json">支持格式</a></h4>
+<p>JSON </p>
+<h4 id="-del_param-"><a href="#del_param">请求参数</a></h4>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>必选</th>
+<th>类型及范围</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>vid</code></td>
+<td>true</td>
+<td>int</td>
+<td>监控器属性值 ID</td>
+</tr>
+</tbody>
+</table>
+<h4 id="-del_notice-"><a href="#del_notice">注意事项</a></h4>
+<p>无</p>
+<h4 id="-del_example-"><a href="#del_example">调用样例</a></h4>
+<figure class="highlight"><pre><span class="php"><span class="preprocessor">&lt;?php</span>
+<span class="variable">$url</span> = <span class="string">'127.0.0.1:9080/user/?/device_monitor.del'</span>;
+<span class="variable">$rev</span> = call(<span class="variable">$url</span>, <span class="string">'POST'</span>, <span class="keyword">array</span>(<span class="string">'vid'</span> =&gt; <span class="string">'3'</span>));
+<span class="variable">$rev</span> = json_decode(<span class="variable">$rev</span>, <span class="keyword">true</span>);
+var_dump(<span class="variable">$rev</span>);</span>
+</pre></figure>
+
+<h4 id="-del_result-"><a href="#del_result">返回结果</a></h4>
+<figure class="highlight json"><pre>{
+  "<span class="attribute">code</span>": <span class="value"><span class="number">10000</span></span>,
+  "<span class="attribute">msg</span>": <span class="value"><span class="string">"delete device monitor success."</span></span>,
+  "<span class="attribute">data</span>": <span class="value">Null 
+</span>}
+</pre></figure>
+
+<h4 id="-del_result_dis-"><a href="#del_result_dis">返回字段说明</a></h4>
+<table>
+<thead>
+<tr>
+<th>返回值字段</th>
+<th>字段类型</th>
+<th>字段说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>code</code></td>
+<td>string</td>
+<td>返回接口的状态码具体的状态码见 <a href="api_errno.html">接口错误码说明</a> </td>
+</tr>
+<tr>
+<td><code>msg</code></td>
+<td>string</td>
+<td>接口的返回描述信息</td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td>array NULL</td>
+<td>不返回数据</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="-device_monitor-json-">获取设备监控器(device_monitor.json)</h3>
+<h4 id="-url-json_url-"><a href="#json_url">URL</a></h4>
+<p><a href="http://127.0.0.1/user/?/device_monitor.json" target="_blank">http://127.0.0.1/user/?/device_monitor.json</a></p>
+<h4 id="-json_post-"><a href="#json_post">请求方式</a></h4>
+<p>POST</p>
+<h4 id="-json_json-"><a href="#json_json">支持格式</a></h4>
+<p>JSON </p>
+<h4 id="-json_param-"><a href="#json_param">请求参数</a></h4>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>必选</th>
+<th>类型及范围</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>did</code></td>
+<td>true</td>
+<td>int</td>
+<td>设备 ID</td>
+</tr>
+<tr>
+<td><code>page</code></td>
+<td>false</td>
+<td>int</td>
+<td>分页的页码</td>
+</tr>
+<tr>
+<td><code>page_count</code></td>
+<td>false</td>
+<td>int</td>
+<td>每页的个数</td>
+</tr>
+</tbody>
+</table>
+<h4 id="-json_notice-"><a href="#json_notice">注意事项</a></h4>
+<p>无</p>
+<h4 id="-json_example-"><a href="#json_example">调用样例</a></h4>
+<figure class="highlight"><pre><span class="php"><span class="preprocessor">&lt;?php</span>
+<span class="variable">$url</span> = <span class="string">'127.0.0.1:9080/user/?/device.json'</span>;
+<span class="variable">$rev</span> = call(<span class="variable">$url</span>, <span class="string">'POST'</span>, <span class="keyword">array</span>(<span class="string">'did'</span> =&gt; <span class="string">'3'</span>));
+<span class="variable">$rev</span> = json_decode(<span class="variable">$rev</span>, <span class="keyword">true</span>);
+var_dump(<span class="variable">$rev</span>);</span>
+</pre></figure>
+
+<h4 id="-json_result-"><a href="#json_result">返回结果</a></h4>
+<figure class="highlight json"><pre>{
+  "<span class="attribute">code</span>": <span class="value"><span class="number">10000</span></span>,
+  "<span class="attribute">msg</span>": <span class="value"><span class="string">"get device monitor success."</span></span>,
+  "<span class="attribute">data</span>": <span class="value">{
+    "<span class="attribute">result</span>": <span class="value">[
+      {
+        "<span class="attribute">value_id</span>": <span class="value"><span class="string">"2"</span></span>,
+        "<span class="attribute">attr_id</span>": <span class="value"><span class="string">"1"</span></span>,
+        "<span class="attribute">device_id</span>": <span class="value"><span class="string">"3"</span></span>,
+        "<span class="attribute">monitor_id</span>": <span class="value"><span class="string">"1"</span></span>,
+        "<span class="attribute">value</span>": <span class="value"><span class="string">"60"</span>
+      </span>}
+    ]</span>,
+    "<span class="attribute">count</span>": <span class="value"><span class="string">"1"</span>
+  </span>}
+</span>}
+</pre></figure>
+
+<h4 id="-json_result_dis-"><a href="#json_result_dis">返回字段说明</a></h4>
+<table>
+<thead>
+<tr>
+<th>返回值字段</th>
+<th>字段类型</th>
+<th>字段说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>code</code></td>
+<td>string</td>
+<td>返回接口的状态码具体的状态码见 <a href="api_errno.html">接口错误码说明</a> </td>
+</tr>
+<tr>
+<td><code>msg</code></td>
+<td>string</td>
+<td>接口的返回描述信息</td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td>array NULL</td>
+<td>不返回数据</td>
+</tr>
+<tr>
+<td><code>device_id</code></td>
+<td>int</td>
+<td>设备 ID</td>
+</tr>
+<tr>
+<td><code>attr_id</code></td>
+<td>int</td>
+<td>监控器属性 ID</td>
+</tr>
+<tr>
+<td><code>monitor_id</code></td>
+<td>int</td>
+<td>监控器 ID</td>
+</tr>
+<tr>
+<td><code>value_id</code></td>
+<td>int</td>
+<td>监控器属性值 ID</td>
+</tr>
+</tbody>
+</table>
+
+      </div>
+      <footer id="page-footer">
+        <time id="page-footer-updated" datetime="2014-02-13T13:54:02.000Z">Last updated: 2月 13, 2014</time>
+        <a href="/docs/device.html" id="page-footer-prev" class="page-footer-link">Prev</a>
+        <a href="/docs/monitor.html" id="page-footer-next" class="page-footer-link">Next</a>
+      </footer>
+    </div>
+    <aside id="sidebar">
+  
+    <strong class="sidebar-title">Inner Api</strong>
+    
+      <a href="/docs/inner_api.html" class="sidebar-link">介绍</a>
+    
+      <a href="/docs/device.html" class="sidebar-link">设备管理</a>
+    
+      <a href="/docs/device_monitor.html" class="sidebar-link current">设备监控器管理</a>
+    
+      <a href="/docs/monitor.html" class="sidebar-link">监控器管理</a>
+    
+      <a href="/docs/monitor_attr.html" class="sidebar-link">监控器属性管理</a>
+    
+  
+</aside>
+  </div>
+</article>
+  <footer id="footer">
+  <div class="outer">
+    <div class="inner">
+      &copy; 2014 <a href="http://www.swanlinux.net">Swan team</a><br>
+    </div>
+  </div>
+</footer>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/script.js"></script>
+
+</body>
+</html>

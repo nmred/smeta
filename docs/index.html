@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>INNER API | Swan</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="/css/style.css">
+  <link href="//fonts.googleapis.com/css?family=Lato:300,700" rel="stylesheet" type="text/css">
+  <link href='http://fonts.googleapis.com/css?family=Source+Code+Pro:400,700' rel='stylesheet' type='text/css'>
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+</head>
+
+
+<body class="page">
+  <header id="header">
+  <div class="outer">
+    <div class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Swan</a>
+      </h1>
+      <nav id="main-nav">
+        <ul id="main-nav-list">
+          
+            <li class="main-nav-item">
+              <a href="/" class="main-nav-link">主页</a>
+            </li>
+          
+            <li class="main-nav-item">
+              <a href="/docs/" class="main-nav-link current">文档</a>
+            </li>
+          
+            <li class="main-nav-item">
+              <a href="https://github.com/nmred/sf1" class="main-nav-link">仓库</a>
+            </li>
+          
+        </ul>
+      </nav>
+    </div>
+  </div>
+</header>
+
+  <article class="page">
+  <header id="page-banner">
+  <div class="outer">
+    <div class="inner">
+      <h1 class="page-title">INNER API</h1>
+    </div>
+  </div>
+</header>
+  <div class="outer">
+    <div class="inner">
+  <select id="page-mobile-menu">
+    <option value="">Navigate...</option>
+    
+      <optgroup label="Inner Api">
+        
+          <option value="/docs/inner_api.html">介绍</option>
+        
+          <option value="/docs/device.html">设备管理</option>
+        
+          <option value="/docs/device_monitor.html">设备监控器管理</option>
+        
+          <option value="/docs/monitor.html">监控器管理</option>
+        
+          <option value="/docs/monitor_attr.html">监控器属性管理</option>
+        
+      </optgroup>
+    
+  </select>
+</div>
+    <div class="page-content">
+      <div class="toc-wrap">
+        <strong class="toc-title">Contents</strong>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">使用前须知</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#-api-"><span class="toc-number">1.1.</span> <span class="toc-text">测试 API 说明</span></a></li></ol>
+      </div>
+      <div class="page-entry">
+        <p>该 API 只是内网授权访问接口，目前启动默认是 127.0.0.1 来访问。 </p>
+<h2 id="-">使用前须知</h2>
+<p>使用需确认是否启动了 PHPD 服务中的 swan_data 进程。</p>
+<figure class="highlight"><pre><span class="variable">$ </span>swan_soft start phpd
+</pre></figure>
+
+<h3 id="-api-">测试 API 说明</h3>
+<p>文档例子中用到的 <code>call()</code> 函数：</p>
+<figure class="highlight"><pre><span class="function"><span class="keyword">function</span> <span class="title">call</span><span class="params">(<span class="variable">$url</span>, <span class="variable">$type</span> = <span class="string">'GET'</span>, <span class="variable">$params</span> = array<span class="params">()</span>)</span>
+{</span>   
+  <span class="variable">$params</span> = http_build_query(<span class="variable">$params</span>);
+  <span class="keyword">if</span> (<span class="string">'GET'</span> == <span class="variable">$type</span>) {
+    <span class="variable">$url</span> .= <span class="variable">$params</span>;
+  }
+  <span class="variable">$ch</span> = curl_init(<span class="variable">$url</span>);
+  curl_setopt(<span class="variable">$ch</span>, CURLOPT_HEADER, <span class="keyword">false</span>);
+  curl_setopt(<span class="variable">$ch</span>, CURLOPT_RETURNTRANSFER , <span class="number">1</span>);
+
+  <span class="keyword">if</span> (<span class="string">'POST'</span> == <span class="variable">$type</span>) {
+    curl_setopt(<span class="variable">$ch</span>, CURLOPT_POST, <span class="number">1</span>);
+    curl_setopt(<span class="variable">$ch</span>, CURLOPT_POSTFIELDS, <span class="variable">$params</span>);
+  }
+
+  <span class="keyword">return</span> curl_exec(<span class="variable">$ch</span>);
+}
+</pre></figure>
+
+<p>所有的例子在 <a href="https://www.github.com/nmred/swansoft" target="_blank"><code>swansoft</code></a> 仓库中的 <code>test/api</code> 目录下，这些测试案例要求 PHP 环境有 <code>curl</code> 扩展。 </p>
+
+      </div>
+      <footer id="page-footer">
+        <time id="page-footer-updated" datetime="2014-02-13T14:52:10.000Z">Last updated: 2月 13, 2014</time>
+        
+        <a href="/docs/device.html" id="page-footer-next" class="page-footer-link">Next</a>
+      </footer>
+    </div>
+    <aside id="sidebar">
+  
+    <strong class="sidebar-title">Inner Api</strong>
+    
+      <a href="/docs/inner_api.html" class="sidebar-link">介绍</a>
+    
+      <a href="/docs/device.html" class="sidebar-link">设备管理</a>
+    
+      <a href="/docs/device_monitor.html" class="sidebar-link">设备监控器管理</a>
+    
+      <a href="/docs/monitor.html" class="sidebar-link">监控器管理</a>
+    
+      <a href="/docs/monitor_attr.html" class="sidebar-link">监控器属性管理</a>
+    
+  
+</aside>
+  </div>
+</article>
+  <footer id="footer">
+  <div class="outer">
+    <div class="inner">
+      &copy; 2014 <a href="http://www.swanlinux.net">Swan team</a><br>
+    </div>
+  </div>
+</footer>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/script.js"></script>
+
+</body>
+</html>
