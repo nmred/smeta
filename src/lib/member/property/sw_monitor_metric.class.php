@@ -12,12 +12,12 @@
 // | $_SWANBR_WEB_DOMAIN_$
 // +---------------------------------------------------------------------------
  
-namespace lib\member\operator;
-use \lib\member\operator\exception\sw_exception;
+namespace lib\member\property;
+use \lib\member\property\exception\sw_exception;
 
 /**
 +------------------------------------------------------------------------------
-* sw_monitor 
+* sw_monitor_metric 
 +------------------------------------------------------------------------------
 * 
 * @uses sw_abstract
@@ -27,65 +27,46 @@ use \lib\member\operator\exception\sw_exception;
 * @author $_SWANBR_AUTHOR_$ 
 +------------------------------------------------------------------------------
 */
-class sw_monitor extends sw_abstract
+class sw_monitor_metric extends sw_abstract
 {
 	// {{{ members
 
 	/**
-	 * 子类的命名空间 
-	 * 
-	 * @var string
-	 * @access protected
-	 */
-	protected $__namespace = "\lib\member\operator\monitor\\";
-
-	/**
-	 * monitor basic
-	 * 
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $__property_basic = null;
-
-	/**
-	 * 允许创建的子类 
+	 * 允许设置的元素列表 
 	 * 
 	 * @var array
 	 * @access protected
 	 */
-	protected $__operator_types = array(
-		'basic'     => true,
-		'attribute' => true,
-		'metric'    => true,
+	protected $__allow_attributes = array(
+		'metric_id'      => true,
+		'metric_name'    => true,
+		'monitor_id'     => true,
+		'collect_every'  => true,
+		'time_threshold' => true,
+		'title'          => true,
 	);
+
+	/**
+	 * 主键 
+	 * 
+	 * @var string
+	 * @access protected
+	 */
+	protected $__key_attributes = array('metric_id');
 
 	// }}}		
 	// {{{ functions
-	// {{{ public function __construct()
+	// {{{ public function check()
 
 	/**
-	 * __construct 
+	 * 检查参数 
 	 * 
 	 * @access public
 	 * @return void
 	 */
-	public function __construct($property = null)
+	public function check()
 	{
-		$this->__property_basic = $property;	
-	}
-
-	// }}}
-	// {{{ public function get_monitor_basic_property()
-
-	/**
-	 * 获取监控器 basic 的属性 
-	 * 
-	 * @access public
-	 * @return void
-	 */
-	public function get_monitor_basic_property()
-	{
-		return $this->__property_basic;	
+		parent::check();
 	}
 
 	// }}}

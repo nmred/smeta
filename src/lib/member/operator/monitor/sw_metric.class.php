@@ -68,7 +68,7 @@ class sw_metric extends sw_abstract
 
         $this->__db->insert(SWAN_TBN_MONITOR_METRIC, $attributes);
 
-		return $attr_id;
+		return $metric_id;
 	}
 	
 	// }}}
@@ -189,16 +189,16 @@ class sw_metric extends sw_abstract
 	/**
 	 * _validate 
 	 * 
-	 * @param mixed $attr_name 
+	 * @param mixed $metric_name 
 	 * @param int $monitor_id 
 	 * @access protected
 	 * @return void
 	 */
-	protected function _validate($monitor_id, $attr_name)
+	protected function _validate($monitor_id, $metric_name)
 	{
 		$parrent = '/^[a-zA-Z]+[0-9a-zA-Z_]{5,}$/is';
-		if (!preg_match($parrent, $attr_name)) {
-			throw new sw_exception("监控器属性名的格式必须是首个字符是字母，由数字、字母、下划线组成,并且至少6位");  
+		if (!preg_match($parrent, $metric_name)) {
+			throw new sw_exception("监控器数据项的格式必须是首个字符是字母，由数字、字母、下划线组成,并且至少6位");  
 		}
 
 		$is_exists = $this->__db->fetch_one($this->__db->select()
@@ -210,11 +210,11 @@ class sw_metric extends sw_abstract
 		}
 
 		$is_exists = $this->__db->fetch_one($this->__db->select()
-								->from(SWAN_TBN_MONITOR_ATTRIBUTE, array('attr_id'))
-								->where('attr_name= ?'), $attr_name);
+								->from(SWAN_TBN_MONITOR_METRIC, array('metric_id'))
+								->where('metric_name= ?'), $metric_name);
 
 		if ($is_exists) {
-			throw new sw_exception("`$attr_name` monitor attribute name already  exists.");
+			throw new sw_exception("`$metric_name` monitor metric name already  exists.");
 		}
 	}
 
