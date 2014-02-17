@@ -72,35 +72,35 @@ class sw_metric extends sw_abstract
 	}
 	
 	// }}}
-	// {{{ public function get_attribute()
+	// {{{ public function get_metric()
 
 	/**
-	 * get_attribute 
+	 * get_metric 
 	 * 
-	 * @param \lib\member\condition\sw_get_monitor_attribute $condition 
+	 * @param \lib\member\condition\sw_get_monitor_metric $condition 
 	 * @access public
 	 * @return void
 	 */
-	public function get_attribute(\lib\member\condition\sw_get_monitor_attribute $condition)
+	public function get_metric(\lib\member\condition\sw_get_monitor_metric $condition)
 	{
 		$condition->check_params();
 		$select = $this->__db->select()
-							 ->from(SWAN_TBN_MONITOR_ATTRIBUTE, null);
+							 ->from(SWAN_TBN_MONITOR_METRIC, null);
 		$condition->where($select, true);
 		return $this->_get($select, $condition->params());	
 	}
 
 	// }}}
-	// {{{ public function mod_attribute()
+	// {{{ public function mod_metric()
 
 	/**
-	 * mod_attribute 
+	 * mod_metric 
 	 * 
-	 * @param \lib\member\condition\sw_mod_monitor_attribute $condition 
+	 * @param \lib\member\condition\sw_mod_monitor_metric $condition 
 	 * @access public
 	 * @return void
 	 */
-	public function mod_attribute(\lib\member\condition\sw_mod_monitor_attribute $condition)
+	public function mod_metric(\lib\member\condition\sw_mod_monitor_metric $condition)
 	{
 		$condition->check_params();
 		$params = $condition->params();
@@ -111,20 +111,20 @@ class sw_metric extends sw_abstract
 			return; 
 		}
 
-		$this->__db->update(SWAN_TBN_MONITOR_ATTRIBUTE, $attributes, $where);
+		$this->__db->update(SWAN_TBN_MONITOR_METRIC, $attributes, $where);
 	}
 
 	// }}}
-	// {{{ public function del_attribute()
+	// {{{ public function del_metric()
 
 	/**
-	 * 删除 monitor 属性 
+	 * 删除 monitor 数据项 
 	 * 
-	 * @param \lib\member\condition\sw_del_monitor_attribute $condition 
+	 * @param \lib\member\condition\sw_del_monitor_metric $condition 
 	 * @access public
 	 * @return void
 	 */
-	public function del_attribute(\lib\member\condition\sw_del_monitor_attribute $condition)
+	public function del_metric(\lib\member\condition\sw_del_monitor_metric $condition)
 	{
 		$condition->check_params();
 		$where = $condition->where();
@@ -132,7 +132,7 @@ class sw_metric extends sw_abstract
 			return; 
 		}
 
-		$this->__db->delete(SWAN_TBN_MONITOR_ATTRIBUTE, $where);
+		$this->__db->delete(SWAN_TBN_MONITOR_METRIC, $where);
 	}
 
 	// }}}
