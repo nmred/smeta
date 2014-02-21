@@ -80,6 +80,31 @@ class sw_basic extends sw_abstract
 		$condition->where($select, true);
 		return $this->_get($select, $condition->params());	
 	}
+	
+	// }}}
+	// {{{
+
+	/**
+	 * 获取监控器的详细信息 
+	 * 
+	 * @param int $monitor_id 
+	 * @access public
+	 * @return array
+	 */
+	public function get_info($monitor_id)
+	{
+		$bind_data = array($monitor_id);
+		$select = $this->__db->select()
+							 ->from(SWAN_TBN_MONITOR_BASIC, '*')
+							 ->where(' monitor_id = ?');
+
+		$result = $this->__db->fetch_all($select, $bind_data);
+		if (!isset($result[0])) {
+			throw new sw_exception('get monitor basic info fail.');
+		}
+
+		return $result[0];
+	}
 
 	// }}}
 	// {{{ public function mod_basic()

@@ -75,7 +75,7 @@ class sw_attribute extends sw_abstract
 	// {{{ public function get_attribute()
 
 	/**
-	 * get_attribute 
+	 * 获取监控器属性 
 	 * 
 	 * @param \lib\member\condition\sw_get_monitor_attribute $condition 
 	 * @access public
@@ -88,6 +88,32 @@ class sw_attribute extends sw_abstract
 							 ->from(SWAN_TBN_MONITOR_ATTRIBUTE, null);
 		$condition->where($select, true);
 		return $this->_get($select, $condition->params());	
+	}
+
+	// }}}
+	// {{{ public function get_info()
+
+	/**
+	 * 获取监控器属性详细信息 
+	 * 
+	 * @param int $monitor_id 
+	 * @param int $attr_id 
+	 * @access public
+	 * @return void
+	 */
+	public function get_info($monitor_id, $attr_id)
+	{
+		$bind_data = array($monitor_id, $attr_id);
+		$select = $this->__db->select()
+							 ->from(SWAN_TBN_MONITOR_ATTRIBUTE, '*')
+							 ->where(' monitor_id = ? AND attr_id = ?');
+
+		$result = $this->__db->fetch_all($select, $bind_data);
+		if (!isset($result[0])) {
+			throw new sw_exception('get monitor attribute fail.');
+		}
+
+		return $result[0];
 	}
 
 	// }}}
