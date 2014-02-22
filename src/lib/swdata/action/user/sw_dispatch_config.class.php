@@ -42,9 +42,14 @@ class sw_dispatch_config extends sw_abstract
 	 */
 	public function action_do()
 	{
+		$device_name = $this->__request->get_post('device_name', '');
 		try {
 			$device = sw_member::operator_factory('device');
 			$condition = sw_member::condition_factory('get_device'); 
+			if ($device_name) {
+				$condition->set_in('device_name');
+				$condition->set_device_name(trim($device_name));
+			}
 			$condition->set_is_count(false);
 			$data = $device->get_device($condition);
 		} catch (\swan\exception\sw_exception $e) {
@@ -78,6 +83,7 @@ class sw_dispatch_config extends sw_abstract
 				$monitor_data[$monitor_key]['basic']['monitor_id']  = $mp_info['monitor_id'];
 				$monitor_data[$monitor_key]['basic']['device_id']   = $device_id;
 				$monitor_data[$monitor_key]['basic']['device_name'] = $d_info['device_name'];
+				$monitor_data[$monitor_key]['basic']['host_name']   = $d_info['host_name'];
 				$monitor_data[$monitor_key]['basic']['device_display_name']  = $d_info['device_display_name'];
 				$monitor_data[$monitor_key]['basic']['monitor_display_name'] = $monitor_info['monitor_display_name'];
 				$monitor_data[$monitor_key]['params'][$attr_info['attr_name']] = $mp_info['value'];

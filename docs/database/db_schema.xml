@@ -208,6 +208,14 @@
                         <default></default>
                     </column>
 
+                    <column name="host_name">
+                        <desc>设备主机地址</desc>
+                        <type>varchar</type>
+                        <nullable>false</nullable>
+                        <precision>255</precision>
+                        <default></default>
+                    </column>
+
                 </columns>
 
                 <keys>
@@ -399,7 +407,7 @@
                         <fields>
                             <field name="value_id"></field>
                             <field name="attr_id"></field>
-                            <field name="monitor_id"></field>
+                            <field name="device_id"></field>
                         </fields>
                     </key>
                 </keys>

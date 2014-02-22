@@ -43,6 +43,7 @@ class sw_device extends sw_abstract
 	public function action_add()
 	{
 		$device_name = $this->__request->get_post('name', '');
+		$host_name   = $this->__request->get_post('host_name', '');
 		$device_display_name = $this->__request->get_post('display_name', '');
 		if (!$device_name) {
 			return $this->render_json(null, 10001, '`name` not allow is empty.');
@@ -63,7 +64,7 @@ class sw_device extends sw_abstract
 		// 添加 device basic
 		try {
 			$property_key   = sw_member::property_factory('device_key', array('device_id' => $device_id)); 
-			$property_basic = sw_member::property_factory('device_basic', array('device_display_name' => $device_display_name)); 
+			$property_basic = sw_member::property_factory('device_basic', array('device_display_name' => $device_display_name, 'host_name' => $host_name)); 
 			$device = sw_member::operator_factory('device', $property_key);
 			$device->get_operator('basic')->add_basic($property_basic);
 		} catch (\swan\exception\sw_exception $e) {
@@ -128,6 +129,7 @@ class sw_device extends sw_abstract
 	public function action_mod()
 	{	
 		$did = $this->__request->get_post('did', '');
+		$host_name = $this->__request->get_post('host_name', '');
 		$display_name = $this->__request->get_post('display_name', '');
 		if (!$did) {
 			return $this->render_json(null, 10001, '`did` not allow is empty.');
@@ -135,7 +137,7 @@ class sw_device extends sw_abstract
 
 		// 修改 device basic
 		try {
-			$property_basic = sw_member::property_factory('device_basic', array('device_display_name' => $display_name)); 
+			$property_basic = sw_member::property_factory('device_basic', array('device_display_name' => $display_name, 'host_name' => $host_name)); 
 			$condition = sw_member::condition_factory('mod_device_basic', array('device_id' => $did));
 			$condition->set_in('device_id');
 			$condition->set_property($property_basic);

@@ -93,11 +93,14 @@ CREATE TABLE `device_key` (
 -- 	设备 id
 -- device_display_name
 -- 	设备显示名称
+-- host_name
+-- 	设备主机地址
 
 DROP TABLE IF EXISTS `device_basic`;
 CREATE TABLE `device_basic` (
 	`device_id` int(11) UNSIGNED NOT NULL ,
 	`device_display_name` varchar(255) NOT NULL ,
+	`host_name` varchar(255) NOT NULL ,
 	PRIMARY KEY (`device_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -176,7 +179,7 @@ CREATE TABLE `monitor_params` (
 	`device_id` int(11) UNSIGNED NOT NULL ,
 	`monitor_id` int(11) UNSIGNED NOT NULL ,
 	`value` varchar(255) NOT NULL ,
-	PRIMARY KEY (`value_id`,`attr_id`,`monitor_id`)
+	PRIMARY KEY (`value_id`,`attr_id`,`device_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --  }}} 

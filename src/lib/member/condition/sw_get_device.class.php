@@ -51,6 +51,7 @@ class sw_get_device extends sw_get_abstract
 	protected $__columns = array(
 		'device_id'   => SWAN_TBN_DEVICE_KEY,		
 		'device_name' => SWAN_TBN_DEVICE_KEY,		
+		'host_name'   => SWAN_TBN_DEVICE_BASIC,		
 		'device_display_name' => SWAN_TBN_DEVICE_BASIC,		
 	);
 

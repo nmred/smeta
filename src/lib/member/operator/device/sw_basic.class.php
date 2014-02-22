@@ -56,7 +56,7 @@ class sw_basic extends sw_abstract
         
         $attributes = $basic_property->attributes();
         $attributes['device_id'] = $key_attributes['device_id'];
-        $require_fields = array('device_id', 'device_display_name');
+        $require_fields = array('device_id', 'device_display_name', 'host_name');
         $this->_check_require($attributes, $require_fields);
 
         $this->__db->insert(SWAN_TBN_DEVICE_BASIC, $attributes);
