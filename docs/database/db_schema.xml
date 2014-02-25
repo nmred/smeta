@@ -230,6 +230,111 @@
             </table>
 
             <!-- }}} -->
+            <!-- {{{ table device_monitor -->
+
+            <table name="device_monitor">
+                <desc>监控的设备的监控器</desc>
+                <engine>InnoDB</engine>
+                <charset>utf8</charset>
+                <columns>
+                    <column name="dm_id">
+                        <desc>设备监控器 id</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+                        <unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                    <column name="device_id">
+                        <desc>设备 id</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+                        <unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                    <column name="monitor_id">
+                        <desc>监控器 id</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+                        <unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                </columns>
+
+                <keys>
+                    <key name="">
+                        <desc></desc>
+                        <type>primary</type>
+                        <fields>
+                            <field name="dm_id"></field>
+                        </fields>
+                    </key>
+                </keys>
+            </table>
+
+            <!-- }}} -->
+            <!-- {{{ table device_monitor_params -->
+
+            <table name="device_monitor_params">
+                <desc>监控器参数</desc>
+                <engine>InnoDB</engine>
+                <charset>utf8</charset>
+                <columns>
+                    <column name="value_id">
+                        <desc>属性值 id</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+                        <unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+                    <column name="attr_id">
+                        <desc>监控器属性 id</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+                        <unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                    <column name="dm_id">
+                        <desc>设备监控器 id</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+                        <unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                    <column name="value">
+                        <desc>属性值</desc>
+                        <type>varchar</type>
+                        <nullable>false</nullable>
+                        <precision>255</precision>
+                        <default></default>
+                    </column>
+
+                </columns>
+
+                <keys>
+                    <key name="">
+                        <desc></desc>
+                        <type>primary</type>
+                        <fields>
+                            <field name="value_id"></field>
+                            <field name="attr_id"></field>
+                            <field name="device_id"></field>
+                        </fields>
+                    </key>
+                </keys>
+            </table>
+
+            <!-- }}} -->
             <!-- {{{ table monitor_basic -->
 
             <table name="monitor_basic">
@@ -262,6 +367,14 @@
                         <default></default>
                     </column>
 
+                    <column name="steps">
+                        <desc>监控器存储 rrd 的间隔时间 (秒)</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+                        <unsigned>true</unsigned>
+                        <default></default>
+                    </column>
                 </columns>
 
                 <keys>
@@ -333,65 +446,8 @@
                         <default></default>
                     </column>
 
-                </columns>
-
-                <keys>
-                    <key name="">
-                        <desc></desc>
-                        <type>primary</type>
-                        <fields>
-                            <field name="attr_id"></field>
-                            <field name="monitor_id"></field>
-                        </fields>
-                    </key>
-                </keys>
-            </table>
-
-            <!-- }}} -->
-            <!-- {{{ table monitor_params -->
-
-            <table name="monitor_params">
-                <desc>监控器参数</desc>
-                <engine>InnoDB</engine>
-                <charset>utf8</charset>
-                <columns>
-                    <column name="value_id">
-                        <desc>属性值 id</desc>
-                        <type>int</type>
-                        <nullable>false</nullable>
-                        <precision>11</precision>
-                        <unsigned>true</unsigned>
-                        <default></default>
-                    </column>
-                    <column name="attr_id">
-                        <desc>监控器属性 id</desc>
-                        <type>int</type>
-                        <nullable>false</nullable>
-                        <precision>11</precision>
-                        <unsigned>true</unsigned>
-                        <default></default>
-                    </column>
-
-                    <column name="device_id">
-                        <desc>设备 id</desc>
-                        <type>int</type>
-                        <nullable>false</nullable>
-                        <precision>11</precision>
-                        <unsigned>true</unsigned>
-                        <default></default>
-                    </column>
-
-                    <column name="monitor_id">
-                        <desc>监控器 id</desc>
-                        <type>int</type>
-                        <nullable>false</nullable>
-                        <precision>11</precision>
-                        <unsigned>true</unsigned>
-                        <default></default>
-                    </column>
-
-                    <column name="value">
-                        <desc>属性值</desc>
+                    <column name="attr_default">
+                        <desc>属性默认值</desc>
                         <type>varchar</type>
                         <nullable>false</nullable>
                         <precision>255</precision>
@@ -405,9 +461,8 @@
                         <desc></desc>
                         <type>primary</type>
                         <fields>
-                            <field name="value_id"></field>
                             <field name="attr_id"></field>
-                            <field name="device_id"></field>
+                            <field name="monitor_id"></field>
                         </fields>
                     </key>
                 </keys>
@@ -470,6 +525,90 @@
                         <type>varchar</type>
                         <nullable>false</nullable>
                         <precision>255</precision>
+                        <default></default>
+                    </column>
+
+                </columns>
+
+                <keys>
+                    <key name="">
+                        <desc></desc>
+                        <type>primary</type>
+                        <fields>
+                            <field name="metric_id"></field>
+                            <field name="monitor_id"></field>
+                        </fields>
+                    </key>
+                </keys>
+            </table>
+
+            <!-- }}} -->
+            <!-- {{{ table monitor_archive -->
+
+            <table name="monitor_archive">
+                <desc>监控器数据归档规则</desc>
+                <engine>InnoDB</engine>
+                <charset>utf8</charset>
+                <columns>
+                    <column name="archive_id">
+                        <desc>归档 id</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+                        <unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                    <column name="monitor_id">
+                        <desc>监控器 id</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+                        <unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                    <column name="title">
+                        <desc>归档规则标题</desc>
+                        <type>varchar</type>
+                        <nullable>false</nullable>
+                        <precision>255</precision>
+                        <default></default>
+                    </column>
+
+                    <column name="cf_type">
+                        <desc>归档运算类型</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+                        <unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                    <column name="xff">
+                        <desc>无效数据判断界限</desc>
+                        <type>varchar</type>
+                        <nullable>false</nullable>
+                        <precision>255</precision>
+                        <unsigned>true</unsigned>
+                        <default>0.5</default>
+                    </column>
+
+                    <column name="steps">
+                        <desc>归档一个数据点合并原始数据点个数</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+                        <unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                    <column name="rows">
+                        <desc>一共归档条目数</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+                        <unsigned>true</unsigned>
                         <default></default>
                     </column>
 
