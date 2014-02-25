@@ -627,6 +627,169 @@
             </table>
 
             <!-- }}} -->
+            <!-- {{{ table graph_basic -->
+
+            <table name="graph_basic">
+                <desc>监控器绘图配置</desc>
+                <engine>InnoDB</engine>
+                <charset>utf8</charset>
+                <columns>
+                    <column name="graph_id">
+                        <desc>绘图配置 id</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+                        <unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                    <column name="scope_type">
+                        <desc>该绘图配置作用范围 1: 全局 2：设备 3: 允许跨设备全局显示 4: 允许跨设备在提及的设备中显示</desc>
+                        <type>tinyint</type>
+                        <nullable>false</nullable>
+                        <precision>1</precision>
+                        <default>1</default>
+                    </column>
+
+                    <column name="scope_ids">
+                        <desc>作用范围 IDS</desc>
+                        <type>varchar</type>
+                        <nullable>false</nullable>
+                        <precision>255</precision>
+                        <default></default>
+                    </column>
+
+                    <column name="title">
+                        <desc>图片的顶部标题</desc>
+                        <type>varchar</type>
+                        <nullable>false</nullable>
+                        <precision>255</precision>
+                        <default></default>
+                    </column>
+
+                    <column name="vlabel">
+                        <desc>图片的垂直的标题</desc>
+                        <type>varchar</type>
+                        <nullable>false</nullable>
+                        <precision>255</precision>
+                        <default></default>
+                    </column>
+
+                    <column name="desc">
+                        <desc>图片的描述信息</desc>
+                        <type>varchar</type>
+                        <nullable>false</nullable>
+                        <precision>255</precision>
+                        <default></default>
+                    </column>
+
+                    <column name="steps">
+                        <desc>绘图的间隔点</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+                        <unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                    <column name="start">
+                        <desc>绘图的起始点</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+                        <unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                    <column name="end">
+                        <desc>绘图的终点</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+                        <unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                </columns>
+
+                <keys>
+                    <key name="">
+                        <desc></desc>
+                        <type>primary</type>
+                        <fields>
+                            <field name="graph_id"></field>
+                            <field name="monitor_id"></field>
+                        </fields>
+                    </key>
+                </keys>
+            </table>
+
+            <!-- }}} -->
+            <!-- {{{ table graph_def -->
+
+            <table name="graph_def">
+                <desc>监控器绘图数据项定义</desc>
+                <engine>InnoDB</engine>
+                <charset>utf8</charset>
+                <columns>
+                    <column name="def_id">
+                        <desc>绘图数据项定义 id</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+                        <unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                    <column name="graph_id">
+                        <desc>绘图配置 id</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+                        <unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                    <column name="name">
+                        <desc>数据项的 name</desc>
+                        <type>varchar</type>
+                        <nullable>false</nullable>
+                        <precision>255</precision>
+                        <default></default>
+                    </column>
+
+                    <column name="ds_name">
+                        <desc>RRD 数据库的数据源名</desc>
+                        <type>varchar</type>
+                        <nullable>false</nullable>
+                        <precision>255</precision>
+                        <default></default>
+                    </column>
+
+                    <column name="cf_type">
+                        <desc>归并计算公式类型</desc>
+                        <type>tinyint</type>
+                        <nullable>false</nullable>
+                        <precision>1</precision>
+                        <unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                </columns>
+
+                <keys>
+                    <key name="">
+                        <desc></desc>
+                        <type>primary</type>
+                        <fields>
+                            <field name="graph_id"></field>
+                            <field name="def_id"></field>
+                        </fields>
+                    </key>
+                </keys>
+            </table>
+
+            <!-- }}} -->
         </tables>
         <!-- }}} end tables -->
     </database>
