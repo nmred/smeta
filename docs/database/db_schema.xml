@@ -147,6 +147,53 @@
             </table>
 
             <!-- }}} -->
+            <!-- {{{ table sequence_graph -->
+
+            <table name="sequence_graph">
+                <desc>图标定义数据表的唯一序列号</desc>
+                <engine>InnoDB</engine>
+                <charset>utf8</charset>
+                <columns>
+                    <column name="graph_id">
+                        <desc>图表 ID</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+						<unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                    <column name="table_name">
+                        <desc>维护序列号的表名称</desc>
+                        <type>varchar</type>
+                        <nullable>false</nullable>
+                        <precision>64</precision>
+                        <default></default>
+                    </column>
+
+                    <column name="sequence_id">
+                        <desc>自增长 ID</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+						<unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+                </columns>
+
+                <keys>
+                    <key name="">
+						<desc></desc>
+                        <type>primary</type>
+                        <fields>
+                            <field name="graph_id"></field>
+                            <field name="table_name"></field>
+                        </fields>
+                    </key>
+                </keys>
+            </table>
+
+            <!-- }}} -->
             <!-- {{{ table device_key -->
 
             <table name="device_key">
@@ -328,7 +375,7 @@
                         <fields>
                             <field name="value_id"></field>
                             <field name="attr_id"></field>
-                            <field name="device_id"></field>
+                            <field name="dm_id"></field>
                         </fields>
                     </key>
                 </keys>
@@ -590,7 +637,6 @@
                         <type>varchar</type>
                         <nullable>false</nullable>
                         <precision>255</precision>
-                        <unsigned>true</unsigned>
                         <default>0.5</default>
                     </column>
 
@@ -619,7 +665,7 @@
                         <desc></desc>
                         <type>primary</type>
                         <fields>
-                            <field name="metric_id"></field>
+                            <field name="archive_id"></field>
                             <field name="monitor_id"></field>
                         </fields>
                     </key>
@@ -718,7 +764,6 @@
                         <type>primary</type>
                         <fields>
                             <field name="graph_id"></field>
-                            <field name="monitor_id"></field>
                         </fields>
                     </key>
                 </keys>
@@ -784,6 +829,241 @@
                         <fields>
                             <field name="graph_id"></field>
                             <field name="def_id"></field>
+                        </fields>
+                    </key>
+                </keys>
+            </table>
+
+            <!-- }}} -->
+            <!-- {{{ table graph_cdef -->
+
+            <table name="graph_cdef">
+                <desc>监控器绘图计算数据项定义</desc>
+                <engine>InnoDB</engine>
+                <charset>utf8</charset>
+                <columns>
+                    <column name="cdef_id">
+                        <desc>绘图计算数据项定义 id</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+                        <unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                    <column name="graph_id">
+                        <desc>绘图配置 id</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+                        <unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                    <column name="name">
+                        <desc>数据项的 name</desc>
+                        <type>varchar</type>
+                        <nullable>false</nullable>
+                        <precision>255</precision>
+                        <default></default>
+                    </column>
+
+                    <column name="operator">
+                        <desc>计算表达式</desc>
+                        <type>varchar</type>
+                        <nullable>false</nullable>
+                        <precision>255</precision>
+                        <default></default>
+                    </column>
+
+                </columns>
+
+                <keys>
+                    <key name="">
+                        <desc></desc>
+                        <type>primary</type>
+                        <fields>
+                            <field name="graph_id"></field>
+                            <field name="cdef_id"></field>
+                        </fields>
+                    </key>
+                </keys>
+            </table>
+
+            <!-- }}} -->
+            <!-- {{{ table graph_graph -->
+
+            <table name="graph_graph">
+                <desc>监控器绘图定义</desc>
+                <engine>InnoDB</engine>
+                <charset>utf8</charset>
+                <columns>
+                    <column name="dgraph_id">
+                        <desc>绘图定义 id</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+                        <unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                    <column name="graph_id">
+                        <desc>绘图配置 id</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+                        <unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                    <column name="data_id">
+                        <desc>数据项 id</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+                        <unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                    <column name="color">
+                        <desc>图标的颜色</desc>
+                        <type>varchar</type>
+                        <nullable>false</nullable>
+                        <precision>255</precision>
+                        <default></default>
+                    </column>
+
+                    <column name="图例说明">
+                        <desc>图例说明描述</desc>
+                        <type>varchar</type>
+                        <nullable>false</nullable>
+                        <precision>255</precision>
+                        <default></default>
+                    </column>
+
+                </columns>
+
+                <keys>
+                    <key name="">
+                        <desc></desc>
+                        <type>primary</type>
+                        <fields>
+                            <field name="graph_id"></field>
+                            <field name="dgraph_id"></field>
+                        </fields>
+                    </key>
+                </keys>
+            </table>
+
+            <!-- }}} -->
+            <!-- {{{ table graph_comment -->
+
+            <table name="graph_comment">
+                <desc>监控器绘图注释性文字定义</desc>
+                <engine>InnoDB</engine>
+                <charset>utf8</charset>
+                <columns>
+                    <column name="comment_id">
+                        <desc>绘图注释定义 id</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+                        <unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                    <column name="graph_id">
+                        <desc>绘图配置 id</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+                        <unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                    <column name="comment">
+                        <desc>图片的注释信息</desc>
+                        <type>varchar</type>
+                        <nullable>false</nullable>
+                        <precision>255</precision>
+                        <default></default>
+                    </column>
+
+                </columns>
+
+                <keys>
+                    <key name="">
+                        <desc></desc>
+                        <type>primary</type>
+                        <fields>
+                            <field name="graph_id"></field>
+                            <field name="comment_id"></field>
+                        </fields>
+                    </key>
+                </keys>
+            </table>
+
+            <!-- }}} -->
+            <!-- {{{ table graph_gprint -->
+
+            <table name="graph_gprint">
+                <desc>监控器绘图格式化的文字信息</desc>
+                <engine>InnoDB</engine>
+                <charset>utf8</charset>
+                <columns>
+                    <column name="gprint_id">
+                        <desc>绘图格式化信息 id</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+                        <unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                    <column name="graph_id">
+                        <desc>绘图配置 id</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+                        <unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                    <column name="data_id">
+                        <desc>格式化的变量名 id</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+                        <unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                    <column name="cf_type">
+                        <desc>运算类型</desc>
+                        <type>tinyint</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+                        <unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                    <column name="format">
+                        <desc>格式化的字符串定义</desc>
+                        <type>varchar</type>
+                        <nullable>false</nullable>
+                        <precision>255</precision>
+                        <default></default>
+                    </column>
+
+                </columns>
+
+                <keys>
+                    <key name="">
+                        <desc></desc>
+                        <type>primary</type>
+                        <fields>
+                            <field name="graph_id"></field>
+                            <field name="gprint_id"></field>
                         </fields>
                     </key>
                 </keys>

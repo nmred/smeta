@@ -300,4 +300,90 @@ class sw_sequence
 	}
 
 	// }}}
+	// {{{ public static function get_next_graph()
+
+	/**
+	 * 获取图表的自增长 ID 
+	 * 
+	 * @param intger $graph
+	 * @param string $table_name
+	 * @param sw_db $db
+	 * @param int $init_id
+	 * @access public
+	 * @return intger
+	 */
+	public static function get_next_graph($graph_id, $table_name, $db = null, $init_id = 1)
+	{
+		if (!isset($db)) {
+			$db = sw_db::singleton();	
+		}
+
+		//判断是否是合法的 graph_id
+		try {
+			$graph_id = $db->fetch_one($db->select()
+						   ->from(SWAN_TBN_GRAPH_BASIC, array('graph_id'))
+						   ->where('graph_id= ?'), $graph_id);
+		} catch (sw_exception $e) {
+			throw new sw_exception('invalid graph id, get sequence faild. ');	
+		}
+
+		if (false === $graph_id) {
+			throw new sw_exception('invalid graph id, get sequence faild. ');	
+		}
+		
+		try {
+			$db->begin_transaction();
+			$transaction = true;	
+		} catch (\swan\exception\sw_exception $e) {
+			$transaction = false;	
+		}
+
+		try {
+			$fields = array('sequence_id' => new sw_db_expr('sequence_id+' . self::get_increment_num()));	
+			$where = $db->quote_into('table_name = ?', $table_name);
+			$where .= $db->quote_into(' AND graph_id = ?', $graph_id);
+			$try_num = 1;
+			do {
+				$affected = $db->update(SWAN_TBN_SEQUENCE_GRAPH, $fields, $where);
+				if (1 === $affected) {
+					break;	
+				}	
+
+				//更新失败，记录不存在则添加
+				$attribute = array(
+					'graph_id'    => $graph_id,
+					'table_name'  => $table_name,
+					'sequence_id' => $init_id,
+				);
+				try {
+					$affected = $db->insert(SWAN_TBN_SEQUENCE_GRAPH, $attribute); 
+				} catch (sw_exception $e){
+				}
+			} while ($affected !== 1 && $try_num < self::MAX_TRY_NUM);
+
+			if (1 === $affected) {
+				$id = $db->fetch_one($db->select()
+										->from(SWAN_TBN_SEQUENCE_GRAPH, array('sequence_id' => 'sequence_id'))
+										->where('table_name= ? AND graph_id= ?'), array($table_name, $graph_id));	
+			}
+
+			if (1 !== $affected || false === $id) {
+				throw new sw_exception('get graph sequence faild.');	
+			}
+
+			if ($transaction) {
+				$db->commit();	
+			}
+
+			return $id;
+		} catch (\swan\exception\sw_exception $e) {
+			if ($transaction) {
+				$db->rollback();	
+			}
+			throw new sw_exception($e);	
+		}
+	}
+
+	// }}}
+	// }}}
 }
