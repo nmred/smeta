@@ -44,6 +44,7 @@ class sw_monitor extends sw_abstract
 	{
 		$monitor_name = $this->__request->get_post('name', '');
 		$monitor_display_name = $this->__request->get_post('display_name', '');
+		$steps = $this->__request->get_post('steps', '');
 		if (!$monitor_name) {
 			return $this->render_json(null, 10001, '`name` not allow is empty.');
 		}
@@ -51,7 +52,7 @@ class sw_monitor extends sw_abstract
 		// 添加 monitor basic
 		try {
 			$property_basic = sw_member::property_factory('monitor_basic', 
-				array('monitor_name' => $monitor_name, 'monitor_display_name' => $monitor_display_name)); 
+				array('monitor_name' => $monitor_name, 'monitor_display_name' => $monitor_display_name, 'steps' => $steps)); 
 			$monitor    = sw_member::operator_factory('monitor', $property_basic);
 			$monitor_id = $monitor->get_operator('basic')->add_basic();
 		} catch (\swan\exception\sw_exception $e) {
@@ -156,13 +157,21 @@ class sw_monitor extends sw_abstract
 		$monitor_name = $this->__request->get_post('name', '');
 		$monitor_id   = $this->__request->get_post('mid', '');
 		$monitor_display_name = $this->__request->get_post('display_name', '');
+		$steps = $this->__request->get_post('steps', '');
 		if (!$monitor_name && !$monitor_id) {
 			return $this->render_json(null, 10001, '`name` or `mid` not allow is empty.');
 		}
 
+		if ($monitor_display_name) {
+			$data['monitor_display_name'] = $monitor_display_name;	
+		}
+
+		if ($steps) {
+			$data['steps'] = $steps;	
+		}
 		// 修改 monitor basic
 		try {
-			$property_basic = sw_member::property_factory('monitor_basic', array('monitor_display_name' => $monitor_display_name)); 
+			$property_basic = sw_member::property_factory('monitor_basic', $data); 
 			if ($monitor_id) {
 				$condition = sw_member::condition_factory('mod_monitor_basic', array('monitor_id' => $monitor_id));
 				$condition->set_in('monitor_id');

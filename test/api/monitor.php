@@ -19,7 +19,7 @@ function call($url, $type = 'GET', $params = array())
 
 // 添加 monitor
 $url = '127.0.0.1:9080/dev/?/monitor.add';
-$rev = call($url, 'POST', array('name' => 'ss21222' . time(), 'display_name' => 'dsadakljl'));
+$rev = call($url, 'POST', array('name' => 'ss21222' . time(), 'display_name' => 'dsadakljl', 'steps' => 22));
 $rev = json_decode($rev, true);
 var_dump($rev);
 
@@ -31,8 +31,7 @@ var_dump($rev);
 
 // 修改 monitor
 $url = '127.0.0.1:9080/dev/?/monitor.mod';
-$rev = call($url, 'POST', array('mid' => '2', 'display_name' =>
-'43333333333'));
+$rev = call($url, 'POST', array('mid' => '2', 'display_name' => '43333333333', 'steps' => '333'));
 $rev = json_decode($rev, true);
 var_dump($rev);
 
