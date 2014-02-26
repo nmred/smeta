@@ -83,17 +83,18 @@ class sw_device_monitor extends sw_abstract
 	 */
 	public function action_del()
 	{
-		$vid = $this->__request->get_post('vid', '');
-		if (!$vid) {
-			return $this->render_json(null, 10001, '`vid` not allow is empty.');
+		$dm_id = $this->__request->get_post('dm_id', '');
+		if (!$dm_id) {
+			return $this->render_json(null, 10001, '`dm_id` not allow is empty.');
 		}
 
 		// 删除设备
 		try {
-			$device    = sw_member::operator_factory('device');
-			$condition = sw_member::condition_factory('del_device_monitor', array('value_id' => $vid)); 
-			$condition->set_in('value_id');
-			$device->get_operator('monitor')->del_monitor($condition);
+			$condition = sw_member::condition_factory('del_device_monitor');
+			$condition->set_in('dm_id');
+			$condition->set_dm_id($dm_id);
+			$device = sw_member::operator_factory('device');
+			$device_monitor = $device->get_operator('monitor')->del_monitor($condition);
 		} catch (\swan\exception\sw_exception $e) {
 			return $this->render_json(null, 10002, $e->getMessage());	
 		}
@@ -112,20 +113,33 @@ class sw_device_monitor extends sw_abstract
 	 */
 	public function action_mod()
 	{	
-		$vid   = $this->__request->get_post('vid', '');
-		$value = $this->__request->get_post('value', '');
-		if (!$vid) {
-			return $this->render_json(null, 10001, '`vid` not allow is empty.');
+		$did = $this->__request->get_post('did', '');
+		$mid = $this->__request->get_post('mid', '');
+		$attr_data = $this->__request->get_post('attr_data', '{}');
+		if (!$did || !$mid) {
+			return $this->render_json(null, 10001, '`did`/`mid` not allow is empty.');
+		}
+
+		$attr_data = json_decode($attr_data, true);
+		$monitor_params = array();
+		foreach ($attr_data as $value) {
+			if (!isset($value['attr_id']) || !isset($value['value'])) {
+				return $this->render_json(null, 10001, 'attr_data is must defined `attr_id`/`value` not allow is empty.');
+			}
+			$monitor_params[] = sw_member::property_factory('monitor_params', array('attr_id' => $value['attr_id'], 'value' => $value['value']));
 		}
 
 		// 修改 device monitor
 		try {
-			$device_monitor_property = sw_member::property_factory('device_monitor', array('value' => $value)); 
-			$condition = sw_member::condition_factory('mod_device_monitor', array('value_id' => $vid));
-			$condition->set_in('value_id');
-			$condition->set_property($device_monitor_property);
-			$device    = sw_member::operator_factory('device');
-			$device->get_operator('monitor')->mod_monitor($condition);
+			$device_property_key = sw_member::property_factory('device_key', array('device_id' => $did));
+			$monitor_property_basic  = sw_member::property_factory('monitor_basic', array('monitor_id' => $mid));
+			$device_property_monitor = sw_member::property_factory('device_monitor');
+			$device_property_monitor->set_monitor_basic($monitor_property_basic);
+			$device_property_monitor->set_monitor_params($monitor_params);
+			$condition = sw_member::condition_factory('mod_device_monitor');
+			$condition->set_property($device_property_monitor);
+			$device = sw_member::operator_factory('device', $device_property_key);
+			$device_monitor = $device->get_operator('monitor')->mod_monitor($condition);
 		} catch (\swan\exception\sw_exception $e) {
 			return $this->render_json(null, 10002, $e->getMessage());	
 		}
