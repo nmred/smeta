@@ -19,15 +19,32 @@ function call($url, $type = 'GET', $params = array())
 
 // 添加 device monitor
 //$url = '127.0.0.1:9080/user/?/device_monitor.add';
-//$rev = call($url, 'POST', array('aid' => '2', 'mid' => 1, 'did' => 3, 'value' => 'sssss'));
+//$attr_data = array(
+//	array(
+//		'attr_id' => 1,
+//		'value'   => 'dsdsd',
+//	),
+//	array(
+//		'attr_id' => 2,
+//		'value'   => 'd434343',
+//	),
+//);
+//$attr_data = json_encode($attr_data);
+//$rev = call($url, 'POST', array('mid' => 1, 'did' => 1, 'attr_data' => $attr_data));
+//$rev = json_decode($rev, true);
+//var_dump($rev);
+//
+//// 获取 device
+//$url = '127.0.0.1:9080/user/?/device_monitor.json';
+//$rev = call($url, 'POST', array('did' => 1));
 //$rev = json_decode($rev, true);
 //var_dump($rev);
 
-//// 获取 device
-//$url = '127.0.0.1:9080/user/?/device_monitor.json';
-//$rev = call($url, 'POST', array('did' => 3));
+// 获取 device params
+$url = '127.0.0.1:9080/user/?/device_monitor.info';
+$rev = call($url, 'POST', array('did' => 1, 'mid' => 1));
 //$rev = json_decode($rev, true);
-//var_dump($rev);
+var_dump($rev);
 
 // 删除 device monitor
 //$url = '127.0.0.1:9080/user/?/device_monitor.del';

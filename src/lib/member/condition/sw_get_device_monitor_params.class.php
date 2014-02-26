@@ -61,6 +61,18 @@ class sw_get_device_monitor_params extends sw_get_abstract
         'attr_display_name' => SWAN_TBN_MONITOR_ATTRIBUTE,     
     );
 
+	/**
+	 * 表的别名 
+	 * 
+	 * @var array
+	 * @access protected
+	 */
+	protected $__table_alias = array(
+		SWAN_TBN_DEVICE_MONITOR => 'd',
+		SWAN_TBN_MONITOR_ATTRIBUTE => 'a',
+		SWAN_TBN_MONITOR_PARAM => 'p',
+	);
+
 	// }}}
 	// {{{ functions
 	// }}}
