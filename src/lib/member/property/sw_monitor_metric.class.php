@@ -44,6 +44,10 @@ class sw_monitor_metric extends sw_abstract
 		'collect_every'  => true,
 		'time_threshold' => true,
 		'title'          => true,
+		'tmax'           => true,
+		'dst_type'       => true,
+		'vmin'           => true,
+		'vmax'           => true,
 	);
 
 	/**
@@ -52,7 +56,7 @@ class sw_monitor_metric extends sw_abstract
 	 * @var string
 	 * @access protected
 	 */
-	protected $__key_attributes = array('metric_id');
+	protected $__key_attributes = array('metric_id', 'monitor_id');
 
 	// }}}		
 	// {{{ functions

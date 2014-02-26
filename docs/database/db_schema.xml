@@ -567,6 +567,40 @@
                         <default></default>
                     </column>
 
+                    <column name="tmax">
+                        <desc>没有收到数据的最长时间</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+                        <unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                    <column name="dst_type">
+                        <desc>数据入库处理规则</desc>
+                        <type>tinyint</type>
+                        <nullable>false</nullable>
+                        <precision>1</precision>
+                        <unsigned>true</unsigned>
+                        <default>1</default>
+                    </column>
+
+                    <column name="vmin">
+                        <desc>数据的最小值</desc>
+                        <type>varchar</type>
+                        <nullable>false</nullable>
+                        <precision>255</precision>
+                        <default>U</default>
+                    </column>
+
+                    <column name="vmax">
+                        <desc>数据的最大值</desc>
+                        <type>varchar</type>
+                        <nullable>false</nullable>
+                        <precision>255</precision>
+                        <default>U</default>
+                    </column>
+
                     <column name="title">
                         <desc>数据项标题</desc>
                         <type>varchar</type>

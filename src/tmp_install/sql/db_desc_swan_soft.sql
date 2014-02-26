@@ -243,6 +243,14 @@ CREATE TABLE `monitor_attribute` (
 -- 	轮询周期
 -- time_threshold
 -- 	收集数据超时
+-- tmax
+-- 	没有收到数据的最长时间
+-- dst_type
+-- 	数据入库处理规则
+-- vmin
+-- 	数据的最小值
+-- vmax
+-- 	数据的最大值
 -- title
 -- 	数据项标题
 
@@ -253,6 +261,10 @@ CREATE TABLE `monitor_metric` (
 	`monitor_id` int(11) UNSIGNED NOT NULL ,
 	`collect_every` int(11) UNSIGNED NOT NULL ,
 	`time_threshold` int(11) UNSIGNED NOT NULL ,
+	`tmax` int(11) UNSIGNED NOT NULL ,
+	`dst_type` tinyint(1) UNSIGNED NOT NULL DEFAULT '1',
+	`vmin` varchar(255) NOT NULL DEFAULT 'U',
+	`vmax` varchar(255) NOT NULL DEFAULT 'U',
 	`title` varchar(255) NOT NULL ,
 	PRIMARY KEY (`metric_id`,`monitor_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

@@ -19,7 +19,7 @@ function call($url, $type = 'GET', $params = array())
 
 // 添加 monitor
 //$url = '127.0.0.1:9080/dev/?/monitor_metric.add';
-//$rev = call($url, 'POST', array('name' => 'ss21222' . time(), 'collect_every' => '1000', 'mid' => 1, 'title' => 'eeee'));
+//$rev = call($url, 'POST', array('name' => 'ss21222' . time(), 'collect_every' => '1000', 'mid' => 1, 'title' => 'eeee', 'dst_type' => 1, 'tmax' => 30, 'vmin' => 'U', 'vmax' => 'U'));
 //$rev = json_decode($rev, true);
 //var_dump($rev);
 
@@ -29,9 +29,9 @@ function call($url, $type = 'GET', $params = array())
 //$rev = json_decode($rev, true);
 //var_dump($rev);
 
-//// 修改 monitor 属性
+// 修改 monitor 属性
 $url = '127.0.0.1:9080/dev/?/monitor_metric.mod';
-$rev = call($url, 'POST', array('mid' => 1, 'mmid' => '6', 'title' => '33333'));
+$rev = call($url, 'POST', array('mmid' => 1, 'collect_every' => '1000', 'mid' => 1, 'title' => '33333', 'dst_type' => 1, 'tmax' => 30, 'vmin' => 'U', 'vmax' => 'U'));
 $rev = json_decode($rev, true);
 var_dump($rev);
 

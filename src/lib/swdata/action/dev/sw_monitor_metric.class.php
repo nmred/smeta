@@ -47,6 +47,10 @@ class sw_monitor_metric extends sw_abstract
 		$collect_every   = $this->__request->get_post('collect_every', '');
 		$time_threshold  = $this->__request->get_post('time_threshold', '200');
 		$title = $this->__request->get_post('title', '');
+		$tmax  = $this->__request->get_post('tmax', '');
+		$vmax  = $this->__request->get_post('vmax', 'U');
+		$vmin  = $this->__request->get_post('vmin', 'U');
+		$dst_type  = $this->__request->get_post('dst_type', '');
 		if (!$metric_name || !$monitor_id || !$collect_every) {
 			return $this->render_json(null, 10001, '`name`/`mid`/`collect_every` not allow is empty.');
 		}
@@ -56,7 +60,11 @@ class sw_monitor_metric extends sw_abstract
 			'metric_name'    => $metric_name,
 			'collect_every'  => $collect_every,
 			'time_threshold' => $time_threshold,
+			'dst_type'       => $dst_type,
 			'title' => $title,
+			'tmax'  => $tmax,
+			'vmax'  => $vmax,
+			'vmin'  => $vmin,
 		);
 		try {
 			$property_metric  = sw_member::property_factory('monitor_metric', $data); 
@@ -168,6 +176,10 @@ class sw_monitor_metric extends sw_abstract
 		$mmid  = $this->__request->get_post('mmid', '');
 		$name = $this->__request->get_post('name', '');
 		$title = $this->__request->get_post('title', '');
+		$tmax  = $this->__request->get_post('tmax', '');
+		$vmax  = $this->__request->get_post('vmax', 'U');
+		$vmin  = $this->__request->get_post('vmin', 'U');
+		$dst_type  = $this->__request->get_post('dst_type', '');
 		$collect_every = $this->__request->get_post('collect_every', '');
 		$time_threshold = $this->__request->get_post('time_threshold', '');
 		if (!$mid || !$mmid) {
@@ -190,6 +202,22 @@ class sw_monitor_metric extends sw_abstract
 
 		if ($time_threshold) {
 			$data['time_threshold'] = $time_threshold;	
+		}
+
+		if ($dst_type) {
+			$data['dst_type'] = $dst_type;	
+		}
+
+		if ($vmax) {
+			$data['vmax'] = $vmax;	
+		}
+
+		if ($vmin) {
+			$data['vmin'] = $vmin;	
+		}
+
+		if ($tmax) {
+			$data['tmax'] = $tmax;	
 		}
 		try {
 			$property_metric = sw_member::property_factory('monitor_metric', $data); 
