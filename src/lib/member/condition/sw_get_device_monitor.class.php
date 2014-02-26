@@ -38,11 +38,24 @@ class sw_get_device_monitor extends sw_get_abstract
 	 * @access protected
 	 */
 	protected $__allow_params = array(
-		'value_id'   => true,
-		'device_id'  => true,
-		'monitor_id' => true,
-		'attr_id'    => true,
+		'dm_id'     => true,
+		'device_id' => true,
 	);
+
+    /**
+     * 查询字段 
+     * 
+     * @var array
+     * @access protected
+     */
+    protected $__columns = array(
+        'dm_id'       => SWAN_TBN_DEVICE_MONITOR,       
+        'device_id'   => SWAN_TBN_DEVICE_MONITOR,       
+        'monitor_id'  => SWAN_TBN_DEVICE_MONITOR,       
+        'monitor_name'  => SWAN_TBN_MONITOR_BASIC,     
+        'steps'         => SWAN_TBN_MONITOR_BASIC,     
+        'monitor_display_name'  => SWAN_TBN_MONITOR_BASIC,     
+    );
 
 	// }}}
 	// {{{ functions

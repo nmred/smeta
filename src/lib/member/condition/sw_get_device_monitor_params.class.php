@@ -17,18 +17,17 @@ use \lib\member\condition\exception\sw_exception;
 
 /**
 +------------------------------------------------------------------------------
-* sw_del_device_monitor 
+* sw_get_device_monitor_params 
 +------------------------------------------------------------------------------
 * 
-* @uses sw
-* @uses _del_abstract
+* @uses sw_get_abstract
 * @package 
 * @version $_SWANBR_VERSION_$
 * @copyright $_SWANBR_COPYRIGHT_$
 * @author $_SWANBR_AUTHOR_$ 
 +------------------------------------------------------------------------------
 */
-class sw_del_device_monitor extends sw_del_abstract
+class sw_get_device_monitor_params extends sw_get_abstract
 {
 	// {{{ members
 
@@ -39,8 +38,28 @@ class sw_del_device_monitor extends sw_del_abstract
 	 * @access protected
 	 */
 	protected $__allow_params = array(
-		'dm_id'   => true,
+		'device_id'  => true,
+		'monitor_id' => true,
 	);
+
+    /**
+     * 查询字段 
+     * 
+     * @var array
+     * @access protected
+     */
+    protected $__columns = array(
+        'dm_id'       => SWAN_TBN_DEVICE_MONITOR,       
+        'device_id'   => SWAN_TBN_DEVICE_MONITOR,       
+        'monitor_id'  => SWAN_TBN_DEVICE_MONITOR,       
+        'attr_id'     => SWAN_TBN_MONITOR_PARAM,     
+        'value'       => SWAN_TBN_MONITOR_PARAM,     
+        'attr_name'    => SWAN_TBN_MONITOR_ATTRIBUTE,     
+        'form_type'    => SWAN_TBN_MONITOR_ATTRIBUTE,     
+        'form_data'    => SWAN_TBN_MONITOR_ATTRIBUTE,     
+        'attr_default' => SWAN_TBN_MONITOR_ATTRIBUTE,     
+        'attr_display_name' => SWAN_TBN_MONITOR_ATTRIBUTE,     
+    );
 
 	// }}}
 	// {{{ functions

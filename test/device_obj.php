@@ -22,12 +22,10 @@ use \lib\member\sw_member as sw_mem;
 //$device_basic = $device->get_operator('basic')->add_basic($device_property_basic);
 
 // 获取 device key
-//$condition = sw_mem::condition_factory('get_device_key');
-//$condition->set_like('device_name');
-//$condition->set_device_name('t333');
-//$device = sw_mem::operator_factory('device');
-//$device_key = $device->get_operator('key')->get_key($condition);
-//var_dump($device_key);
+$condition = sw_mem::condition_factory('get_device_key');
+$device = sw_mem::operator_factory('device');
+$device_key = $device->get_operator('key')->get_key($condition);
+var_dump($device_key);
 
 // 获取 device basic
 //$condition = sw_mem::condition_factory('get_device_basic');
@@ -50,9 +48,9 @@ use \lib\member\sw_member as sw_mem;
 //$device_basic = $device->get_operator('basic')->del_basic($condition);
 
 // 获取 device list
-$condition = sw_mem::condition_factory('get_device');
-$condition->set_is_count(true);
-$device = sw_mem::operator_factory('device');
-$device_key = $device->get_device($condition);
-var_dump($device_key);
+//$condition = sw_mem::condition_factory('get_device');
+//$condition->set_is_count(true);
+//$device = sw_mem::operator_factory('device');
+//$device_key = $device->get_device($condition);
+//var_dump($device_key);
 

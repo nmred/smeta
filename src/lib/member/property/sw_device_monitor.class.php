@@ -38,7 +38,8 @@ class sw_device_monitor extends sw_abstract
 	 * @access protected
 	 */
 	protected $__allow_attributes = array(
-		'value'    => true,
+		'monitor_id'     => true,
+		'monitor_params' => true,
 	);
 
 	/**
@@ -49,7 +50,6 @@ class sw_device_monitor extends sw_abstract
 	 */
 	protected $__allow_propertys = array(
 		'monitor_basic' => true,
-		'monitor_attribute' => true,
 	);
 
 	/**
@@ -58,7 +58,7 @@ class sw_device_monitor extends sw_abstract
 	 * @var string
 	 * @access protected
 	 */
-	protected $__key_attributes = array('value_id');
+	protected $__key_attributes = array('dm_id');
 
 	// }}}		
 	// {{{ functions

@@ -14,6 +14,7 @@
 
 namespace lib\member\operator\device;
 use \lib\member\operator\device\exception\sw_exception;
+use \lib\member\property\sw_monitor_params as sw_monitor_params;
 
 /**
 +------------------------------------------------------------------------------
@@ -49,37 +50,73 @@ class sw_monitor extends sw_abstract
             throw new sw_exception('Unknow device id.');
         }
 
-		$monitor_basic_property		= $monitor_property->get_monitor_basic();
-		$monitor_attribute_property = $monitor_property->get_monitor_attribute(); 
-		$monitor_basic		= $monitor_basic_property->attributes();
-		$monitor_attributes = $monitor_attribute_property->attributes();
-        $attributes		    = $monitor_property->attributes();
+		$monitor_params = $monitor_property->get_monitor_params(); 
+		$monitor_basic_property	= $monitor_property->get_monitor_basic();
+		$monitor_basic = $monitor_basic_property->attributes();
+        $attributes	   = $monitor_property->attributes();
 
         // 判断是否已经存在
-		$this->exists($key_attributes['device_id'], $monitor_basic['monitor_id'], $monitor_attributes['attr_id']);
+		$this->exists($key_attributes['device_id'], $monitor_basic['monitor_id']);
 
         $select = $this->__db->select()
                              ->from(SWAN_TBN_DEVICE_MONITOR, 'count(*)')
-                             ->where('device_id=? AND monitor_id=? AND attr_id=?');
-        if ($this->__db->fetch_one($select, array($key_attributes['device_id'], $monitor_basic['monitor_id'], $monitor_attributes['attr_id'])) > 0) {
+                             ->where('device_id=? AND monitor_id=? ');
+        if ($this->__db->fetch_one($select, array($key_attributes['device_id'], $monitor_basic['monitor_id'])) > 0) {
 			throw new sw_exception('already exists this item.');	
 		}
 
-		if (!isset($attributes['attr_id'])) {
-			$value_id = \lib\sequence\sw_sequence::get_next_device($key_attributes['device_id'], SWAN_TBN_DEVICE_MONITOR);	
-		} else {
-			$value_id = $attributes['value_id'];		
-		}
-        
+		$dm_id = \lib\sequence\sw_sequence::get_next_device($key_attributes['device_id'], SWAN_TBN_DEVICE_MONITOR);	
+
+		$this->__db->begin_transaction();
+
+		// 设备 监控器 主表
+        $attributes['dm_id']   = $dm_id;
         $attributes['device_id']  = $key_attributes['device_id'];
         $attributes['monitor_id'] = $monitor_basic['monitor_id'];
-        $attributes['attr_id']    = $monitor_attributes['attr_id'];
-        $attributes['value_id']   = $value_id;
-        $require_fields = array('value_id', 'device_id', 'monitor_id', 'attr_id', 'value');
-        $this->_check_require($attributes, $require_fields);
+		unset($attributes['monitor_params']);
+        $require_fields = array('dm_id', 'device_id', 'monitor_id');
+		try {
+			$this->_check_require($attributes, $require_fields);
+        	$this->__db->insert(SWAN_TBN_DEVICE_MONITOR, $attributes);
+		} catch (\swan\exception\sw_exception $e) {
+			$this->__db->rollback();
+			throw new sw_exception($e);
+		}
+		if (!isset($monitor_params) || empty($monitor_params)) {
+			$this->__db->commit();
+			return $dm_id;	
+		}
+		
+		// 监控器参数值设置
+		foreach ($monitor_params as $param) {
+			$param_attributes = $param->attributes();
+			if (!isset($param_attributes['attr_id'])) {
+				$this->__db->rollback();
+				throw new sw_exception('must define attr_id for add param');
+			}
+			$select = $this->__db->select()
+					       ->from(SWAN_TBN_MONITOR_ATTRIBUTE, 'count(*)')
+					  	   ->where('attr_id=? AND monitor_id=? ');
+			if ($this->__db->fetch_one($select, array($param_attributes['attr_id'], $monitor_basic['monitor_id'])) == 0) {
+				$this->__db->rollback();
+				throw new sw_exception('not exists this attribute.');	
+			}
 
-        $this->__db->insert(SWAN_TBN_DEVICE_MONITOR, $attributes);
-		return $value_id;
+			$value_id = \lib\sequence\sw_sequence::get_next_device($key_attributes['device_id'], SWAN_TBN_MONITOR_PARAM);
+			$param_attributes['value_id'] = $value_id;
+			$param_attributes['dm_id'] = $dm_id;
+			$require_fields = array('dm_id', 'value_id', 'attr_id', 'value');
+			try {
+				$this->_check_require($param_attributes, $require_fields);
+				$this->__db->insert(SWAN_TBN_MONITOR_PARAM, $param_attributes);
+			} catch (\swan\exception\sw_exception $e) {
+				$this->__db->rollback();
+				throw new sw_exception($e);
+			}
+		}
+
+		$this->__db->commit();
+		return $dm_id;
 	}
 	
 	// }}}
@@ -94,11 +131,53 @@ class sw_monitor extends sw_abstract
 	 */
 	public function get_monitor(\lib\member\condition\sw_get_device_monitor $condition)
 	{
-		$condition->check_params();
+        $condition->check_params();
+		$params = $condition->params();
+		$device_monitor_columns   = $condition->columns(SWAN_TBN_DEVICE_MONITOR);
+		$monitor_basic_columns = $condition->columns(SWAN_TBN_MONITOR_BASIC);
+		if (empty($monitor_basic_columns)) { // 没有指定查询关联的字段
+		    $basic_columns = null;  
+		}
 		$select = $this->__db->select()
-							 ->from(SWAN_TBN_DEVICE_MONITOR, null);
+		                     ->from(array('k' => SWAN_TBN_DEVICE_MONITOR), $device_monitor_columns)
+		                     ->join(array('b' => SWAN_TBN_MONITOR_BASIC), "k.monitor_id = b.monitor_id", $monitor_basic_columns);
+		$condition->set_columns(array());
 		$condition->where($select, true);
-		return $this->_get($select, $condition->params());	
+		return $this->_get($select, $condition->params()); 
+	}
+
+	// }}}
+	// {{{ public function get_monitor_params()
+
+	/**
+	 * get_monitor 
+	 * 
+	 * @param \lib\member\condition\sw_get_device_monitor_params $condition 
+	 * @access public
+	 * @return void
+	 */
+	public function get_monitor_params(\lib\member\condition\sw_get_device_monitor_params $condition)
+	{
+        $condition->check_params();
+		$params = $condition->params();
+		
+		$mparams_columns = $condition->columns(SWAN_TBN_MONITOR_PARAM);
+		$attr_monitor_columns   = $condition->columns(SWAN_TBN_MONITOR_ATTRIBUTE);
+		$device_monitor_columns = $condition->columns(SWAN_TBN_DEVICE_MONITOR);	
+		if (empty($mparams_columns)) { // 没有指定查询关联的字段
+		    $mparams_columns = null;  
+		}
+		if (empty($attr_monitor_columns)) { // 没有指定查询关联的字段
+		    $attr_monitor_columns = null;  
+		}
+
+		$select = $this->__db->select()
+		                     ->from(array('d' => SWAN_TBN_DEVICE_MONITOR), $device_monitor_columns)
+		                     ->join(array('p' => SWAN_TBN_MONITOR_PARAM), "p.dm_id = d.dm_id", $mparams_columns)
+		                     ->join(array('a' => SWAN_TBN_MONITOR_ATTRIBUTE), "a.attr_id = p.attr_id", $attr_monitor_columns);
+		$condition->set_columns(array());
+		$condition->where($select, true);
+		return $this->_get($select, $condition->params()); 
 	}
 
 	// }}}
@@ -113,17 +192,54 @@ class sw_monitor extends sw_abstract
 	 */
 	public function mod_monitor(\lib\member\condition\sw_mod_device_monitor $condition)
 	{
+		$property_key = $this->get_device_operator()->get_device_key_property();
+		$key_attributes = $property_key->attributes();
+        if (!isset($key_attributes['device_id'])) {
+            throw new sw_exception('Unknow device id.');
+        }
+
+		$monitor_property = $condition->get_property();
+		$monitor_basic_property	= $monitor_property->get_monitor_basic();
+		$monitor_id = $monitor_basic_property->get_monitor_id();
+        if (!isset($monitor_id)) {
+            throw new sw_exception('Unknow monitor id.');
+        }
+		$monitor_params = $monitor_property->get_monitor_params(); 
+
+        // 判断是否已经存在
+        $select = $this->__db->select()
+                             ->from(SWAN_TBN_DEVICE_MONITOR, array('dm_id'))
+                             ->where('device_id=? AND monitor_id=? ');
+		$dm_id = $this->__db->fetch_one($select, array($key_attributes['device_id'], $monitor_id));
+        if (!$dm_id) {
+			throw new sw_exception('not exists this device monitor.');	
+		}
+		
+		$this->__db->begin_transaction();
+
+		// 监控器参数值设置
+		$condition->set_in('dm_id');
+		$condition->set_dm_id($dm_id);
 		$condition->check_params();
 		$params = $condition->params();
-		$monitor_property = $condition->get_property();
-		$attributes = $monitor_property->prepared_attributes();
-
-		$where = $condition->where();
-		if (!$where || !$attributes) {
-			return; 
+		foreach ($monitor_params as $param) {
+			$param_attributes = $param->attributes();
+			$attributes = $param->prepared_attributes();
+			if (isset($param_attributes['attr_id'])) {
+				$condition->set_in('attr_id');
+				$condition->set_attr_id($param_attributes['attr_id']);	
+			}
+			$where = $condition->where();
+			try {
+				$this->__db->update(SWAN_TBN_MONITOR_PARAM, $attributes, $where);
+			} catch (\swan\exception\sw_exception $e) {
+				$this->__db->rollback();
+				throw new sw_exception($e);
+			}
 		}
 
-		$this->__db->update(SWAN_TBN_DEVICE_MONITOR, $attributes, $where);
+		$this->__db->commit();
+		return $dm_id;
 	}
 
 	// }}}
@@ -144,7 +260,22 @@ class sw_monitor extends sw_abstract
 			return; 
 		}
 
-		$this->__db->delete(SWAN_TBN_DEVICE_MONITOR, $where);
+		$this->__db->begin_transaction();
+		try {
+			$cols = $this->__db->delete(SWAN_TBN_DEVICE_MONITOR, $where);
+		} catch (\swan\exception\sw_exception $e) {
+			$this->__db->rollback();
+			throw new sw_exception($e);
+		}
+		try {
+			$this->__db->delete(SWAN_TBN_MONITOR_PARAM, $where);
+		} catch (\swan\exception\sw_exception $e) {
+			$this->__db->rollback();
+			throw new sw_exception($e);
+		}
+
+		$this->__db->commit();
+		return $cols;
 	}
 
 	// }}}
@@ -159,7 +290,7 @@ class sw_monitor extends sw_abstract
      * @access public
      * @return void
      */
-    public function exists($device_id, $monitor_id, $attr_id)
+    public function exists($device_id, $monitor_id)
     {
         $select = $this->__db->select()
                              ->from(SWAN_TBN_DEVICE_KEY, 'count(*)')
@@ -173,13 +304,6 @@ class sw_monitor extends sw_abstract
                              ->where('monitor_id=?');
         if (false == $this->__db->fetch_one($select, $monitor_id) > 0) {
 			throw new sw_exception('monitor id not exists.');	
-		}
-
-        $select = $this->__db->select()
-                             ->from(SWAN_TBN_MONITOR_ATTRIBUTE, 'count(*)')
-                             ->where('attr_id=?');
-        if (false == $this->__db->fetch_one($select, $attr_id) > 0) {
-			throw new sw_exception('attribute id not exists.');	
 		}
     }
 
