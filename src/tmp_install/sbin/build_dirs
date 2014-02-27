@@ -37,6 +37,7 @@ ARRAY_DIRS=(
         "log/httpd"
     "data"
         "data/mysql"
+        "data/redis"
     "run"
 )
 
@@ -51,6 +52,8 @@ ARRAY_CHOWN=(
 # 需要 chmod 的目录 ( [权限] [是否需要递归. 1 | 0] [路径] )
 ARRAY_CHMOD=(
     "755" "0" "app/sbin/sw_phpd"
+    "755" "0" "app/sbin/sw_reinit_db"
+    "755" "0" "app/sbin/sw_init_data"
 )
 
 # }}}
