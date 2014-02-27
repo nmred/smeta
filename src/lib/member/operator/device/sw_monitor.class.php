@@ -174,7 +174,7 @@ class sw_monitor extends sw_abstract
 		$select = $this->__db->select()
 		                     ->from(array('d' => SWAN_TBN_DEVICE_MONITOR), $device_monitor_columns)
 		                     ->join(array('p' => SWAN_TBN_MONITOR_PARAM), "p.dm_id = d.dm_id", $mparams_columns)
-		                     ->join(array('a' => SWAN_TBN_MONITOR_ATTRIBUTE), "a.attr_id = p.attr_id", $attr_monitor_columns);
+		                     ->join(array('a' => SWAN_TBN_MONITOR_ATTRIBUTE), "a.attr_id = p.attr_id AND a.monitor_id = d.monitor_id", $attr_monitor_columns);
 		$condition->set_columns(array());
 		$condition->where($select, false);
 		return $this->_get($select, $condition->params()); 

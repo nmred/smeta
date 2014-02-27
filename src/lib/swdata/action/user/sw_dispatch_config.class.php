@@ -72,21 +72,25 @@ class sw_dispatch_config extends sw_abstract
 			if (empty($monitor_params)) {
 				continue; 
 			}
+
 			foreach ($monitor_params as $mp_info) {
 				try {
-					$attr_info    = $this->_get_attr_info($mp_info['monitor_id'], $mp_info['attr_id']);
-					$monitor_info = $this->_get_monitor_info($mp_info['monitor_id']);
+					$attr_info  = $this->_get_attr_info($mp_info['monitor_id'], $mp_info['device_id']);
 				} catch (\swan\exception\sw_exception $e) {
 					continue;
 				}
+				$params = array();
+				foreach ($attr_info as $attr) {
+					$params[$attr['attr_name']]	= $attr['value'];
+				}
+
+				$basic = $mp_info;
+				$basic['device_display_name'] = $d_info['device_display_name'];
+				$basic['host_name']   = $d_info['host_name'];
+				$basic['device_name'] = $d_info['device_name'];
 				$monitor_key  = $device_id . '_' . $mp_info['monitor_id'];
-				$monitor_data[$monitor_key]['basic']['monitor_id']  = $mp_info['monitor_id'];
-				$monitor_data[$monitor_key]['basic']['device_id']   = $device_id;
-				$monitor_data[$monitor_key]['basic']['device_name'] = $d_info['device_name'];
-				$monitor_data[$monitor_key]['basic']['host_name']   = $d_info['host_name'];
-				$monitor_data[$monitor_key]['basic']['device_display_name']  = $d_info['device_display_name'];
-				$monitor_data[$monitor_key]['basic']['monitor_display_name'] = $monitor_info['monitor_display_name'];
-				$monitor_data[$monitor_key]['params'][$attr_info['attr_name']] = $mp_info['value'];
+				$monitor_data[$monitor_key]['params'] = $params;
+				$monitor_data[$monitor_key]['basic']  = $basic;
 
 				// 获取数据项
 				try {
@@ -100,7 +104,7 @@ class sw_dispatch_config extends sw_abstract
 				$monitor_data[$monitor_key]['metrics'] = $metrics;
 			}
 		}
-		return $this->render_json($monitor_data, 10000);
+		return $this->render_json($monitor_data, 10000, 'get smeta config success');
 	}
 
 	// }}}
@@ -114,16 +118,22 @@ class sw_dispatch_config extends sw_abstract
 	 * @access protected
 	 * @return array
 	 */
-	protected function _get_attr_info($monitor_id, $attr_id)
+	protected function _get_attr_info($monitor_id, $device_id)
 	{
 		try {
-			$monitor = sw_member::operator_factory('monitor');
-			$monitor_attribute = $monitor->get_operator('attribute')->get_info($monitor_id, $attr_id);
+			$device = sw_member::operator_factory('device');
+			$condition = sw_member::condition_factory('get_device_monitor_params'); 
+			$condition->set_in('device_id');
+			$condition->set_device_id($device_id);	
+			$condition->set_in('monitor_id');
+			$condition->set_monitor_id($monitor_id);	
+			$condition->set_is_count(false);
+			$monitor_params = $device->get_operator('monitor')->get_monitor_params($condition);
 		} catch (\swan\exception\sw_exception $e) {
 			throw new sw_exception($e);
 		}
 
-		return $monitor_attribute;
+		return $monitor_params;
 	}
 
 	// }}}

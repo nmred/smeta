@@ -50,7 +50,7 @@ class sw_monitor_metric extends sw_abstract
 		$tmax  = $this->__request->get_post('tmax', '');
 		$vmax  = $this->__request->get_post('vmax', 'U');
 		$vmin  = $this->__request->get_post('vmin', 'U');
-		$dst_type  = $this->__request->get_post('dst_type', '');
+		$dst_type  = $this->__request->get_post('dst_type', '1');
 		if (!$metric_name || !$monitor_id || !$collect_every) {
 			return $this->render_json(null, 10001, '`name`/`mid`/`collect_every` not allow is empty.');
 		}
