@@ -47,6 +47,7 @@ class sw_monitor_attr extends sw_abstract
 		$form_type  = $this->__request->get_post('form_type', '');
 		$form_data  = $this->__request->get_post('form_data', '');
 		$display_name = $this->__request->get_post('display_name', '');
+		$attr_default = $this->__request->get_post('attr_default', '');
 		if (!$attr_name || !$monitor_id || !$form_type) {
 			return $this->render_json(null, 10001, '`name`/`mid`/`form_type` not allow is empty.');
 		}
@@ -57,6 +58,7 @@ class sw_monitor_attr extends sw_abstract
 			'form_data' => $form_data,
 			'attr_name' => $attr_name,
 			'attr_display_name' => $display_name,
+			'attr_default' => $attr_default,
 		);
 		try {
 			$property_attr  = sw_member::property_factory('monitor_attribute', $data); 
@@ -170,6 +172,7 @@ class sw_monitor_attr extends sw_abstract
 		$display_name = $this->__request->get_post('display_name', '');
 		$form_type = $this->__request->get_post('form_type', '');
 		$form_data = $this->__request->get_post('form_data', '');
+		$attr_default = $this->__request->get_post('attr_default', '');
 		if (!$mid || !$aid) {
 			return $this->render_json(null, 10001, '`mid` and `aid` not allow is empty.');
 		}
@@ -191,6 +194,11 @@ class sw_monitor_attr extends sw_abstract
 		if ($form_data) {
 			$data['form_data'] = $form_data;	
 		}
+
+		if ($attr_default) {
+			$data['attr_default'] = $attr_default;	
+		}
+
 		try {
 			$property_attribute = sw_member::property_factory('monitor_attribute', $data); 
 			$condition = sw_member::condition_factory('mod_monitor_attribute', array('monitor_id' => $mid, 'attr_id' => $aid));

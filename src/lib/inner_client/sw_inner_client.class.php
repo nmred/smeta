@@ -12,62 +12,60 @@
 // | $_SWANBR_WEB_DOMAIN_$
 // +---------------------------------------------------------------------------
  
-namespace lib\member\property;
-use \lib\member\property\exception\sw_exception;
+namespace lib\inner_client;
+use \lib\inner_client\exception\sw_exception;
 
 /**
 +------------------------------------------------------------------------------
-* sw_monitor_attribute 
+* 封装调用数据中心数据 
 +------------------------------------------------------------------------------
 * 
-* @uses sw_abstract
 * @package 
 * @version $_SWANBR_VERSION_$
-* @copyright $_SWANBR_COPYRIGHT_$
+* @copyright Copyleft
 * @author $_SWANBR_AUTHOR_$ 
 +------------------------------------------------------------------------------
 */
-class sw_monitor_attribute extends sw_abstract
+class sw_inner_client
 {
+	// {{{ consts
+	// }}}
 	// {{{ members
-
-	/**
-	 * 允许设置的元素列表 
-	 * 
-	 * @var array
-	 * @access protected
-	 */
-	protected $__allow_attributes = array(
-		'attr_id'           => true,
-		'monitor_id'        => true,
-		'attr_name'         => true,
-		'attr_display_name' => true,
-		'form_type'         => true,
-		'form_data'         => true,
-		'attr_default'      => true,
-	);
-
-	/**
-	 * 主键 
-	 * 
-	 * @var string
-	 * @access protected
-	 */
-	protected $__key_attributes = array('monitor_id', 'attr_id');
-
-	// }}}		
+	// }}}
 	// {{{ functions
-	// {{{ public function check()
-
+	// {{{ public function call()
+	
 	/**
-	 * 检查参数 
+	 * 调用接口 
 	 * 
+	 * @param string $module 
+	 * @param string $action 
+	 * @static
 	 * @access public
-	 * @return void
+	 * @return array
 	 */
-	public function check()
+	public static function call($module, $action, $params = array())
 	{
-		parent::check();
+		$config = \swan\config\sw_config::get_config('data_host');
+		if (!isset($config['host']) || !isset($config['port'])) {
+			throw new sw_exception('data center host or port empty.');		
+		}
+
+		$url = 'http://%s:%s/%s/?/%s';
+		$url = sprintf($url, $config['host'], $config['port'], $module, $action);
+		$curl = new \swan\curl\sw_curl($url);
+		$curl->set_params($params);
+		$return_content = $curl->call();
+		if (!$return_content) {
+			throw new sw_exception('get data from data center.');	
+		}
+
+		$data = json_decode($return_content, true);
+		if (isset($data['code'])) {
+			return $data;
+		}
+
+		throw new sw_exception('get data from data center.');	
 	}
 
 	// }}}

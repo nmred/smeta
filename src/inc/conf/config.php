@@ -15,4 +15,8 @@ return array(
 		'self' => 'localhost',
 		'port' => '10514',
 	),
+	'data_host' => array(
+		'host' => '127.0.0.1',
+		'port' => '9080',
+	),
 );

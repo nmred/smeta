@@ -1,0 +1,4 @@
+#!/bin/bash
+
+/usr/local/swan/opt/mysql/bin/mysql -uroot -S /usr/local/swan/run/sw_mysql.sock </usr/local/swan/tmp_install/sql/db_clear.sql
+/usr/local/swan/opt/mysql/bin/mysql -uroot -S /usr/local/swan/run/sw_mysql.sock </usr/local/swan/tmp_install/sql/db_desc_swan_soft.sql
