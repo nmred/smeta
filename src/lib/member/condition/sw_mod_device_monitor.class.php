@@ -38,7 +38,7 @@ class sw_mod_device_monitor extends sw_mod_abstract
 	 * @access protected
 	 */
 	protected $__allow_params = array(
-		'attr_id' => true,
+		'device_id' => true,
 		'dm_id'   => true,
 	);
 

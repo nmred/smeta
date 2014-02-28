@@ -6,7 +6,7 @@ use \lib\member\sw_member as sw_mem;
 // 添加 device monitor
 //$device_property_key    = sw_mem::property_factory('device_key', array('device_id' => '1'));
 //$monitor_property_basic = sw_mem::property_factory('monitor_basic', array('monitor_id' => '1'));
-//$device_property_monitor = sw_mem::property_factory('device_monitor');
+//$device_property_monitor = sw_mem::property_factory('device_monitor', array('dm_name' => 'lsss'));
 //$device_property_monitor->set_monitor_basic($monitor_property_basic);
 //$monitor_params[] = sw_mem::property_factory('monitor_params', array('attr_id' => '1', 'value' => 'dsds'));
 //$monitor_params[] = sw_mem::property_factory('monitor_params', array('attr_id' => '2', 'value' => 'dsdsd'));
@@ -29,6 +29,7 @@ use \lib\member\sw_member as sw_mem;
 //$device_property_monitor = sw_mem::property_factory('device_monitor');
 //$device_property_monitor->set_monitor_basic($monitor_property_basic);
 //$device_property_monitor->set_monitor_params($monitor_params);
+//$device_property_monitor->set_dm_id(3);
 //$condition = sw_mem::condition_factory('mod_device_monitor');
 //$condition->set_property($device_property_monitor);
 //$device = sw_mem::operator_factory('device', $device_property_key);

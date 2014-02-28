@@ -293,6 +293,14 @@
                         <default></default>
                     </column>
 
+                    <column name="dm_name">
+                        <desc>设备监控器名称</desc>
+                        <type>varchar</type>
+                        <nullable>false</nullable>
+                        <precision>255</precision>
+                        <default></default>
+                    </column>
+
                     <column name="device_id">
                         <desc>设备 id</desc>
                         <type>int</type>

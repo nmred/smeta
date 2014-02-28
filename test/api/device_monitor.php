@@ -30,15 +30,15 @@ function call($url, $type = 'GET', $params = array())
 //	),
 //);
 //$attr_data = json_encode($attr_data);
-//$rev = call($url, 'POST', array('mid' => 1, 'did' => 1, 'attr_data' => $attr_data));
+//$rev = call($url, 'POST', array('mid' => 1, 'did' => 2, 'attr_data' => $attr_data, 'dm_name' => 'dsds'));
 //$rev = json_decode($rev, true);
 //var_dump($rev);
-//
-//// 获取 device
-//$url = '127.0.0.1:9080/user/?/device_monitor.json';
-//$rev = call($url, 'POST', array('did' => 1));
-//$rev = json_decode($rev, true);
-//var_dump($rev);
+
+// 获取 device
+$url = '127.0.0.1:9080/user/?/device_monitor.json';
+$rev = call($url, 'POST', array('did' => 1));
+$rev = json_decode($rev, true);
+var_dump($rev);
 
 // 获取 device params
 $url = '127.0.0.1:9080/user/?/device_monitor.info';
@@ -48,7 +48,7 @@ var_dump($rev);
 
 // 删除 device monitor
 $url = '127.0.0.1:9080/user/?/device_monitor.del';
-$rev = call($url, 'POST', array('dm_id' => 2));
+$rev = call($url, 'POST', array('dm_id' => 1, 'did' => 2));
 $rev = json_decode($rev, true);
 var_dump($rev);
 
@@ -65,6 +65,6 @@ var_dump($rev);
 //);
 //$attr_data = json_encode($attr_data);
 //$url = '127.0.0.1:9080/user/?/device_monitor.mod';
-//$rev = call($url, 'POST', array('did' => 1, 'mid' => 1, 'attr_data' => $attr_data));
+//$rev = call($url, 'POST', array('did' => 1, 'mid' => 1, 'attr_data' => $attr_data, 'dm_id' => 3));
 //$rev = json_decode($rev, true);
 //var_dump($rev);

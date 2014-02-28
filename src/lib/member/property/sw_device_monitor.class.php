@@ -38,7 +38,9 @@ class sw_device_monitor extends sw_abstract
 	 * @access protected
 	 */
 	protected $__allow_attributes = array(
-		'monitor_id'     => true,
+		'dm_id'      => true,
+		'monitor_id' => true,
+		'dm_name'    => true,
 		'monitor_params' => true,
 	);
 

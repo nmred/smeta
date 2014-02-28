@@ -133,6 +133,8 @@ CREATE TABLE `device_basic` (
 -- 
 -- dm_id
 -- 	设备监控器 id
+-- dm_name
+-- 	设备监控器名称
 -- device_id
 -- 	设备 id
 -- monitor_id
@@ -141,6 +143,7 @@ CREATE TABLE `device_basic` (
 DROP TABLE IF EXISTS `device_monitor`;
 CREATE TABLE `device_monitor` (
 	`dm_id` int(11) UNSIGNED NOT NULL ,
+	`dm_name` varchar(255) NOT NULL ,
 	`device_id` int(11) UNSIGNED NOT NULL ,
 	`monitor_id` int(11) UNSIGNED NOT NULL ,
 	PRIMARY KEY (`dm_id`)

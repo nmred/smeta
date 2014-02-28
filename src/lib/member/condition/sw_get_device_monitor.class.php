@@ -50,6 +50,7 @@ class sw_get_device_monitor extends sw_get_abstract
      */
     protected $__columns = array(
         'dm_id'       => SWAN_TBN_DEVICE_MONITOR,       
+        'dm_name'     => SWAN_TBN_DEVICE_MONITOR,       
         'device_id'   => SWAN_TBN_DEVICE_MONITOR,       
         'monitor_id'  => SWAN_TBN_DEVICE_MONITOR,       
         'monitor_name'  => SWAN_TBN_MONITOR_BASIC,     

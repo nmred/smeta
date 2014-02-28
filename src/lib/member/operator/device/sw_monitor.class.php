@@ -55,13 +55,17 @@ class sw_monitor extends sw_abstract
 		$monitor_basic = $monitor_basic_property->attributes();
         $attributes	   = $monitor_property->attributes();
 
+		if (!isset($attributes['dm_name'])) {
+			throw new sw_exception('must defined `dm_name`');	
+		}
+		 
         // 判断是否已经存在
 		$this->exists($key_attributes['device_id'], $monitor_basic['monitor_id']);
 
         $select = $this->__db->select()
                              ->from(SWAN_TBN_DEVICE_MONITOR, 'count(*)')
-                             ->where('device_id=? AND monitor_id=? ');
-        if ($this->__db->fetch_one($select, array($key_attributes['device_id'], $monitor_basic['monitor_id'])) > 0) {
+                             ->where('device_id=? AND dm_name=? ');
+        if ($this->__db->fetch_one($select, array($key_attributes['device_id'], $attributes['dm_name'])) > 0) {
 			throw new sw_exception('already exists this item.');	
 		}
 
@@ -74,7 +78,7 @@ class sw_monitor extends sw_abstract
         $attributes['device_id']  = $key_attributes['device_id'];
         $attributes['monitor_id'] = $monitor_basic['monitor_id'];
 		unset($attributes['monitor_params']);
-        $require_fields = array('dm_id', 'device_id', 'monitor_id');
+        $require_fields = array('dm_id', 'device_id', 'monitor_id', 'dm_name');
 		try {
 			$this->_check_require($attributes, $require_fields);
         	$this->__db->insert(SWAN_TBN_DEVICE_MONITOR, $attributes);
@@ -205,12 +209,12 @@ class sw_monitor extends sw_abstract
             throw new sw_exception('Unknow monitor id.');
         }
 		$monitor_params = $monitor_property->get_monitor_params(); 
+		$dm_id = $monitor_property->get_dm_id();
 
-        // 判断是否已经存在
         $select = $this->__db->select()
                              ->from(SWAN_TBN_DEVICE_MONITOR, array('dm_id'))
-                             ->where('device_id=? AND monitor_id=? ');
-		$dm_id = $this->__db->fetch_one($select, array($key_attributes['device_id'], $monitor_id));
+                             ->where('device_id=? AND dm_id=? ');
+		$dm_id = $this->__db->fetch_one($select, array($key_attributes['device_id'], $dm_id));
         if (!$dm_id) {
 			throw new sw_exception('not exists this device monitor.');	
 		}

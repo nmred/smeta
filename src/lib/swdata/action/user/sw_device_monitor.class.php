@@ -44,9 +44,10 @@ class sw_device_monitor extends sw_abstract
 	{
 		$did = $this->__request->get_post('did', '');
 		$mid = $this->__request->get_post('mid', '');
+		$dm_name = $this->__request->get_post('dm_name', '');
 		$attr_data = $this->__request->get_post('attr_data', '{}');
-		if (!$did || !$mid) {
-			return $this->render_json(null, 10001, '`did`/`mid` not allow is empty.');
+		if (!$did || !$mid || !$dm_name) {
+			return $this->render_json(null, 10001, '`dm_name`/`did`/`mid` not allow is empty.');
 		}
 
 		$attr_data = json_decode($attr_data, true);
@@ -60,7 +61,7 @@ class sw_device_monitor extends sw_abstract
 		try {
 			$device_property_key    = sw_member::property_factory('device_key', array('device_id' => $did));
 			$monitor_property_basic = sw_member::property_factory('monitor_basic', array('monitor_id' => $mid));
-			$device_property_monitor = sw_member::property_factory('device_monitor');
+			$device_property_monitor = sw_member::property_factory('device_monitor', array('dm_name' => $dm_name));
 			$device_property_monitor->set_monitor_basic($monitor_property_basic);
 			$device_property_monitor->set_monitor_params($monitor_params);
 			$device = sw_member::operator_factory('device', $device_property_key);
@@ -84,8 +85,9 @@ class sw_device_monitor extends sw_abstract
 	public function action_del()
 	{
 		$dm_id = $this->__request->get_post('dm_id', '');
-		if (!$dm_id) {
-			return $this->render_json(null, 10001, '`dm_id` not allow is empty.');
+		$did   = $this->__request->get_post('did', '');
+		if (!$dm_id || !$did) {
+			return $this->render_json(null, 10001, '`dm_id`/`did` not allow is empty.');
 		}
 
 		// 删除设备
@@ -93,6 +95,8 @@ class sw_device_monitor extends sw_abstract
 			$condition = sw_member::condition_factory('del_device_monitor');
 			$condition->set_in('dm_id');
 			$condition->set_dm_id($dm_id);
+			$condition->set_in('device_id');
+			$condition->set_device_id($did);
 			$device = sw_member::operator_factory('device');
 			$device_monitor = $device->get_operator('monitor')->del_monitor($condition);
 		} catch (\swan\exception\sw_exception $e) {
@@ -115,9 +119,10 @@ class sw_device_monitor extends sw_abstract
 	{	
 		$did = $this->__request->get_post('did', '');
 		$mid = $this->__request->get_post('mid', '');
+		$dm_id = $this->__request->get_post('dm_id', '');
 		$attr_data = $this->__request->get_post('attr_data', '{}');
-		if (!$did || !$mid) {
-			return $this->render_json(null, 10001, '`did`/`mid` not allow is empty.');
+		if (!$did || !$mid || !$dm_id) {
+			return $this->render_json(null, 10001, '`did`/`mid`/`dm_id` not allow is empty.');
 		}
 
 		$attr_data = json_decode($attr_data, true);
@@ -136,6 +141,7 @@ class sw_device_monitor extends sw_abstract
 			$device_property_monitor = sw_member::property_factory('device_monitor');
 			$device_property_monitor->set_monitor_basic($monitor_property_basic);
 			$device_property_monitor->set_monitor_params($monitor_params);
+			$device_property_monitor->set_dm_id($dm_id);
 			$condition = sw_member::condition_factory('mod_device_monitor');
 			$condition->set_property($device_property_monitor);
 			$device = sw_member::operator_factory('device', $device_property_key);
