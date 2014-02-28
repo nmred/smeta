@@ -19,11 +19,11 @@
 				<param name="url">http://localhost/server-status</param>
 			</monitor>
 
+			<monitor name="harddisk" dm_name="sda1">
+				<param name="device">/dev/sda1</param>
+			</monitor>
 			<monitor name="harddisk" dm_name="sdb1">
 				<param name="device">/dev/sdb1</param>
-			</monitor>
-			<monitor name="harddisk" dm_name="sdb2">
-				<param name="device">/dev/sdb2</param>
 			</monitor>
 
 			<monitor name="memcached" dm_name="memcache">
@@ -53,11 +53,11 @@
 				<param name="url">http://localhost/server-status</param>
 			</monitor>
 
+			<monitor name="harddisk" dm_name="sda1">
+				<param name="device">/dev/sda1</param>
+			</monitor>
 			<monitor name="harddisk" dm_name="sdb1">
 				<param name="device">/dev/sdb1</param>
-			</monitor>
-			<monitor name="harddisk" dm_name="sdb2">
-				<param name="device">/dev/sdb2</param>
 			</monitor>
 
 			<monitor name="memcached" dm_name="memcache">
@@ -115,7 +115,7 @@
     <!-- {{{ metrics -->
 
     <metric_groups>
-        <metric_group collect_every="30" time_threshold="90" module="apache">
+        <metric_group collect_every="30" time_threshold="2000" module="apache">
             <metric name="ap_busy_workers" title="Apache - 繁忙线程数" value_threshold="0"/>
             <metric name="ap_idle_workers" title="Apache - 空闲线程数" value_threshold="0"/>
             <metric name="ap_req_per_sec" title="Apache - 每秒平均请求数" value_threshold="0.0"/>
@@ -138,7 +138,7 @@
             <metric name="ap_keepalive" title="Apache - 当前处于 Keepalive 状态的进程数" value_threshold="0"/>
         </metric_group>
 
-        <metric_group collect_every="60" time_threshold="90" module="apc">
+        <metric_group collect_every="60" time_threshold="2000" module="apc">
             <metric name="apc_mem_size" title="Apc - 内存总空间" value_threshold="0.0"/>
             <metric name="apc_mem_avail" title="Apc - 内存可用空间" value_threshold="0.0"/>
             <metric name="apc_mem_used" title="Apc - 内存已用空间" value_threshold="0.0"/>
@@ -157,7 +157,7 @@
             <metric name="apc_insert_rate" title="Apc - 插入缓存平均速度" value_threshold="0.0"/>
         </metric_group>
 
-        <metric_group collect_every="60" time_threshold="90" module="mysql">
+        <metric_group collect_every="60" time_threshold="2000" module="mysql">
             <metric name="mysql_select" title="MySQL - Select 查询数" value_threshold="0"/>
             <metric name="mysql_insert" title="MySQL - Insert 查询数" value_threshold="0"/>
             <metric name="mysql_update" title="MySQL - Update 查询数" value_threshold="0"/>
@@ -191,7 +191,7 @@
             <metric name="mysql_uptime" title="MySQL - 运行时间" value_threshold="0"/>
         </metric_group>
 
-        <metric_group collect_every="30" time_threshold="90" module="nginx">
+        <metric_group collect_every="30" time_threshold="2000" module="nginx">
             <metric name="nginx_active_connections" title="Nginx - 当前连接数" value_threshold="0"/>
             <metric name="nginx_accepts" title="Nginx - 累计已 Accepted 的连接总数" value_threshold="0"/>
             <metric name="nginx_handled" title="Nginx - 累计已 Handled 的连接总数" value_threshold="0"/>
@@ -201,7 +201,7 @@
             <metric name="nginx_waiting" title="Nginx - 当前处于 Waiting 状态的连接数" value_threshold="0"/>
         </metric_group>
 
-        <metric_group collect_every="60" time_threshold="90" module="memcached">
+        <metric_group collect_every="60" time_threshold="2000" module="memcached">
             <metric name="memc_uptime" title="Memcache - 运行时间" value_threshold="0"/>
             <metric name="memc_curr_items" title="Memcache - 当前数据个数" value_threshold="0"/>
             <metric name="memc_total_items" title="Memcache - 累计数据存储个数" value_threshold="0"/>
@@ -236,7 +236,7 @@
             <metric name="memc_cas_hit_rate" title="Memcache - Cas 请求命中率" value_threshold="0"/>
         </metric_group>
 
-        <metric_group collect_every="120" time_threshold="90" module="harddisk">
+        <metric_group collect_every="20" time_threshold="2000" module="harddisk">
             <metric name="harddisk_size" title="磁盘 - 分区的总空间" value_threshold="0"/>
             <metric name="harddisk_used" title="磁盘 - 分区已用空间" value_threshold="0"/>
             <metric name="harddisk_free" title="磁盘 - 分区剩余空间" value_threshold="0"/>
@@ -247,7 +247,7 @@
             <metric name="harddisk_iuse" title="磁盘 - 分区 inode 使用率" value_threshold="0"/>
         </metric_group>
 
-        <metric_group collect_every="20" time_threshold="90" module="harddisk">
+        <metric_group collect_every="20" time_threshold="2000" module="harddisk">
             <metric name="harddisk_tps" title="磁盘 - 每秒 I/O 请求数" value_threshold="0"/>
             <metric name="harddisk_blk_read_sec" title="磁盘 - 每秒读取的 block 数" value_threshold="0"/>
             <metric name="harddisk_blk_wrtn_sec" title="磁盘 - 每秒写入的 block 数" value_threshold="0"/>
@@ -266,7 +266,7 @@
             <metric name="harddisk_util" title="磁盘 - 每秒的 I/O 请求占比(%Util)" value_threshold="0"/>
         </metric_group>
 
-        <metric_group collect_every="30" time_threshold="90" module="network">
+        <metric_group collect_every="30" time_threshold="2000" module="network">
             <metric name="net_rx_bytes" title="NetWork - Receive 总流量" value_threshold="0.0"/>
             <metric name="net_rx_pkts" title="NetWork - Receive 总数据包数" value_threshold="0"/>
             <metric name="net_rx_errs" title="NetWork - Receive 错误包数" value_threshold="0"/>
