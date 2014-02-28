@@ -155,10 +155,10 @@ CREATE TABLE `device_monitor` (
 -- 
 -- 监控器参数
 -- 
--- value_id
--- 	属性值 id
 -- attr_id
 -- 	监控器属性 id
+-- device_id
+-- 	设备 id
 -- dm_id
 -- 	设备监控器 id
 -- value
@@ -166,11 +166,11 @@ CREATE TABLE `device_monitor` (
 
 DROP TABLE IF EXISTS `device_monitor_params`;
 CREATE TABLE `device_monitor_params` (
-	`value_id` int(11) UNSIGNED NOT NULL ,
 	`attr_id` int(11) UNSIGNED NOT NULL ,
+	`device_id` int(11) UNSIGNED NOT NULL ,
 	`dm_id` int(11) UNSIGNED NOT NULL ,
 	`value` varchar(255) NOT NULL ,
-	PRIMARY KEY (`value_id`,`attr_id`,`dm_id`)
+	PRIMARY KEY (`attr_id`,`device_id`,`dm_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --  }}} 
@@ -254,6 +254,8 @@ CREATE TABLE `monitor_attribute` (
 -- 	数据的最小值
 -- vmax
 -- 	数据的最大值
+-- unit
+-- 	数据项的单位
 -- title
 -- 	数据项标题
 
@@ -268,6 +270,7 @@ CREATE TABLE `monitor_metric` (
 	`dst_type` tinyint(1) UNSIGNED NOT NULL DEFAULT '1',
 	`vmin` varchar(255) NOT NULL DEFAULT 'U',
 	`vmax` varchar(255) NOT NULL DEFAULT 'U',
+	`unit` varchar(255) NOT NULL ,
 	`title` varchar(255) NOT NULL ,
 	PRIMARY KEY (`metric_id`,`monitor_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

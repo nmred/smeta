@@ -106,10 +106,9 @@ class sw_monitor extends sw_abstract
 				throw new sw_exception('not exists this attribute.');	
 			}
 
-			$value_id = \lib\sequence\sw_sequence::get_next_device($key_attributes['device_id'], SWAN_TBN_MONITOR_PARAM);
-			$param_attributes['value_id'] = $value_id;
+			$param_attributes['device_id']  = $key_attributes['device_id'];
 			$param_attributes['dm_id'] = $dm_id;
-			$require_fields = array('dm_id', 'value_id', 'attr_id', 'value');
+			$require_fields = array('dm_id', 'device_id', 'attr_id', 'value');
 			try {
 				$this->_check_require($param_attributes, $require_fields);
 				$this->__db->insert(SWAN_TBN_MONITOR_PARAM, $param_attributes);
@@ -224,6 +223,8 @@ class sw_monitor extends sw_abstract
 		// 监控器参数值设置
 		$condition->set_in('dm_id');
 		$condition->set_dm_id($dm_id);
+		$condition->set_in('device_id');
+		$condition->set_device_id($key_attributes['device_id']);
 		$condition->check_params();
 		$params = $condition->params();
 		foreach ($monitor_params as $param) {
