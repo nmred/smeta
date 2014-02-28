@@ -70,7 +70,7 @@ class sw_device_monitor extends sw_abstract
 			return $this->render_json(null, 10002, $e->getMessage());	
 		}
 
-		return $this->render_json($dm_id, 10000, 'add device monitor attributes success.');
+		return $this->render_json(array('dm_id' => $dm_id, 'device_id' => $did), 10000, 'add device monitor attributes success.');
 	}
 
 	// }}}
@@ -221,11 +221,12 @@ class sw_device_monitor extends sw_abstract
 		// 获取设备监控器 params 值
 		$did  = $this->__request->get_post('did', '');
 		$mid  = $this->__request->get_post('mid', '');
+		$dm_id  = $this->__request->get_post('dm_id', '');
 		$page = $this->__request->get_post('page', 1);
 		$page_count = $this->__request->get_post('page_count', 10);
 		$count = 0;
-		if (!$did || !$mid) {
-			return $this->render_json(null, 10001, '`did`/`mid` not allow is empty.');
+		if (!$did || !$mid || !$dm_id) {
+			return $this->render_json(null, 10001, '`did`/`mid`/`dm_id` not allow is empty.');
 		}
 
 		try {
@@ -234,6 +235,8 @@ class sw_device_monitor extends sw_abstract
 			$condition->set_device_id($did);
 			$condition->set_in('monitor_id');
 			$condition->set_monitor_id($mid);
+			$condition->set_dm_id($dm_id);
+			$condition->set_in('dm_id');
 			$condition->set_is_count(true);
 			$device = sw_member::operator_factory('device');
 			$count = $device->get_operator('monitor')->get_monitor_params($condition);
@@ -251,6 +254,8 @@ class sw_device_monitor extends sw_abstract
 			$condition->set_device_id($did);
 			$condition->set_in('monitor_id');
 			$condition->set_monitor_id($mid);
+			$condition->set_dm_id($dm_id);
+			$condition->set_in('dm_id');
 			$device = sw_member::operator_factory('device');
 			$data = $device->get_operator('monitor')->get_monitor_params($condition);
 		} catch (\swan\exception\sw_exception $e) {

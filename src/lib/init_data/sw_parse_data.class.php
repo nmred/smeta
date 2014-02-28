@@ -198,12 +198,14 @@ class sw_parse_data
                 }
 				$monitor_attr = $monitor->attributes();
 				$monitor_name = (string) $monitor_attr->name;
+				$dm_name = (string)$monitor_attr->dm_name; 
 				foreach ($monitor->children() as $mtag_name => $value) {
 					$param_attr = $value->attributes();
 					$param_name = (string) $param_attr->name;
-					$monitors[$monitor_name]['attrs'][$param_name] = (string)$value;	
+					$monitors[$dm_name]['attrs'][$param_name] = (string)$value;	
 				}
-				$monitors[$monitor_name]['name'] = $monitor_name;
+				$monitors[$dm_name]['name'] = $monitor_name;
+				$monitors[$dm_name]['dm_name'] = (string)$monitor_attr->dm_name;
             }
 			$devices[$name]['monitors'] = $monitors;
 		}

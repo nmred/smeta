@@ -39,6 +39,7 @@ class sw_get_device_monitor_params extends sw_get_abstract
 	 */
 	protected $__allow_params = array(
 		'device_id'  => true,
+		'dm_id'      => true,
 		'monitor_id' => true,
 	);
 

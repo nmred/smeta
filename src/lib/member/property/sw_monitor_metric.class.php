@@ -44,6 +44,7 @@ class sw_monitor_metric extends sw_abstract
 		'collect_every'  => true,
 		'time_threshold' => true,
 		'title'          => true,
+		'unit'           => true,
 		'tmax'           => true,
 		'dst_type'       => true,
 		'vmin'           => true,

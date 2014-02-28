@@ -175,7 +175,8 @@ class sw_init_data
 			}
 			$device_id = $data['data']['device_id'];
 
-			foreach ($monitors as $monitor_name => $value) {
+			foreach ($monitors as $dm_name => $value) {
+				$monitor_name = $value['name'];
 				$attr_data = array();
 				foreach ($value['attrs'] as $attr_name => $attr_value) {
 					if (!isset($this->__monitor_ids[$monitor_name]['attr_ids'][$attr_name])) {
@@ -189,6 +190,7 @@ class sw_init_data
 				$post_data = array(
 					'did' => $device_id,
 					'mid' => $this->__monitor_ids[$monitor_name]['id'],
+					'dm_name' => $value['dm_name'],
 					'attr_data' => json_encode($attr_data),
 				);
 				$data = \lib\inner_client\sw_inner_client::call('user', 'device_monitor.add', $post_data);

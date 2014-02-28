@@ -146,7 +146,7 @@ CREATE TABLE `device_monitor` (
 	`dm_name` varchar(255) NOT NULL ,
 	`device_id` int(11) UNSIGNED NOT NULL ,
 	`monitor_id` int(11) UNSIGNED NOT NULL ,
-	PRIMARY KEY (`dm_id`)
+	PRIMARY KEY (`dm_id`,`device_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --  }}} 

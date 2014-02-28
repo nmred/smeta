@@ -327,6 +327,7 @@
                         <type>primary</type>
                         <fields>
                             <field name="dm_id"></field>
+                            <field name="device_id"></field>
                         </fields>
                     </key>
                 </keys>

@@ -47,6 +47,7 @@ class sw_monitor_metric extends sw_abstract
 		$collect_every   = $this->__request->get_post('collect_every', '');
 		$time_threshold  = $this->__request->get_post('time_threshold', '200');
 		$title = $this->__request->get_post('title', '');
+		$unit  = $this->__request->get_post('unit', '');
 		$tmax  = $this->__request->get_post('tmax', '');
 		$vmax  = $this->__request->get_post('vmax', 'U');
 		$vmin  = $this->__request->get_post('vmin', 'U');
@@ -62,6 +63,7 @@ class sw_monitor_metric extends sw_abstract
 			'time_threshold' => $time_threshold,
 			'dst_type'       => $dst_type,
 			'title' => $title,
+			'unit' => $unit,
 			'tmax'  => $tmax,
 			'vmax'  => $vmax,
 			'vmin'  => $vmin,
@@ -175,6 +177,7 @@ class sw_monitor_metric extends sw_abstract
 		$mid  = $this->__request->get_post('mid', '');
 		$mmid  = $this->__request->get_post('mmid', '');
 		$name = $this->__request->get_post('name', '');
+		$unit  = $this->__request->get_post('unit', '');
 		$title = $this->__request->get_post('title', '');
 		$tmax  = $this->__request->get_post('tmax', '');
 		$vmax  = $this->__request->get_post('vmax', 'U');
@@ -194,6 +197,10 @@ class sw_monitor_metric extends sw_abstract
 
 		if ($title) {
 			$data['title'] = $title;	
+		}
+
+		if ($unit) {
+			$data['unit'] = $unit;	
 		}
 
 		if ($collect_every) {
