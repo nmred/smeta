@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>SWANSOFT 库文档 | Swan</title>
+  <title>环境部署 | Swan</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <link rel="stylesheet" href="/swansoft/css/style.css">
   <link href="//fonts.googleapis.com/css?family=Lato:300,700" rel="stylesheet" type="text/css">
@@ -43,7 +43,7 @@
   <header id="page-banner">
   <div class="outer">
     <div class="inner">
-      <h1 class="page-title">SWANSOFT 库文档</h1>
+      <h1 class="page-title">环境部署</h1>
     </div>
   </div>
 </header>
@@ -95,16 +95,40 @@
     <div class="page-content">
       <div class="toc-wrap">
         <strong class="toc-title">Contents</strong>
-        
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">环境部署需求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">2.</span> <span class="toc-text">开发部署</span></a></li></ol>
       </div>
       <div class="page-entry">
-        <p>SWANSOFT 库文档</p>
+        <h3 id="-">环境部署需求</h3>
+<ul>
+<li>系统： CentOs 5.4 </li>
+<li>软件: swansoft <a href="rpm_publish.html">rpm 软件包</a></li>
+</ul>
+<h3 id="-">开发部署</h3>
+<ul>
+<li>安装 dev_swan 工具包</li>
+<li>安装 swansoft</li>
+<li>更新 git 代码仓库并且同步到目标具体方法：</li>
+</ul>
+<figure class="highlight bash"><pre>git clone git@github.com:nmred/swansoft.git
+<span class="built_in">cd</span> swansoft
+git submodule init
+git submodule update
+<span class="comment">#去引用 sf1 子库的目录更新</span>
+<span class="built_in">cd</span> src/sf
+git fetch
+git pull origin master
+./install
+</pre></figure>
+
+<blockquote class="note warn"><strong class="note-title">警告</strong><p>如果更新的代码中有影响 PHPD 业务流程的代码，在更新后需要重新启动 PHPD</p>
+</blockquote>
+
 
       </div>
       <footer id="page-footer">
         <time id="page-footer-updated" datetime="2014-02-22T03:20:42.000Z">Last updated: 2月 21, 2014</time>
-        
-        <a href="/swansoft/docs/rpm_publish.html" id="page-footer-next" class="page-footer-link">Next</a>
+        <a href="/swansoft/docs/rpm_publish.html" id="page-footer-prev" class="page-footer-link">Prev</a>
+        <a href="/swansoft/docs/inner_api.html" id="page-footer-next" class="page-footer-link">Next</a>
       </footer>
     </div>
     <aside id="sidebar">
@@ -113,7 +137,7 @@
     
       <a href="/swansoft/docs/rpm_publish.html" class="sidebar-link">RPM 安装包发布</a>
     
-      <a href="/swansoft/docs/evn_deploy.html" class="sidebar-link">环境部署</a>
+      <a href="/swansoft/docs/evn_deploy.html" class="sidebar-link current">环境部署</a>
     
       <a href="/swansoft/docs/mysql_desc.html" class="sidebar-link">数据字典</a>
     

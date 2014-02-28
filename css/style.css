@@ -313,6 +313,7 @@ body {
   border-left: 4px solid #ddd;
   padding: 0 20px;
   position: relative;
+  overflow: auto;
   margin-left: 45px;
 }
 .page-entry blockquote:before {

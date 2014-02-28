@@ -22,7 +22,7 @@
         <ul id="main-nav-list">
           
             <li class="main-nav-item">
-              <a href="http://www.swanlinux.net" class="main-nav-link">主页</a>
+              <a href="/" class="main-nav-link">主页</a>
             </li>
           
             <li class="main-nav-item">
@@ -52,6 +52,16 @@
   <select id="page-mobile-menu">
     <option value="">Navigate...</option>
     
+      <optgroup label="安装部署相关">
+        
+          <option value="/swansoft/docs/rpm_publish.html">RPM 安装包发布</option>
+        
+          <option value="/swansoft/docs/evn_deploy.html">环境部署</option>
+        
+          <option value="/swansoft/docs/mysql_desc.html">数据字典</option>
+        
+      </optgroup>
+    
       <optgroup label="Inner Api">
         
           <option value="/swansoft/docs/inner_api.html">介绍</option>
@@ -63,6 +73,20 @@
           <option value="/swansoft/docs/monitor.html">监控器管理</option>
         
           <option value="/swansoft/docs/monitor_attr.html">监控器属性管理</option>
+        
+          <option value="/swansoft/docs/monitor_metric.html">监控器数据项管理</option>
+        
+          <option value="/swansoft/docs/api_errno.html">接口错误代码说明</option>
+        
+      </optgroup>
+    
+      <optgroup label="API 开发相关">
+        
+          <option value="/swansoft/docs/null">介绍</option>
+        
+          <option value="/swansoft/docs/null">路由规则及设置</option>
+        
+          <option value="/swansoft/docs/null">函数及常用 LIB 的调用</option>
         
       </optgroup>
     
@@ -108,7 +132,7 @@
 <td><code>form_type</code></td>
 <td>true</td>
 <td>int</td>
-<td>监控器属性表单类型</td>
+<td>监控器属性表单类型 1:input 2:select 3:check 4:textarea </td>
 </tr>
 <tr>
 <td><code>form_data</code></td>
@@ -233,9 +257,9 @@ var_dump(<span class="variable">$rev</span>);</span>
 </tr>
 <tr>
 <td><code>form_type</code></td>
-<td>false</td>
-<td>string</td>
-<td>监控器属性表单类型</td>
+<td>true</td>
+<td>int</td>
+<td>监控器属性表单类型 1:input 2:select 3:check 4:textarea </td>
 </tr>
 <tr>
 <td><code>form_data</code></td>
@@ -412,7 +436,7 @@ var_dump(<span class="variable">$rev</span>);</span>
 <p>无</p>
 <h4 id="-json_example-"><a href="#json_example">调用样例</a></h4>
 <figure class="highlight"><pre><span class="php"><span class="preprocessor">&lt;?php</span>
-<span class="variable">$url</span> = <span class="string">'127.0.0.1:9080/user/?/device.json'</span>;
+<span class="variable">$url</span> = <span class="string">'127.0.0.1:9080/dev/?/monitor_attr.json'</span>;
 <span class="variable">$rev</span> = call(<span class="variable">$url</span>, <span class="string">'POST'</span>, <span class="keyword">array</span>(<span class="string">'page'</span> =&gt; <span class="string">'1'</span>));
 <span class="variable">$rev</span> = json_decode(<span class="variable">$rev</span>, <span class="keyword">true</span>);
 var_dump(<span class="variable">$rev</span>);</span>
@@ -522,12 +546,21 @@ var_dump(<span class="variable">$rev</span>);</span>
 
       </div>
       <footer id="page-footer">
-        <time id="page-footer-updated" datetime="2014-02-13T14:47:04.000Z">Last updated: 2月 13, 2014</time>
+        <time id="page-footer-updated" datetime="2014-02-28T13:46:19.000Z">Last updated: 2月 28, 2014</time>
         <a href="/swansoft/docs/monitor.html" id="page-footer-prev" class="page-footer-link">Prev</a>
-        
+        <a href="/swansoft/docs/monitor_metric.html" id="page-footer-next" class="page-footer-link">Next</a>
       </footer>
     </div>
     <aside id="sidebar">
+  
+    <strong class="sidebar-title">安装部署相关</strong>
+    
+      <a href="/swansoft/docs/rpm_publish.html" class="sidebar-link">RPM 安装包发布</a>
+    
+      <a href="/swansoft/docs/evn_deploy.html" class="sidebar-link">环境部署</a>
+    
+      <a href="/swansoft/docs/mysql_desc.html" class="sidebar-link">数据字典</a>
+    
   
     <strong class="sidebar-title">Inner Api</strong>
     
@@ -540,6 +573,19 @@ var_dump(<span class="variable">$rev</span>);</span>
       <a href="/swansoft/docs/monitor.html" class="sidebar-link">监控器管理</a>
     
       <a href="/swansoft/docs/monitor_attr.html" class="sidebar-link current">监控器属性管理</a>
+    
+      <a href="/swansoft/docs/monitor_metric.html" class="sidebar-link">监控器数据项管理</a>
+    
+      <a href="/swansoft/docs/api_errno.html" class="sidebar-link">接口错误代码说明</a>
+    
+  
+    <strong class="sidebar-title">API 开发相关</strong>
+    
+      <a href="/swansoft/docs/null" class="sidebar-link">介绍</a>
+    
+      <a href="/swansoft/docs/null" class="sidebar-link">路由规则及设置</a>
+    
+      <a href="/swansoft/docs/null" class="sidebar-link">函数及常用 LIB 的调用</a>
     
   
 </aside>

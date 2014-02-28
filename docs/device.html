@@ -22,7 +22,7 @@
         <ul id="main-nav-list">
           
             <li class="main-nav-item">
-              <a href="http://www.swanlinux.net" class="main-nav-link">主页</a>
+              <a href="/" class="main-nav-link">主页</a>
             </li>
           
             <li class="main-nav-item">
@@ -52,6 +52,16 @@
   <select id="page-mobile-menu">
     <option value="">Navigate...</option>
     
+      <optgroup label="安装部署相关">
+        
+          <option value="/swansoft/docs/rpm_publish.html">RPM 安装包发布</option>
+        
+          <option value="/swansoft/docs/evn_deploy.html">环境部署</option>
+        
+          <option value="/swansoft/docs/mysql_desc.html">数据字典</option>
+        
+      </optgroup>
+    
       <optgroup label="Inner Api">
         
           <option value="/swansoft/docs/inner_api.html">介绍</option>
@@ -63,6 +73,20 @@
           <option value="/swansoft/docs/monitor.html">监控器管理</option>
         
           <option value="/swansoft/docs/monitor_attr.html">监控器属性管理</option>
+        
+          <option value="/swansoft/docs/monitor_metric.html">监控器数据项管理</option>
+        
+          <option value="/swansoft/docs/api_errno.html">接口错误代码说明</option>
+        
+      </optgroup>
+    
+      <optgroup label="API 开发相关">
+        
+          <option value="/swansoft/docs/null">介绍</option>
+        
+          <option value="/swansoft/docs/null">路由规则及设置</option>
+        
+          <option value="/swansoft/docs/null">函数及常用 LIB 的调用</option>
         
       </optgroup>
     
@@ -97,6 +121,12 @@
 <td>true</td>
 <td>string</td>
 <td>设备名称，设备名称必须是首个字符是字母，由数字、字母、下划线组成,并且至少6位</td>
+</tr>
+<tr>
+<td><code>host_name</code></td>
+<td>true</td>
+<td>string</td>
+<td>设备主机名</td>
 </tr>
 <tr>
 <td><code>display_name</code></td>
@@ -183,6 +213,12 @@ var_dump(<span class="variable">$rev</span>);</span>
 <td>true</td>
 <td>int</td>
 <td>设备 ID</td>
+</tr>
+<tr>
+<td><code>host_name</code></td>
+<td>false</td>
+<td>string</td>
+<td>设备主机名</td>
 </tr>
 <tr>
 <td><code>display_name</code></td>
@@ -363,21 +399,25 @@ var_dump(<span class="variable">$rev</span>);</span>
       {
         "<span class="attribute">device_id</span>": <span class="value"><span class="string">"1"</span></span>,
         "<span class="attribute">device_name</span>": <span class="value"><span class="string">"device_001"</span></span>,
+        "<span class="attribute">host_name</span>": <span class="value"><span class="string">"192.168.1.132"</span></span>,
         "<span class="attribute">device_display_name</span>": <span class="value"><span class="string">""</span>
       </span>},
       {
         "<span class="attribute">device_id</span>": <span class="value"><span class="string">"2"</span></span>,
         "<span class="attribute">device_name</span>": <span class="value"><span class="string">"device_002"</span></span>,
+        "<span class="attribute">host_name</span>": <span class="value"><span class="string">"192.168.1.132"</span></span>,
         "<span class="attribute">device_display_name</span>": <span class="value"><span class="string">""</span>
       </span>},
       {
         "<span class="attribute">device_id</span>": <span class="value"><span class="string">"3"</span></span>,
         "<span class="attribute">device_name</span>": <span class="value"><span class="string">"device_003"</span></span>,
+        "<span class="attribute">host_name</span>": <span class="value"><span class="string">"192.168.1.132"</span></span>,
         "<span class="attribute">device_display_name</span>": <span class="value"><span class="string">"device_desc_test"</span>
       </span>},
       {
         "<span class="attribute">device_id</span>": <span class="value"><span class="string">"4"</span></span>,
         "<span class="attribute">device_name</span>": <span class="value"><span class="string">"device_004"</span></span>,
+        "<span class="attribute">host_name</span>": <span class="value"><span class="string">"192.168.1.132"</span></span>,
         "<span class="attribute">device_display_name</span>": <span class="value"><span class="string">""</span>
       </span>}
     ]</span>,
@@ -422,6 +462,11 @@ var_dump(<span class="variable">$rev</span>);</span>
 <td>设备名称</td>
 </tr>
 <tr>
+<td><code>host_name</code></td>
+<td>string</td>
+<td>设备主机名</td>
+</tr>
+<tr>
 <td><code>device_display_name</code></td>
 <td>string</td>
 <td>设备描述信息</td>
@@ -431,12 +476,21 @@ var_dump(<span class="variable">$rev</span>);</span>
 
       </div>
       <footer id="page-footer">
-        <time id="page-footer-updated" datetime="2014-02-13T13:54:02.000Z">Last updated: 2月 13, 2014</time>
+        <time id="page-footer-updated" datetime="2014-02-22T03:18:41.000Z">Last updated: 2月 21, 2014</time>
         <a href="/swansoft/docs/inner_api.html" id="page-footer-prev" class="page-footer-link">Prev</a>
         <a href="/swansoft/docs/device_monitor.html" id="page-footer-next" class="page-footer-link">Next</a>
       </footer>
     </div>
     <aside id="sidebar">
+  
+    <strong class="sidebar-title">安装部署相关</strong>
+    
+      <a href="/swansoft/docs/rpm_publish.html" class="sidebar-link">RPM 安装包发布</a>
+    
+      <a href="/swansoft/docs/evn_deploy.html" class="sidebar-link">环境部署</a>
+    
+      <a href="/swansoft/docs/mysql_desc.html" class="sidebar-link">数据字典</a>
+    
   
     <strong class="sidebar-title">Inner Api</strong>
     
@@ -449,6 +503,19 @@ var_dump(<span class="variable">$rev</span>);</span>
       <a href="/swansoft/docs/monitor.html" class="sidebar-link">监控器管理</a>
     
       <a href="/swansoft/docs/monitor_attr.html" class="sidebar-link">监控器属性管理</a>
+    
+      <a href="/swansoft/docs/monitor_metric.html" class="sidebar-link">监控器数据项管理</a>
+    
+      <a href="/swansoft/docs/api_errno.html" class="sidebar-link">接口错误代码说明</a>
+    
+  
+    <strong class="sidebar-title">API 开发相关</strong>
+    
+      <a href="/swansoft/docs/null" class="sidebar-link">介绍</a>
+    
+      <a href="/swansoft/docs/null" class="sidebar-link">路由规则及设置</a>
+    
+      <a href="/swansoft/docs/null" class="sidebar-link">函数及常用 LIB 的调用</a>
     
   
 </aside>

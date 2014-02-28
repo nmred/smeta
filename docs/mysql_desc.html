@@ -1,0 +1,2585 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Smeta 产品数据字典 | Swan</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="/swansoft/css/style.css">
+  <link href="//fonts.googleapis.com/css?family=Lato:300,700" rel="stylesheet" type="text/css">
+  <link href='http://fonts.googleapis.com/css?family=Source+Code+Pro:400,700' rel='stylesheet' type='text/css'>
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+</head>
+
+
+<body class="page">
+  <header id="header">
+  <div class="outer">
+    <div class="inner">
+      <h1 id="logo-wrap">
+        <a href="/swansoft/" id="logo">Swan</a>
+      </h1>
+      <nav id="main-nav">
+        <ul id="main-nav-list">
+          
+            <li class="main-nav-item">
+              <a href="/" class="main-nav-link">主页</a>
+            </li>
+          
+            <li class="main-nav-item">
+              <a href="/swansoft/docs/" class="main-nav-link current">文档</a>
+            </li>
+          
+            <li class="main-nav-item">
+              <a href="https://github.com/nmred/sf1" class="main-nav-link">仓库</a>
+            </li>
+          
+        </ul>
+      </nav>
+    </div>
+  </div>
+</header>
+
+  <article class="page">
+  <header id="page-banner">
+  <div class="outer">
+    <div class="inner">
+      <h1 class="page-title">Smeta 产品数据字典</h1>
+    </div>
+  </div>
+</header>
+  <div class="outer">
+    <div class="inner">
+  <select id="page-mobile-menu">
+    <option value="">Navigate...</option>
+    
+      <optgroup label="安装部署相关">
+        
+          <option value="/swansoft/docs/rpm_publish.html">RPM 安装包发布</option>
+        
+          <option value="/swansoft/docs/evn_deploy.html">环境部署</option>
+        
+          <option value="/swansoft/docs/mysql_desc.html">数据字典</option>
+        
+      </optgroup>
+    
+      <optgroup label="Inner Api">
+        
+          <option value="/swansoft/docs/inner_api.html">介绍</option>
+        
+          <option value="/swansoft/docs/device.html">设备管理</option>
+        
+          <option value="/swansoft/docs/device_monitor.html">设备监控器管理</option>
+        
+          <option value="/swansoft/docs/monitor.html">监控器管理</option>
+        
+          <option value="/swansoft/docs/monitor_attr.html">监控器属性管理</option>
+        
+          <option value="/swansoft/docs/monitor_metric.html">监控器数据项管理</option>
+        
+          <option value="/swansoft/docs/api_errno.html">接口错误代码说明</option>
+        
+      </optgroup>
+    
+      <optgroup label="API 开发相关">
+        
+          <option value="/swansoft/docs/null">介绍</option>
+        
+          <option value="/swansoft/docs/null">路由规则及设置</option>
+        
+          <option value="/swansoft/docs/null">函数及常用 LIB 的调用</option>
+        
+      </optgroup>
+    
+  </select>
+</div>
+    <div class="page-content">
+      <div class="toc-wrap">
+        <strong class="toc-title">Contents</strong>
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#swan_soft-"><span class="toc-number">1.</span> <span class="toc-text">swan_soft 数据库</span></a></li><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#sequence_global"><span class="toc-number">1.1.</span> <span class="toc-text">sequence_global</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#sequence_device"><span class="toc-number">1.2.</span> <span class="toc-text">sequence_device</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#sequence_monitor"><span class="toc-number">1.3.</span> <span class="toc-text">sequence_monitor</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#sequence_graph"><span class="toc-number">1.4.</span> <span class="toc-text">sequence_graph</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#device_key"><span class="toc-number">1.5.</span> <span class="toc-text">device_key</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#device_basic"><span class="toc-number">1.6.</span> <span class="toc-text">device_basic</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#device_monitor"><span class="toc-number">1.7.</span> <span class="toc-text">device_monitor</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#device_monitor_params"><span class="toc-number">1.8.</span> <span class="toc-text">device_monitor_params</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#monitor_basic"><span class="toc-number">1.9.</span> <span class="toc-text">monitor_basic</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#monitor_attribute"><span class="toc-number">1.10.</span> <span class="toc-text">monitor_attribute</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#monitor_metric"><span class="toc-number">1.11.</span> <span class="toc-text">monitor_metric</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#monitor_archive"><span class="toc-number">1.12.</span> <span class="toc-text">monitor_archive</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#graph_basic"><span class="toc-number">1.13.</span> <span class="toc-text">graph_basic</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#graph_def"><span class="toc-number">1.14.</span> <span class="toc-text">graph_def</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#graph_cdef"><span class="toc-number">1.15.</span> <span class="toc-text">graph_cdef</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#graph_graph"><span class="toc-number">1.16.</span> <span class="toc-text">graph_graph</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#graph_comment"><span class="toc-number">1.17.</span> <span class="toc-text">graph_comment</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#graph_gprint"><span class="toc-number">1.18.</span> <span class="toc-text">graph_gprint</span></a></li></ol>
+      </div>
+      <div class="page-entry">
+        <h3 id="swan_soft-">swan_soft 数据库</h3>
+<h4 id="sequence_global">sequence_global</h4>
+<table>
+<thead>
+<tr>
+<th>-</th>
+<th>属性名</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> 表名</td>
+<td>sequence_global</td>
+</tr>
+<tr>
+<td> 描述</td>
+<td>维护全局的数据表的唯一序列号</td>
+</tr>
+<tr>
+<td> Engine</td>
+<td>InnoDB</td>
+</tr>
+<tr>
+<td> 编码</td>
+<td>utf8</td>
+</tr>
+<tr>
+<td> 主键</td>
+<td><code>table_name</code></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>类型</th>
+<th>nullable</th>
+<th>宽度</th>
+<th>默认值</th>
+<th>auto</th>
+<th>unsigned </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>table_name</td>
+<td>varchar</td>
+<td>false</td>
+<td>64</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>维护序列号的表名称</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>sequence_id</td>
+<td>int</td>
+<td>false</td>
+<td>11</td>
+<td></td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td></td>
+<td>自增长 ID</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="sequence_device">sequence_device</h4>
+<table>
+<thead>
+<tr>
+<th>-</th>
+<th>属性名</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> 表名</td>
+<td>sequence_device</td>
+</tr>
+<tr>
+<td> 描述</td>
+<td>设备成员数据表的唯一序列号</td>
+</tr>
+<tr>
+<td> Engine</td>
+<td>InnoDB</td>
+</tr>
+<tr>
+<td> 编码</td>
+<td>utf8</td>
+</tr>
+<tr>
+<td> 主键</td>
+<td><code>device_id</code>,<code>table_name</code></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>类型</th>
+<th>nullable</th>
+<th>宽度</th>
+<th>默认值</th>
+<th>auto</th>
+<th>unsigned </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>device_id</td>
+<td>int</td>
+<td>false</td>
+<td>11</td>
+<td></td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td></td>
+<td>设备 ID</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>table_name</td>
+<td>varchar</td>
+<td>false</td>
+<td>64</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>维护序列号的表名称</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>sequence_id</td>
+<td>int</td>
+<td>false</td>
+<td>11</td>
+<td></td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td></td>
+<td>自增长 ID</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="sequence_monitor">sequence_monitor</h4>
+<table>
+<thead>
+<tr>
+<th>-</th>
+<th>属性名</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> 表名</td>
+<td>sequence_monitor</td>
+</tr>
+<tr>
+<td> 描述</td>
+<td>监控器数据表的唯一序列号</td>
+</tr>
+<tr>
+<td> Engine</td>
+<td>InnoDB</td>
+</tr>
+<tr>
+<td> 编码</td>
+<td>utf8</td>
+</tr>
+<tr>
+<td> 主键</td>
+<td><code>monitor_id</code>,<code>table_name</code></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>类型</th>
+<th>nullable</th>
+<th>宽度</th>
+<th>默认值</th>
+<th>auto</th>
+<th>unsigned </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>monitor_id</td>
+<td>int</td>
+<td>false</td>
+<td>11</td>
+<td></td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td></td>
+<td>设备 ID</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>table_name</td>
+<td>varchar</td>
+<td>false</td>
+<td>64</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>维护序列号的表名称</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>sequence_id</td>
+<td>int</td>
+<td>false</td>
+<td>11</td>
+<td></td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td></td>
+<td>自增长 ID</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="sequence_graph">sequence_graph</h4>
+<table>
+<thead>
+<tr>
+<th>-</th>
+<th>属性名</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> 表名</td>
+<td>sequence_graph</td>
+</tr>
+<tr>
+<td> 描述</td>
+<td>图标定义数据表的唯一序列号</td>
+</tr>
+<tr>
+<td> Engine</td>
+<td>InnoDB</td>
+</tr>
+<tr>
+<td> 编码</td>
+<td>utf8</td>
+</tr>
+<tr>
+<td> 主键</td>
+<td><code>graph_id</code>,<code>table_name</code></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>类型</th>
+<th>nullable</th>
+<th>宽度</th>
+<th>默认值</th>
+<th>auto</th>
+<th>unsigned </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>graph_id</td>
+<td>int</td>
+<td>false</td>
+<td>11</td>
+<td></td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td></td>
+<td>图表 ID</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>table_name</td>
+<td>varchar</td>
+<td>false</td>
+<td>64</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>维护序列号的表名称</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>sequence_id</td>
+<td>int</td>
+<td>false</td>
+<td>11</td>
+<td></td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td></td>
+<td>自增长 ID</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="device_key">device_key</h4>
+<table>
+<thead>
+<tr>
+<th>-</th>
+<th>属性名</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> 表名</td>
+<td>device_key</td>
+</tr>
+<tr>
+<td> 描述</td>
+<td>监控的设备关键表</td>
+</tr>
+<tr>
+<td> Engine</td>
+<td>InnoDB</td>
+</tr>
+<tr>
+<td> 编码</td>
+<td>utf8</td>
+</tr>
+<tr>
+<td> 主键</td>
+<td><code>device_id</code></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>类型</th>
+<th>nullable</th>
+<th>宽度</th>
+<th>默认值</th>
+<th>auto</th>
+<th>unsigned </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>device_id</td>
+<td>int</td>
+<td>false</td>
+<td>11</td>
+<td></td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td></td>
+<td>设备 id</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>device_name</td>
+<td>varchar</td>
+<td>false</td>
+<td>255</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>设备名称(唯一)</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="device_basic">device_basic</h4>
+<table>
+<thead>
+<tr>
+<th>-</th>
+<th>属性名</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> 表名</td>
+<td>device_basic</td>
+</tr>
+<tr>
+<td> 描述</td>
+<td>监控的设备基本信息表</td>
+</tr>
+<tr>
+<td> Engine</td>
+<td>InnoDB</td>
+</tr>
+<tr>
+<td> 编码</td>
+<td>utf8</td>
+</tr>
+<tr>
+<td> 主键</td>
+<td><code>device_id</code></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>类型</th>
+<th>nullable</th>
+<th>宽度</th>
+<th>默认值</th>
+<th>auto</th>
+<th>unsigned </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>device_id</td>
+<td>int</td>
+<td>false</td>
+<td>11</td>
+<td></td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td></td>
+<td>设备 id</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>device_display_name</td>
+<td>varchar</td>
+<td>false</td>
+<td>255</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>设备显示名称</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>host_name</td>
+<td>varchar</td>
+<td>false</td>
+<td>255</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>设备主机地址</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="device_monitor">device_monitor</h4>
+<table>
+<thead>
+<tr>
+<th>-</th>
+<th>属性名</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> 表名</td>
+<td>device_monitor</td>
+</tr>
+<tr>
+<td> 描述</td>
+<td>监控的设备的监控器</td>
+</tr>
+<tr>
+<td> Engine</td>
+<td>InnoDB</td>
+</tr>
+<tr>
+<td> 编码</td>
+<td>utf8</td>
+</tr>
+<tr>
+<td> 主键</td>
+<td><code>dm_id</code></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>类型</th>
+<th>nullable</th>
+<th>宽度</th>
+<th>默认值</th>
+<th>auto</th>
+<th>unsigned </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>dm_id</td>
+<td>int</td>
+<td>false</td>
+<td>11</td>
+<td></td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td></td>
+<td>设备监控器 id</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>dm_name</td>
+<td>varchar</td>
+<td>false</td>
+<td>255</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>设备监控器名称</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>device_id</td>
+<td>int</td>
+<td>false</td>
+<td>11</td>
+<td></td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td></td>
+<td>设备 id</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>monitor_id</td>
+<td>int</td>
+<td>false</td>
+<td>11</td>
+<td></td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td></td>
+<td>监控器 id</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="device_monitor_params">device_monitor_params</h4>
+<table>
+<thead>
+<tr>
+<th>-</th>
+<th>属性名</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> 表名</td>
+<td>device_monitor_params</td>
+</tr>
+<tr>
+<td> 描述</td>
+<td>监控器参数</td>
+</tr>
+<tr>
+<td> Engine</td>
+<td>InnoDB</td>
+</tr>
+<tr>
+<td> 编码</td>
+<td>utf8</td>
+</tr>
+<tr>
+<td> 主键</td>
+<td><code>attr_id</code>,<code>device_id</code>,<code>dm_id</code></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>类型</th>
+<th>nullable</th>
+<th>宽度</th>
+<th>默认值</th>
+<th>auto</th>
+<th>unsigned </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>attr_id</td>
+<td>int</td>
+<td>false</td>
+<td>11</td>
+<td></td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td></td>
+<td>监控器属性 id</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>device_id</td>
+<td>int</td>
+<td>false</td>
+<td>11</td>
+<td></td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td></td>
+<td>设备 id</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>dm_id</td>
+<td>int</td>
+<td>false</td>
+<td>11</td>
+<td></td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td></td>
+<td>设备监控器 id</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>value</td>
+<td>varchar</td>
+<td>false</td>
+<td>255</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>属性值</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="monitor_basic">monitor_basic</h4>
+<table>
+<thead>
+<tr>
+<th>-</th>
+<th>属性名</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> 表名</td>
+<td>monitor_basic</td>
+</tr>
+<tr>
+<td> 描述</td>
+<td>监控器管理</td>
+</tr>
+<tr>
+<td> Engine</td>
+<td>InnoDB</td>
+</tr>
+<tr>
+<td> 编码</td>
+<td>utf8</td>
+</tr>
+<tr>
+<td> 主键</td>
+<td><code>monitor_id</code></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>类型</th>
+<th>nullable</th>
+<th>宽度</th>
+<th>默认值</th>
+<th>auto</th>
+<th>unsigned </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>monitor_id</td>
+<td>int</td>
+<td>false</td>
+<td>11</td>
+<td></td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td></td>
+<td>监控器 id</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>monitor_name</td>
+<td>varchar</td>
+<td>false</td>
+<td>255</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>监控器名称</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>monitor_display_name</td>
+<td>varchar</td>
+<td>false</td>
+<td>255</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>监控器显示名称</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>steps</td>
+<td>int</td>
+<td>false</td>
+<td>11</td>
+<td></td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td></td>
+<td>监控器存储 rrd 的间隔时间 (秒)</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="monitor_attribute">monitor_attribute</h4>
+<table>
+<thead>
+<tr>
+<th>-</th>
+<th>属性名</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> 表名</td>
+<td>monitor_attribute</td>
+</tr>
+<tr>
+<td> 描述</td>
+<td>监控器属性管理</td>
+</tr>
+<tr>
+<td> Engine</td>
+<td>InnoDB</td>
+</tr>
+<tr>
+<td> 编码</td>
+<td>utf8</td>
+</tr>
+<tr>
+<td> 主键</td>
+<td><code>attr_id</code>,<code>monitor_id</code></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>类型</th>
+<th>nullable</th>
+<th>宽度</th>
+<th>默认值</th>
+<th>auto</th>
+<th>unsigned </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>attr_id</td>
+<td>int</td>
+<td>false</td>
+<td>11</td>
+<td></td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td></td>
+<td>监控器属性 id</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>monitor_id</td>
+<td>int</td>
+<td>false</td>
+<td>11</td>
+<td></td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td></td>
+<td>监控器 id</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>attr_name</td>
+<td>varchar</td>
+<td>false</td>
+<td>255</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>属性名称</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>attr_display_name</td>
+<td>varchar</td>
+<td>false</td>
+<td>255</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>属性显示名称</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>form_type</td>
+<td>varchar</td>
+<td>false</td>
+<td>255</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>属性表单类型</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>form_data</td>
+<td>varchar</td>
+<td>false</td>
+<td>255</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>属性表单数据</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>attr_default</td>
+<td>varchar</td>
+<td>false</td>
+<td>255</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>属性默认值</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="monitor_metric">monitor_metric</h4>
+<table>
+<thead>
+<tr>
+<th>-</th>
+<th>属性名</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> 表名</td>
+<td>monitor_metric</td>
+</tr>
+<tr>
+<td> 描述</td>
+<td>监控器收集数据项</td>
+</tr>
+<tr>
+<td> Engine</td>
+<td>InnoDB</td>
+</tr>
+<tr>
+<td> 编码</td>
+<td>utf8</td>
+</tr>
+<tr>
+<td> 主键</td>
+<td><code>metric_id</code>,<code>monitor_id</code></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>类型</th>
+<th>nullable</th>
+<th>宽度</th>
+<th>默认值</th>
+<th>auto</th>
+<th>unsigned </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>metric_id</td>
+<td>int</td>
+<td>false</td>
+<td>11</td>
+<td></td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td></td>
+<td>数据项 id</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>metric_name</td>
+<td>varchar</td>
+<td>false</td>
+<td>255</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>数据项名称</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>monitor_id</td>
+<td>int</td>
+<td>false</td>
+<td>11</td>
+<td></td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td></td>
+<td>监控器 id</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>collect_every</td>
+<td>int</td>
+<td>false</td>
+<td>11</td>
+<td></td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td></td>
+<td>轮询周期</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>time_threshold</td>
+<td>int</td>
+<td>false</td>
+<td>11</td>
+<td></td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td></td>
+<td>收集数据超时</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>tmax</td>
+<td>int</td>
+<td>false</td>
+<td>11</td>
+<td></td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td></td>
+<td>没有收到数据的最长时间</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>dst_type</td>
+<td>tinyint</td>
+<td>false</td>
+<td>1</td>
+<td>1</td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td></td>
+<td>数据入库处理规则</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>vmin</td>
+<td>varchar</td>
+<td>false</td>
+<td>255</td>
+<td>U</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>数据的最小值</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>vmax</td>
+<td>varchar</td>
+<td>false</td>
+<td>255</td>
+<td>U</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>数据的最大值</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>unit</td>
+<td>varchar</td>
+<td>false</td>
+<td>255</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>数据项的单位</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>title</td>
+<td>varchar</td>
+<td>false</td>
+<td>255</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>数据项标题</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="monitor_archive">monitor_archive</h4>
+<table>
+<thead>
+<tr>
+<th>-</th>
+<th>属性名</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> 表名</td>
+<td>monitor_archive</td>
+</tr>
+<tr>
+<td> 描述</td>
+<td>监控器数据归档规则</td>
+</tr>
+<tr>
+<td> Engine</td>
+<td>InnoDB</td>
+</tr>
+<tr>
+<td> 编码</td>
+<td>utf8</td>
+</tr>
+<tr>
+<td> 主键</td>
+<td><code>archive_id</code>,<code>monitor_id</code></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>类型</th>
+<th>nullable</th>
+<th>宽度</th>
+<th>默认值</th>
+<th>auto</th>
+<th>unsigned </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>archive_id</td>
+<td>int</td>
+<td>false</td>
+<td>11</td>
+<td></td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td></td>
+<td>归档 id</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>monitor_id</td>
+<td>int</td>
+<td>false</td>
+<td>11</td>
+<td></td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td></td>
+<td>监控器 id</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>title</td>
+<td>varchar</td>
+<td>false</td>
+<td>255</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>归档规则标题</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>cf_type</td>
+<td>int</td>
+<td>false</td>
+<td>11</td>
+<td></td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td></td>
+<td>归档运算类型</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>xff</td>
+<td>varchar</td>
+<td>false</td>
+<td>255</td>
+<td>0.5</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>无效数据判断界限</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>steps</td>
+<td>int</td>
+<td>false</td>
+<td>11</td>
+<td></td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td></td>
+<td>归档一个数据点合并原始数据点个数</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>rows</td>
+<td>int</td>
+<td>false</td>
+<td>11</td>
+<td></td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td></td>
+<td>一共归档条目数</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="graph_basic">graph_basic</h4>
+<table>
+<thead>
+<tr>
+<th>-</th>
+<th>属性名</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> 表名</td>
+<td>graph_basic</td>
+</tr>
+<tr>
+<td> 描述</td>
+<td>监控器绘图配置</td>
+</tr>
+<tr>
+<td> Engine</td>
+<td>InnoDB</td>
+</tr>
+<tr>
+<td> 编码</td>
+<td>utf8</td>
+</tr>
+<tr>
+<td> 主键</td>
+<td><code>graph_id</code></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>类型</th>
+<th>nullable</th>
+<th>宽度</th>
+<th>默认值</th>
+<th>auto</th>
+<th>unsigned </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>graph_id</td>
+<td>int</td>
+<td>false</td>
+<td>11</td>
+<td></td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td></td>
+<td>绘图配置 id</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>scope_type</td>
+<td>tinyint</td>
+<td>false</td>
+<td>1</td>
+<td>1</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>该绘图配置作用范围 1: 全局 2：设备 3: 允许跨设备全局显示 4: 允许跨设备在提及的设备中显示</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>scope_ids</td>
+<td>varchar</td>
+<td>false</td>
+<td>255</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>作用范围 IDS</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>title</td>
+<td>varchar</td>
+<td>false</td>
+<td>255</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>图片的顶部标题</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>vlabel</td>
+<td>varchar</td>
+<td>false</td>
+<td>255</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>图片的垂直的标题</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>desc</td>
+<td>varchar</td>
+<td>false</td>
+<td>255</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>图片的描述信息</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>steps</td>
+<td>int</td>
+<td>false</td>
+<td>11</td>
+<td></td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td></td>
+<td>绘图的间隔点</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>start</td>
+<td>int</td>
+<td>false</td>
+<td>11</td>
+<td></td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td></td>
+<td>绘图的起始点</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>end</td>
+<td>int</td>
+<td>false</td>
+<td>11</td>
+<td></td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td></td>
+<td>绘图的终点</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="graph_def">graph_def</h4>
+<table>
+<thead>
+<tr>
+<th>-</th>
+<th>属性名</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> 表名</td>
+<td>graph_def</td>
+</tr>
+<tr>
+<td> 描述</td>
+<td>监控器绘图数据项定义</td>
+</tr>
+<tr>
+<td> Engine</td>
+<td>InnoDB</td>
+</tr>
+<tr>
+<td> 编码</td>
+<td>utf8</td>
+</tr>
+<tr>
+<td> 主键</td>
+<td><code>graph_id</code>,<code>def_id</code></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>类型</th>
+<th>nullable</th>
+<th>宽度</th>
+<th>默认值</th>
+<th>auto</th>
+<th>unsigned </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>def_id</td>
+<td>int</td>
+<td>false</td>
+<td>11</td>
+<td></td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td></td>
+<td>绘图数据项定义 id</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>graph_id</td>
+<td>int</td>
+<td>false</td>
+<td>11</td>
+<td></td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td></td>
+<td>绘图配置 id</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>name</td>
+<td>varchar</td>
+<td>false</td>
+<td>255</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>数据项的 name</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>ds_name</td>
+<td>varchar</td>
+<td>false</td>
+<td>255</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>RRD 数据库的数据源名</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>cf_type</td>
+<td>tinyint</td>
+<td>false</td>
+<td>1</td>
+<td></td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td></td>
+<td>归并计算公式类型</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="graph_cdef">graph_cdef</h4>
+<table>
+<thead>
+<tr>
+<th>-</th>
+<th>属性名</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> 表名</td>
+<td>graph_cdef</td>
+</tr>
+<tr>
+<td> 描述</td>
+<td>监控器绘图计算数据项定义</td>
+</tr>
+<tr>
+<td> Engine</td>
+<td>InnoDB</td>
+</tr>
+<tr>
+<td> 编码</td>
+<td>utf8</td>
+</tr>
+<tr>
+<td> 主键</td>
+<td><code>graph_id</code>,<code>cdef_id</code></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>类型</th>
+<th>nullable</th>
+<th>宽度</th>
+<th>默认值</th>
+<th>auto</th>
+<th>unsigned </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>cdef_id</td>
+<td>int</td>
+<td>false</td>
+<td>11</td>
+<td></td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td></td>
+<td>绘图计算数据项定义 id</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>graph_id</td>
+<td>int</td>
+<td>false</td>
+<td>11</td>
+<td></td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td></td>
+<td>绘图配置 id</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>name</td>
+<td>varchar</td>
+<td>false</td>
+<td>255</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>数据项的 name</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>operator</td>
+<td>varchar</td>
+<td>false</td>
+<td>255</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>计算表达式</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="graph_graph">graph_graph</h4>
+<table>
+<thead>
+<tr>
+<th>-</th>
+<th>属性名</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> 表名</td>
+<td>graph_graph</td>
+</tr>
+<tr>
+<td> 描述</td>
+<td>监控器绘图定义</td>
+</tr>
+<tr>
+<td> Engine</td>
+<td>InnoDB</td>
+</tr>
+<tr>
+<td> 编码</td>
+<td>utf8</td>
+</tr>
+<tr>
+<td> 主键</td>
+<td><code>graph_id</code>,<code>dgraph_id</code></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>类型</th>
+<th>nullable</th>
+<th>宽度</th>
+<th>默认值</th>
+<th>auto</th>
+<th>unsigned </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>dgraph_id</td>
+<td>int</td>
+<td>false</td>
+<td>11</td>
+<td></td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td></td>
+<td>绘图定义 id</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>graph_id</td>
+<td>int</td>
+<td>false</td>
+<td>11</td>
+<td></td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td></td>
+<td>绘图配置 id</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>data_id</td>
+<td>int</td>
+<td>false</td>
+<td>11</td>
+<td></td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td></td>
+<td>数据项 id</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>color</td>
+<td>varchar</td>
+<td>false</td>
+<td>255</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>图标的颜色</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>图例说明</td>
+<td>varchar</td>
+<td>false</td>
+<td>255</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>图例说明描述</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="graph_comment">graph_comment</h4>
+<table>
+<thead>
+<tr>
+<th>-</th>
+<th>属性名</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> 表名</td>
+<td>graph_comment</td>
+</tr>
+<tr>
+<td> 描述</td>
+<td>监控器绘图注释性文字定义</td>
+</tr>
+<tr>
+<td> Engine</td>
+<td>InnoDB</td>
+</tr>
+<tr>
+<td> 编码</td>
+<td>utf8</td>
+</tr>
+<tr>
+<td> 主键</td>
+<td><code>graph_id</code>,<code>comment_id</code></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>类型</th>
+<th>nullable</th>
+<th>宽度</th>
+<th>默认值</th>
+<th>auto</th>
+<th>unsigned </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>comment_id</td>
+<td>int</td>
+<td>false</td>
+<td>11</td>
+<td></td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td></td>
+<td>绘图注释定义 id</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>graph_id</td>
+<td>int</td>
+<td>false</td>
+<td>11</td>
+<td></td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td></td>
+<td>绘图配置 id</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>comment</td>
+<td>varchar</td>
+<td>false</td>
+<td>255</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>图片的注释信息</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="graph_gprint">graph_gprint</h4>
+<table>
+<thead>
+<tr>
+<th>-</th>
+<th>属性名</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> 表名</td>
+<td>graph_gprint</td>
+</tr>
+<tr>
+<td> 描述</td>
+<td>监控器绘图格式化的文字信息</td>
+</tr>
+<tr>
+<td> Engine</td>
+<td>InnoDB</td>
+</tr>
+<tr>
+<td> 编码</td>
+<td>utf8</td>
+</tr>
+<tr>
+<td> 主键</td>
+<td><code>graph_id</code>,<code>gprint_id</code></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>类型</th>
+<th>nullable</th>
+<th>宽度</th>
+<th>默认值</th>
+<th>auto</th>
+<th>unsigned </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>gprint_id</td>
+<td>int</td>
+<td>false</td>
+<td>11</td>
+<td></td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td></td>
+<td>绘图格式化信息 id</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>graph_id</td>
+<td>int</td>
+<td>false</td>
+<td>11</td>
+<td></td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td></td>
+<td>绘图配置 id</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>data_id</td>
+<td>int</td>
+<td>false</td>
+<td>11</td>
+<td></td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td></td>
+<td>格式化的变量名 id</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>cf_type</td>
+<td>tinyint</td>
+<td>false</td>
+<td>11</td>
+<td></td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td></td>
+<td>运算类型</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>format</td>
+<td>varchar</td>
+<td>false</td>
+<td>255</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>格式化的字符串定义</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+      </div>
+      <footer id="page-footer">
+        <time id="page-footer-updated" datetime="2014-02-28T13:51:19.000Z">Last updated: 2月 28, 2014</time>
+        <a href="/swansoft/docs/evn_deploy.html" id="page-footer-prev" class="page-footer-link">Prev</a>
+        <a href="/swansoft/docs/inner_api.html" id="page-footer-next" class="page-footer-link">Next</a>
+      </footer>
+    </div>
+    <aside id="sidebar">
+  
+    <strong class="sidebar-title">安装部署相关</strong>
+    
+      <a href="/swansoft/docs/rpm_publish.html" class="sidebar-link">RPM 安装包发布</a>
+    
+      <a href="/swansoft/docs/evn_deploy.html" class="sidebar-link">环境部署</a>
+    
+      <a href="/swansoft/docs/mysql_desc.html" class="sidebar-link current">数据字典</a>
+    
+  
+    <strong class="sidebar-title">Inner Api</strong>
+    
+      <a href="/swansoft/docs/inner_api.html" class="sidebar-link">介绍</a>
+    
+      <a href="/swansoft/docs/device.html" class="sidebar-link">设备管理</a>
+    
+      <a href="/swansoft/docs/device_monitor.html" class="sidebar-link">设备监控器管理</a>
+    
+      <a href="/swansoft/docs/monitor.html" class="sidebar-link">监控器管理</a>
+    
+      <a href="/swansoft/docs/monitor_attr.html" class="sidebar-link">监控器属性管理</a>
+    
+      <a href="/swansoft/docs/monitor_metric.html" class="sidebar-link">监控器数据项管理</a>
+    
+      <a href="/swansoft/docs/api_errno.html" class="sidebar-link">接口错误代码说明</a>
+    
+  
+    <strong class="sidebar-title">API 开发相关</strong>
+    
+      <a href="/swansoft/docs/null" class="sidebar-link">介绍</a>
+    
+      <a href="/swansoft/docs/null" class="sidebar-link">路由规则及设置</a>
+    
+      <a href="/swansoft/docs/null" class="sidebar-link">函数及常用 LIB 的调用</a>
+    
+  
+</aside>
+  </div>
+</article>
+  <footer id="footer">
+  <div class="outer">
+    <div class="inner">
+      &copy; 2014 <a href="http://www.swanlinux.net">Swan team</a><br>
+    </div>
+  </div>
+</footer>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/swansoft/js/script.js"></script>
+
+</body>
+</html>
