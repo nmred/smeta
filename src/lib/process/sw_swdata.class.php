@@ -235,7 +235,7 @@ class sw_swdata extends sw_abstract
     {
         if (!isset($this->__http) && !$this->_create_server()) {
             $log = "create swdata server fail.";
-            $this->log($log, __FILE__, __LINE__, LOG_INFO);
+            $this->log($log, LOG_INFO);
             exit(1);
         }
 
@@ -246,7 +246,7 @@ class sw_swdata extends sw_abstract
                          ->set_max_body_size($this->__max_body);
             $this->_set_callback();
         } catch (exception $e) {
-            $this->log($e->getMessage(), __FILE__, __LINE__, LOG_INFO);
+            $this->log($e->getMessage(), LOG_INFO);
             exit(1);
         }
 
@@ -254,14 +254,14 @@ class sw_swdata extends sw_abstract
 			$is_exit = $this->__event_base->exit($this->__loop_timeout);
 			if (false === $is_exit) {
 				$log = "set loop exit timeout fail, timeout: {$this->__loop_timeout}.";
-				$this->log($log, __FILE__, __LINE__, LOG_INFO);
+				$this->log($log, LOG_INFO);
 				exit(1);
 			}
 
 			$is_loop = $this->__event_base->loop(\EventBase::NO_CACHE_TIME);
 			if (false === $is_loop) {
 				$log = "loop return fail, timeout: {$this->__loop_timeout}.";
-				$this->log($log, __FILE__, __LINE__, LOG_INFO);
+				$this->log($log, LOG_INFO);
 				exit(1);
 			}
 		}

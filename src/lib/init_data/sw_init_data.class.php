@@ -109,6 +109,8 @@ class sw_init_data
 		foreach ($this->__monitors as $name => $monitor) {
 			$attrs = $monitor['attrs'];
 			unset($monitor['attrs']);
+			$archives = $monitor['archives'];
+			unset($monitor['archives']);
 			$data = \lib\inner_client\sw_inner_client::call('dev', 'monitor.add', $monitor);
 			if ($data['code'] !== 10000) {
 				throw new sw_exception("add monitor: $name .," . $data['msg']);	
@@ -124,6 +126,13 @@ class sw_init_data
 				}
 
 				$attr_ids[$value['name']] = $data['data']['attr_id'];
+			}
+			foreach ($archives as $value) {
+				$value['mid'] = $monitor_id;
+				$data = \lib\inner_client\sw_inner_client::call('dev', 'monitor_archive.add', $value);
+				if ($data['code'] !== 10000) {
+					throw new sw_exception("add monitor: $name ". $data['msg']);	
+				}
 			}
 			$this->__monitor_ids[$name]['id'] = $monitor_id;
 			$this->__monitor_ids[$name]['attr_ids'] = $attr_ids;

@@ -240,24 +240,34 @@ class sw_parse_data
 
             $attrs = array();
             foreach ($monitor->children() as $tag_name => $tag_value) {
-                if ('param' !== $tag_name) {
-                    continue;
+                if ('param' == $tag_name) {
+					$param_attrs = (array)$tag_value->attributes();
+					$param_attrs = $param_attrs['@attributes'];
+					$param_name  = $param_attrs['name'];
+					if ('' === $param_name) {
+						throw new sw_exception("parse xml config monitor error. param name is empty.");
+					}
+
+					$item = array();
+					foreach ($param_attrs as $attr_name => $attr_value) {
+						$item[(string) $attr_name] = (string) $attr_value;
+					}
+
+					$item['attr_default'] = (string) $tag_value;
+					$monitors[$name]['attrs'][] = $item;
                 }
 
-                $param_attrs = (array)$tag_value->attributes();
-				$param_attrs = $param_attrs['@attributes'];
-				$param_name  = $param_attrs['name'];
-                if ('' === $param_name) {
-                    throw new sw_exception("parse xml config monitor error. param name is empty.");
+                if ('archive' == $tag_name) {
+					$archive_attrs = (array)$tag_value->attributes();
+					$archive_attrs = $archive_attrs['@attributes'];
+
+					$ar_item = array();
+					foreach ($archive_attrs as $attr_name => $attr_value) {
+						$ar_item[(string) $attr_name] = (string) $attr_value;
+					}
+
+					$monitors[$name]['archives'][] = $ar_item;
                 }
-
-				$item = array();
-				foreach ($param_attrs as $attr_name => $attr_value) {
-					$item[(string) $attr_name] = (string) $attr_value;
-				}
-
-				$item['attr_default'] = (string) $tag_value;
-				$monitors[$name]['attrs'][] = $item;
             }
 		}
 

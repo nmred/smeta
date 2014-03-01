@@ -14,6 +14,7 @@
  
 namespace lib\process;
 use \lib\process\exception\sw_exception;
+use \lib\rrd_store\sw_update;
 
 /**
 +------------------------------------------------------------------------------
@@ -318,9 +319,15 @@ class sw_smeta extends sw_abstract
         $client_port = $this->__buffer_event[$client_key][2];
         $client_name = "$client_ip:$client_port";
         $data = rtrim($data);
-
-//		echo $data;
-
+		$data = json_decode($data, true);
+		if (isset($data[1])) {
+			try {
+				sw_update::update($data[0], $data[1]);
+				$this->log('update data ' . json_encode($data[1]) . ' to ' . $data[0], LOG_DEBUG);
+			} catch (\swan\exception\sw_exception $e) {
+				$this->log($e->getMessage(), LOG_INFO);	
+			}
+		}
     }
 
     // }}}

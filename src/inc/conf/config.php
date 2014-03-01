@@ -15,8 +15,12 @@ return array(
 		'self' => 'localhost',
 		'port' => '10514',
 	),
-	'data_host' => array(
+	'data_host' => array( // swdata server
 		'host' => '127.0.0.1',
 		'port' => '9080',
+	),
+	'redis' => array(
+		'host' => '127.0.0.1',
+		'port' => '6378',
 	),
 );

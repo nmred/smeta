@@ -196,9 +196,9 @@ class sw_metric extends sw_abstract
 	 */
 	protected function _validate($monitor_id, $metric_name)
 	{
-		$parrent = '/^[a-zA-Z]+[0-9a-zA-Z_]{5,}$/is';
+		$parrent = '/^[a-zA-Z]+[0-9a-zA-Z_\-]{2,}$/is';
 		if (!preg_match($parrent, $metric_name)) {
-			throw new sw_exception("监控器数据项的格式必须是首个字符是字母，由数字、字母、下划线组成,并且至少6位");  
+			throw new sw_exception("监控器数据项的格式必须是首个字符是字母，由数字、字母、下划线组成,并且至少3位");  
 		}
 
 		$is_exists = $this->__db->fetch_one($this->__db->select()

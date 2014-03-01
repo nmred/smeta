@@ -78,36 +78,126 @@
     <!-- {{{ monitors -->
 
     <monitors>
+		<!-- cf_type
+		1:AVERAGE
+		2:MIN
+		3:MAX
+		4:LAST
+		-->
         <monitor name="apache" steps="300" display_name="APACHE 监控器">
             <param name="url" form_type="1">http://localhost:8090/server-status</param>
+            <archive cf_type="1" xff="0.5" steps="1" rows="600"/>   <!--2d-->
+            <archive cf_type="1" xff="0.5" steps="6" rows="700"/>   <!--2w-->
+            <archive cf_type="1" xff="0.5" steps="24" rows="775"/>  <!--2m-->
+            <archive cf_type="1" xff="0.5" steps="288" rows="797"/> <!--2y-->
+            <archive cf_type="2" xff="0.5" steps="1" rows="600"/>   <!--2d-->
+            <archive cf_type="2" xff="0.5" steps="6" rows="700"/>   <!--2w-->
+            <archive cf_type="2" xff="0.5" steps="24" rows="775"/>  <!--2m-->
+            <archive cf_type="2" xff="0.5" steps="288" rows="797"/> <!--2y-->
+            <archive cf_type="3" xff="0.5" steps="1" rows="600"/>   <!--2d-->
+            <archive cf_type="3" xff="0.5" steps="6" rows="700"/>   <!--2w-->
+            <archive cf_type="3" xff="0.5" steps="24" rows="775"/>  <!--2m-->
+            <archive cf_type="3" xff="0.5" steps="288" rows="797"/> <!--2y-->
         </monitor>
 
         <monitor name="mysql" steps="300" display_name="MYSQL 监控器">
             <param name="username" form_type="1">swan</param>
             <param name="password" form_type="1">swan</param>
             <param name="dsn"  form_type="1">unix_socket=/usr/local/swan/run/sw_mysql.sock;dbname=swan_soft</param>
+            <archive cf_type="1" xff="0.5" steps="1" rows="600"/>   <!--2d-->
+            <archive cf_type="1" xff="0.5" steps="6" rows="700"/>   <!--2w-->
+            <archive cf_type="1" xff="0.5" steps="24" rows="775"/>  <!--2m-->
+            <archive cf_type="1" xff="0.5" steps="288" rows="797"/> <!--2y-->
+            <archive cf_type="2" xff="0.5" steps="1" rows="600"/>   <!--2d-->
+            <archive cf_type="2" xff="0.5" steps="6" rows="700"/>   <!--2w-->
+            <archive cf_type="2" xff="0.5" steps="24" rows="775"/>  <!--2m-->
+            <archive cf_type="2" xff="0.5" steps="288" rows="797"/> <!--2y-->
+            <archive cf_type="3" xff="0.5" steps="1" rows="600"/>   <!--2d-->
+            <archive cf_type="3" xff="0.5" steps="6" rows="700"/>   <!--2w-->
+            <archive cf_type="3" xff="0.5" steps="24" rows="775"/>  <!--2m-->
+            <archive cf_type="3" xff="0.5" steps="288" rows="797"/> <!--2y-->
         </monitor>
 
         <monitor name="nginx" steps="300"  display_name="NGINX 监控器">
             <param name="url" form_type="1">http://localhost/server-status</param>
+            <archive cf_type="1" xff="0.5" steps="1" rows="600"/>   <!--2d-->
+            <archive cf_type="1" xff="0.5" steps="6" rows="700"/>   <!--2w-->
+            <archive cf_type="1" xff="0.5" steps="24" rows="775"/>  <!--2m-->
+            <archive cf_type="1" xff="0.5" steps="288" rows="797"/> <!--2y-->
+            <archive cf_type="2" xff="0.5" steps="1" rows="600"/>   <!--2d-->
+            <archive cf_type="2" xff="0.5" steps="6" rows="700"/>   <!--2w-->
+            <archive cf_type="2" xff="0.5" steps="24" rows="775"/>  <!--2m-->
+            <archive cf_type="2" xff="0.5" steps="288" rows="797"/> <!--2y-->
+            <archive cf_type="3" xff="0.5" steps="1" rows="600"/>   <!--2d-->
+            <archive cf_type="3" xff="0.5" steps="6" rows="700"/>   <!--2w-->
+            <archive cf_type="3" xff="0.5" steps="24" rows="775"/>  <!--2m-->
+            <archive cf_type="3" xff="0.5" steps="288" rows="797"/> <!--2y-->
         </monitor>
 
         <!-- auto : 1 程序自动获取磁盘分区 0 : 获取配置项 multi 和 device -->
         <monitor name="harddisk" steps="300"  display_name="磁盘监控器">
             <param name="device" form_type="1"></param>
+            <archive cf_type="1" xff="0.5" steps="1" rows="600"/>   <!--2d-->
+            <archive cf_type="1" xff="0.5" steps="6" rows="700"/>   <!--2w-->
+            <archive cf_type="1" xff="0.5" steps="24" rows="775"/>  <!--2m-->
+            <archive cf_type="1" xff="0.5" steps="288" rows="797"/> <!--2y-->
+            <archive cf_type="2" xff="0.5" steps="1" rows="600"/>   <!--2d-->
+            <archive cf_type="2" xff="0.5" steps="6" rows="700"/>   <!--2w-->
+            <archive cf_type="2" xff="0.5" steps="24" rows="775"/>  <!--2m-->
+            <archive cf_type="2" xff="0.5" steps="288" rows="797"/> <!--2y-->
+            <archive cf_type="3" xff="0.5" steps="1" rows="600"/>   <!--2d-->
+            <archive cf_type="3" xff="0.5" steps="6" rows="700"/>   <!--2w-->
+            <archive cf_type="3" xff="0.5" steps="24" rows="775"/>  <!--2m-->
+            <archive cf_type="3" xff="0.5" steps="288" rows="797"/> <!--2y-->
         </monitor>
 
         <monitor name="memcached" steps="300" display_name="MEMCACHED 监控器">
             <param name="server" form_type="1">127.0.0.1:11211</param>
+            <archive cf_type="1" xff="0.5" steps="1" rows="600"/>   <!--2d-->
+            <archive cf_type="1" xff="0.5" steps="6" rows="700"/>   <!--2w-->
+            <archive cf_type="1" xff="0.5" steps="24" rows="775"/>  <!--2m-->
+            <archive cf_type="1" xff="0.5" steps="288" rows="797"/> <!--2y-->
+            <archive cf_type="2" xff="0.5" steps="1" rows="600"/>   <!--2d-->
+            <archive cf_type="2" xff="0.5" steps="6" rows="700"/>   <!--2w-->
+            <archive cf_type="2" xff="0.5" steps="24" rows="775"/>  <!--2m-->
+            <archive cf_type="2" xff="0.5" steps="288" rows="797"/> <!--2y-->
+            <archive cf_type="3" xff="0.5" steps="1" rows="600"/>   <!--2d-->
+            <archive cf_type="3" xff="0.5" steps="6" rows="700"/>   <!--2w-->
+            <archive cf_type="3" xff="0.5" steps="24" rows="775"/>  <!--2m-->
+            <archive cf_type="3" xff="0.5" steps="288" rows="797"/> <!--2y-->
         </monitor>
 
         <!-- apc-json.php 在仓库 /src/lib/ganglia 目录中，将其拷贝到 apache 可以访问的目录中 -->
         <monitor name="apc" steps="300"  display_name="APC 监控器">
             <param name="url" form_type="1">http://localhost:8090/tpl/apc-json.php</param>
+            <archive cf_type="1" xff="0.5" steps="1" rows="600"/>   <!--2d-->
+            <archive cf_type="1" xff="0.5" steps="6" rows="700"/>   <!--2w-->
+            <archive cf_type="1" xff="0.5" steps="24" rows="775"/>  <!--2m-->
+            <archive cf_type="1" xff="0.5" steps="288" rows="797"/> <!--2y-->
+            <archive cf_type="2" xff="0.5" steps="1" rows="600"/>   <!--2d-->
+            <archive cf_type="2" xff="0.5" steps="6" rows="700"/>   <!--2w-->
+            <archive cf_type="2" xff="0.5" steps="24" rows="775"/>  <!--2m-->
+            <archive cf_type="2" xff="0.5" steps="288" rows="797"/> <!--2y-->
+            <archive cf_type="3" xff="0.5" steps="1" rows="600"/>   <!--2d-->
+            <archive cf_type="3" xff="0.5" steps="6" rows="700"/>   <!--2w-->
+            <archive cf_type="3" xff="0.5" steps="24" rows="775"/>  <!--2m-->
+            <archive cf_type="3" xff="0.5" steps="288" rows="797"/> <!--2y-->
         </monitor>
 
         <monitor name="network" steps="300" display_name="网络监控器">
             <param name="device" form_type="1">lo</param>
+            <archive cf_type="1" xff="0.5" steps="1" rows="600"/>   <!--2d-->
+            <archive cf_type="1" xff="0.5" steps="6" rows="700"/>   <!--2w-->
+            <archive cf_type="1" xff="0.5" steps="24" rows="775"/>  <!--2m-->
+            <archive cf_type="1" xff="0.5" steps="288" rows="797"/> <!--2y-->
+            <archive cf_type="2" xff="0.5" steps="1" rows="600"/>   <!--2d-->
+            <archive cf_type="2" xff="0.5" steps="6" rows="700"/>   <!--2w-->
+            <archive cf_type="2" xff="0.5" steps="24" rows="775"/>  <!--2m-->
+            <archive cf_type="2" xff="0.5" steps="288" rows="797"/> <!--2y-->
+            <archive cf_type="3" xff="0.5" steps="1" rows="600"/>   <!--2d-->
+            <archive cf_type="3" xff="0.5" steps="6" rows="700"/>   <!--2w-->
+            <archive cf_type="3" xff="0.5" steps="24" rows="775"/>  <!--2m-->
+            <archive cf_type="3" xff="0.5" steps="288" rows="797"/> <!--2y-->
         </monitor>
     </monitors>
 
@@ -237,33 +327,33 @@
         </metric_group>
 
         <metric_group collect_every="20" time_threshold="2000" module="harddisk">
-            <metric name="harddisk_size" title="磁盘 - 分区的总空间" value_threshold="0"/>
-            <metric name="harddisk_used" title="磁盘 - 分区已用空间" value_threshold="0"/>
-            <metric name="harddisk_free" title="磁盘 - 分区剩余空间" value_threshold="0"/>
-            <metric name="harddisk_use" title="磁盘 - 分区空间使用率" value_threshold="0"/>
-            <metric name="harddisk_inodes" title="磁盘 - 分区 inode 总数" value_threshold="0"/>
-            <metric name="harddisk_iused" title="磁盘 - 分区 inode 已用数" value_threshold="0"/>
-            <metric name="harddisk_ifree" title="磁盘 - 分区 inode 剩余值" value_threshold="0"/>
-            <metric name="harddisk_iuse" title="磁盘 - 分区 inode 使用率" value_threshold="0"/>
+            <metric name="size" title="磁盘 - 分区的总空间" value_threshold="0"/>
+            <metric name="used" title="磁盘 - 分区已用空间" value_threshold="0"/>
+            <metric name="free" title="磁盘 - 分区剩余空间" value_threshold="0"/>
+            <metric name="use" title="磁盘 - 分区空间使用率" value_threshold="0"/>
+            <metric name="inodes" title="磁盘 - 分区 inode 总数" value_threshold="0"/>
+            <metric name="iused" title="磁盘 - 分区 inode 已用数" value_threshold="0"/>
+            <metric name="ifree" title="磁盘 - 分区 inode 剩余值" value_threshold="0"/>
+            <metric name="iuse" title="磁盘 - 分区 inode 使用率" value_threshold="0"/>
         </metric_group>
 
         <metric_group collect_every="20" time_threshold="2000" module="harddisk">
-            <metric name="harddisk_tps" title="磁盘 - 每秒 I/O 请求数" value_threshold="0"/>
-            <metric name="harddisk_blk_read_sec" title="磁盘 - 每秒读取的 block 数" value_threshold="0"/>
-            <metric name="harddisk_blk_wrtn_sec" title="磁盘 - 每秒写入的 block 数" value_threshold="0"/>
-            <metric name="harddisk_blk_read" title="磁盘 - 读取的 block 总数" value_threshold="0"/>
-            <metric name="harddisk_blk_wrtn" title="磁盘 - 写入的 block 总数" value_threshold="0"/>
-            <metric name="harddisk_rrqm_sec" title="磁盘 - 每秒进行 merge 读取请求数" value_threshold="0"/>
-            <metric name="harddisk_wrqm_sec" title="磁盘 - 每秒进行 merge 写入请求数" value_threshold="0"/>
-            <metric name="harddisk_r_sec" title="磁盘 - 每秒完成读取的次数" value_threshold="0"/>
-            <metric name="harddisk_w_sec" title="磁盘 - 每秒完成写入的次数" value_threshold="0"/>
-            <metric name="harddisk_rsec_sec" title="磁盘 - 每秒读取的扇区数" value_threshold="0"/>
-            <metric name="harddisk_wsec_sec" title="磁盘 - 每秒写入的扇区数" value_threshold="0"/>
-            <metric name="harddisk_avgrq_sz" title="磁盘 - I/O 请求的平均大小" value_threshold="0"/>
-            <metric name="harddisk_avgqu_sz" title="磁盘 - I/O 请求的平均队列长度" value_threshold="0"/>
-            <metric name="harddisk_await" title="磁盘 - I/O 请求平均等待时间" value_threshold="0"/>
-            <metric name="harddisk_svctm" title="磁盘 -  设备对 I/O 请求的平均服务时间" value_threshold="0"/>
-            <metric name="harddisk_util" title="磁盘 - 每秒的 I/O 请求占比(%Util)" value_threshold="0"/>
+            <metric name="tps" title="磁盘 - 每秒 I/O 请求数" value_threshold="0"/>
+            <metric name="blk_read_sec" title="磁盘 - 每秒读取的 block 数" value_threshold="0"/>
+            <metric name="blk_wrtn_sec" title="磁盘 - 每秒写入的 block 数" value_threshold="0"/>
+            <metric name="blk_read" title="磁盘 - 读取的 block 总数" value_threshold="0"/>
+            <metric name="blk_wrtn" title="磁盘 - 写入的 block 总数" value_threshold="0"/>
+            <metric name="rrqm_sec" title="磁盘 - 每秒进行 merge 读取请求数" value_threshold="0"/>
+            <metric name="wrqm_sec" title="磁盘 - 每秒进行 merge 写入请求数" value_threshold="0"/>
+            <metric name="r_sec" title="磁盘 - 每秒完成读取的次数" value_threshold="0"/>
+            <metric name="w_sec" title="磁盘 - 每秒完成写入的次数" value_threshold="0"/>
+            <metric name="rsec_sec" title="磁盘 - 每秒读取的扇区数" value_threshold="0"/>
+            <metric name="wsec_sec" title="磁盘 - 每秒写入的扇区数" value_threshold="0"/>
+            <metric name="avgrq_sz" title="磁盘 - I/O 请求的平均大小" value_threshold="0"/>
+            <metric name="avgqu_sz" title="磁盘 - I/O 请求的平均队列长度" value_threshold="0"/>
+            <metric name="await" title="磁盘 - I/O 请求平均等待时间" value_threshold="0"/>
+            <metric name="svctm" title="磁盘 -  设备对 I/O 请求的平均服务时间" value_threshold="0"/>
+            <metric name="util" title="磁盘 - 每秒的 I/O 请求占比(%Util)" value_threshold="0"/>
         </metric_group>
 
         <metric_group collect_every="30" time_threshold="2000" module="network">

@@ -44,6 +44,7 @@ define('PATH_SWAN_BASE', realpath(dirname(__FILE__)));
         define('PATH_SWAN_CONF', PATH_SWAN_INC . '/conf/'); // 系统配置文件， 由 etc 下的 ini自动生成
     define('PATH_SWAN_RUN', PATH_SWAN_BASE . '/run/'); //系统运行过程中产生的文件，一般是pid文件
     define('PATH_SWAN_DATA', PATH_SWAN_BASE . '/data/'); // 存放数据目录
+		define('PATH_SWAN_RRD', PATH_SWAN_DATA . '/rrd/');
 // }}}
 // {{{ 参数配置
 
@@ -145,4 +146,8 @@ define('SWAN_TBN_MONITOR_ATTRIBUTE', 'monitor_attribute');
 define('SWAN_TBN_MONITOR_METRIC', 'monitor_metric');
 define('SWAN_TBN_MONITOR_ARCHIVE', 'monitor_archive');
 
+// }}}
+// {{{ redis key
+
+define('SWAN_CACHE_DM_IDS', 'config_cache_dm_ids');
 // }}}

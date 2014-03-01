@@ -108,6 +108,102 @@ class sw_dispatch_config extends sw_abstract
 	}
 
 	// }}}
+	// {{{ public function action_cache_dm()
+
+	/**
+	 * 缓存到 redis 的数据 
+	 * 
+	 * @access public
+	 * @return intger
+	 */
+	public function action_cache_dm()
+	{
+		try {
+			$device = sw_member::operator_factory('device');
+			$condition = sw_member::condition_factory('get_device'); 
+			$condition->set_is_count(false);
+			$data = $device->get_device($condition);
+		} catch (\swan\exception\sw_exception $e) {
+			return $this->render_json(null, 10001, $e->getMessage());	
+		}
+
+		$monitor_data = array();
+		foreach ($data as $d_info) {
+			$device_id = $d_info['device_id'];
+			try {
+				$condition = sw_member::condition_factory('get_device_monitor'); 
+				$condition->set_in('device_id');
+				$condition->set_device_id($device_id);	
+				$condition->set_is_count(false);
+				$monitor_params = $device->get_operator('monitor')->get_monitor($condition);
+			} catch (\swan\exception\sw_exception $e) {
+				return $this->render_json(null, 10001, $e->getMessage());	
+			}
+
+			if (empty($monitor_params)) {
+				continue; 
+			}
+
+			foreach ($monitor_params as $mp_info) {
+				$basic = $mp_info;
+				$basic['device_display_name'] = $d_info['device_display_name'];
+				$basic['host_name']   = $d_info['host_name'];
+				$basic['device_name'] = $d_info['device_name'];
+				$monitor_key  = $device_id . '_' . $mp_info['dm_id'];
+				$monitor_data[$monitor_key]  = $basic;
+
+			}
+		}
+		return $this->render_json($monitor_data, 10000, 'get smeta config success');
+	}
+
+	// }}}
+	// {{{ public function action_cache_monitor()
+
+	/**
+	 * 缓存到 redis 的监控器 archive 数据 
+	 * 
+	 * @access public
+	 * @return intger
+	 */
+	public function action_cache_monitor()
+	{
+		try {
+			$condition = sw_member::condition_factory('get_monitor_basic');
+			$monitor = sw_member::operator_factory('monitor');
+			$monitor_basic = $monitor->get_operator('basic')->get_basic($condition);
+		} catch (\swan\exception\sw_exception $e) {
+			return $this->render_json(null, 10001, $e->getMessage());	
+		}
+
+		$monitor_data = array();
+		foreach ($monitor_basic as $monitor_info) {
+			// 获取数据项
+			try {
+				$condition = sw_member::condition_factory('get_monitor_metric', array('monitor_id' => $monitor_info['monitor_id'])); 
+				$condition->set_in('monitor_id');
+				$monitor = sw_member::operator_factory('monitor');
+				$metrics = $monitor->get_operator('metric')->get_metric($condition);
+			} catch (\swan\exception\sw_exception $e) {
+				return $this->render_json(null, 10001, $e->getMessage());	
+			}
+			// 获取 archive 信息
+			try {
+				$condition = sw_member::condition_factory('get_monitor_archive', array('monitor_id' => $monitor_info['monitor_id'])); 
+				$condition->set_in('monitor_id');
+				$monitor  = sw_member::operator_factory('monitor');
+				$archives = $monitor->get_operator('archive')->get_archive($condition);
+			} catch (\swan\exception\sw_exception $e) {
+				return $this->render_json(null, 10001, $e->getMessage());	
+			}
+			$monitor_data[$monitor_info['monitor_id']]['archives'] = $archives;
+			$monitor_data[$monitor_info['monitor_id']]['metrics']  = $metrics;
+			$monitor_data[$monitor_info['monitor_id']]['basic']    = $monitor_info;
+		}
+		return $this->render_json($monitor_data, 10000, 'get smeta config success');
+	}
+
+	// }}}
 	// {{{ protected function _get_attr_info()
 	
 	/**
@@ -136,28 +232,6 @@ class sw_dispatch_config extends sw_abstract
 		}
 
 		return $monitor_params;
-	}
-
-	// }}}
-	// {{{ protected function _get_monitor_info()
-	
-	/**
-	 * 获取监控器的详细信息 
-	 * 
-	 * @param int $monitor_id 
-	 * @access protected
-	 * @return array
-	 */
-	protected function _get_monitor_info($monitor_id)
-	{
-		try {
-			$monitor = sw_member::operator_factory('monitor');
-			$monitor_info = $monitor->get_operator('basic')->get_info($monitor_id);
-		} catch (\swan\exception\sw_exception $e) {
-			throw new sw_exception($e);
-		}
-
-		return $monitor_info;
 	}
 
 	// }}}
