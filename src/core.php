@@ -143,5 +143,6 @@ define('SWAN_TBN_MONITOR_BASIC', 'monitor_basic');
 define('SWAN_TBN_MONITOR_PARAM', 'device_monitor_params');
 define('SWAN_TBN_MONITOR_ATTRIBUTE', 'monitor_attribute');
 define('SWAN_TBN_MONITOR_METRIC', 'monitor_metric');
+define('SWAN_TBN_MONITOR_ARCHIVE', 'monitor_archive');
 
 // }}}
