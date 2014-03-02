@@ -106,6 +106,14 @@ class sw_smeta extends sw_abstract
 	 */
 	protected $__bev_key = 0;
 
+	/**
+	 * rrd 缓存 
+	 * 
+	 * @var array
+	 * @access protected
+	 */
+	protected $__rrd_cache = array();
+
     // }}} end members
     // {{{ functions
     // {{{ protected function _init()
@@ -253,6 +261,7 @@ class sw_smeta extends sw_abstract
 				break;
 			}
 
+			$this->log("recive data:" . $data, LOG_DEBUG);
 			$this->_process_receive_data($data, $arg);
 		}		
 	}
@@ -321,16 +330,29 @@ class sw_smeta extends sw_abstract
         $data = rtrim($data);
 		$data = json_decode($data, true);
 		if (isset($data[1])) {
-			try {
-				sw_update::update($data[0], $data[1]);
-				$this->log('update data ' . json_encode($data[1]) . ' to ' . $data[0], LOG_DEBUG);
-			} catch (\swan\exception\sw_exception $e) {
-				$this->log($e->getMessage(), LOG_INFO);	
+			list($device_id, $dm_id, $metric_id) = explode('_', $data[0]);
+			$dm_key = $device_id . '_' . $dm_id;
+			if (isset($this->__rrd_cache[$dm_key]['data'])
+				&& isset($this->__rrd_cache[$dm_key]['time'])
+				&& $data[1]['time'] !== $this->__rrd_cache[$dm_key]['time']) {
+				try {
+					sw_update::update($dm_key, $this->__rrd_cache[$dm_key]['data'], $this->__rrd_cache[$dm_key]['time']);
+					$this->log('update success data:' . var_export($this->__rrd_cache[$dm_key], true), LOG_INFO);
+				} catch (\swan\exception\sw_exception $e) {
+					$this->log($e->getMessage(), LOG_INFO);	
+				}
+
+				$this->__rrd_cache[$dm_key]['data'] = array();
 			}
+	
+			if (!isset($this->__rrd_cache[$dm_key]['data'])) {
+				$this->__rrd_cache[$dm_key]['data'] = array();	
+			}
+			$this->__rrd_cache[$dm_key]['data'][$metric_id] = $data[1]['value'];
+			$this->__rrd_cache[$dm_key]['time'] = $data[1]['time'];
 		}
     }
 
     // }}}
-
     // }}} end functions
 }
