@@ -38,6 +38,7 @@ ARRAY_DIRS=(
     "data"
         "data/mysql"
         "data/redis"
+        "data/rrd"
     "run"
 )
 

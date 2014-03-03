@@ -1,8 +1,8 @@
 <?php
-$outputPngFile = "/usr/local/dev_swan/web/speed.png";
+$outputPngFile = "/root/i_code/swan_docs/swansoft/public/speed.png";
 unlink($outputPngFile);
 
-$tmp = '/usr/local/swan/data/rrd/2_5.rrd';
+$tmp = '/usr/local/swan/data/rrd/1_4.rrd';
 $rrdFile = '/usr/local/swan/data/rrd/2_5.rrd' . time();
 copy($tmp, $rrdFile);
 
