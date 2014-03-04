@@ -1,4 +1,4 @@
-#!/usr/local/swan/opt/bin/php 
+#!/usr/local/swan/smeta/opt/bin/php 
 <?php
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4 foldmethod=marker: */
 // +---------------------------------------------------------------------------
@@ -106,7 +106,7 @@ class swan_snmp_test
 	 */
 	public function ab_test()
 	{
-		$cmd = '/usr/local/swan/opt/apache2/bin/ab -n ';
+		$cmd = '/usr/local/swan/smeta/opt/apache2/bin/ab -n ';
 		$cmd .= $this->get_count() . ' -c 200 -k http://localhost/?q=user >/dev/null 2>&1';
 		exec($cmd, $return_arr);
 	}

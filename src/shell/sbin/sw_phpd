@@ -1,4 +1,4 @@
-#!/usr/local/swan/opt/bin/php
+#!/usr/local/swan/smeta/opt/bin/php
 <?php
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4 foldmethod=marker: */
 // +---------------------------------------------------------------------------

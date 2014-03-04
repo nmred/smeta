@@ -1,4 +1,4 @@
-#!/usr/local/swan/opt/bin/php
+#!/usr/local/swan/smeta/opt/bin/php
 <?php
 require 'core.php';
 

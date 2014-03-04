@@ -17,7 +17,7 @@
 #
 
 # 路径配置
-PATH_SWAN="/usr/local/swan"
+PATH_SWAN="/usr/local/swan/smeta/"
 PATH_OPT="$PATH_SWAN/opt"
 PATH_OPT_MYSQL="$PATH_OPT/mysql"
 PATH_OPT_ETC="$PATH_SWAN/etc"

@@ -5,7 +5,7 @@ build_rpm)
 	DIST_MASTER="/usr/local/tmp_swansoft_git"	
 	;;
 *)
-	DIST_MASTER="/usr/local/swan"
+	DIST_MASTER="/usr/local/swan/smeta"
 esac
 
 

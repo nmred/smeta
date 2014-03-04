@@ -28,7 +28,7 @@
 #
 
 # {{{
-PATH_SWAN="/usr/local/swan"
+PATH_SWAN="/usr/local/swan/smeta"
 PATH_OPT="$PATH_SWAN/opt"
 PATH_SBIN="$PATH_SWAN/app/sbin"
 PATH_SBIN_PHPD="$PATH_SBIN/sw_phpd"

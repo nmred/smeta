@@ -18,7 +18,7 @@
 # {{{ 配置部分
 
 # 路径配置
-PATH_SWAN="/usr/local/swan"
+PATH_SWAN="/usr/local/swan/smeta"
 PATH_PWD=`pwd`
 
 DIR_OWER="swan:swan"

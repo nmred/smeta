@@ -1,4 +1,4 @@
-#!/usr/local/swan/opt/bin/php 
+#!/usr/local/swan/smeta/opt/bin/php 
 <?php
 require_once 'core.php';
 require_once PATH_SWAN_LIB . 'daemon/sw_daemon.class.php';
@@ -23,7 +23,7 @@ function my_handler2()
 		 ->set_host('192.168.56.131')
 		 ->set_timeout(5)
 		 ->set_community('public');
-	$string = '/usr/local/swan/opt/rrdtool/bin/rrdtool update /usr/local/swan/opt/rrdtool/bin/cpu.rrd ';
+	$string = '/usr/local/swan/smeta/opt/rrdtool/bin/rrdtool update /usr/local/swan/smeta/opt/rrdtool/bin/cpu.rrd ';
 	$string .= ' --template cpu ' . time() . ':' . trim($snmp->get_next());
 //	echo $string . "\n";
 	exec($string, $rev);
