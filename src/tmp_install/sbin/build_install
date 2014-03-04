@@ -273,8 +273,6 @@ run_create_mysql_db
 run_stop_mysql
 run_set_initd
 
-ln -s /usr/local/swan/smeta/opt/lib/libevent-2.0.so.5 /usr/lib/libevent-2.0.so.5 
-
 ###### finish
 log_init "finish"
 
