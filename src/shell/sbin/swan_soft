@@ -37,6 +37,7 @@ PATH_OPT_MYSQL="$PATH_OPT/mysql"
 PATH_OPT_HTTP="$PATH_OPT/apache2"
 PATH_OPT_SNMP="$PATH_OPT/snmp"
 PATH_OPT_REDIS="$PATH_OPT/"
+PATH_OPT_SBIN="$PATH_OPT/sbin"
 PATH_OPT_MEMCAHED="$PATH_OPT/memcached"
 PATH_OPT_RSYSLOG="$PATH_OPT"
 PATH_RUN="$PATH_SWAN/run"
@@ -49,6 +50,8 @@ PATH_SW_CROND="/etc/cron.d/swan_soft"
 PIDF_MYSQL="$PATH_RUN/sw_mysql.pid"
 PIDF_HTTPD="$PATH_RUN/sw_httpd.pid"
 PIDF_REDIS="$PATH_RUN/sw_redis.pid"
+PIDF_NGINX="$PATH_RUN/sw_nginx.pid"
+PIDF_GEARMAN="$PATH_RUN/sw_gearman.pid"
 PIDF_PHPD="$PATH_RUN/sw_phpd.pid"
 PIDF_MEMCACHED="$PATH_RUN/sw_memcached.pid"
 PIDF_RSYSLOGD="$PATH_RUN/sw_rsyslogd.pid"
@@ -391,6 +394,8 @@ watch_proc ()
         httpd
 		snmpd
 		redis
+		gearman
+		nginx
 		memcached
 		rsyslogd
 		phpd
@@ -607,6 +612,111 @@ start_redis ()
     let "init_res = 0 || $?"
 }
 
+start_gearman ()
+{
+    init_res=0
+    init_msg=""
+
+    watch_proc gearman
+    if test "0" = "$watch_res"; then
+        init_res=2
+        return
+    fi
+
+    $PATH_OPT_SBIN/gearmand -d -l $PATH_LOG/gearman.log -P $PIDF_GEARMAN
+    let "init_res = 0 || $?"
+}
+
+
+start_nginx ()
+{
+    init_res=0
+    init_msg=""
+
+    watch_proc nginx
+    if test "0" = "$watch_res"; then
+        init_res=2
+        return
+    fi
+
+    $PATH_OPT_SBIN/nginx -c $PATH_OPT_ETC/nginx/nginx.conf
+    let "init_res = 0 || $?"
+}
+
+start_phpd ()
+{
+    init_res=0
+    init_msg=""
+
+    watch_proc phpd
+    if test "0" = "$watch_res"; then
+        init_res=2
+        return
+    fi
+
+    $PATH_SBIN_PHPD -k start
+    let "init_res = 0 || $?"
+}
+
+start_memcached ()
+{
+    init_res=0
+    init_msg=""
+
+    watch_proc memcached
+    if test "0" = "$watch_res"; then
+        init_res=2
+        return
+    fi
+
+    $PATH_OPT_MEMCAHED/bin/memcached -d -u swan -m 512 127.0.0.1 -p 11212 -P $PIDF_MEMCACHED 
+    let "init_res = 0 || $?"
+}
+
+start_rsyslogd ()
+{
+    init_res=0
+    init_msg=""
+
+    watch_proc rsyslogd
+    if test "0" = "$watch_res"; then
+        init_res=2
+        return
+    fi
+
+    $PATH_OPT_RSYSLOG/sbin/rsyslogd -f $PATH_OPT_ETC/rsyslogd.conf -i $PIDF_RSYSLOGD 
+    let "init_res = 0 || $?"
+}
+
+start_snmpd ()
+{
+    init_res=0
+    init_msg=""
+
+    watch_proc snmpd
+    if test "0" = "$watch_res"; then
+        init_res=2
+        return
+    fi
+
+    $PATH_OPT_SNMP/sbin/snmpd -c $PATH_OPT_ETC/snmp.conf -p $PIDF_SNMPD
+    let "init_res = 0 || $?"
+}
+
+start_cron_etc ()
+{
+    init_res=0
+    init_msg=""
+
+    watch_proc cron_etc
+    if test "0" = "$watch_res"; then
+        init_res=2
+        return
+    fi
+
+    cp $PATH_OPT_ETC/sw_cron.cf $PATH_SW_CROND
+    let "init_res = 0 || $?"
+}
 start_phpd ()
 {
     init_res=0
@@ -688,6 +798,9 @@ stop_proc ()
 		snmpd
 		memcached
 		rsyslogd
+		redis
+		gearman
+		nginx
     )
 
     t_proc_name_stop="$1"
@@ -756,15 +869,6 @@ stop_phpd ()
     init_msg=""
 
 	$PATH_SBIN_PHPD -k stop
-    let "init_res = 0 || $?"
-}
-
-stop_redis ()
-{
-    init_res=0
-    init_msg=""
-
-    $PATH_OPT_REDIS/bin/redis-cli shutdown
     let "init_res = 0 || $?"
 }
 

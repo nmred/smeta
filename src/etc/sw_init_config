@@ -11,14 +11,18 @@ ARRAY_START=(
     mysql
     redis
 	rsyslogd
+	gearman
 	phpd
+	nginx
     cron_etc
 )
 
 # 需要停止的进程
 ARRAY_STOP=(
     cron_etc
+	nginx
 	phpd
+	gearman
 	rsyslogd
 	redis
     mysql
@@ -31,6 +35,8 @@ ARRAY_WATCH=(
 	rsyslogd "rsyslogd"
     cron_etc "crond_etc"
 	phpd "sw_phpd"
+	nginx "nginx"
+	gearman "gearman"
 )
 
 
