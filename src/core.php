@@ -34,8 +34,6 @@ define('PATH_SWAN_BASE', realpath(dirname(__FILE__)));
 		define('PATH_INI_SWDATA', PATH_SWAN_ETC . 'sw_swdata.ini');
 		define('PATH_INIT_DATA', PATH_SWAN_ETC . 'sw_init_data.xml');
     define('PATH_SWAN_TPL', PATH_SWAN_BASE . '/tpl/');
-    define('PATH_SWAN_WEB', PATH_SWAN_BASE . '/web/');
-		define('PATH_SWAN_RRDPNG', PATH_SWAN_WEB . 'rrdpng/');
     define('PATH_SWAN_TMP', PATH_SWAN_BASE . '/tmp/');
 		define('PATH_SWAN_COMPILE', PATH_SWAN_TMP . 'compile/');
 		define('PATH_SWAN_CACHE', PATH_SWAN_TMP . 'tmp/');
@@ -45,6 +43,8 @@ define('PATH_SWAN_BASE', realpath(dirname(__FILE__)));
     define('PATH_SWAN_RUN', PATH_SWAN_BASE . '/run/'); //系统运行过程中产生的文件，一般是pid文件
     define('PATH_SWAN_DATA', PATH_SWAN_BASE . '/data/'); // 存放数据目录
 		define('PATH_SWAN_RRD', PATH_SWAN_DATA . '/rrd/');
+    define('PATH_SWAN_WEB', PATH_SWAN_BASE . '/web/'); // WEB 目录
+		define('PATH_SWAN_RRD_GRAPH', PATH_SWAN_WEB . '/graph/'); // rrd 图片目录
 // }}}
 // {{{ 参数配置
 
