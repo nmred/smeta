@@ -44,7 +44,7 @@ define('PATH_SWAN_BASE', realpath(dirname(__FILE__)));
     define('PATH_SWAN_DATA', PATH_SWAN_BASE . '/data/'); // 存放数据目录
 		define('PATH_SWAN_RRD', PATH_SWAN_DATA . '/rrd/');
     define('PATH_SWAN_WEB', PATH_SWAN_BASE . '/web/'); // WEB 目录
-		define('PATH_SWAN_RRD_GRAPH', PATH_SWAN_WEB . '/graph/'); // rrd 图片目录
+		define('PATH_SWAN_RRD_GRAPH', PATH_SWAN_WEB . 'graph/'); // rrd 图片目录
 // }}}
 // {{{ 参数配置
 
@@ -150,4 +150,5 @@ define('SWAN_TBN_MONITOR_ARCHIVE', 'monitor_archive');
 // {{{ redis key
 
 define('SWAN_CACHE_DM_IDS', 'config_cache_dm_ids');
+define('SWAN_QUEUE_GRAPH', 'swan_queue_graph');
 // }}}

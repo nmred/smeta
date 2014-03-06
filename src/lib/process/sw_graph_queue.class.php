@@ -17,7 +17,7 @@ use \lib\process\exception\sw_exception;
 
 /**
 +------------------------------------------------------------------------------
-* smeta 缓存配置
+* graph 模块队列 
 +------------------------------------------------------------------------------
 * 
 * @uses sw
@@ -28,15 +28,9 @@ use \lib\process\exception\sw_exception;
 * @author $_SWANBR_AUTHOR_$ 
 +------------------------------------------------------------------------------
 */
-class sw_cache_config extends sw_abstract
+class sw_graph_queue extends sw_abstract
 {
     // {{{ consts
-
-	/**
-	 * 缓存时间  
-	 */
-	const EXPIRE_TIME = '86400';
-
     // }}}
     // {{{ members
 
@@ -54,7 +48,15 @@ class sw_cache_config extends sw_abstract
 	 * @var float
 	 * @access protected
 	 */
-	protected $__loop_timeout = 1;
+	protected $__loop_timeout = 10;
+
+	/**
+	 * 绘图间隔时间 
+	 * 
+	 * @var float
+	 * @access protected
+	 */
+	protected $__graph_interval = 300;
 
 	/**
 	 * 定时器 
@@ -65,12 +67,20 @@ class sw_cache_config extends sw_abstract
 	protected $__event_timer = array();
 
 	/**
-	 * 重新获取配置的时间间隔 
+	 * 入队列预处理数据 
 	 * 
-	 * @var float
+	 * @var array
 	 * @access protected
 	 */
-	protected $__reconfig_interval = 10;
+	protected $__prepare_data = array();
+
+	/**
+	 * redis 连接对象 
+	 * 
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $__redis = null;
 
     // }}} end members
     // {{{ functions
@@ -83,12 +93,19 @@ class sw_cache_config extends sw_abstract
      */
     protected function _init()
     {
-        $this->log('Start smond config.', LOG_DEBUG);
+        $this->log('Start graph queue.', LOG_DEBUG);
+        if (!empty($this->__proc_config['graph_interval'])) {
+            $this->__graph_interval = $this->__proc_config['graph_interval'];
+        }
         if (!empty($this->__proc_config['reconfig_interval'])) {
-            $this->__reconfig_interval = $this->__proc_config['reconfig_interval'];
+            $this->__loop_timeout = $this->__proc_config['reconfig_interval'];
         }
         $this->__event_base = new \EventBase();
-        $this->_create_timer($this->__reconfig_interval);
+		$this->__redis = \swan\redis\sw_redis::singleton();
+
+		// 读取所有的入队列数据
+		$this->_get_config_data();
+		$this->_create_timer($this->__graph_interval);
     }
 
     // }}}
@@ -117,6 +134,8 @@ class sw_cache_config extends sw_abstract
             $this->log($log, LOG_WARNING);
             throw new sw_exception($log);    
         }
+
+		$this->_get_config_data();
     }
 
     // }}}
@@ -130,7 +149,7 @@ class sw_cache_config extends sw_abstract
      */
     public function callback($interval)
     {
-        $this->_reconfig($interval);
+        $this->_insert_queue($interval);
         if (!isset($this->__event_timer[$interval])) {
             $log = "this event timer has free, interval: {$interval}.";
             $this->log($log, LOG_DEBUG);
@@ -172,74 +191,60 @@ class sw_cache_config extends sw_abstract
     }
 
     // }}}
-	// {{{ protected function _reconfig()
+	// {{{ protected function _insert_queue()
 
 	/**
-	 * 重新更新配置 
+	 * 入队列操作 
 	 * 
 	 * @param int $interval 
 	 * @access protected
 	 * @return void
 	 */
-	protected function _reconfig($interval)
+	protected function _insert_queue($interval)
 	{
-		// 缓存 dm 数据
-		$redis = \swan\redis\sw_redis::singleton();
-		$dm_data = array();
-		try {
-			$dm_data = \lib\inner_client\sw_inner_client::call('user', 'dispatch_config.cache_dm');
-			if (isset($dm_data['data'])) {
-				$dm_data = $dm_data['data'];
-			} else {
-				$dm_data = array();	
-			}
-		} catch (\swan\exception\sw_exception $e) {
-			$this->log($e->getMessage(), LOG_INFO);
+		if (empty($this->__prepare_data)) {
+			$this->log('not data need insert graph queue', LOG_DEBUG);
+			return;
 		}
 
-		foreach ($dm_data as $key => $value) {	
-			$cache_data = json_encode($value);
-			$redis->set('dm_' . $key, $cache_data, self::EXPIRE_TIME);
-
-			$redis->sadd(SWAN_CACHE_DM_IDS, $key);
-			$redis->expire(SWAN_CACHE_DM_IDS, self::EXPIRE_TIME);
-		}
-
-		// 缓存监控器相关数据
-		try {
-			$monitor_data = \lib\inner_client\sw_inner_client::call('user', 'dispatch_config.cache_monitor');
-			if (isset($monitor_data['data'])) {
-				$monitor_data = $monitor_data['data'];
-			} else {
-				$monitor_data = array();	
-			}
-		} catch (\swan\exception\sw_exception $e) {
-			$this->log($e->getMessage(), LOG_INFO);
-		}
-
-		foreach ($monitor_data as $monitor_id => $value) {	
-			if (isset($value['archives'])) {
-				$cache_data = json_encode($value['archives']);
-				$redis->set('archive_' . $monitor_id, $cache_data, self::EXPIRE_TIME);
-			}
-
-			if (isset($value['metrics'])) {
-				foreach ($value['metrics'] as $val) {
-					$cache_id = 'metric_' . $monitor_id . '_' . $val['metric_id'];
-					$cache_data = json_encode($val);
-					$redis->set($cache_id, $cache_data, self::EXPIRE_TIME);
-					$scache_id = 'metric_ids_' . $monitor_id;
-					$redis->sadd($scache_id, $val['metric_id']);
-					$redis->expire($scache_id, self::EXPIRE_TIME);
-				}
-			}
-
-			if (isset($value['basic'])) {
-				$cache_data = json_encode($value['basic']);
-				$redis->set('monitor_' . $monitor_id, $cache_data, self::EXPIRE_TIME);
+		foreach ($this->__prepare_data as $key => $metric_ids) {
+			foreach ($metric_ids as $metric_id) {
+				$data = array($key, $metric_id);
+				$data = json_encode($data);
+				$this->__redis->rpush(SWAN_QUEUE_GRAPH, $data);
 			}
 		}
+	}
 
+	// }}}
+	// {{{ protected function _get_config_data()
+
+	/**
+	 * 获取配置数据 
+	 * 
+	 * @access protected
+	 * @return array
+	 */
+	protected function _get_config_data()
+	{
+		$this->__prepare_data = array();
+		$ids = $this->__redis->smembers(SWAN_CACHE_DM_IDS);
+		foreach ($ids as $key) {
+			$dm_info = $this->__redis->get('dm_' . $key);
+			$dm_info = json_decode($dm_info, true);
+			if (!$dm_info) {
+				$this->log('get dm info fail. dm_id:' . $key, LOG_DEBUG);
+				continue;
+			}
+
+			$monitor_id = $dm_info['monitor_id'];
+			$metric_ids = $this->__redis->smembers('metric_ids_' . $monitor_id);
+			if (!$metric_ids) {
+				$this->log('get metric fail. monitor_id:' . $monitor_id . 'dm_id:' . $key, LOG_DEBUG);
+				continue;
+			}
+			$this->__prepare_data[$key] = $metric_ids;
+		}
 	}
 
 	// }}}

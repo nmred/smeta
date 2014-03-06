@@ -29,6 +29,14 @@ use \lib\rrd_store\exception\sw_exception;
 class sw_graph
 {
 	// {{{ consts
+	
+	const T_15_MIN  = 900;
+	const T_60_MIN  = 3600;
+	const T_1_DAY   = 86400;
+	const T_7_DAY   = 604800;
+	const T_30_DAY  = 2592000;
+	const T_365_DAY = 31536000;
+
 	// }}}
 	// {{{ members
 
@@ -46,24 +54,13 @@ class sw_graph
 	 * @var mixed
 	 * @access protected
 	 */
-	protected static $__cf_types = array(
-		1 => 'AVERAGE',
-		2 => 'MIN',
-		3 => 'MAX',
-		4 => 'LAST',
-	);
-
-	/**
-	 *  rrd dst_type 对应关系 
-	 * 
-	 * @var mixed
-	 * @access protected
-	 */
-	protected static $__dst_types = array(
-		1 => 'GAUGE',
-		2 => 'COUNTER',
-		3 => 'DERIVE',
-		4 => 'ABSOLUTE',
+	protected static $__x_grid = array(
+		self::T_15_MIN => 'MINUTE:1:MINUTE:3:MINUTE:3:0:%M',
+		self::T_60_MIN => 'MINUTE:5:MINUTE:10:MINUTE:10:0:%M',
+		self::T_1_DAY  => 'DAY:1:HOUR:2:HOUR:2:0:%M',
+		self::T_7_DAY  => 'HOUR:12:DAY:1:DAY:1:0:%M',
+		self::T_30_DAY => 'DAY:2:DAY:5:DAY:5:0:%M',
+		self::T_365_DAY => 'DAY:15:MONTH:1:MONTH:1:0:%M',
 	);
 
 	// }}}
@@ -98,7 +95,11 @@ class sw_graph
 		$metric_info = json_decode($metric_info, true);
 
 		$graph_params = self::_get_graph_params($dm_info, $metric_info, $options);
-		$out_file = PATH_SWAN_RRD_GRAPH . $dm_id . '_' . $metric_id . '.png';
+		$time_grid = isset($options['time_grid']) ? $options['time_grid'] : self::T_15_MIN;
+		if (!array_key_exists($options['time_grid'], self::$__x_grid)) {
+			$time_grid = self::T_15_MIN;
+		}
+		$out_file = PATH_SWAN_RRD_GRAPH . $time_grid . '/' . $dm_id . '_' . $metric_id . '.png';
 		try {
 			$graph = new \RRDGraph($out_file);
 			$graph->setOptions($graph_params);
@@ -130,9 +131,17 @@ class sw_graph
 		if (!file_exists($file_name)) {
 			throw new sw_exception('not exists rrd file:' . $file_name);
 		}
-		
+
+		$time_grid = isset($options['time_grid']) ? $options['time_grid'] : self::T_15_MIN;
+		if (!array_key_exists($options['time_grid'], self::$__x_grid)) {
+			$time_grid = self::T_15_MIN;
+		}
+
+		$end_time   = time();
+		$start_time = $end_time - $time_grid;
+
 		$metric_name = $metric_info['metric_name'];
-		$title       = $dm_info['device_name'] . '-' . $metric_info['metric_name'];
+		$title       = $dm_info['device_name'] . '-' . $metric_info['title'];
 		$options = array(
 			'--color' => "SHADEA#DDDDDD",
 			'--color' => "SHADEB#808080",
@@ -141,12 +150,12 @@ class sw_graph
 			'--color' => "ARROW#FF0000",
 			'--color' => "AXIS#000000",
 			'--color' => "BACK#FFFFFF",	
-			'--x-grid' => "MINUTE:12:HOUR:1:HOUR:1:0:%H",
+			'--x-grid' => self::$__x_grid[$time_grid],
 			"-X 1 ",
 			"-t $title",
 			"-v GB",
-			"-s " . (time() - 7200),
-			"-e " . time(),
+			"-s " . $start_time,
+			"-e " . $end_time,
 			"DEF:value1=$file_name:$metric_name:AVERAGE",
 			"COMMENT: \\n",
 			"COMMENT: \\n",
@@ -156,8 +165,9 @@ class sw_graph
 			"GPRINT:value1:MAX:最大\:%.0lf",
 			"GPRINT:value1:MIN:最小\:%.0lf",
 			"COMMENT: \\n",
-			"COMMENT: \\t\\t\\t\\t\\t\\t\\t最后更新 \:" . date('Y-m-d H\\\:m', time()) . "\\n",
-			"COMMENT: \\t\\t\\t\\t\\t\\t\\tSWAN 监控数据中心\\n",
+			"COMMENT: \\n",
+			"COMMENT: \\t\\t\\t\\t\\t最后更新 \:" . date('Y-m-d H\\\:i\\\:s', time()) . "\\n",
+			"COMMENT: \\t\\t\\t\\t\\tSWAN 监控数据中心\\n",
 		);
 	
 		return $options;	
