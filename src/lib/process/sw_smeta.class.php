@@ -14,7 +14,7 @@
  
 namespace lib\process;
 use \lib\process\exception\sw_exception;
-use \lib\rrd_store\sw_update;
+use \swan\gearman\sw_client;
 
 /**
 +------------------------------------------------------------------------------
@@ -107,12 +107,20 @@ class sw_smeta extends sw_abstract
 	protected $__bev_key = 0;
 
 	/**
-	 * rrd 缓存 
+	 * rrd gmc 
 	 * 
 	 * @var array
 	 * @access protected
 	 */
-	protected $__rrd_cache = array();
+	protected $__rrd_gmc = null;
+
+	/**
+	 * push gmc 
+	 * 
+	 * @var array
+	 * @access protected
+	 */
+	protected $__push_gmc = null;
 
     // }}} end members
     // {{{ functions
@@ -142,6 +150,10 @@ class sw_smeta extends sw_abstract
         $this->__event_base = new \EventBase(); 
 		$this->__listener = new \EventListener($this->__event_base, array($this, 'callback_accept'), $this->__event_base, \EventListener::OPT_CLOSE_ON_FREE | \EventListener::OPT_REUSEABLE, -1, $this->__listen);
 		$this->__listener->setErrorCallback(array($this, 'callback_accept_error'));
+		$this->__rrd_gmc = new sw_client();
+		$this->__rrd_gmc->add_servers_by_config('gmc_update_rrd');
+		$this->__push_gmc = new sw_client();
+		$this->__push_gmc->add_servers_by_config('gmc_push_server');
 
 		$this->log('init event ok.', LOG_INFO);
     }
@@ -328,29 +340,13 @@ class sw_smeta extends sw_abstract
         $client_port = $this->__buffer_event[$client_key][2];
         $client_name = "$client_ip:$client_port";
         $data = rtrim($data);
-		$data = json_decode($data, true);
-		if (isset($data[1])) {
-			list($device_id, $dm_id, $metric_id) = explode('_', $data[0]);
-			$dm_key = $device_id . '_' . $dm_id;
-			if (isset($this->__rrd_cache[$dm_key]['data'])
-				&& isset($this->__rrd_cache[$dm_key]['time'])
-				&& $data[1]['time'] !== $this->__rrd_cache[$dm_key]['time']) {
-				try {
-					sw_update::update($dm_key, $this->__rrd_cache[$dm_key]['data'], $this->__rrd_cache[$dm_key]['time']);
-					$this->log('update success data:' . var_export($this->__rrd_cache[$dm_key], true), LOG_INFO);
-				} catch (\swan\exception\sw_exception $e) {
-					$this->log($e->getMessage(), LOG_INFO);	
-				}
+		$this->__rrd_gmc->doBackground('rrd_store', $data);
 
-				$this->__rrd_cache[$dm_key]['data'] = array();
-			}
-	
-			if (!isset($this->__rrd_cache[$dm_key]['data'])) {
-				$this->__rrd_cache[$dm_key]['data'] = array();	
-			}
-			$this->__rrd_cache[$dm_key]['data'][$metric_id] = $data[1]['value'];
-			$this->__rrd_cache[$dm_key]['time'] = $data[1]['time'];
-		}
+		$push_data = array(
+			'channel' => 'monitor',
+			'data' => json_decode($data, true),
+		);
+		$this->__push_gmc->doBackground('push_server', json_encode($push_data));
     }
 
     // }}}
