@@ -6,4 +6,4 @@
 # !!!  注意: 编辑完成此文件之后需要重启 cron_etc 服务
 # !!!
 
-*/1 * * * * swan ntpdate time.windows.com > /usr/local/swan/smeta/log/cron.log
+*/1 * * * * root /usr/sbin/ntpdate time.windows.com > /usr/local/swan/smeta/log/cron.log

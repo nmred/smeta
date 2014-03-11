@@ -149,6 +149,7 @@ class sw_dispatch_config extends sw_abstract
 				$basic['device_display_name'] = $d_info['device_display_name'];
 				$basic['host_name']   = $d_info['host_name'];
 				$basic['device_name'] = $d_info['device_name'];
+				$basic['heartbeat_time'] = $d_info['heartbeat_time'];
 				$monitor_key  = $device_id . '_' . $mp_info['dm_id'];
 				$monitor_data[$monitor_key]  = $basic;
 

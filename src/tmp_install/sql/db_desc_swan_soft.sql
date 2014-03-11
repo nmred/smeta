@@ -116,12 +116,15 @@ CREATE TABLE `device_key` (
 -- 	设备显示名称
 -- host_name
 -- 	设备主机地址
+-- heartbeat_time
+-- 	用来检测服务器心跳的阀值, 单位（秒）
 
 DROP TABLE IF EXISTS `device_basic`;
 CREATE TABLE `device_basic` (
 	`device_id` int(11) UNSIGNED NOT NULL ,
 	`device_display_name` varchar(255) NOT NULL ,
 	`host_name` varchar(255) NOT NULL ,
+	`heartbeat_time` int(11) UNSIGNED NOT NULL ,
 	PRIMARY KEY (`device_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -187,6 +190,10 @@ CREATE TABLE `device_monitor_params` (
 -- 	监控器显示名称
 -- steps
 -- 	监控器存储 rrd 的间隔时间 (秒)
+-- store_type
+-- 	数据存储引擎 2: rrd存储 4: redis存储 , 如果是选项之和说明是 rrd + redis
+-- monitor_type
+-- 	监控器类型：1: core 该类型在添加设备的时候会一并添加进去，不允许删除 2：normal 普通监控器
 
 DROP TABLE IF EXISTS `monitor_basic`;
 CREATE TABLE `monitor_basic` (
@@ -194,6 +201,8 @@ CREATE TABLE `monitor_basic` (
 	`monitor_name` varchar(255) NOT NULL ,
 	`monitor_display_name` varchar(255) NOT NULL ,
 	`steps` int(11) UNSIGNED NOT NULL ,
+	`store_type` tinyint(1) UNSIGNED NOT NULL DEFAULT '2',
+	`monitor_type` tinyint(1) UNSIGNED NOT NULL DEFAULT '2',
 	PRIMARY KEY (`monitor_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

@@ -41,7 +41,9 @@ class sw_monitor_basic extends sw_abstract
 		'monitor_id'           => true,
 		'monitor_name'         => true,
 		'monitor_display_name' => true,
-		'steps' => true,
+		'steps'        => true,
+		'store_type'   => true,
+		'monitor_type' => true,
 	);
 
 	/**

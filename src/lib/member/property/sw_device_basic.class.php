@@ -40,6 +40,7 @@ class sw_device_basic extends sw_abstract
 	protected $__allow_attributes = array(
 		'device_id' => true,
 		'host_name' => true,
+		'heartbeat_time'      => true,
 		'device_display_name' => true,
 	);
 

@@ -2,9 +2,7 @@
 $outputPngFile = "/root/i_code/swan_docs/swansoft/public/speed.png";
 unlink($outputPngFile);
 
-$tmp = '/usr/local/swan/data/rrd/1_4.rrd';
-$rrdFile = '/usr/local/swan/data/rrd/2_5.rrd' . time();
-copy($tmp, $rrdFile);
+$tmp = '/usr/local/swan/smeta/data/rrd/1_4.rrd';
 
 $graphObj = new RRDGraph($outputPngFile);
 
@@ -23,7 +21,7 @@ $graphObj = new RRDGraph($outputPngFile);
 			"-v GB",
   			"-s " . (time() - 7200),
 			"-e " . time(),
- 		    "DEF:value1=$rrdFile:used:AVERAGE",
+ 		    "DEF:value1=$tmp:used:AVERAGE",
  		    "COMMENT: \\n",
  		    "COMMENT: \\n",
  		    "AREA:value1#00ff00:已使用 ",

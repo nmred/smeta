@@ -263,6 +263,15 @@
                         <default></default>
                     </column>
 
+                    <column name="heartbeat_time">
+						<desc>用来检测服务器心跳的阀值, 单位（秒）</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+                        <unsigned>true</unsigned>
+                        <default>300</default>
+                    </column>
+
                 </columns>
 
                 <keys>
@@ -431,6 +440,24 @@
                         <precision>11</precision>
                         <unsigned>true</unsigned>
                         <default></default>
+                    </column>
+
+                    <column name="store_type">
+                        <desc>数据存储引擎 2: rrd存储 4: redis存储 , 如果是选项之和说明是 rrd + redis</desc>
+                        <type>tinyint</type>
+                        <nullable>false</nullable>
+                        <precision>1</precision>
+                        <unsigned>true</unsigned>
+                        <default>2</default>
+                    </column>
+
+                    <column name="monitor_type">
+                        <desc>监控器类型：1: core 该类型在添加设备的时候会一并添加进去，不允许删除 2：normal 普通监控器</desc>
+                        <type>tinyint</type>
+                        <nullable>false</nullable>
+                        <precision>1</precision>
+                        <unsigned>true</unsigned>
+                        <default>2</default>
                     </column>
                 </columns>
 
