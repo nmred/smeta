@@ -17,6 +17,10 @@ use \lib\member\sw_member as sw_mem;
 
 // 获取 device monitor
 //$condition = sw_mem::condition_factory('get_device_monitor');
+//$condition->set_in('device_id');
+//$condition->set_device_id(2);
+//$condition->set_in('monitor_id');
+//$condition->set_monitor_id(1);
 //$device = sw_mem::operator_factory('device');
 //$device_monitor = $device->get_operator('monitor')->get_monitor($condition);
 //var_dump($device_monitor);

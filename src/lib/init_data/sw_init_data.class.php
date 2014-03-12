@@ -107,9 +107,9 @@ class sw_init_data
 	protected function _init_monitor()
 	{
 		foreach ($this->__monitors as $name => $monitor) {
-			$attrs = $monitor['attrs'];
+			$attrs = isset($monitor['attrs']) ? $monitor['attrs'] : array();
 			unset($monitor['attrs']);
-			$archives = $monitor['archives'];
+			$archives = isset($monitor['archives']) ? $monitor['archives'] : array();
 			unset($monitor['archives']);
 			$data = \lib\inner_client\sw_inner_client::call('dev', 'monitor.add', $monitor);
 			if ($data['code'] !== 10000) {

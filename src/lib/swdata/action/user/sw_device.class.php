@@ -73,6 +73,28 @@ class sw_device extends sw_abstract
 			return $this->render_json(null, 10003, $e->getMessage());	
 		}
 
+		// 获取核心监控器
+		$condition = sw_member::condition_factory('get_monitor_basic');
+		$condition->set_in('monitor_type');
+		$condition->set_monitor_type('1');
+		$monitor = sw_member::operator_factory('monitor');
+		$monitor_basic = $monitor->get_operator('basic')->get_basic($condition);
+
+		if (!empty($monitor_basic)) {
+			foreach ($monitor_basic as $monitor_info) {
+				$monitor_property_basic = sw_member::property_factory('monitor_basic', array('monitor_id' => $monitor_info['monitor_id']));
+				$device_property_monitor = sw_member::property_factory('device_monitor', array('dm_name' => $monitor_info['monitor_name']));
+				$device_property_monitor->set_monitor_basic($monitor_property_basic);
+				try {	
+					$device = sw_member::operator_factory('device', $property_key);
+					$device_monitor = $device->get_operator('monitor')->add_monitor($device_property_monitor);
+				} catch (\swan\exception\sw_exception $e) {
+					$db->rollback();
+					return $this->render_json(null, 10004, $e->getMessage());	
+				}
+			}
+		}
+		
 		$db->commit();
 		return $this->render_json(array('device_id' => $device_id), 10000, "add device $device_name success.");
 	}
@@ -114,6 +136,42 @@ class sw_device extends sw_abstract
 			$db->rollback();
 			return $this->render_json(null, 10003, $e->getMessage());	
 		}
+
+		// 获取核心监控器
+		$condition = sw_member::condition_factory('get_monitor_basic');
+		$condition->set_in('monitor_type');
+		$condition->set_monitor_type('1');
+		$monitor = sw_member::operator_factory('monitor');
+		$monitor_basic = $monitor->get_operator('basic')->get_basic($condition);
+
+		if (!empty($monitor_basic)) {
+			foreach ($monitor_basic as $monitor_info) {
+				try {	
+					$condition = sw_member::condition_factory('get_device_monitor');
+					$condition->set_in('device_id');
+					$condition->set_in('monitor_id');
+					$condition->set_device_id($did);
+					$condition->set_monitor_id($monitor_info['monitor_id']);
+					$device = sw_member::operator_factory('device');
+					$device_monitor = $device->get_operator('monitor')->get_monitor($condition);
+					if (!empty($device_monitor)) {
+						foreach ($device_monitor as $dm_info) {
+							$condition = sw_member::condition_factory('del_device_monitor');
+							$condition->set_in('dm_id');
+							$condition->set_dm_id($dm_info['dm_id']);
+							$condition->set_in('device_id');
+							$condition->set_device_id($did);
+							$device = sw_member::operator_factory('device');
+							$device_monitor = $device->get_operator('monitor')->del_monitor($condition);
+						}
+					}
+				} catch (\swan\exception\sw_exception $e) {
+					$db->rollback();
+					return $this->render_json(null, 10004, $e->getMessage());	
+				}
+			}
+		}
+	
 		$db->commit();
 		return $this->render_json(null, 10000, 'delete device success.');
 	}

@@ -58,6 +58,17 @@ class sw_get_device_monitor extends sw_get_abstract
         'monitor_display_name'  => SWAN_TBN_MONITOR_BASIC,     
     );
 
+    /**
+     * 表的别名 
+     * 
+     * @var array
+     * @access protected
+     */
+    protected $__table_alias = array(
+        SWAN_TBN_DEVICE_MONITOR => 'k',
+        SWAN_TBN_MONITOR_BASIC => 'b',
+    );
+
 	// }}}
 	// {{{ functions
 	// }}}
