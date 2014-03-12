@@ -55,6 +55,8 @@ class sw_get_device_monitor extends sw_get_abstract
         'monitor_id'  => SWAN_TBN_DEVICE_MONITOR,       
         'monitor_name'  => SWAN_TBN_MONITOR_BASIC,     
         'steps'         => SWAN_TBN_MONITOR_BASIC,     
+        'store_type'    => SWAN_TBN_MONITOR_BASIC,     
+        'monitor_type'  => SWAN_TBN_MONITOR_BASIC,     
         'monitor_display_name'  => SWAN_TBN_MONITOR_BASIC,     
     );
 

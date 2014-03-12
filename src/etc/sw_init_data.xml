@@ -5,6 +5,7 @@
 
     <devices>
 		<device name="lan-115" host_name="127.0.0.1" display_name="115 设备" heartbeat_time="60">
+			<!--
 			<monitor name="apache" dm_name="apache">
 				<param name="url">http://localhost:8090/server-status</param>
 			</monitor>
@@ -37,8 +38,10 @@
 			<monitor name="network" dm_name="io">
 				<param name="device">lo</param>
 			</monitor>
+			-->
 		</device>
 		<device name="lan-114" host_name="127.0.0.1" display_name="114 设备" heartbeat_time="60">
+			<!--
 			<monitor name="apache" dm_name="apache">
 				<param name="url">http://localhost:8090/server-status</param>
 			</monitor>
@@ -71,6 +74,7 @@
 			<monitor name="network" dm_name="io">
 				<param name="device">lo</param>
 			</monitor>
+			-->
 		</device>
     </devices>
 
@@ -209,6 +213,12 @@
     <!-- {{{ metrics -->
 
     <metric_groups>
+        <metric_group collect_every="5" time_threshold="2000" module="heartbeat">
+            <metric name="heartbeat" title="服务器心跳线" value_threshold="0"/>
+        </metric_group>
+        <metric_group collect_every="5" time_threshold="2000" module="server_info">
+            <metric name="server_info" title="服务器硬件信息" value_threshold="0"/>
+        </metric_group>
         <metric_group collect_every="30" time_threshold="2000" module="apache">
             <metric name="ap_busy_workers" title="Apache - 繁忙线程数" value_threshold="0"/>
             <metric name="ap_idle_workers" title="Apache - 空闲线程数" value_threshold="0"/>

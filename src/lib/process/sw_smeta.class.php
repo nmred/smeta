@@ -122,6 +122,14 @@ class sw_smeta extends sw_abstract
 	 */
 	protected $__push_gmc = null;
 
+	/**
+	 * redis gmc 
+	 * 
+	 * @var array
+	 * @access protected
+	 */
+	protected $__redis_gmc = null;
+
     // }}} end members
     // {{{ functions
     // {{{ protected function _init()
@@ -154,6 +162,8 @@ class sw_smeta extends sw_abstract
 		$this->__rrd_gmc->add_servers_by_config('gmc_update_rrd');
 		$this->__push_gmc = new sw_client();
 		$this->__push_gmc->add_servers_by_config('gmc_push_server');
+		$this->__redis_gmc = new sw_client();
+		$this->__redis_gmc->add_servers_by_config('gmc_update_redis');
 
 		$this->log('init event ok.', LOG_INFO);
     }
@@ -340,7 +350,43 @@ class sw_smeta extends sw_abstract
         $client_port = $this->__buffer_event[$client_key][2];
         $client_name = "$client_ip:$client_port";
         $data = rtrim($data);
-		$this->__rrd_gmc->doBackground('rrd_store', $data);
+		$info = json_decode($data, true);
+		if (!isset($info[1])) {
+			$this->log('data format invalid.', LOG_INFO);
+			return;
+		}
+
+		$redis = \swan\redis\sw_redis::singleton();
+		list($device_id, $dm_id, $metric_id) = explode('_', $info[0]);
+		$dm_info = $redis->get('dm_' . $device_id . '_' . $dm_id);
+		$dm_info = json_decode($dm_info, true);
+		if (!$dm_info) {
+			$this->log('store failed, get dm info fail.: ' . $data, LOG_INFO);
+			return;
+		}
+		$monitor_info = $redis->get('monitor_' . $dm_info['monitor_id']);
+		$monitor_info = json_decode($monitor_info, true);
+		if (!$monitor_info) {
+			$this->log('store failed, get monitor info fail.: ' . $data, LOG_INFO);
+			return;
+		}
+
+		if (!isset($monitor_info['store_type'])) {
+			return;
+		}
+
+		switch ((int)$monitor_info['store_type']) {
+			case 2:
+				$this->__rrd_gmc->doBackground('rrd_store', $data);
+				break;
+			case 4:
+				$this->__redis_gmc->doBackground('redis_store', $data);
+				break;
+			case 6:
+				$this->__rrd_gmc->doBackground('rrd_store', $data);
+				$this->__redis_gmc->doBackground('redis_store', $data);
+				break;
+		}
 
 		$push_data = array(
 			'channel' => 'monitor',

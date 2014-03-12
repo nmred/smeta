@@ -150,5 +150,7 @@ define('SWAN_TBN_MONITOR_ARCHIVE', 'monitor_archive');
 // {{{ redis key
 
 define('SWAN_CACHE_DM_IDS', 'config_cache_dm_ids');
+define('SWAN_CACHE_MONITOR_IDS', 'config_cache_monitor_ids');
 define('SWAN_QUEUE_GRAPH', 'swan_queue_graph');
+define('SWAN_MONITOR_REDIS_DATA', 'swan_monitor_data_');
 // }}}

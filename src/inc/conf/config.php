@@ -25,6 +25,8 @@ return array(
 	),
 	'gmw_update_rrd' => '127.0.0.1:4730',
 	'gmc_update_rrd' => '127.0.0.1:4730',
+	'gmw_update_redis' => '127.0.0.1:4730',
+	'gmc_update_redis' => '127.0.0.1:4730',
 	'gmw_push_server' => '127.0.0.1:4730',
 	'gmc_push_server' => '127.0.0.1:4730',
 );

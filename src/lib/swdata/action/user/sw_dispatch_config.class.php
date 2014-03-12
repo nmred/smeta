@@ -84,8 +84,9 @@ class sw_dispatch_config extends sw_abstract
 					$params[$attr['attr_name']]	= $attr['value'];
 				}
 
+				unset($mp_info['monitor_display_name']);
+				unset($mp_info['steps']);
 				$basic = $mp_info;
-				$basic['device_display_name'] = $d_info['device_display_name'];
 				$basic['host_name']   = $d_info['host_name'];
 				$basic['device_name'] = $d_info['device_name'];
 				$monitor_key  = $device_id . '_' . $mp_info['dm_id'];
@@ -100,6 +101,16 @@ class sw_dispatch_config extends sw_abstract
 					$metrics = $monitor->get_operator('metric')->get_metric($condition);
 				} catch (\swan\exception\sw_exception $e) {
 					return $this->render_json(null, 10001, $e->getMessage());	
+				}
+				
+				// 删除掉 smond 不需要的属性
+				foreach ($metrics as $key => $value) {
+					unset($metrics[$key]['tmax']);
+					unset($metrics[$key]['dst_type']);
+					unset($metrics[$key]['vmin']);
+					unset($metrics[$key]['vmax']);
+					unset($metrics[$key]['unit']);
+					unset($metrics[$key]['title']);
 				}
 				$monitor_data[$monitor_key]['metrics'] = $metrics;
 			}

@@ -197,12 +197,20 @@ class sw_cache_config extends sw_abstract
 			$this->log($e->getMessage(), LOG_INFO);
 		}
 
+		$old_dm_ids = $redis->smembers(SWAN_CACHE_DM_IDS);
+		$dm_ids = array();
 		foreach ($dm_data as $key => $value) {	
 			$cache_data = json_encode($value);
 			$redis->set('dm_' . $key, $cache_data, self::EXPIRE_TIME);
 
+			$dm_ids[] = $key;
 			$redis->sadd(SWAN_CACHE_DM_IDS, $key);
 			$redis->expire(SWAN_CACHE_DM_IDS, self::EXPIRE_TIME);
+		}
+		$del_dm_ids = array_diff($old_dm_ids, $dm_ids);
+		foreach ($del_dm_ids as $key) {
+			$redis->srem(SWAN_CACHE_DM_IDS, $key);
+			$redis->delete('dm_' . $key);
 		}
 
 		// 缓存监控器相关数据
@@ -217,6 +225,8 @@ class sw_cache_config extends sw_abstract
 			$this->log($e->getMessage(), LOG_INFO);
 		}
 
+		$old_monitor_ids = $redis->smembers(SWAN_CACHE_MONITOR_IDS);
+		$monitor_ids = array();
 		foreach ($monitor_data as $monitor_id => $value) {	
 			if (isset($value['archives'])) {
 				$cache_data = json_encode($value['archives']);
@@ -224,20 +234,37 @@ class sw_cache_config extends sw_abstract
 			}
 
 			if (isset($value['metrics'])) {
+				$scache_id = 'metric_ids_' . $monitor_id;
+				$old_metric_ids = $redis->smembers($scache_id);
+				$metric_ids = array();
 				foreach ($value['metrics'] as $val) {
 					$cache_id = 'metric_' . $monitor_id . '_' . $val['metric_id'];
 					$cache_data = json_encode($val);
 					$redis->set($cache_id, $cache_data, self::EXPIRE_TIME);
-					$scache_id = 'metric_ids_' . $monitor_id;
+					$metric_ids[] = $val['metric_id'];
 					$redis->sadd($scache_id, $val['metric_id']);
 					$redis->expire($scache_id, self::EXPIRE_TIME);
+				}
+				$del_metric_ids = array_diff($old_metric_ids, $metric_ids);
+				foreach ($del_metric_ids as $metric_id) {
+					$redis->srem($scache_id, $metric_id);
+					$redis->delete('metric_' . $monitor_id . '_' . $metric_id);
 				}
 			}
 
 			if (isset($value['basic'])) {
 				$cache_data = json_encode($value['basic']);
 				$redis->set('monitor_' . $monitor_id, $cache_data, self::EXPIRE_TIME);
+				$monitor_ids[] = $monitor_id;
+				$redis->sadd(SWAN_CACHE_MONITOR_IDS, $monitor_id);
+				$redis->expire(SWAN_CACHE_MONITOR_IDS, self::EXPIRE_TIME);
 			}
+		}
+
+		$del_monitor_ids = array_diff($old_monitor_ids, $monitor_ids);
+		foreach ($del_monitor_ids as $monitor_id) {
+			$redis->srem(SWAN_CACHE_MONITOR_IDS, $monitor_id);
+			$redis->delete('monitor_' . $monitor_id);
 		}
 
 	}
