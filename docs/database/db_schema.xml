@@ -343,6 +343,127 @@
             </table>
 
             <!-- }}} -->
+            <!-- {{{ table device_alert -->
+
+            <table name="device_alert">
+                <desc>监控的设备的告警器</desc>
+                <engine>InnoDB</engine>
+                <charset>utf8</charset>
+                <columns>
+                    <column name="da_id">
+                        <desc>设备告警器策略 id</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+                        <unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                    <column name="dm_id">
+                        <desc>设备监控器 id</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+                        <unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                    <column name="device_id">
+                        <desc>设备 id</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+                        <unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+
+                    <column name="metric_id">
+                        <desc>监控数据项 id</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+                        <unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                    <column name="alert_type">
+                        <desc>告警类型 2: 数据项告警 4: 服务器告警 , 如果是选项之和说明是 数据项 + 服务器</desc>
+                        <type>tinyint</type>
+                        <nullable>false</nullable>
+                        <precision>1</precision>
+                        <unsigned>true</unsigned>
+                        <default>2</default>
+                    </column>
+
+                    <column name="wmax">
+                        <desc>警告高阀值</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+                        <unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                    <column name="wmin">
+                        <desc>警告低阀值</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+                        <unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                    <column name="amax">
+                        <desc>紧急高阀值</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+                        <unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                    <column name="amin">
+                        <desc>紧急低阀值</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+                        <unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                    <column name="nmax">
+                        <desc>提示高阀值</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+                        <unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                    <column name="nmin">
+                        <desc>提示低阀值</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+                        <unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+                </columns>
+
+                <keys>
+                    <key name="">
+                        <desc></desc>
+                        <type>primary</type>
+                        <fields>
+                            <field name="dm_id"></field>
+                            <field name="device_id"></field>
+                        </fields>
+                    </key>
+                </keys>
+            </table>
+
+            <!-- }}} -->
             <!-- {{{ table device_monitor_params -->
 
             <table name="device_monitor_params">
