@@ -60,8 +60,12 @@ class sw_member
 	 */
 	public static function condition_factory($type, array $params = array())
 	{
+		if (!strpos($type, '_')) {
+			throw new sw_exception('Invalide condition name.' . $type);
+		}
+		list($operator, $type) = explode('_', $type, 2);
 		\swan\member\sw_member::set_namespace("\\lib\\");
-		$condition = \swan\member\sw_member::condition_factory('member', $type, $params);
+		$condition = \swan\member\sw_member::condition_factory('member', $type, $params, $operator);
 		$condition->set_db(\swan\db\sw_db::singleton());
 		return $condition;
 	}

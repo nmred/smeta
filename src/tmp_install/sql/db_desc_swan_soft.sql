@@ -45,24 +45,24 @@ CREATE TABLE `sequence_device` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --  }}} 
--- {{{  table sequence_monitor
+-- {{{  table sequence_madapter
 
 -- 
--- 监控器数据表的唯一序列号
+-- 监控适配器数据表的唯一序列号
 -- 
--- monitor_id
--- 	设备 ID
+-- madapter_id
+-- 	监控适配器 ID
 -- table_name
 -- 	维护序列号的表名称
 -- sequence_id
 -- 	自增长 ID
 
-DROP TABLE IF EXISTS `sequence_monitor`;
-CREATE TABLE `sequence_monitor` (
-	`monitor_id` int(11) UNSIGNED NOT NULL ,
+DROP TABLE IF EXISTS `sequence_madapter`;
+CREATE TABLE `sequence_madapter` (
+	`madapter_id` int(11) UNSIGNED NOT NULL ,
 	`table_name` varchar(64) NOT NULL ,
 	`sequence_id` int(11) UNSIGNED NOT NULL ,
-	PRIMARY KEY (`monitor_id`,`table_name`)
+	PRIMARY KEY (`madapter_id`,`table_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --  }}} 
@@ -124,7 +124,7 @@ CREATE TABLE `device_basic` (
 	`device_id` int(11) UNSIGNED NOT NULL ,
 	`device_display_name` varchar(255) NOT NULL ,
 	`host_name` varchar(255) NOT NULL ,
-	`heartbeat_time` int(11) UNSIGNED NOT NULL ,
+	`heartbeat_time` int(11) UNSIGNED NOT NULL DEFAULT '300',
 	PRIMARY KEY (`device_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -132,23 +132,23 @@ CREATE TABLE `device_basic` (
 -- {{{  table device_monitor
 
 -- 
--- 监控的设备的监控器
+-- 监控的设备的监控适配器
 -- 
 -- dm_id
--- 	设备监控器 id
+-- 	设备监控适配器 id
 -- dm_name
--- 	设备监控器名称
+-- 	设备监控适配器名称
 -- device_id
 -- 	设备 id
--- monitor_id
--- 	监控器 id
+-- madapter_id
+-- 	监控适配器 id
 
 DROP TABLE IF EXISTS `device_monitor`;
 CREATE TABLE `device_monitor` (
 	`dm_id` int(11) UNSIGNED NOT NULL ,
 	`dm_name` varchar(255) NOT NULL ,
 	`device_id` int(11) UNSIGNED NOT NULL ,
-	`monitor_id` int(11) UNSIGNED NOT NULL ,
+	`madapter_id` int(11) UNSIGNED NOT NULL ,
 	PRIMARY KEY (`dm_id`,`device_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -156,14 +156,14 @@ CREATE TABLE `device_monitor` (
 -- {{{  table device_monitor_params
 
 -- 
--- 监控器参数
+-- 监控适配器参数
 -- 
 -- attr_id
--- 	监控器属性 id
+-- 	监控适配器属性 id
 -- device_id
 -- 	设备 id
 -- dm_id
--- 	设备监控器 id
+-- 	设备监控适配器 id
 -- value
 -- 	属性值
 
@@ -177,45 +177,45 @@ CREATE TABLE `device_monitor_params` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --  }}} 
--- {{{  table monitor_basic
+-- {{{  table madapter_basic
 
 -- 
--- 监控器管理
+-- 监控适配器管理
 -- 
--- monitor_id
--- 	监控器 id
--- monitor_name
--- 	监控器名称
--- monitor_display_name
--- 	监控器显示名称
+-- madapter_id
+-- 	监控适配器 id
+-- madapter_name
+-- 	监控适配器名称
+-- madapter_display_name
+-- 	监控适配器显示名称
 -- steps
--- 	监控器存储 rrd 的间隔时间 (秒)
+-- 	监控适配器存储 rrd 的间隔时间 (秒)
 -- store_type
 -- 	数据存储引擎 2: rrd存储 4: redis存储 , 如果是选项之和说明是 rrd + redis
--- monitor_type
--- 	监控器类型：1: core 该类型在添加设备的时候会一并添加进去，不允许删除 2：normal 普通监控器
+-- madapter_type
+-- 	监控适配器类型：1: core 该类型在添加设备的时候会一并添加进去，不允许删除 2：normal 普通监控适配器
 
-DROP TABLE IF EXISTS `monitor_basic`;
-CREATE TABLE `monitor_basic` (
-	`monitor_id` int(11) UNSIGNED NOT NULL ,
-	`monitor_name` varchar(255) NOT NULL ,
-	`monitor_display_name` varchar(255) NOT NULL ,
+DROP TABLE IF EXISTS `madapter_basic`;
+CREATE TABLE `madapter_basic` (
+	`madapter_id` int(11) UNSIGNED NOT NULL ,
+	`madapter_name` varchar(255) NOT NULL ,
+	`madapter_display_name` varchar(255) NOT NULL ,
 	`steps` int(11) UNSIGNED NOT NULL ,
 	`store_type` tinyint(1) UNSIGNED NOT NULL DEFAULT '2',
-	`monitor_type` tinyint(1) UNSIGNED NOT NULL DEFAULT '2',
-	PRIMARY KEY (`monitor_id`)
+	`madapter_type` tinyint(1) UNSIGNED NOT NULL DEFAULT '2',
+	PRIMARY KEY (`madapter_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --  }}} 
--- {{{  table monitor_attribute
+-- {{{  table madapter_attribute
 
 -- 
--- 监控器属性管理
+-- 监控适配器属性管理
 -- 
 -- attr_id
--- 	监控器属性 id
--- monitor_id
--- 	监控器 id
+-- 	监控适配器属性 id
+-- madapter_id
+-- 	监控适配器 id
 -- attr_name
 -- 	属性名称
 -- attr_display_name
@@ -227,30 +227,30 @@ CREATE TABLE `monitor_basic` (
 -- attr_default
 -- 	属性默认值
 
-DROP TABLE IF EXISTS `monitor_attribute`;
-CREATE TABLE `monitor_attribute` (
+DROP TABLE IF EXISTS `madapter_attribute`;
+CREATE TABLE `madapter_attribute` (
 	`attr_id` int(11) UNSIGNED NOT NULL ,
-	`monitor_id` int(11) UNSIGNED NOT NULL ,
+	`madapter_id` int(11) UNSIGNED NOT NULL ,
 	`attr_name` varchar(255) NOT NULL ,
 	`attr_display_name` varchar(255) NOT NULL ,
 	`form_type` varchar(255) NOT NULL ,
 	`form_data` varchar(255) NOT NULL ,
 	`attr_default` varchar(255) NOT NULL ,
-	PRIMARY KEY (`attr_id`,`monitor_id`)
+	PRIMARY KEY (`attr_id`,`madapter_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --  }}} 
--- {{{  table monitor_metric
+-- {{{  table madapter_metric
 
 -- 
--- 监控器收集数据项
+-- 监控适配器收集数据项
 -- 
 -- metric_id
 -- 	数据项 id
 -- metric_name
 -- 	数据项名称
--- monitor_id
--- 	监控器 id
+-- madapter_id
+-- 	监控适配器 id
 -- collect_every
 -- 	轮询周期
 -- time_threshold
@@ -268,11 +268,11 @@ CREATE TABLE `monitor_attribute` (
 -- title
 -- 	数据项标题
 
-DROP TABLE IF EXISTS `monitor_metric`;
-CREATE TABLE `monitor_metric` (
+DROP TABLE IF EXISTS `madapter_metric`;
+CREATE TABLE `madapter_metric` (
 	`metric_id` int(11) UNSIGNED NOT NULL ,
 	`metric_name` varchar(255) NOT NULL ,
-	`monitor_id` int(11) UNSIGNED NOT NULL ,
+	`madapter_id` int(11) UNSIGNED NOT NULL ,
 	`collect_every` int(11) UNSIGNED NOT NULL ,
 	`time_threshold` int(11) UNSIGNED NOT NULL ,
 	`tmax` int(11) UNSIGNED NOT NULL ,
@@ -281,19 +281,19 @@ CREATE TABLE `monitor_metric` (
 	`vmax` varchar(255) NOT NULL DEFAULT 'U',
 	`unit` varchar(255) NOT NULL ,
 	`title` varchar(255) NOT NULL ,
-	PRIMARY KEY (`metric_id`,`monitor_id`)
+	PRIMARY KEY (`metric_id`,`madapter_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --  }}} 
--- {{{  table monitor_archive
+-- {{{  table madapter_archive
 
 -- 
--- 监控器数据归档规则
+-- 监控适配器数据归档规则
 -- 
 -- archive_id
 -- 	归档 id
--- monitor_id
--- 	监控器 id
+-- madapter_id
+-- 	监控适配器 id
 -- title
 -- 	归档规则标题
 -- cf_type
@@ -305,23 +305,23 @@ CREATE TABLE `monitor_metric` (
 -- rows
 -- 	一共归档条目数
 
-DROP TABLE IF EXISTS `monitor_archive`;
-CREATE TABLE `monitor_archive` (
+DROP TABLE IF EXISTS `madapter_archive`;
+CREATE TABLE `madapter_archive` (
 	`archive_id` int(11) UNSIGNED NOT NULL ,
-	`monitor_id` int(11) UNSIGNED NOT NULL ,
+	`madapter_id` int(11) UNSIGNED NOT NULL ,
 	`title` varchar(255) NOT NULL ,
 	`cf_type` int(11) UNSIGNED NOT NULL ,
 	`xff` varchar(255) NOT NULL DEFAULT '0.5',
 	`steps` int(11) UNSIGNED NOT NULL ,
 	`rows` int(11) UNSIGNED NOT NULL ,
-	PRIMARY KEY (`archive_id`,`monitor_id`)
+	PRIMARY KEY (`archive_id`,`madapter_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --  }}} 
 -- {{{  table graph_basic
 
 -- 
--- 监控器绘图配置
+-- 监控适配器绘图配置
 -- 
 -- graph_id
 -- 	绘图配置 id
@@ -360,7 +360,7 @@ CREATE TABLE `graph_basic` (
 -- {{{  table graph_def
 
 -- 
--- 监控器绘图数据项定义
+-- 监控适配器绘图数据项定义
 -- 
 -- def_id
 -- 	绘图数据项定义 id
@@ -387,7 +387,7 @@ CREATE TABLE `graph_def` (
 -- {{{  table graph_cdef
 
 -- 
--- 监控器绘图计算数据项定义
+-- 监控适配器绘图计算数据项定义
 -- 
 -- cdef_id
 -- 	绘图计算数据项定义 id
@@ -411,7 +411,7 @@ CREATE TABLE `graph_cdef` (
 -- {{{  table graph_graph
 
 -- 
--- 监控器绘图定义
+-- 监控适配器绘图定义
 -- 
 -- dgraph_id
 -- 	绘图定义 id
@@ -438,7 +438,7 @@ CREATE TABLE `graph_graph` (
 -- {{{  table graph_comment
 
 -- 
--- 监控器绘图注释性文字定义
+-- 监控适配器绘图注释性文字定义
 -- 
 -- comment_id
 -- 	绘图注释定义 id
@@ -459,7 +459,7 @@ CREATE TABLE `graph_comment` (
 -- {{{  table graph_gprint
 
 -- 
--- 监控器绘图格式化的文字信息
+-- 监控适配器绘图格式化的文字信息
 -- 
 -- gprint_id
 -- 	绘图格式化信息 id

@@ -100,15 +100,15 @@
             </table>
 
             <!-- }}} -->
-            <!-- {{{ table sequence_monitor -->
+            <!-- {{{ table sequence_madapter -->
 
-            <table name="sequence_monitor">
-                <desc>监控器数据表的唯一序列号</desc>
+            <table name="sequence_madapter">
+                <desc>监控适配器数据表的唯一序列号</desc>
                 <engine>InnoDB</engine>
                 <charset>utf8</charset>
                 <columns>
-                    <column name="monitor_id">
-                        <desc>设备 ID</desc>
+                    <column name="madapter_id">
+                        <desc>监控适配器 ID</desc>
                         <type>int</type>
                         <nullable>false</nullable>
                         <precision>11</precision>
@@ -139,7 +139,7 @@
 						<desc></desc>
                         <type>primary</type>
                         <fields>
-                            <field name="monitor_id"></field>
+                            <field name="madapter_id"></field>
                             <field name="table_name"></field>
                         </fields>
                     </key>
@@ -289,12 +289,12 @@
             <!-- {{{ table device_monitor -->
 
             <table name="device_monitor">
-                <desc>监控的设备的监控器</desc>
+                <desc>监控的设备的监控适配器</desc>
                 <engine>InnoDB</engine>
                 <charset>utf8</charset>
                 <columns>
                     <column name="dm_id">
-                        <desc>设备监控器 id</desc>
+                        <desc>设备监控适配器 id</desc>
                         <type>int</type>
                         <nullable>false</nullable>
                         <precision>11</precision>
@@ -303,7 +303,7 @@
                     </column>
 
                     <column name="dm_name">
-                        <desc>设备监控器名称</desc>
+                        <desc>设备监控适配器名称</desc>
                         <type>varchar</type>
                         <nullable>false</nullable>
                         <precision>255</precision>
@@ -319,8 +319,8 @@
                         <default></default>
                     </column>
 
-                    <column name="monitor_id">
-                        <desc>监控器 id</desc>
+                    <column name="madapter_id">
+                        <desc>监控适配器 id</desc>
                         <type>int</type>
                         <nullable>false</nullable>
                         <precision>11</precision>
@@ -328,127 +328,6 @@
                         <default></default>
                     </column>
 
-                </columns>
-
-                <keys>
-                    <key name="">
-                        <desc></desc>
-                        <type>primary</type>
-                        <fields>
-                            <field name="dm_id"></field>
-                            <field name="device_id"></field>
-                        </fields>
-                    </key>
-                </keys>
-            </table>
-
-            <!-- }}} -->
-            <!-- {{{ table device_alert -->
-
-            <table name="device_alert">
-                <desc>监控的设备的告警器</desc>
-                <engine>InnoDB</engine>
-                <charset>utf8</charset>
-                <columns>
-                    <column name="da_id">
-                        <desc>设备告警器策略 id</desc>
-                        <type>int</type>
-                        <nullable>false</nullable>
-                        <precision>11</precision>
-                        <unsigned>true</unsigned>
-                        <default></default>
-                    </column>
-
-                    <column name="dm_id">
-                        <desc>设备监控器 id</desc>
-                        <type>int</type>
-                        <nullable>false</nullable>
-                        <precision>11</precision>
-                        <unsigned>true</unsigned>
-                        <default></default>
-                    </column>
-
-                    <column name="device_id">
-                        <desc>设备 id</desc>
-                        <type>int</type>
-                        <nullable>false</nullable>
-                        <precision>11</precision>
-                        <unsigned>true</unsigned>
-                        <default></default>
-                    </column>
-
-
-                    <column name="metric_id">
-                        <desc>监控数据项 id</desc>
-                        <type>int</type>
-                        <nullable>false</nullable>
-                        <precision>11</precision>
-                        <unsigned>true</unsigned>
-                        <default></default>
-                    </column>
-
-                    <column name="alert_type">
-                        <desc>告警类型 2: 数据项告警 4: 服务器告警 , 如果是选项之和说明是 数据项 + 服务器</desc>
-                        <type>tinyint</type>
-                        <nullable>false</nullable>
-                        <precision>1</precision>
-                        <unsigned>true</unsigned>
-                        <default>2</default>
-                    </column>
-
-                    <column name="wmax">
-                        <desc>警告高阀值</desc>
-                        <type>int</type>
-                        <nullable>false</nullable>
-                        <precision>11</precision>
-                        <unsigned>true</unsigned>
-                        <default></default>
-                    </column>
-
-                    <column name="wmin">
-                        <desc>警告低阀值</desc>
-                        <type>int</type>
-                        <nullable>false</nullable>
-                        <precision>11</precision>
-                        <unsigned>true</unsigned>
-                        <default></default>
-                    </column>
-
-                    <column name="amax">
-                        <desc>紧急高阀值</desc>
-                        <type>int</type>
-                        <nullable>false</nullable>
-                        <precision>11</precision>
-                        <unsigned>true</unsigned>
-                        <default></default>
-                    </column>
-
-                    <column name="amin">
-                        <desc>紧急低阀值</desc>
-                        <type>int</type>
-                        <nullable>false</nullable>
-                        <precision>11</precision>
-                        <unsigned>true</unsigned>
-                        <default></default>
-                    </column>
-
-                    <column name="nmax">
-                        <desc>提示高阀值</desc>
-                        <type>int</type>
-                        <nullable>false</nullable>
-                        <precision>11</precision>
-                        <unsigned>true</unsigned>
-                        <default></default>
-                    </column>
-
-                    <column name="nmin">
-                        <desc>提示低阀值</desc>
-                        <type>int</type>
-                        <nullable>false</nullable>
-                        <precision>11</precision>
-                        <unsigned>true</unsigned>
-                        <default></default>
-                    </column>
                 </columns>
 
                 <keys>
@@ -467,12 +346,12 @@
             <!-- {{{ table device_monitor_params -->
 
             <table name="device_monitor_params">
-                <desc>监控器参数</desc>
+                <desc>监控适配器参数</desc>
                 <engine>InnoDB</engine>
                 <charset>utf8</charset>
                 <columns>
                     <column name="attr_id">
-                        <desc>监控器属性 id</desc>
+                        <desc>监控适配器属性 id</desc>
                         <type>int</type>
                         <nullable>false</nullable>
                         <precision>11</precision>
@@ -490,7 +369,7 @@
                     </column>
 
                     <column name="dm_id">
-                        <desc>设备监控器 id</desc>
+                        <desc>设备监控适配器 id</desc>
                         <type>int</type>
                         <nullable>false</nullable>
                         <precision>11</precision>
@@ -522,15 +401,15 @@
             </table>
 
             <!-- }}} -->
-            <!-- {{{ table monitor_basic -->
+            <!-- {{{ table madapter_basic -->
 
-            <table name="monitor_basic">
-                <desc>监控器管理</desc>
+            <table name="madapter_basic">
+                <desc>监控适配器管理</desc>
                 <engine>InnoDB</engine>
                 <charset>utf8</charset>
                 <columns>
-                    <column name="monitor_id">
-                        <desc>监控器 id</desc>
+                    <column name="madapter_id">
+                        <desc>监控适配器 id</desc>
                         <type>int</type>
                         <nullable>false</nullable>
                         <precision>11</precision>
@@ -538,16 +417,16 @@
                         <default></default>
                     </column>
 
-                    <column name="monitor_name">
-                        <desc>监控器名称</desc>
+                    <column name="madapter_name">
+                        <desc>监控适配器名称</desc>
                         <type>varchar</type>
                         <nullable>false</nullable>
                         <precision>255</precision>
                         <default></default>
                     </column>
 
-                    <column name="monitor_display_name">
-                        <desc>监控器显示名称</desc>
+                    <column name="madapter_display_name">
+                        <desc>监控适配器显示名称</desc>
                         <type>varchar</type>
                         <nullable>false</nullable>
                         <precision>255</precision>
@@ -555,7 +434,7 @@
                     </column>
 
                     <column name="steps">
-                        <desc>监控器存储 rrd 的间隔时间 (秒)</desc>
+                        <desc>监控适配器存储 rrd 的间隔时间 (秒)</desc>
                         <type>int</type>
                         <nullable>false</nullable>
                         <precision>11</precision>
@@ -572,8 +451,8 @@
                         <default>2</default>
                     </column>
 
-                    <column name="monitor_type">
-                        <desc>监控器类型：1: core 该类型在添加设备的时候会一并添加进去，不允许删除 2：normal 普通监控器</desc>
+                    <column name="madapter_type">
+                        <desc>监控适配器类型：1: core 该类型在添加设备的时候会一并添加进去，不允许删除 2：normal 普通监控适配器</desc>
                         <type>tinyint</type>
                         <nullable>false</nullable>
                         <precision>1</precision>
@@ -587,22 +466,22 @@
                         <desc></desc>
                         <type>primary</type>
                         <fields>
-                            <field name="monitor_id"></field>
+                            <field name="madapter_id"></field>
                         </fields>
                     </key>
                 </keys>
             </table>
 
             <!-- }}} -->
-            <!-- {{{ table monitor_attribute -->
+            <!-- {{{ table madapter_attribute -->
 
-            <table name="monitor_attribute">
-                <desc>监控器属性管理</desc>
+            <table name="madapter_attribute">
+                <desc>监控适配器属性管理</desc>
                 <engine>InnoDB</engine>
                 <charset>utf8</charset>
                 <columns>
                     <column name="attr_id">
-                        <desc>监控器属性 id</desc>
+                        <desc>监控适配器属性 id</desc>
                         <type>int</type>
                         <nullable>false</nullable>
                         <precision>11</precision>
@@ -610,8 +489,8 @@
                         <default></default>
                     </column>
 
-                    <column name="monitor_id">
-                        <desc>监控器 id</desc>
+                    <column name="madapter_id">
+                        <desc>监控适配器 id</desc>
                         <type>int</type>
                         <nullable>false</nullable>
                         <precision>11</precision>
@@ -667,17 +546,17 @@
                         <type>primary</type>
                         <fields>
                             <field name="attr_id"></field>
-                            <field name="monitor_id"></field>
+                            <field name="madapter_id"></field>
                         </fields>
                     </key>
                 </keys>
             </table>
 
             <!-- }}} -->
-            <!-- {{{ table monitor_metric -->
+            <!-- {{{ table madapter_metric -->
 
-            <table name="monitor_metric">
-                <desc>监控器收集数据项</desc>
+            <table name="madapter_metric">
+                <desc>监控适配器收集数据项</desc>
                 <engine>InnoDB</engine>
                 <charset>utf8</charset>
                 <columns>
@@ -698,8 +577,8 @@
                         <default></default>
                     </column>
 
-                    <column name="monitor_id">
-                        <desc>监控器 id</desc>
+                    <column name="madapter_id">
+                        <desc>监控适配器 id</desc>
                         <type>int</type>
                         <nullable>false</nullable>
                         <precision>11</precision>
@@ -783,17 +662,17 @@
                         <type>primary</type>
                         <fields>
                             <field name="metric_id"></field>
-                            <field name="monitor_id"></field>
+                            <field name="madapter_id"></field>
                         </fields>
                     </key>
                 </keys>
             </table>
 
             <!-- }}} -->
-            <!-- {{{ table monitor_archive -->
+            <!-- {{{ table madapter_archive -->
 
-            <table name="monitor_archive">
-                <desc>监控器数据归档规则</desc>
+            <table name="madapter_archive">
+                <desc>监控适配器数据归档规则</desc>
                 <engine>InnoDB</engine>
                 <charset>utf8</charset>
                 <columns>
@@ -806,8 +685,8 @@
                         <default></default>
                     </column>
 
-                    <column name="monitor_id">
-                        <desc>监控器 id</desc>
+                    <column name="madapter_id">
+                        <desc>监控适配器 id</desc>
                         <type>int</type>
                         <nullable>false</nullable>
                         <precision>11</precision>
@@ -866,7 +745,7 @@
                         <type>primary</type>
                         <fields>
                             <field name="archive_id"></field>
-                            <field name="monitor_id"></field>
+                            <field name="madapter_id"></field>
                         </fields>
                     </key>
                 </keys>
@@ -876,7 +755,7 @@
             <!-- {{{ table graph_basic -->
 
             <table name="graph_basic">
-                <desc>监控器绘图配置</desc>
+                <desc>监控适配器绘图配置</desc>
                 <engine>InnoDB</engine>
                 <charset>utf8</charset>
                 <columns>
@@ -973,7 +852,7 @@
             <!-- {{{ table graph_def -->
 
             <table name="graph_def">
-                <desc>监控器绘图数据项定义</desc>
+                <desc>监控适配器绘图数据项定义</desc>
                 <engine>InnoDB</engine>
                 <charset>utf8</charset>
                 <columns>
@@ -1038,7 +917,7 @@
             <!-- {{{ table graph_cdef -->
 
             <table name="graph_cdef">
-                <desc>监控器绘图计算数据项定义</desc>
+                <desc>监控适配器绘图计算数据项定义</desc>
                 <engine>InnoDB</engine>
                 <charset>utf8</charset>
                 <columns>
@@ -1094,7 +973,7 @@
             <!-- {{{ table graph_graph -->
 
             <table name="graph_graph">
-                <desc>监控器绘图定义</desc>
+                <desc>监控适配器绘图定义</desc>
                 <engine>InnoDB</engine>
                 <charset>utf8</charset>
                 <columns>
@@ -1159,7 +1038,7 @@
             <!-- {{{ table graph_comment -->
 
             <table name="graph_comment">
-                <desc>监控器绘图注释性文字定义</desc>
+                <desc>监控适配器绘图注释性文字定义</desc>
                 <engine>InnoDB</engine>
                 <charset>utf8</charset>
                 <columns>
@@ -1207,7 +1086,7 @@
             <!-- {{{ table graph_gprint -->
 
             <table name="graph_gprint">
-                <desc>监控器绘图格式化的文字信息</desc>
+                <desc>监控适配器绘图格式化的文字信息</desc>
                 <engine>InnoDB</engine>
                 <charset>utf8</charset>
                 <columns>
