@@ -114,5 +114,63 @@ class sw_basic_test extends sw_test_db
 	}
 
 	// }}}
+	// {{{ public function test_mod_basic()
+
+	/**
+	 * test_mod_basic 
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function test_mod_basic()
+	{
+		$data = array(
+			'device_display_name' => 'desc_lan-116',
+			'host_name' => '192.168.2.116',
+			'heartbeat_time' => 350,
+		);
+		$property_basic = sw_member::property_factory('device_basic', $data);
+		$condition = sw_member::condition_factory('mod_device_basic', array('device_id' => 2));
+		$condition->set_property($property_basic);
+		$condition->set_in('device_id');
+		$device = sw_member::operator_factory('device');
+		$device->get_operator('basic')->mod_basic($condition);
+
+		$query_table = $this->getConnection()
+			                ->CreateQueryTable('device_basic', 'select * from device_basic');
+		$expect = $this->createXMLDataSet(dirname(__FILE__) . '/_files/mod_result.xml')
+			           ->getTable('device_basic');
+		$this->assertTablesEqual($expect, $query_table);
+	}
+
+	// }}}
+	// {{{ public function test_del_basic()
+
+	/**
+	 * test_del_basic 
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function test_del_basic()
+	{
+		$data = array(
+			'device_display_name' => 'desc_lan-116',
+			'host_name' => '192.168.2.116',
+			'heartbeat_time' => 350,
+		);
+		$condition = sw_member::condition_factory('del_device_basic', array('device_id' => 2));
+		$condition->set_in('device_id');
+		$device = sw_member::operator_factory('device');
+		$device->get_operator('basic')->del_basic($condition);
+
+		$query_table = $this->getConnection()
+			                ->CreateQueryTable('device_basic', 'select * from device_basic');
+		$expect = $this->createXMLDataSet(dirname(__FILE__) . '/_files/del_result.xml')
+			           ->getTable('device_basic');
+		$this->assertTablesEqual($expect, $query_table);
+	}
+
+	// }}}
 	// }}}
 }

@@ -11,5 +11,11 @@
 			<value>192.168.1.114</value>
 			<value>300</value>
 		</row>
+		<row>
+			<value>2</value>
+			<value>desc_lan-116</value>
+			<value>192.168.2.116</value>
+			<value>350</value>
+		</row>
 	</table>
 </dataset>
