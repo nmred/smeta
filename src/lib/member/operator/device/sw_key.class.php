@@ -68,11 +68,11 @@ class sw_key extends sw_abstract
 	/**
 	 * get_key 
 	 * 
-	 * @param \lib\member\condition\sw_get_device_key $condition 
+	 * @param \lib\member\condition\get\sw_device_key $condition 
 	 * @access public
 	 * @return void
 	 */
-	public function get_key(\lib\member\condition\sw_get_device_key $condition)
+	public function get_key(\lib\member\condition\get\sw_device_key $condition)
 	{
 		$condition->check_params();
 		$select = $this->__db->select()
@@ -87,11 +87,11 @@ class sw_key extends sw_abstract
 	/**
 	 * 删除 device 设备 KEY 
 	 * 
-	 * @param \lib\member\condition\sw_del_device_key $condition 
+	 * @param \lib\member\condition\del\sw_device_key $condition 
 	 * @access public
 	 * @return void
 	 */
-	public function del_key(\lib\member\condition\sw_del_device_key $condition)
+	public function del_key(\lib\member\condition\del\sw_device_key $condition)
 	{
 		$condition->check_params();
 		$where = $condition->where();

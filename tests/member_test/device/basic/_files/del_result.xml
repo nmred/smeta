@@ -1,0 +1,11 @@
+<?xml version="1.0" ?>
+<dataset>
+	<table name="device_key">
+		<column>device_id</column>
+		<column>device_name</column>
+		<row>
+			<value>2</value>
+			<value>lan-115</value>
+		</row>
+	</table>
+</dataset>

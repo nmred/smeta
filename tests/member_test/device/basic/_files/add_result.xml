@@ -1,0 +1,51 @@
+<?xml version="1.0" ?>
+<dataset>
+	<table name="sequence_global">
+		<column>table_name</column>
+		<column>sequence_id</column>
+		<row>
+			<value>device_key</value>
+			<value>3</value>
+		</row>
+	</table>
+	<table name="device_key">
+		<column>device_id</column>
+		<column>device_name</column>
+		<row>
+			<value>1</value>
+			<value>lan-114</value>
+		</row>
+		<row>
+			<value>2</value>
+			<value>lan-115</value>
+		</row>
+		<row>
+			<value>3</value>
+			<value>lan-116</value>
+		</row>
+	</table>
+	<table name="device_basic">
+		<column>device_id</column>
+		<column>device_display_name</column>
+		<column>host_name</column>
+		<column>heartbeat_time</column>
+		<row>
+			<value>1</value>
+			<value>desc_lan-114</value>
+			<value>192.168.1.114</value>
+			<value>300</value>
+		</row>
+		<row>
+			<value>2</value>
+			<value>desc_lan-115</value>
+			<value>192.168.1.115</value>
+			<value>300</value>
+		</row>
+		<row>
+			<value>3</value>
+			<value>desc_lan-116</value>
+			<value>192.168.1.116</value>
+			<value>300</value>
+		</row>
+	</table>
+</dataset>

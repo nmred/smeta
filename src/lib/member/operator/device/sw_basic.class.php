@@ -69,11 +69,11 @@ class sw_basic extends sw_abstract
 	/**
 	 * get_basic 
 	 * 
-	 * @param \lib\member\condition\sw_get_device_basic $condition 
+	 * @param \lib\member\condition\get\sw_device_basic $condition 
 	 * @access public
 	 * @return void
 	 */
-	public function get_basic(\lib\member\condition\sw_get_device_basic $condition)
+	public function get_basic(\lib\member\condition\get\sw_device_basic $condition)
 	{
 		$condition->check_params();
 		$select = $this->__db->select()
