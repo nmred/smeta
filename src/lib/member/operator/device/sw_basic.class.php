@@ -86,13 +86,13 @@ class sw_basic extends sw_abstract
 	// {{{ public function mod_basic()
 
 	/**
-	 * mod_basic 
+	 * 修改设备的基本基本信息 
 	 * 
-	 * @param \lib\member\condition\sw_mod_device_basic $condition 
+	 * @param \lib\member\condition\mod\sw_device_basic $condition 
 	 * @access public
 	 * @return void
 	 */
-	public function mod_basic(\lib\member\condition\sw_mod_device_basic $condition)
+	public function mod_basic(\lib\member\condition\mod\sw_device_basic $condition)
 	{
 		$condition->check_params();
 		$params = $condition->params();
@@ -112,11 +112,11 @@ class sw_basic extends sw_abstract
 	/**
 	 * 删除 device 设备信息 
 	 * 
-	 * @param \lib\member\condition\sw_del_device_basic $condition 
+	 * @param \lib\member\condition\del\sw_device_basic $condition 
 	 * @access public
 	 * @return void
 	 */
-	public function del_basic(\lib\member\condition\sw_del_device_basic $condition)
+	public function del_basic(\lib\member\condition\del\sw_device_basic $condition)
 	{
 		$condition->check_params();
 		$where = $condition->where();

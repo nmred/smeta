@@ -103,15 +103,14 @@ class sw_basic_test extends sw_test_db
 	 */
 	public function test_get_basic()
 	{
-	//	$condition = sw_mem::condition_factory('get_device_basic');
-	//	$device = sw_mem::operator_factory('device');
-	//	$device_basic = $device->get_operator('basic')->get_basic($condition);
-	//	$this->assertEquals(3, $device_id);
-	//	$query_table = $this->getConnection()
-	//		                ->CreateQueryTable('device_basic', 'select * from device_basic');
-	//	$expect = $this->createXMLDataSet(dirname(__FILE__) . '/_files/add_result.xml')
-	//		           ->getTable('device_basic');
-	//	$this->assertTablesEqual($expect, $query_table);
+		$condition = sw_member::condition_factory('get_device_basic');
+		$device    = sw_member::operator_factory('device');
+		$device_basic = $device->get_operator('basic')->get_basic($condition);
+		$query_table  = $this->array_to_dbset(array('device_basic' => $device_basic))
+							 ->getTable('device_basic');
+		$expect = $this->createXMLDataSet(dirname(__FILE__) . '/_files/get_result.xml')
+			           ->getTable('device_basic');
+		$this->assertTablesEqual($expect, $query_table);
 	}
 
 	// }}}
