@@ -4,6 +4,8 @@ php:
     - 5.4
     - 5.5
 before_script:
+    - curl -s http://getcomposer.org/installer | php
+    - php composer.phar install --dev --no-interaction
     - mysql -e 'create database swan_soft;'
     - mysql -e 'use swan_soft;'
     - mysql -e 'source src/tmp_install/sql/db_desc_swan_soft.sql;'
@@ -13,7 +15,15 @@ before_script:
     - echo "<?php return array('db' => array('type' => 'mysql', 'dbname' => 'swan_soft', 'username' => 'root', 'password' => '', 'host' => '127.0.0.1', 'port' => '3306', 'driver_options' => array()));" > src/inc/conf/config.php
     - cd tests
 
-script: phpunit -v --coverage-text
+script:
+  - mkdir -p build/logs
+  - mkdir -p build/coverage
+  - php vendor/bin/phpunit -c phpunit.xml.dist
+
+after_script:
+  - php vendor/bin/phpcov.php --merge --clover build/logs/clover.xml --whitelist library build/coverage
+  - php vendor/bin/coveralls -v
+
 notifications:
     email:
         - swansoft_team@groups.163.com
