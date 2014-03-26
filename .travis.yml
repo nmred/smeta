@@ -19,7 +19,7 @@ script:
 
 after_script:
   - php ../vendor/bin/phpcov.php --merge --clover build/logs/clover.xml --whitelist library build/coverage
-  - php ../vendor/satooshi/php-coveralls -v
+  - php ../vendor/bin/coveralls  -v
 
 notifications:
     email:
