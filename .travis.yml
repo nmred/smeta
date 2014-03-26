@@ -15,13 +15,12 @@ before_script:
 script:
   - mkdir -p build/logs
   - mkdir -p build/coverage
-  - php vendor/bin/phpunit -c phpunit.xml.dist
+  - php ../vendor/bin/phpunit -c --coverage-clover build/logs/clover.xml 
 
 after_script:
-  - php vendor/bin/phpcov.php --merge --clover build/logs/clover.xml --whitelist library build/coverage
-  - php vendor/bin/coveralls -v
+  - php ../vendor/bin/phpcov.php --merge --clover build/logs/clover.xml --whitelist library build/coverage
+  - php ../vendor/satooshi/php-coveralls -v
 
 notifications:
     email:
         - swansoft_team@groups.163.com
-        
