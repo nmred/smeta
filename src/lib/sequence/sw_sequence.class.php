@@ -215,35 +215,35 @@ class sw_sequence
 	}
 
 	// }}}
-	// {{{ public static function get_next_monitor()
+	// {{{ public static function get_next_madapter()
 
 	/**
 	 * 获取全局的自增长 ID 
 	 * 
-	 * @param intger $monitor_id
+	 * @param intger $madapter_id
 	 * @param string $table_name
 	 * @param sw_db $db
 	 * @param int $init_id
 	 * @access public
 	 * @return intger
 	 */
-	public static function get_next_monitor($monitor_id, $table_name, $db = null, $init_id = 1)
+	public static function get_next_madapter($madapter_id, $table_name, $db = null, $init_id = 1)
 	{
 		if (!isset($db)) {
 			$db = sw_db::singleton();	
 		}
 
-		//判断是否是合法的 monitor_id
+		//判断是否是合法的 madapter_id
 		try {
-			$monitor_id = $db->fetch_one($db->select()
-							  ->from(SWAN_TBN_MONITOR_BASIC, array('monitor_id'))
-							  ->where('monitor_id= ?'), $monitor_id);
+			$madapter_id = $db->fetch_one($db->select()
+							  ->from(SWAN_TBN_MADAPTER_BASIC, array('madapter_id'))
+							  ->where('madapter_id= ?'), $madapter_id);
 		} catch (sw_exception $e) {
-			throw new sw_exception('invalid monitor id, get sequence faild. ');	
+			throw new sw_exception('invalid madapter id, get sequence faild. ');	
 		}
 
-		if (false === $monitor_id) {
-			throw new sw_exception('invalid monitor id, get sequence faild. ');	
+		if (false === $madapter_id) {
+			throw new sw_exception('invalid madapter id, get sequence faild. ');	
 		}
 		
 		try {
@@ -256,34 +256,34 @@ class sw_sequence
 		try {
 			$fields = array('sequence_id' => new sw_db_expr('sequence_id+' . self::get_increment_num()));	
 			$where = $db->quote_into('table_name = ?', $table_name);
-			$where .= $db->quote_into(' AND monitor_id = ?', $monitor_id);
+			$where .= $db->quote_into(' AND madapter_id = ?', $madapter_id);
 			$try_num = 1;
 			do {
-				$affected = $db->update(SWAN_TBN_SEQUENCE_MONITOR, $fields, $where);
+				$affected = $db->update(SWAN_TBN_SEQUENCE_MADAPTER, $fields, $where);
 				if (1 === $affected) {
 					break;	
 				}	
 
 				//更新失败，记录不存在则添加
 				$attribute = array(
-					'monitor_id' => $monitor_id,
+					'madapter_id' => $madapter_id,
 					'table_name' => $table_name,
 					'sequence_id' => $init_id,
 				);
 				try {
-					$affected = $db->insert(SWAN_TBN_SEQUENCE_MONITOR, $attribute); 
+					$affected = $db->insert(SWAN_TBN_SEQUENCE_MADAPTER, $attribute); 
 				} catch (sw_exception $e){
 				}
 			} while ($affected !== 1 && $try_num < self::MAX_TRY_NUM);
 
 			if (1 === $affected) {
 				$id = $db->fetch_one($db->select()
-										->from(SWAN_TBN_SEQUENCE_MONITOR, array('sequence_id' => 'sequence_id'))
-										->where('table_name= ? AND monitor_id= ?'), array($table_name, $monitor_id));	
+										->from(SWAN_TBN_SEQUENCE_MADAPTER, array('sequence_id' => 'sequence_id'))
+										->where('table_name= ? AND madapter_id= ?'), array($table_name, $madapter_id));	
 			}
 
 			if (1 !== $affected || false === $id) {
-				throw new sw_exception('get monitor sequence faild.');	
+				throw new sw_exception('get madapter sequence faild.');	
 			}
 
 			if ($transaction) {

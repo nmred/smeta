@@ -77,11 +77,11 @@ class sw_metric extends sw_abstract
 	/**
 	 * get_metric 
 	 * 
-	 * @param \lib\member\condition\sw_get_madapter_metric $condition 
+	 * @param \lib\member\condition\get\sw_madapter_metric $condition 
 	 * @access public
 	 * @return void
 	 */
-	public function get_metric(\lib\member\condition\sw_get_madapter_metric $condition)
+	public function get_metric(\lib\member\condition\get\sw_madapter_metric $condition)
 	{
 		$condition->check_params();
 		$select = $this->__db->select()
@@ -96,11 +96,11 @@ class sw_metric extends sw_abstract
 	/**
 	 * mod_metric 
 	 * 
-	 * @param \lib\member\condition\sw_mod_madapter_metric $condition 
+	 * @param \lib\member\condition\mod\sw_madapter_metric $condition 
 	 * @access public
 	 * @return void
 	 */
-	public function mod_metric(\lib\member\condition\sw_mod_madapter_metric $condition)
+	public function mod_metric(\lib\member\condition\mod\sw_madapter_metric $condition)
 	{
 		$condition->check_params();
 		$params = $condition->params();
@@ -120,11 +120,11 @@ class sw_metric extends sw_abstract
 	/**
 	 * 删除 madapter 数据项 
 	 * 
-	 * @param \lib\member\condition\sw_del_madapter_metric $condition 
+	 * @param \lib\member\condition\del\sw_madapter_metric $condition 
 	 * @access public
 	 * @return void
 	 */
-	public function del_metric(\lib\member\condition\sw_del_madapter_metric $condition)
+	public function del_metric(\lib\member\condition\del\sw_madapter_metric $condition)
 	{
 		$condition->check_params();
 		$where = $condition->where();

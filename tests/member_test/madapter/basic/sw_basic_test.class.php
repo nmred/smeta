@@ -12,13 +12,13 @@
 // | $_SWANBR_WEB_DOMAIN_$
 // +---------------------------------------------------------------------------
  
-namespace member_test\device\basic;
+namespace member_test\madapter\basic;
 use swan\test\sw_test_db;
 use \lib\member\sw_member;
 
 /**
 +------------------------------------------------------------------------------
-* 设备 basic 测试 
+* 监控适配器 basic 测试 
 +------------------------------------------------------------------------------
 * 
 * @package 
@@ -75,20 +75,21 @@ class sw_basic_test extends sw_test_db
 	public function test_add_basic()
 	{
 		$data = array(
-			'device_display_name' => 'desc_lan-116',
-			'host_name' => '192.168.1.116',
-			'heartbeat_time' => 300,
+			'steps' => 300,
+			'madapter_name' => 'nginx',
+			'madapter_display_name' => 'nginx监控适配器',
+			'store_type'    => 2,
+			'madapter_type' => 2,
 		);
-		$property_key   = sw_member::property_factory('device_key', array('device_id' => 3));
-		$property_basic = sw_member::property_factory('device_basic', $data);
-		$device    = sw_member::operator_factory('device', $property_key);
-		$device_id = $device->get_operator('basic')->add_basic($property_basic);
+		$basic_property = sw_member::property_factory('madapter_basic', $data);
+		$madapter = sw_member::operator_factory('madapter', $basic_property);
+		$madapter_id = $madapter->get_operator('basic')->add_basic();
 
-		$this->assertEquals(3, $device_id);
+		$this->assertEquals(3, $madapter_id);
 		$query_table = $this->getConnection()
-			                ->CreateQueryTable('device_basic', 'select * from device_basic');
+			                ->CreateQueryTable('madapter_basic', 'select * from madapter_basic');
 		$expect = $this->createXMLDataSet(dirname(__FILE__) . '/_files/add_result.xml')
-			           ->getTable('device_basic');
+			           ->getTable('madapter_basic');
 		$this->assertTablesEqual($expect, $query_table);
 	}
 
@@ -103,14 +104,38 @@ class sw_basic_test extends sw_test_db
 	 */
 	public function test_get_basic()
 	{
-		$condition = sw_member::condition_factory('get_device_basic');
-		$device    = sw_member::operator_factory('device');
-		$device_basic = $device->get_operator('basic')->get_basic($condition);
-		$query_table  = $this->array_to_dbset(array('device_basic' => $device_basic))
-							 ->getTable('device_basic');
+		$condition = sw_member::condition_factory('get_madapter_basic');
+		$madapter  = sw_member::operator_factory('madapter');
+		$madapter_basic = $madapter->get_operator('basic')->get_basic($condition);
+		$query_table  = $this->array_to_dbset(array('madapter_basic' => $madapter_basic))
+							 ->getTable('madapter_basic');
 		$expect = $this->createXMLDataSet(dirname(__FILE__) . '/_files/get_result.xml')
-			           ->getTable('device_basic');
+			           ->getTable('madapter_basic');
 		$this->assertTablesEqual($expect, $query_table);
+	}
+
+	// }}}
+	// {{{ public function test_get_info()
+
+	/**
+	 * test_get_info 
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function test_get_info()
+	{
+		$data = array (
+		     'madapter_id' => '1',
+		     'madapter_name' => 'apache',
+		     'madapter_display_name' => 'apache监控适配器',
+		     'steps' => '300',
+		     'store_type' => '2',
+		     'madapter_type' => '2',
+		);
+		$madapter = sw_member::operator_factory('madapter');
+		$info = $madapter->get_operator('basic')->get_info(1);
+		$this->assertEquals($data, $info);
 	}
 
 	// }}}
@@ -125,21 +150,24 @@ class sw_basic_test extends sw_test_db
 	public function test_mod_basic()
 	{
 		$data = array(
-			'device_display_name' => 'desc_lan-116',
-			'host_name' => '192.168.2.116',
-			'heartbeat_time' => 350,
+			'steps' => 350,
+			'madapter_name' => 'ngnix',
+			'madapter_display_name' => 'ngnix监控适配器',
+			'store_type'    => 2,
+			'madapter_type' => 2,
 		);
-		$property_basic = sw_member::property_factory('device_basic', $data);
-		$condition = sw_member::condition_factory('mod_device_basic', array('device_id' => 2));
+
+		$property_basic = sw_member::property_factory('madapter_basic', $data);
+		$condition = sw_member::condition_factory('mod_madapter_basic', array('madapter_id' => 2));
 		$condition->set_property($property_basic);
-		$condition->set_in('device_id');
-		$device = sw_member::operator_factory('device');
-		$device->get_operator('basic')->mod_basic($condition);
+		$condition->set_in('madapter_id');
+		$madapter = sw_member::operator_factory('madapter');
+		$madapter->get_operator('basic')->mod_basic($condition);
 
 		$query_table = $this->getConnection()
-			                ->CreateQueryTable('device_basic', 'select * from device_basic');
+			                ->CreateQueryTable('madapter_basic', 'select * from madapter_basic');
 		$expect = $this->createXMLDataSet(dirname(__FILE__) . '/_files/mod_result.xml')
-			           ->getTable('device_basic');
+			           ->getTable('madapter_basic');
 		$this->assertTablesEqual($expect, $query_table);
 	}
 
@@ -154,15 +182,15 @@ class sw_basic_test extends sw_test_db
 	 */
 	public function test_del_basic()
 	{
-		$condition = sw_member::condition_factory('del_device_basic', array('device_id' => 2));
-		$condition->set_in('device_id');
-		$device = sw_member::operator_factory('device');
-		$device->get_operator('basic')->del_basic($condition);
+		$condition = sw_member::condition_factory('del_madapter_basic', array('madapter_id' => 2));
+		$condition->set_in('madapter_id');
+		$madapter = sw_member::operator_factory('madapter');
+		$madapter->get_operator('basic')->del_basic($condition);
 
 		$query_table = $this->getConnection()
-			                ->CreateQueryTable('device_basic', 'select * from device_basic');
+			                ->CreateQueryTable('madapter_basic', 'select * from madapter_basic');
 		$expect = $this->createXMLDataSet(dirname(__FILE__) . '/_files/del_result.xml')
-			           ->getTable('device_basic');
+			           ->getTable('madapter_basic');
 		$this->assertTablesEqual($expect, $query_table);
 	}
 

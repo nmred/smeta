@@ -77,11 +77,11 @@ class sw_attribute extends sw_abstract
 	/**
 	 * 获取监控适配器属性 
 	 * 
-	 * @param \lib\member\condition\sw_get_madapter_attribute $condition 
+	 * @param \lib\member\condition\get\sw_madapter_attribute $condition 
 	 * @access public
 	 * @return void
 	 */
-	public function get_attribute(\lib\member\condition\sw_get_madapter_attribute $condition)
+	public function get_attribute(\lib\member\condition\get\sw_madapter_attribute $condition)
 	{
 		$condition->check_params();
 		$select = $this->__db->select()
@@ -122,11 +122,11 @@ class sw_attribute extends sw_abstract
 	/**
 	 * mod_attribute 
 	 * 
-	 * @param \lib\member\condition\sw_mod_madapter_attribute $condition 
+	 * @param \lib\member\condition\mod\sw_madapter_attribute $condition 
 	 * @access public
 	 * @return void
 	 */
-	public function mod_attribute(\lib\member\condition\sw_mod_madapter_attribute $condition)
+	public function mod_attribute(\lib\member\condition\mod\sw_madapter_attribute $condition)
 	{
 		$condition->check_params();
 		$params = $condition->params();
@@ -146,11 +146,11 @@ class sw_attribute extends sw_abstract
 	/**
 	 * 删除 madapter 属性 
 	 * 
-	 * @param \lib\member\condition\sw_del_madapter_attribute $condition 
+	 * @param \lib\member\condition\del\sw_madapter_attribute $condition 
 	 * @access public
 	 * @return void
 	 */
-	public function del_attribute(\lib\member\condition\sw_del_madapter_attribute $condition)
+	public function del_attribute(\lib\member\condition\del\sw_madapter_attribute $condition)
 	{
 		$condition->check_params();
 		$where = $condition->where();

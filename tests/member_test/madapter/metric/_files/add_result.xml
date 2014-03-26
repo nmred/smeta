@@ -1,0 +1,102 @@
+<?xml version="1.0" ?>
+<dataset>
+	<table name="sequence_global">
+		<column>table_name</column>
+		<column>sequence_id</column>
+		<row>
+			<value>madapter_basic</value>
+			<value>2</value>
+		</row>
+	</table>
+	<table name="sequence_madapter">
+		<column>madapter_id</column>
+		<column>table_name</column>
+		<column>sequence_id</column>
+		<row>
+			<value>1</value>
+			<value>madapter_metric</value>
+			<value>2</value>
+		</row>
+		<row>
+			<value>2</value>
+			<value>madapter_metric</value>
+			<value>1</value>
+		</row>
+	</table>
+	<table name="madapter_basic">
+		<column>madapter_id</column>
+		<column>madapter_name</column>
+		<column>madapter_display_name</column>
+		<column>steps</column>
+		<column>store_type</column>
+		<column>madapter_type</column>
+		<row>
+			<value>1</value>
+			<value>apache</value>
+			<value>apache监控适配器</value>
+			<value>300</value>
+			<value>2</value>
+			<value>2</value>
+		</row>
+		<row>
+			<value>2</value>
+			<value>mysql</value>
+			<value>mysql监控适配器</value>
+			<value>300</value>
+			<value>2</value>
+			<value>2</value>
+		</row>
+	</table>
+	<table name="madapter_metric">
+		<column>metric_id</column>
+		<column>metric_name</column>
+		<column>madapter_id</column>
+		<column>collect_every</column>
+		<column>time_threshold</column>
+		<column>tmax</column>
+		<column>dst_type</column>
+		<column>vmin</column>
+		<column>vmax</column>
+		<column>unit</column>
+		<column>title</column>
+		<row>
+			<value>1</value>
+			<value>ap_busy_workers</value>
+			<value>1</value>
+			<value>30</value>
+			<value>2000</value>
+			<value>600</value>
+			<value>1</value>
+			<value>U</value>
+			<value>U</value>
+			<value>N</value>
+			<value>Apache - 繁忙线程数</value>
+		</row>
+		<row>
+			<value>1</value>
+			<value>mysql_select</value>
+			<value>2</value>
+			<value>60</value>
+			<value>2000</value>
+			<value>600</value>
+			<value>1</value>
+			<value>U</value>
+			<value>U</value>
+			<value>N</value>
+			<value>MySQL - Select 查询数</value>
+		</row>
+		<row>
+			<value>2</value>
+			<value>ap_idle_workers</value>
+			<value>1</value>
+			<value>30</value>
+			<value>2000</value>
+			<value>600</value>
+			<value>1</value>
+			<value>U</value>
+			<value>U</value>
+			<value>N</value>
+			<value>Apache - 空闲线程数</value>
+		</row>
+	</table>
+</dataset>

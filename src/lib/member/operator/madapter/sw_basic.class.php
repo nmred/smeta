@@ -66,13 +66,13 @@ class sw_basic extends sw_abstract
 	// {{{ public function get_basic()
 
 	/**
-	 * get_basic 
+	 * 获取监控适配器 basic 信息 
 	 * 
-	 * @param \lib\member\condition\sw_get_madapter_basic $condition 
+	 * @param \lib\member\condition\get\sw_madapter_basic $condition 
 	 * @access public
 	 * @return void
 	 */
-	public function get_basic(\lib\member\condition\sw_get_madapter_basic $condition)
+	public function get_basic(\lib\member\condition\get\sw_madapter_basic $condition)
 	{
 		$condition->check_params();
 		$select = $this->__db->select()
@@ -82,7 +82,7 @@ class sw_basic extends sw_abstract
 	}
 	
 	// }}}
-	// {{{
+	// {{{ public function get_info()
 
 	/**
 	 * 获取监控适配器的详细信息 
@@ -112,11 +112,11 @@ class sw_basic extends sw_abstract
 	/**
 	 * mod_basic 
 	 * 
-	 * @param \lib\member\condition\sw_mod_madapter_basic $condition 
+	 * @param \lib\member\condition\mod\sw_madapter_basic $condition 
 	 * @access public
 	 * @return void
 	 */
-	public function mod_basic(\lib\member\condition\sw_mod_madapter_basic $condition)
+	public function mod_basic(\lib\member\condition\mod\sw_madapter_basic $condition)
 	{
 		$condition->check_params();
 		$params = $condition->params();
@@ -136,11 +136,11 @@ class sw_basic extends sw_abstract
 	/**
 	 * 删除 madapter 设备信息 
 	 * 
-	 * @param \lib\member\condition\sw_del_madapter_basic $condition 
+	 * @param \lib\member\condition\del\sw_madapter_basic $condition 
 	 * @access public
 	 * @return void
 	 */
-	public function del_basic(\lib\member\condition\sw_del_madapter_basic $condition)
+	public function del_basic(\lib\member\condition\del\sw_madapter_basic $condition)
 	{
 		$condition->check_params();
 		$where = $condition->where();

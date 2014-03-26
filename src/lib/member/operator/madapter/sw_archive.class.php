@@ -76,11 +76,11 @@ class sw_archive extends sw_abstract
 	/**
 	 * 获取监控适配器 archive 
 	 * 
-	 * @param \lib\member\condition\sw_get_madapter_archive $condition 
+	 * @param \lib\member\condition\get\sw_madapter_archive $condition 
 	 * @access public
 	 * @return void
 	 */
-	public function get_archive(\lib\member\condition\sw_get_madapter_archive $condition)
+	public function get_archive(\lib\member\condition\get\sw_madapter_archive $condition)
 	{
 		$condition->check_params();
 		$select = $this->__db->select()
@@ -95,11 +95,11 @@ class sw_archive extends sw_abstract
 	/**
 	 * mod_archive 
 	 * 
-	 * @param \lib\member\condition\sw_mod_madapter_archive $condition 
+	 * @param \lib\member\condition\mod\sw_madapter_archive $condition 
 	 * @access public
 	 * @return void
 	 */
-	public function mod_archive(\lib\member\condition\sw_mod_madapter_archive $condition)
+	public function mod_archive(\lib\member\condition\mod\sw_madapter_archive $condition)
 	{
 		$condition->check_params();
 		$params = $condition->params();
@@ -119,11 +119,11 @@ class sw_archive extends sw_abstract
 	/**
 	 * 删除 madapter archive 
 	 * 
-	 * @param \lib\member\condition\sw_del_madapter_archive $condition 
+	 * @param \lib\member\condition\del\sw_madapter_archive $condition 
 	 * @access public
 	 * @return void
 	 */
-	public function del_archive(\lib\member\condition\sw_del_madapter_archive $condition)
+	public function del_archive(\lib\member\condition\del\sw_madapter_archive $condition)
 	{
 		$condition->check_params();
 		$where = $condition->where();
