@@ -19,6 +19,7 @@ script:
   - php vendor/bin/phpunit -v --coverage-clover build/logs/clover.xml 
 
 after_script:
+  - export COVERALLS_REPO_TOKEN=rpv5QBLlkcy8JwvCCaEiftaIsg173jsBn
   - php vendor/bin/coveralls  -v
 
 notifications:
