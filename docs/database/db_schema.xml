@@ -289,12 +289,12 @@
             <!-- {{{ table device_monitor -->
 
             <table name="device_monitor">
-                <desc>监控的设备的监控适配器</desc>
+                <desc>设备监控器</desc>
                 <engine>InnoDB</engine>
                 <charset>utf8</charset>
                 <columns>
-                    <column name="dm_id">
-                        <desc>设备监控适配器 id</desc>
+                    <column name="monitor_id">
+                        <desc>设备监控器 id</desc>
                         <type>int</type>
                         <nullable>false</nullable>
                         <precision>11</precision>
@@ -302,7 +302,7 @@
                         <default></default>
                     </column>
 
-                    <column name="dm_name">
+                    <column name="monitor_name">
                         <desc>设备监控适配器名称</desc>
                         <type>varchar</type>
                         <nullable>false</nullable>
@@ -335,7 +335,7 @@
                         <desc></desc>
                         <type>primary</type>
                         <fields>
-                            <field name="dm_id"></field>
+                            <field name="monitor_id"></field>
                             <field name="device_id"></field>
                         </fields>
                     </key>
@@ -346,12 +346,12 @@
             <!-- {{{ table device_monitor_params -->
 
             <table name="device_monitor_params">
-                <desc>监控适配器参数</desc>
+                <desc>监控器参数</desc>
                 <engine>InnoDB</engine>
                 <charset>utf8</charset>
                 <columns>
                     <column name="attr_id">
-                        <desc>监控适配器属性 id</desc>
+                        <desc>监控器属性 id</desc>
                         <type>int</type>
                         <nullable>false</nullable>
                         <precision>11</precision>
@@ -368,8 +368,8 @@
                         <default></default>
                     </column>
 
-                    <column name="dm_id">
-                        <desc>设备监控适配器 id</desc>
+                    <column name="monitor_id">
+                        <desc>设备监控器 id</desc>
                         <type>int</type>
                         <nullable>false</nullable>
                         <precision>11</precision>
@@ -394,7 +394,7 @@
                         <fields>
                             <field name="attr_id"></field>
                             <field name="device_id"></field>
-                            <field name="dm_id"></field>
+                            <field name="monitor_id"></field>
                         </fields>
                     </key>
                 </keys>

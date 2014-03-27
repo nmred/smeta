@@ -132,11 +132,11 @@ CREATE TABLE `device_basic` (
 -- {{{  table device_monitor
 
 -- 
--- 监控的设备的监控适配器
+-- 设备监控器
 -- 
--- dm_id
--- 	设备监控适配器 id
--- dm_name
+-- monitor_id
+-- 	设备监控器 id
+-- monitor_name
 -- 	设备监控适配器名称
 -- device_id
 -- 	设备 id
@@ -145,25 +145,25 @@ CREATE TABLE `device_basic` (
 
 DROP TABLE IF EXISTS `device_monitor`;
 CREATE TABLE `device_monitor` (
-	`dm_id` int(11) UNSIGNED NOT NULL ,
-	`dm_name` varchar(255) NOT NULL ,
+	`monitor_id` int(11) UNSIGNED NOT NULL ,
+	`monitor_name` varchar(255) NOT NULL ,
 	`device_id` int(11) UNSIGNED NOT NULL ,
 	`madapter_id` int(11) UNSIGNED NOT NULL ,
-	PRIMARY KEY (`dm_id`,`device_id`)
+	PRIMARY KEY (`monitor_id`,`device_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --  }}} 
 -- {{{  table device_monitor_params
 
 -- 
--- 监控适配器参数
+-- 监控器参数
 -- 
 -- attr_id
--- 	监控适配器属性 id
+-- 	监控器属性 id
 -- device_id
 -- 	设备 id
--- dm_id
--- 	设备监控适配器 id
+-- monitor_id
+-- 	设备监控器 id
 -- value
 -- 	属性值
 
@@ -171,9 +171,9 @@ DROP TABLE IF EXISTS `device_monitor_params`;
 CREATE TABLE `device_monitor_params` (
 	`attr_id` int(11) UNSIGNED NOT NULL ,
 	`device_id` int(11) UNSIGNED NOT NULL ,
-	`dm_id` int(11) UNSIGNED NOT NULL ,
+	`monitor_id` int(11) UNSIGNED NOT NULL ,
 	`value` varchar(255) NOT NULL ,
-	PRIMARY KEY (`attr_id`,`device_id`,`dm_id`)
+	PRIMARY KEY (`attr_id`,`device_id`,`monitor_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --  }}} 
