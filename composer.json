@@ -1,31 +1,7 @@
 {
 	"name": "nmred/swansoft",
 	"description": "swan Monitor",
-	"repositories": [
-	{
-		"type": "package",
-		"package": {
-			"name": "sebastianbergmann/phpcov",
-			"version": "1.1.0",
-			"dist": {
-				"url": "https://github.com/sebastianbergmann/phpcov/archive/1.1.0.zip",
-				"type": "zip"
-			},
-			"source": {
-				"url": "https://github.com/sebastianbergmann/phpcov.git",
-				"type": "git",
-				"reference": "1.1.0"
-			},
-			"bin": [
-				"phpcov.php"
-				]
-		}
-	}
-	],
 	"require-dev": {
-		"satooshi/php-coveralls": "dev-master",
-		"phpunit/PHPUnit": "3.7.*",
-		"sebastianbergmann/phpcov": "1.1.0",
-		"phpunit/dbunit": "1.3.0"
+		"satooshi/php-coveralls": "dev-master"
 	}
 }

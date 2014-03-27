@@ -8,16 +8,23 @@ php:
 before_script:
     - curl -s http://getcomposer.org/installer | php
     - php composer.phar install --dev --no-interaction
+    - pear config-set auto_discover 1
+    - pear install pear.phpunit.de/PHPUnit
+    - pear install phpunit/DbUnit
     - mysql -e 'create database swan_soft;'
     - mysql -e 'use swan_soft;'
     - mysql -e 'source src/tmp_install/sql/db_desc_swan_soft.sql;'
     - echo "<?php return array('db' => array('type' => 'mysql', 'dbname' => 'swan_soft', 'username' => 'root', 'password' => '', 'host' => '127.0.0.1', 'port' => '3306', 'driver_options' => array()));" > src/inc/conf/config.php
+    - mysql -e 'create database sf_unit;'
+    - mysql -e 'use sf_unit;'
+    - mysql -e 'source src/sf/tests/db_desc_sf_unit.sql;'
+    - echo "<?php return array('db' => array('type' => 'mysql', 'dbname' => 'sf_unit', 'username' => 'root', 'password' => '', 'host' => '127.0.0.1', 'port' => '3306', 'driver_options' => array()));" > src/sf/tests/config.php
 
 script:
   - mkdir -p build/logs
   - mkdir -p build/coverage
-  - php vendor/bin/phpunit -v --coverage-clover build/logs/clover.xml 
-  - php vendor/bin/phpunit -c src/sf/phpunit.xml -v --coverage-clover build/logs/clover_sf.xml 
+  - phpunit -v --coverage-clover build/logs/clover_swan.xml 
+  - phpunit -c src/sf/phpunit.xml -v --coverage-clover build/logs/clover_sf.xml 
 
 after_script:
   - php vendor/bin/coveralls  -v
