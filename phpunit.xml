@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit
+	bootstrap="tests/boot_strap.php"
+	colors="true"
+	verbose="true"
+	convertNoticesToExceptions="true"
+	convertWarningsToExceptions="true"
+	reportDirectory=""
+	stopOnError="false"
+	stopOnFailure="false"
+	stopOnIncomplete="false"
+	stopOnSkipped="false">
+	<testsuites>
+		<testsuite name="SWANSOFT Test Suite">
+			<directory suffix="test.class.php">tests/member_test</directory>
+		</testsuite>
+	</testsuites>
+
+	<groups>
+	</groups>
+
+	<filter>
+		<blacklist>
+			<directory suffix=".php">PEAR_INSTALL_DIR</directory>
+			<directory suffix=".php">PHP_LIBDIR</directory>
+			<directory suffix=".php">vendor</directory>
+		</blacklist>
+	</filter>
+</phpunit>
