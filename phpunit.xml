@@ -14,6 +14,7 @@
 	<testsuites>
 		<testsuite name="SWANSOFT Test Suite">
 			<directory suffix="test.class.php">tests/member_test</directory>
+			<directory suffix="test.class.php">tests/api_test</directory>
 		</testsuite>
 	</testsuites>
 

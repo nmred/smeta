@@ -30,6 +30,7 @@ require_once dirname(__DIR__) . '/src/core.php';
 $autoloader = \swan\loader\sw_auto::get_instance(array(
 	'namespaces' => array(
 		'member_test' => './',
+		'api_test'    => './',
 		'mock' => dirname(__FILE__),
 	),
 ));

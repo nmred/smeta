@@ -19,7 +19,7 @@ use \lib\member\sw_member;
 
 /**
 +------------------------------------------------------------------------------
-* 监控器接口 
+* 监控适配器接口 
 +------------------------------------------------------------------------------
 * 
 * @uses sw_abstract
@@ -35,39 +35,40 @@ class sw_madapter extends sw_abstract
 	// {{{ public function action_add()
 
 	/**
-	 * 添加监控器 
+	 * 添加监控适配器 
 	 * 
 	 * @access public
 	 * @return intger
 	 */
 	public function action_add()
 	{
-		$monitor_name = $this->__request->get_post('name', '');
-		$monitor_display_name = $this->__request->get_post('display_name', '');
+		$madapter_name = $this->__request->get_post('name', '');
+		$madapter_display_name = $this->__request->get_post('display_name', '');
 		$steps = $this->__request->get_post('steps', '');
 		$store_type   = $this->__request->get_post('store_type', '2');
-		$monitor_type = $this->__request->get_post('monitor_type', '2');
-		if (!$monitor_name) {
+		$madapter_type = $this->__request->get_post('madapter_type', '2');
+		if (!$madapter_name) {
 			return $this->render_json(null, 10001, '`name` not allow is empty.');
 		}
 
 		$data = array(
-			'monitor_name' => $monitor_name,
-			'monitor_display_name' => $monitor_display_name,
+			'madapter_name' => $madapter_name,
+			'madapter_display_name' => $madapter_display_name,
 			'steps' => $steps,
 			'store_type'   => $store_type,
-			'monitor_type' => $monitor_type,			
+			'madapter_type' => $madapter_type,			
 		);
-		// 添加 monitor basic
+
+		// 添加 madapter basic
 		try {
-			$property_basic = sw_member::property_factory('monitor_basic', $data); 
-			$monitor    = sw_member::operator_factory('monitor', $property_basic);
-			$monitor_id = $monitor->get_operator('basic')->add_basic();
+			$property_basic = sw_member::property_factory('madapter_basic', $data); 
+			$madapter    = sw_member::operator_factory('madapter', $property_basic);
+			$madapter_id = $madapter->get_operator('basic')->add_basic();
 		} catch (\swan\exception\sw_exception $e) {
 			return $this->render_json(null, 10002, $e->getMessage());	
 		}
 
-		return $this->render_json(array('monitor_id' => $monitor_id), 10000, 'add monitor success.');
+		return $this->render_json(array('madapter_id' => $madapter_id), 10000, 'add madapter success.');
 	}
 
 	// }}}
@@ -81,28 +82,28 @@ class sw_madapter extends sw_abstract
 	 */
 	public function action_del()
 	{
-		$monitor_name = $this->__request->get_post('name', '');
-		$monitor_id   = $this->__request->get_post('mid', '');
-		if (!$monitor_name && !$monitor_id) {
+		$madapter_name = $this->__request->get_post('name', '');
+		$madapter_id   = $this->__request->get_post('mid', '');
+		if (!$madapter_name && !$madapter_id) {
 			return $this->render_json(null, 10001, '`name` or `mid` not allow is empty.');
 		}
 
-		// 删除监控器
+		// 删除监控适配器
 		try {
-			if ($monitor_id) {
-				$condition_basic = sw_member::condition_factory('del_monitor_basic', array('monitor_id' => $monitor_id)); 
-				$condition_basic->set_in('monitor_id');
+			if ($madapter_id) {
+				$condition_basic = sw_member::condition_factory('del_madapter_basic', array('madapter_id' => $madapter_id)); 
+				$condition_basic->set_in('madapter_id');
 			} else {
-				$condition_basic = sw_member::condition_factory('del_monitor_basic', array('monitor_name' => $monitor_name)); 
-				$condition_basic->set_in('monitor_name');
+				$condition_basic = sw_member::condition_factory('del_madapter_basic', array('madapter_name' => $madapter_name)); 
+				$condition_basic->set_in('madapter_name');
 			}
-			$monitor = sw_member::operator_factory('monitor');
-			$monitor->get_operator('basic')->del_basic($condition_basic);
+			$madapter = sw_member::operator_factory('madapter');
+			$madapter->get_operator('basic')->del_basic($condition_basic);
 		} catch (\swan\exception\sw_exception $e) {
 			return $this->render_json(null, 10002, $e->getMessage());	
 		}
 
-		return $this->render_json(null, 10000, 'delete monitor success.');
+		return $this->render_json(null, 10000, 'delete madapter success.');
 	}
 
 	// }}}
@@ -116,15 +117,15 @@ class sw_madapter extends sw_abstract
 	 */
 	public function action_json()
 	{
-		// 获取监控器
+		// 获取监控适配器
 		$page = $this->__request->get_post('page', 1);
 		$page_count = $this->__request->get_post('page_count', 10);
 		$count = 0;
 		try {
-			$condition_basic = sw_member::condition_factory('get_monitor_basic'); 
+			$condition_basic = sw_member::condition_factory('get_madapter_basic'); 
 			$condition_basic->set_is_count(true);
-			$monitor = sw_member::operator_factory('monitor');
-			$count   = $monitor->get_operator('basic')->get_basic($condition_basic);
+			$madapter = sw_member::operator_factory('madapter');
+			$count   = $madapter->get_operator('basic')->get_basic($condition_basic);
 		} catch (\swan\exception\sw_exception $e) {
 			return $this->render_json(null, 10001, $e->getMessage());	
 		}
@@ -137,8 +138,8 @@ class sw_madapter extends sw_abstract
 			$condition_basic->set_is_count(false);
 			$condition_basic->set_columns('*');
 			$condition_basic->set_limit_page(array('page' => $page, 'rows_count' => $page_count));
-			$monitor = sw_member::operator_factory('monitor');
-			$data   = $monitor->get_operator('basic')->get_basic($condition_basic);
+			$madapter = sw_member::operator_factory('madapter');
+			$data   = $madapter->get_operator('basic')->get_basic($condition_basic);
 		} catch (\swan\exception\sw_exception $e) {
 			return $this->render_json(null, 10001, $e->getMessage());	
 		}
@@ -148,32 +149,32 @@ class sw_madapter extends sw_abstract
 			'count'  => $count,
 		);
 
-		return $this->render_json($result, 10000, 'get monitor success.');
+		return $this->render_json($result, 10000, 'get madapter success.');
 	}
 
 	// }}}
 	// {{{ public function action_mod()
 
 	/**
-	 * 修改监控器 
+	 * 修改监控适配器 
 	 * 
 	 * @access public
 	 * @return void
 	 */
 	public function action_mod()
 	{	
-		$monitor_name = $this->__request->get_post('name', '');
-		$monitor_id   = $this->__request->get_post('mid', '');
-		$monitor_display_name = $this->__request->get_post('display_name', '');
+		$madapter_name = $this->__request->get_post('name', '');
+		$madapter_id   = $this->__request->get_post('mid', '');
+		$madapter_display_name = $this->__request->get_post('display_name', '');
 		$steps = $this->__request->get_post('steps', '');
 		$store_type   = $this->__request->get_post('store_type', '');
-		$monitor_type = $this->__request->get_post('monitor_type', '');
-		if (!$monitor_name && !$monitor_id) {
+		$madapter_type = $this->__request->get_post('madapter_type', '');
+		if (!$madapter_name && !$madapter_id) {
 			return $this->render_json(null, 10001, '`name` or `mid` not allow is empty.');
 		}
 
-		if ($monitor_display_name) {
-			$data['monitor_display_name'] = $monitor_display_name;	
+		if ($madapter_display_name) {
+			$data['madapter_display_name'] = $madapter_display_name;	
 		}
 
 		if ($steps) {
@@ -184,27 +185,27 @@ class sw_madapter extends sw_abstract
 			$data['store_type'] = $store_type;	
 		}
 
-		if ($monitor_type) {
-			$data['monitor_type'] = $monitor_type;	
+		if ($madapter_type) {
+			$data['madapter_type'] = $madapter_type;	
 		}
-		// 修改 monitor basic
+		// 修改 madapter basic
 		try {
-			$property_basic = sw_member::property_factory('monitor_basic', $data); 
-			if ($monitor_id) {
-				$condition = sw_member::condition_factory('mod_monitor_basic', array('monitor_id' => $monitor_id));
-				$condition->set_in('monitor_id');
+			$property_basic = sw_member::property_factory('madapter_basic', $data); 
+			if ($madapter_id) {
+				$condition = sw_member::condition_factory('mod_madapter_basic', array('madapter_id' => $madapter_id));
+				$condition->set_in('madapter_id');
 			} else {
-				$condition = sw_member::condition_factory('mod_monitor_basic', array('monitor_name' => $monitor_name));
-				$condition->set_in('monitor_name');
+				$condition = sw_member::condition_factory('mod_madapter_basic', array('madapter_name' => $madapter_name));
+				$condition->set_in('madapter_name');
 			}
 			$condition->set_property($property_basic);
-			$monitor = sw_member::operator_factory('monitor');
-			$monitor->get_operator('basic')->mod_basic($condition);
+			$madapter = sw_member::operator_factory('madapter');
+			$madapter->get_operator('basic')->mod_basic($condition);
 		} catch (\swan\exception\sw_exception $e) {
 			return $this->render_json(null, 10002, $e->getMessage());	
 		}
 
-		return $this->render_json(null, 10000, 'mod monitor success.');
+		return $this->render_json(null, 10000, 'mod madapter success.');
 	}
 
 	// }}}
