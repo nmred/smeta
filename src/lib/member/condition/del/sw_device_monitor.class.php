@@ -38,7 +38,8 @@ class sw_device_monitor extends sw_abstract
 	 * @access protected
 	 */
 	protected $__allow_params = array(
-		'dm_id'   => true,
+		'monitor_id' => true,
+		'device_id'  => true,
 	);
 
 	// }}}

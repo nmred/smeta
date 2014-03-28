@@ -39,8 +39,8 @@ class sw_device_monitor_params extends sw_abstract
 	 */
 	protected $__allow_params = array(
 		'device_id'  => true,
-		'dm_id'      => true,
 		'monitor_id' => true,
+		'madapter_id' => true,
 	);
 
     /**
@@ -50,17 +50,17 @@ class sw_device_monitor_params extends sw_abstract
      * @access protected
      */
     protected $__columns = array(
-        'dm_id'       => SWAN_TBN_DEVICE_MONITOR,       
-        'dm_name'     => SWAN_TBN_DEVICE_MONITOR,       
-        'device_id'   => SWAN_TBN_DEVICE_MONITOR,       
-        'monitor_id'  => SWAN_TBN_DEVICE_MONITOR,       
+        'monitor_id'   => SWAN_TBN_DEVICE_MONITOR,       
+        'monitor_name' => SWAN_TBN_DEVICE_MONITOR,       
+        'device_id'    => SWAN_TBN_DEVICE_MONITOR,       
+        'madapter_id'  => SWAN_TBN_DEVICE_MONITOR,       
         'attr_id'     => SWAN_TBN_MONITOR_PARAM,     
         'value'       => SWAN_TBN_MONITOR_PARAM,     
-        'attr_name'    => SWAN_TBN_MONITOR_ATTRIBUTE,     
-        'form_type'    => SWAN_TBN_MONITOR_ATTRIBUTE,     
-        'form_data'    => SWAN_TBN_MONITOR_ATTRIBUTE,     
-        'attr_default' => SWAN_TBN_MONITOR_ATTRIBUTE,     
-        'attr_display_name' => SWAN_TBN_MONITOR_ATTRIBUTE,     
+        'attr_name'    => SWAN_TBN_MADAPTER_ATTRIBUTE,     
+        'form_type'    => SWAN_TBN_MADAPTER_ATTRIBUTE,     
+        'form_data'    => SWAN_TBN_MADAPTER_ATTRIBUTE,     
+        'attr_default' => SWAN_TBN_MADAPTER_ATTRIBUTE,     
+        'attr_display_name' => SWAN_TBN_MADAPTER_ATTRIBUTE,     
     );
 
 	/**
@@ -71,8 +71,8 @@ class sw_device_monitor_params extends sw_abstract
 	 */
 	protected $__table_alias = array(
 		SWAN_TBN_DEVICE_MONITOR => 'd',
-		SWAN_TBN_MONITOR_ATTRIBUTE => 'a',
-		SWAN_TBN_MONITOR_PARAM => 'p',
+		SWAN_TBN_MONITOR_PARAM  => 'p',
+		SWAN_TBN_MADAPTER_ATTRIBUTE => 'a',
 	);
 
 	// }}}

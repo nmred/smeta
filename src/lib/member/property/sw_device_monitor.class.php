@@ -38,9 +38,9 @@ class sw_device_monitor extends sw_abstract
 	 * @access protected
 	 */
 	protected $__allow_attributes = array(
-		'dm_id'      => true,
-		'monitor_id' => true,
-		'dm_name'    => true,
+		'monitor_id'   => true,
+		'madapter_id'  => true,
+		'monitor_name' => true,
 		'monitor_params' => true,
 	);
 
@@ -51,7 +51,7 @@ class sw_device_monitor extends sw_abstract
 	 * @access protected
 	 */
 	protected $__allow_propertys = array(
-		'monitor_basic' => true,
+		'madapter_basic' => true,
 	);
 
 	/**
@@ -60,7 +60,7 @@ class sw_device_monitor extends sw_abstract
 	 * @var string
 	 * @access protected
 	 */
-	protected $__key_attributes = array('dm_id');
+	protected $__key_attributes = array('monitor_id');
 
 	// }}}		
 	// {{{ functions

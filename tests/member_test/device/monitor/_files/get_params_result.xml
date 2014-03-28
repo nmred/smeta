@@ -1,0 +1,42 @@
+<?xml version="1.0" ?>
+<dataset>
+	<table name="monitor_params">
+		<column>monitor_id</column>
+		<column>monitor_name</column>
+		<column>device_id</column>
+		<column>madapter_id</column>
+		<column>attr_id</column>
+		<column>value</column>
+		<column>attr_name</column>
+		<column>form_type</column>
+		<column>form_data</column>
+		<column>attr_default</column>
+		<column>attr_display_name</column>
+		<row>
+			<value>1</value>
+			<value>apache_web1</value>
+			<value>1</value>
+			<value>1</value>
+			<value>1</value>
+			<value>http://www.apache_web1.com/server_status</value>
+			<value>url</value>
+			<value>1</value>
+			<value></value>
+			<value></value>
+			<value>URL地址</value>
+		</row>
+		<row>
+			<value>1</value>
+			<value>apache_web1</value>
+			<value>1</value>
+			<value>1</value>
+			<value>2</value>
+			<value>http://www.apache_web1.com/server_status</value>
+			<value>url_a</value>
+			<value>1</value>
+			<value></value>
+			<value></value>
+			<value>URL地址</value>
+		</row>
+	</table>
+</dataset>
