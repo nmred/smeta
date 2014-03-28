@@ -164,13 +164,13 @@ class sw_madapter extends sw_abstract
 	public function action_mod()
 	{	
 		$madapter_name = $this->__request->get_post('name', '');
-		$madapter_id   = $this->__request->get_post('mid', '');
+		$madapter_id   = $this->__request->get_post('madapter_id', '');
 		$madapter_display_name = $this->__request->get_post('display_name', '');
 		$steps = $this->__request->get_post('steps', '');
 		$store_type   = $this->__request->get_post('store_type', '');
 		$madapter_type = $this->__request->get_post('madapter_type', '');
-		if (!$madapter_name && !$madapter_id) {
-			return $this->render_json(null, 10001, '`name` or `mid` not allow is empty.');
+		if (!$madapter_id) {
+			return $this->render_json(null, 10001, '`madapter_id` not allow is empty.');
 		}
 
 		if ($madapter_display_name) {
@@ -188,16 +188,17 @@ class sw_madapter extends sw_abstract
 		if ($madapter_type) {
 			$data['madapter_type'] = $madapter_type;	
 		}
+
+		if ($madapter_name) {
+			$data['madapter_name'] = $madapter_name;	
+		}
+
 		// 修改 madapter basic
 		try {
 			$property_basic = sw_member::property_factory('madapter_basic', $data); 
-			if ($madapter_id) {
-				$condition = sw_member::condition_factory('mod_madapter_basic', array('madapter_id' => $madapter_id));
-				$condition->set_in('madapter_id');
-			} else {
-				$condition = sw_member::condition_factory('mod_madapter_basic', array('madapter_name' => $madapter_name));
-				$condition->set_in('madapter_name');
-			}
+			$condition = sw_member::condition_factory('mod_madapter_basic', array('madapter_id' => $madapter_id));
+			$condition->set_in('madapter_id');
+
 			$condition->set_property($property_basic);
 			$madapter = sw_member::operator_factory('madapter');
 			$madapter->get_operator('basic')->mod_basic($condition);

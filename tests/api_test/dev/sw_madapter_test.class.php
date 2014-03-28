@@ -54,7 +54,9 @@ class sw_madapter extends sw_test_db
 	 */
 	public function get_data_set() 
 	{
-		return array();
+		return array(
+			dirname(__FILE__) . '/_files/prepare.xml',
+		);
 	}
 
 	// }}}
@@ -85,14 +87,52 @@ class sw_madapter extends sw_test_db
 	public function test_action_add()
 	{
 		$post_data = array(
-			'name' => 'test_1',
-			'display_name' => 'test_1_desc',
+			'name' => 'nginx',
+			'display_name' => 'nginx监控适配器',
 			'steps' => 300,
 		);	
 
 		// 初始化 POST 参数
 		sw_request::get_instance($post_data);
 		$result = $this->__madapter->action_add();	
+		$expect = 10000; 
+		$this->assertEquals($expect, $result['code']);
+		$this->assertEquals(3, $result['data']['madapter_id']);
+		$query_table = $this->getConnection()
+			                ->CreateQueryTable('madapter_basic', 'select * from madapter_basic');
+		$expect = $this->createXMLDataSet(dirname(__FILE__) . '/_files/add_result.xml')
+			           ->getTable('madapter_basic');
+		$this->assertTablesEqual($expect, $query_table);
+	}
+
+	// }}}
+	// {{{ public function test_action_mod()
+	
+	/**
+	 * test_action_mod 
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function test_action_mod()
+	{
+		$post_data = array(
+			'madapter_id' => '2',
+			'steps' => 350,
+			'name' => 'nginx',
+			'display_name' => 'nginx监控适配器',
+		);	
+
+		// 初始化 POST 参数
+		sw_request::get_instance($post_data);
+		$result = $this->__madapter->action_mod();	
+		$expect = 10000; 
+		$this->assertEquals($expect, $result['code']);
+		$query_table = $this->getConnection()
+			                ->CreateQueryTable('madapter_basic', 'select * from madapter_basic');
+		$expect = $this->createXMLDataSet(dirname(__FILE__) . '/_files/mod_result.xml')
+			           ->getTable('madapter_basic');
+		$this->assertTablesEqual($expect, $query_table);
 	}
 
 	// }}}
