@@ -12,14 +12,14 @@
 // | $_SWANBR_WEB_DOMAIN_$
 // +---------------------------------------------------------------------------
  
-namespace api_test\dev;
+namespace api_test\dev\attr;
 use swan\test\sw_test_db;
-use mock\api_test\dev\sw_madapter as sw_mock_madapter;
+use mock\api_test\dev\sw_attribute as sw_mock_attribute;
 use mock\api_test\sw_request;
 
 /**
 +------------------------------------------------------------------------------
-* 监控适配器 basic 测试 
+* 监控适配器 attribute 测试 
 +------------------------------------------------------------------------------
 * 
 * @package 
@@ -28,7 +28,7 @@ use mock\api_test\sw_request;
 * @group sw_db
 +------------------------------------------------------------------------------
 */
-class sw_madapter extends sw_test_db
+class sw_attribute extends sw_test_db
 {
 	// {{{ consts
 	// }}}
@@ -40,7 +40,7 @@ class sw_madapter extends sw_test_db
 	 * @var mixed
 	 * @access protected
 	 */
-	protected $__madapter = null;
+	protected $__attribute = null;
 
 	// }}}
 	// {{{ functions
@@ -71,8 +71,8 @@ class sw_madapter extends sw_test_db
 	public function setUp()
 	{
 		parent::setUp();
-		$this->__madapter = sw_mock_madapter::get_instance($this);
-		$this->__madapter->init();
+		$this->__attribute = sw_mock_attribute::get_instance($this);
+		$this->__attribute->init();
 	}
 
 	// }}}
@@ -87,21 +87,23 @@ class sw_madapter extends sw_test_db
 	public function test_action_add()
 	{
 		$post_data = array(
-			'name' => 'nginx',
-			'display_name' => 'nginx监控适配器',
-			'steps' => 300,
+			'name' => 'username',
+			'madapter_id'  => 2,
+			'display_name' => '用户名',
+			'form_type' => 1,
+			'attr_default' => 'root',
 		);	
 
 		// 初始化 POST 参数
 		sw_request::get_instance($post_data);
-		$result = $this->__madapter->action_add();	
+		$result = $this->__attribute->action_add();	
 		$expect = 10000; 
 		$this->assertEquals($expect, $result['code']);
-		$this->assertEquals(3, $result['data']['madapter_id']);
+		$this->assertEquals(1, $result['data']['attr_id']);
 		$query_table = $this->getConnection()
-			                ->CreateQueryTable('madapter_basic', 'select * from madapter_basic');
+			                ->CreateQueryTable('madapter_attribute', 'select * from madapter_attribute');
 		$expect = $this->createXMLDataSet(dirname(__FILE__) . '/_files/add_result.xml')
-			           ->getTable('madapter_basic');
+			           ->getTable('madapter_attribute');
 		$this->assertTablesEqual($expect, $query_table);
 	}
 
@@ -117,21 +119,78 @@ class sw_madapter extends sw_test_db
 	public function test_action_mod()
 	{
 		$post_data = array(
-			'madapter_id' => '2',
-			'steps' => 350,
-			'name' => 'nginx',
-			'display_name' => 'nginx监控适配器',
+			'name' => 'url_b',
+			'madapter_id' => 1,
+			'attr_id' => 2,
+			'display_name' => 'URL B 地址',
 		);	
 
 		// 初始化 POST 参数
 		sw_request::get_instance($post_data);
-		$result = $this->__madapter->action_mod();	
+		$result = $this->__attribute->action_mod();	
 		$expect = 10000; 
 		$this->assertEquals($expect, $result['code']);
 		$query_table = $this->getConnection()
-			                ->CreateQueryTable('madapter_basic', 'select * from madapter_basic');
+			                ->CreateQueryTable('madapter_attribute', 'select * from madapter_attribute');
 		$expect = $this->createXMLDataSet(dirname(__FILE__) . '/_files/mod_result.xml')
-			           ->getTable('madapter_basic');
+			           ->getTable('madapter_attribute');
+		$this->assertTablesEqual($expect, $query_table);
+	}
+
+	// }}}
+	// {{{ public function test_action_del()
+	
+	/**
+	 * test_action_del 
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function test_action_del()
+	{
+		$post_data = array(
+			'attr_id' => '1',
+			'madapter_id' => '1',
+		);	
+
+		// 初始化 POST 参数
+		sw_request::get_instance($post_data);
+		$result = $this->__attribute->action_del();	
+		$expect = 10000; 
+		$this->assertEquals($expect, $result['code']);
+		$query_table = $this->getConnection()
+			                ->CreateQueryTable('madapter_attribute', 'select * from madapter_attribute');
+		$expect = $this->createXMLDataSet(dirname(__FILE__) . '/_files/del_result.xml')
+			           ->getTable('madapter_attribute');
+		$this->assertTablesEqual($expect, $query_table);
+	}
+
+	// }}}
+	// {{{ public function test_action_json()
+	
+	/**
+	 * test_action_json 
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function test_action_json()
+	{
+		$post_data = array(
+			'page' => 1,
+			'page_count' => 20,
+			'madapter_id' => 1
+		);	
+
+		// 初始化 POST 参数
+		sw_request::get_instance($post_data);
+		$result = $this->__attribute->action_json();	
+		$expect = 10000; 
+		$this->assertEquals($expect, $result['code']);
+		$query_table = $this->array_to_dbset(array('madapter_attribute' => $result['data']['result']))
+							->getTable('madapter_attribute');
+		$expect = $this->createXMLDataSet(dirname(__FILE__) . '/_files/get_result.xml')
+			           ->getTable('madapter_attribute');
 		$this->assertTablesEqual($expect, $query_table);
 	}
 

@@ -19,7 +19,7 @@ use \lib\member\sw_member;
 
 /**
 +------------------------------------------------------------------------------
-* 监控器数据项接口 
+* 监控适配器数据项接口 
 +------------------------------------------------------------------------------
 * 
 * @uses sw_abstract
@@ -29,13 +29,13 @@ use \lib\member\sw_member;
 * @author $_SWANBR_AUTHOR_$ 
 +------------------------------------------------------------------------------
 */
-class sw_monitor_metric extends sw_abstract
+class sw_madapter_metric extends sw_abstract
 {
 	// {{{ functions
 	// {{{ public function action_add()
 
 	/**
-	 * 添加监控器数据项 
+	 * 添加监控适配器数据项 
 	 * 
 	 * @access public
 	 * @return intger
@@ -43,7 +43,7 @@ class sw_monitor_metric extends sw_abstract
 	public function action_add()
 	{
 		$metric_name  = $this->__request->get_post('name', '');
-		$monitor_id   = $this->__request->get_post('mid', '');
+		$madapter_id   = $this->__request->get_post('madapter_id', '');
 		$collect_every   = $this->__request->get_post('collect_every', '');
 		$time_threshold  = $this->__request->get_post('time_threshold', '200');
 		$title = $this->__request->get_post('title', '');
@@ -52,11 +52,11 @@ class sw_monitor_metric extends sw_abstract
 		$vmax  = $this->__request->get_post('vmax', 'U');
 		$vmin  = $this->__request->get_post('vmin', 'U');
 		$dst_type  = $this->__request->get_post('dst_type', '1');
-		if (!$metric_name || !$monitor_id || !$collect_every) {
-			return $this->render_json(null, 10001, '`name`/`mid`/`collect_every` not allow is empty.');
+		if (!$metric_name || !$madapter_id || !$collect_every) {
+			return $this->render_json(null, 10001, '`name`/`madapter_id`/`collect_every` not allow is empty.');
 		}
 
-		// 添加 monitor metric
+		// 添加 madapter metric
 		$data = array(
 			'metric_name'    => $metric_name,
 			'collect_every'  => $collect_every,
@@ -69,15 +69,15 @@ class sw_monitor_metric extends sw_abstract
 			'vmin'  => $vmin,
 		);
 		try {
-			$property_metric  = sw_member::property_factory('monitor_metric', $data); 
-			$property_basic   = sw_member::property_factory('monitor_basic', array('monitor_id' => $monitor_id)); 
-			$monitor = sw_member::operator_factory('monitor', $property_basic);
-			$metric_id = $monitor->get_operator('metric')->add_metric($property_metric);
+			$property_metric  = sw_member::property_factory('madapter_metric', $data); 
+			$property_basic   = sw_member::property_factory('madapter_basic', array('madapter_id' => $madapter_id)); 
+			$madapter = sw_member::operator_factory('madapter', $property_basic);
+			$metric_id = $madapter->get_operator('metric')->add_metric($property_metric);
 		} catch (\swan\exception\sw_exception $e) {
 			return $this->render_json(null, 10002, $e->getMessage());	
 		}
 
-		return $this->render_json(array('metric_id' => $metric_id, 'monitor_id' => $monitor_id), 10000, 'add monitor metric success.');
+		return $this->render_json(array('metric_id' => $metric_id, 'madapter_id' => $madapter_id), 10000, 'add madapter metric success.');
 	}
 
 	// }}}
@@ -91,24 +91,24 @@ class sw_monitor_metric extends sw_abstract
 	 */
 	public function action_del()
 	{
-		$metric_id  = $this->__request->get_post('mmid', '');
-		$monitor_id = $this->__request->get_post('mid', '');
-		if (!$metric_id || !$monitor_id) {
-			return $this->render_json(null, 10001, '`mmid`/`mid` not allow is empty.');
+		$metric_id  = $this->__request->get_post('metric_id', '');
+		$madapter_id = $this->__request->get_post('madapter_id', '');
+		if (!$metric_id || !$madapter_id) {
+			return $this->render_json(null, 10001, '`metric_id`/`madapter_id` not allow is empty.');
 		}
 
-		// 删除监控器数据项
+		// 删除监控适配器数据项
 		try {
-			$condition = sw_member::condition_factory('del_monitor_metric', array('metric_id' => $metric_id, 'monitor_id' => $monitor_id)); 
+			$condition = sw_member::condition_factory('del_madapter_metric', array('metric_id' => $metric_id, 'madapter_id' => $madapter_id)); 
 			$condition->set_in('metric_id');
-			$condition->set_in('monitor_id');
-			$monitor = sw_member::operator_factory('monitor');
-			$monitor->get_operator('metric')->del_metric($condition);
+			$condition->set_in('madapter_id');
+			$madapter = sw_member::operator_factory('madapter');
+			$madapter->get_operator('metric')->del_metric($condition);
 		} catch (\swan\exception\sw_exception $e) {
 			return $this->render_json(null, 10002, $e->getMessage());	
 		}
 
-		return $this->render_json(null, 10000, 'delete monitor metric success.');
+		return $this->render_json(null, 10000, 'delete madapter metric success.');
 	}
 
 	// }}}
@@ -122,22 +122,22 @@ class sw_monitor_metric extends sw_abstract
 	 */
 	public function action_json()
 	{
-		// 获取监控器属性
-		$mid  = $this->__request->get_post('mid', '');
+		// 获取监控适配器属性
+		$mid  = $this->__request->get_post('madapter_id', '');
 		$page = $this->__request->get_post('page', 1);
 		$page_count = $this->__request->get_post('page_count', 10);
 
 		if (!$mid) {
-			return $this->render_json(null, 10001, 'must defined mid.');	
+			return $this->render_json(null, 10001, 'must defined madapter_id.');	
 		}
 
 		$count = 0;
 		try {
-			$condition = sw_member::condition_factory('get_monitor_metric', array('monitor_id' => $mid)); 
-			$condition->set_in('monitor_id');
+			$condition = sw_member::condition_factory('get_madapter_metric', array('madapter_id' => $mid)); 
+			$condition->set_in('madapter_id');
 			$condition->set_is_count(true);
-			$monitor = sw_member::operator_factory('monitor');
-			$count   = $monitor->get_operator('metric')->get_metric($condition);
+			$madapter = sw_member::operator_factory('madapter');
+			$count   = $madapter->get_operator('metric')->get_metric($condition);
 		} catch (\swan\exception\sw_exception $e) {
 			return $this->render_json(null, 10001, $e->getMessage());	
 		}
@@ -150,7 +150,7 @@ class sw_monitor_metric extends sw_abstract
 			$condition->set_is_count(false);
 			$condition->set_columns('*');
 			$condition->set_limit_page(array('page' => $page, 'rows_count' => $page_count));
-			$data   = $monitor->get_operator('metric')->get_metric($condition);
+			$data   = $madapter->get_operator('metric')->get_metric($condition);
 		} catch (\swan\exception\sw_exception $e) {
 			return $this->render_json(null, 10001, $e->getMessage());	
 		}
@@ -160,22 +160,22 @@ class sw_monitor_metric extends sw_abstract
 			'count'  => $count,
 		);
 
-		return $this->render_json($result, 10000, 'get monitor metric success.');
+		return $this->render_json($result, 10000, 'get madapter metric success.');
 	}
 
 	// }}}
 	// {{{ public function action_mod()
 
 	/**
-	 * 修改监控器数据项 
+	 * 修改监控适配器数据项 
 	 * 
 	 * @access public
 	 * @return void
 	 */
 	public function action_mod()
 	{	
-		$mid  = $this->__request->get_post('mid', '');
-		$mmid  = $this->__request->get_post('mmid', '');
+		$mid  = $this->__request->get_post('madapter_id', '');
+		$mmid  = $this->__request->get_post('metric_id', '');
 		$name = $this->__request->get_post('name', '');
 		$unit  = $this->__request->get_post('unit', '');
 		$title = $this->__request->get_post('title', '');
@@ -186,10 +186,10 @@ class sw_monitor_metric extends sw_abstract
 		$collect_every = $this->__request->get_post('collect_every', '');
 		$time_threshold = $this->__request->get_post('time_threshold', '');
 		if (!$mid || !$mmid) {
-			return $this->render_json(null, 10001, '`mid` and `mmid` not allow is empty.');
+			return $this->render_json(null, 10001, '`madapter_id` and `metric_id` not allow is empty.');
 		}
 
-		// 修改 monitor metric
+		// 修改 madapter metric
 		$data = array();
 		if ($name) {
 			$data['metric_name'] = $name;	
@@ -227,18 +227,18 @@ class sw_monitor_metric extends sw_abstract
 			$data['tmax'] = $tmax;	
 		}
 		try {
-			$property_metric = sw_member::property_factory('monitor_metric', $data); 
-			$condition = sw_member::condition_factory('mod_monitor_metric', array('monitor_id' => $mid, 'metric_id' => $mmid));
-			$condition->set_in('monitor_id');
+			$property_metric = sw_member::property_factory('madapter_metric', $data); 
+			$condition = sw_member::condition_factory('mod_madapter_metric', array('madapter_id' => $mid, 'metric_id' => $mmid));
+			$condition->set_in('madapter_id');
 			$condition->set_in('metric_id');
 			$condition->set_property($property_metric);
-			$monitor = sw_member::operator_factory('monitor');
-			$monitor->get_operator('metric')->mod_metric($condition);
+			$madapter = sw_member::operator_factory('madapter');
+			$madapter->get_operator('metric')->mod_metric($condition);
 		} catch (\swan\exception\sw_exception $e) {
 			return $this->render_json(null, 10002, $e->getMessage());	
 		}
 
-		return $this->render_json(null, 10000, 'mod monitor metric success.');
+		return $this->render_json(null, 10000, 'mod madapter metric success.');
 	}
 
 	// }}}

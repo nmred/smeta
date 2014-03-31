@@ -19,7 +19,7 @@ use \lib\member\sw_member;
 
 /**
 +------------------------------------------------------------------------------
-* 监控器属性接口 
+* 监控适配器属性接口 
 +------------------------------------------------------------------------------
 * 
 * @uses sw_abstract
@@ -29,13 +29,13 @@ use \lib\member\sw_member;
 * @author $_SWANBR_AUTHOR_$ 
 +------------------------------------------------------------------------------
 */
-class sw_monitor_attr extends sw_abstract
+class sw_madapter_attr extends sw_abstract
 {
 	// {{{ functions
 	// {{{ public function action_add()
 
 	/**
-	 * 添加监控器属性 
+	 * 添加监控适配器属性 
 	 * 
 	 * @access public
 	 * @return intger
@@ -43,16 +43,16 @@ class sw_monitor_attr extends sw_abstract
 	public function action_add()
 	{
 		$attr_name  = $this->__request->get_post('name', '');
-		$monitor_id = $this->__request->get_post('mid', '');
+		$madapter_id = $this->__request->get_post('madapter_id', '');
 		$form_type  = $this->__request->get_post('form_type', '');
 		$form_data  = $this->__request->get_post('form_data', '');
 		$display_name = $this->__request->get_post('display_name', '');
 		$attr_default = $this->__request->get_post('attr_default', '');
-		if (!$attr_name || !$monitor_id || !$form_type) {
-			return $this->render_json(null, 10001, '`name`/`mid`/`form_type` not allow is empty.');
+		if (!$attr_name || !$madapter_id || !$form_type) {
+			return $this->render_json(null, 10001, '`name`/`madapter_id`/`form_type` not allow is empty.');
 		}
 
-		// 添加 monitor attribute
+		// 添加 madapter attribute
 		$data = array(
 			'form_type' => $form_type,
 			'form_data' => $form_data,
@@ -61,15 +61,15 @@ class sw_monitor_attr extends sw_abstract
 			'attr_default' => $attr_default,
 		);
 		try {
-			$property_attr  = sw_member::property_factory('monitor_attribute', $data); 
-			$property_basic = sw_member::property_factory('monitor_basic', array('monitor_id' => $monitor_id)); 
-			$monitor = sw_member::operator_factory('monitor', $property_basic);
-			$attr_id = $monitor->get_operator('attribute')->add_attribute($property_attr);
+			$property_attr  = sw_member::property_factory('madapter_attribute', $data); 
+			$property_basic = sw_member::property_factory('madapter_basic', array('madapter_id' => $madapter_id)); 
+			$madapter = sw_member::operator_factory('madapter', $property_basic);
+			$attr_id = $madapter->get_operator('attribute')->add_attribute($property_attr);
 		} catch (\swan\exception\sw_exception $e) {
 			return $this->render_json(null, 10002, $e->getMessage());	
 		}
 
-		return $this->render_json(array('attr_id' => $attr_id, 'monitor_id' => $monitor_id), 10000, 'add monitor attribute success.');
+		return $this->render_json(array('attr_id' => $attr_id, 'madapter_id' => $madapter_id), 10000, 'add madapter attribute success.');
 	}
 
 	// }}}
@@ -83,24 +83,24 @@ class sw_monitor_attr extends sw_abstract
 	 */
 	public function action_del()
 	{
-		$attr_id    = $this->__request->get_post('aid', '');
-		$monitor_id = $this->__request->get_post('mid', '');
-		if (!$attr_id || !$monitor_id) {
-			return $this->render_json(null, 10001, '`aid`/`mid` not allow is empty.');
+		$attr_id    = $this->__request->get_post('attr_id', '');
+		$madapter_id = $this->__request->get_post('madapter_id', '');
+		if (!$attr_id || !$madapter_id) {
+			return $this->render_json(null, 10001, '`attr_id`/`madapter_id` not allow is empty.');
 		}
 
-		// 删除监控器属性
+		// 删除监控适配器属性
 		try {
-			$condition = sw_member::condition_factory('del_monitor_attribute', array('attr_id' => $attr_id, 'monitor_id' => $monitor_id)); 
+			$condition = sw_member::condition_factory('del_madapter_attribute', array('attr_id' => $attr_id, 'madapter_id' => $madapter_id)); 
 			$condition->set_in('attr_id');
-			$condition->set_in('monitor_id');
-			$monitor = sw_member::operator_factory('monitor');
-			$monitor->get_operator('attribute')->del_attribute($condition);
+			$condition->set_in('madapter_id');
+			$madapter = sw_member::operator_factory('madapter');
+			$madapter->get_operator('attribute')->del_attribute($condition);
 		} catch (\swan\exception\sw_exception $e) {
 			return $this->render_json(null, 10002, $e->getMessage());	
 		}
 
-		return $this->render_json(null, 10000, 'delete monitor success.');
+		return $this->render_json(null, 10000, 'delete madapter success.');
 	}
 
 	// }}}
@@ -114,22 +114,22 @@ class sw_monitor_attr extends sw_abstract
 	 */
 	public function action_json()
 	{
-		// 获取监控器属性
-		$mid  = $this->__request->get_post('mid', '');
+		// 获取监控适配器属性
+		$mid  = $this->__request->get_post('madapter_id', '');
 		$page = $this->__request->get_post('page', 1);
 		$page_count = $this->__request->get_post('page_count', 10);
 
 		if (!$mid) {
-			return $this->render_json(null, 10001, 'must defined mid.');	
+			return $this->render_json(null, 10001, 'must defined madapter_id.');	
 		}
 
 		$count = 0;
 		try {
-			$condition = sw_member::condition_factory('get_monitor_attribute', array('monitor_id' => $mid)); 
-			$condition->set_in('monitor_id');
+			$condition = sw_member::condition_factory('get_madapter_attribute', array('madapter_id' => $mid)); 
+			$condition->set_in('madapter_id');
 			$condition->set_is_count(true);
-			$monitor = sw_member::operator_factory('monitor');
-			$count   = $monitor->get_operator('attribute')->get_attribute($condition);
+			$madapter = sw_member::operator_factory('madapter');
+			$count   = $madapter->get_operator('attribute')->get_attribute($condition);
 		} catch (\swan\exception\sw_exception $e) {
 			return $this->render_json(null, 10001, $e->getMessage());	
 		}
@@ -142,7 +142,7 @@ class sw_monitor_attr extends sw_abstract
 			$condition->set_is_count(false);
 			$condition->set_columns('*');
 			$condition->set_limit_page(array('page' => $page, 'rows_count' => $page_count));
-			$data   = $monitor->get_operator('attribute')->get_attribute($condition);
+			$data   = $madapter->get_operator('attribute')->get_attribute($condition);
 		} catch (\swan\exception\sw_exception $e) {
 			return $this->render_json(null, 10001, $e->getMessage());	
 		}
@@ -152,32 +152,32 @@ class sw_monitor_attr extends sw_abstract
 			'count'  => $count,
 		);
 
-		return $this->render_json($result, 10000, 'get monitor attribute success.');
+		return $this->render_json($result, 10000, 'get madapter attribute success.');
 	}
 
 	// }}}
 	// {{{ public function action_mod()
 
 	/**
-	 * 修改监控器属性 
+	 * 修改监控适配器属性 
 	 * 
 	 * @access public
 	 * @return void
 	 */
 	public function action_mod()
 	{	
-		$mid  = $this->__request->get_post('mid', '');
-		$aid  = $this->__request->get_post('aid', '');
+		$mid  = $this->__request->get_post('madapter_id', '');
+		$aid  = $this->__request->get_post('attr_id', '');
 		$name = $this->__request->get_post('name', '');
 		$display_name = $this->__request->get_post('display_name', '');
 		$form_type = $this->__request->get_post('form_type', '');
 		$form_data = $this->__request->get_post('form_data', '');
 		$attr_default = $this->__request->get_post('attr_default', '');
 		if (!$mid || !$aid) {
-			return $this->render_json(null, 10001, '`mid` and `aid` not allow is empty.');
+			return $this->render_json(null, 10001, '`madapter_id` and `attr_id` not allow is empty.');
 		}
 
-		// 修改 monitor attribute
+		// 修改 madapter attribute
 		$data = array();
 		if ($name) {
 			$data['attr_name'] = $name;	
@@ -200,18 +200,18 @@ class sw_monitor_attr extends sw_abstract
 		}
 
 		try {
-			$property_attribute = sw_member::property_factory('monitor_attribute', $data); 
-			$condition = sw_member::condition_factory('mod_monitor_attribute', array('monitor_id' => $mid, 'attr_id' => $aid));
-			$condition->set_in('monitor_id');
+			$property_attribute = sw_member::property_factory('madapter_attribute', $data); 
+			$condition = sw_member::condition_factory('mod_madapter_attribute', array('madapter_id' => $mid, 'attr_id' => $aid));
+			$condition->set_in('madapter_id');
 			$condition->set_in('attr_id');
 			$condition->set_property($property_attribute);
-			$monitor = sw_member::operator_factory('monitor');
-			$monitor->get_operator('attribute')->mod_attribute($condition);
+			$madapter = sw_member::operator_factory('madapter');
+			$madapter->get_operator('attribute')->mod_attribute($condition);
 		} catch (\swan\exception\sw_exception $e) {
 			return $this->render_json(null, 10002, $e->getMessage());	
 		}
 
-		return $this->render_json(null, 10000, 'mod monitor success.');
+		return $this->render_json(null, 10000, 'mod madapter success.');
 	}
 
 	// }}}

@@ -19,7 +19,7 @@ use \lib\member\sw_member;
 
 /**
 +------------------------------------------------------------------------------
-* 监控器 archive 接口 
+* 监控适配器 archive 接口 
 +------------------------------------------------------------------------------
 * 
 * @uses sw_abstract
@@ -29,32 +29,32 @@ use \lib\member\sw_member;
 * @author $_SWANBR_AUTHOR_$ 
 +------------------------------------------------------------------------------
 */
-class sw_monitor_archive extends sw_abstract
+class sw_madapter_archive extends sw_abstract
 {
 	// {{{ functions
 	// {{{ public function action_add()
 
 	/**
-	 * 添加监控器数据项 
+	 * 添加监控适配器数据项 
 	 * 
 	 * @access public
 	 * @return intger
 	 */
 	public function action_add()
 	{
-		$monitor_id = $this->__request->get_post('mid', '');
+		$madapter_id = $this->__request->get_post('madapter_id', '');
 		$cf_type    = $this->__request->get_post('cf_type', '');
 		$xff   = $this->__request->get_post('xff', '0.5');
 		$title = $this->__request->get_post('title', '');
 		$steps = $this->__request->get_post('steps', '');
 		$rows  = $this->__request->get_post('rows', '');
-		if (!$cf_type || !$monitor_id || !$steps || !$rows) {
-			return $this->render_json(null, 10001, '`cf_type`/`steps`/`mid`/`rows` not allow is empty.');
+		if (!$cf_type || !$madapter_id || !$steps || !$rows) {
+			return $this->render_json(null, 10001, '`cf_type`/`steps`/`madapter_id`/`rows` not allow is empty.');
 		}
 
-		// 添加 monitor archive
+		// 添加 madapter archive
 		$data = array(
-			'monitor_id' => $monitor_id,
+			'madapter_id' => $madapter_id,
 			'title'   => $title,
 			'cf_type' => $cf_type,
 			'xff'   => $xff,
@@ -62,15 +62,15 @@ class sw_monitor_archive extends sw_abstract
 			'rows'  => $rows,
 		);
 		try {
-			$property_archive  = sw_member::property_factory('monitor_archive', $data); 
-			$property_basic   = sw_member::property_factory('monitor_basic', array('monitor_id' => $monitor_id)); 
-			$monitor = sw_member::operator_factory('monitor', $property_basic);
-			$archive_id = $monitor->get_operator('archive')->add_archive($property_archive);
+			$property_archive  = sw_member::property_factory('madapter_archive', $data); 
+			$property_basic   = sw_member::property_factory('madapter_basic', array('madapter_id' => $madapter_id)); 
+			$madapter = sw_member::operator_factory('madapter', $property_basic);
+			$archive_id = $madapter->get_operator('archive')->add_archive($property_archive);
 		} catch (\swan\exception\sw_exception $e) {
 			return $this->render_json(null, 10002, $e->getMessage());	
 		}
 
-		return $this->render_json(array('archive_id' => $archive_id, 'monitor_id' => $monitor_id), 10000, 'add monitor archive success.');
+		return $this->render_json(array('archive_id' => $archive_id, 'madapter_id' => $madapter_id), 10000, 'add madapter archive success.');
 	}
 
 	// }}}
@@ -84,24 +84,24 @@ class sw_monitor_archive extends sw_abstract
 	 */
 	public function action_del()
 	{
-		$archive_id  = $this->__request->get_post('arid', '');
-		$monitor_id = $this->__request->get_post('mid', '');
-		if (!$archive_id || !$monitor_id) {
-			return $this->render_json(null, 10001, '`arid`/`mid` not allow is empty.');
+		$archive_id  = $this->__request->get_post('archive_id', '');
+		$madapter_id = $this->__request->get_post('madapter_id', '');
+		if (!$archive_id || !$madapter_id) {
+			return $this->render_json(null, 10001, '`archive_id`/`madapter_id` not allow is empty.');
 		}
 
-		// 删除监控器 archive
+		// 删除监控适配器 archive
 		try {
-			$condition = sw_member::condition_factory('del_monitor_archive', array('archive_id' => $archive_id, 'monitor_id' => $monitor_id)); 
+			$condition = sw_member::condition_factory('del_madapter_archive', array('archive_id' => $archive_id, 'madapter_id' => $madapter_id)); 
 			$condition->set_in('archive_id');
-			$condition->set_in('monitor_id');
-			$monitor = sw_member::operator_factory('monitor');
-			$monitor->get_operator('archive')->del_archive($condition);
+			$condition->set_in('madapter_id');
+			$madapter = sw_member::operator_factory('madapter');
+			$madapter->get_operator('archive')->del_archive($condition);
 		} catch (\swan\exception\sw_exception $e) {
 			return $this->render_json(null, 10002, $e->getMessage());	
 		}
 
-		return $this->render_json(null, 10000, 'delete monitor archive success.');
+		return $this->render_json(null, 10000, 'delete madapter archive success.');
 	}
 
 	// }}}
@@ -115,9 +115,9 @@ class sw_monitor_archive extends sw_abstract
 	 */
 	public function action_json()
 	{
-		// 获取监控器属性
-		$mid  = $this->__request->get_post('mid', '');
-		$arid = $this->__request->get_post('arid', '');
+		// 获取监控适配器属性
+		$mid  = $this->__request->get_post('madapter_id', '');
+		$arid = $this->__request->get_post('archive_id', '');
 		$page = $this->__request->get_post('page', 1);
 		$page_count = $this->__request->get_post('page_count', 10);
 
@@ -127,15 +127,15 @@ class sw_monitor_archive extends sw_abstract
 
 		$count = 0;
 		try {
-			$condition = sw_member::condition_factory('get_monitor_archive', array('monitor_id' => $mid)); 
-			$condition->set_in('monitor_id');
+			$condition = sw_member::condition_factory('get_madapter_archive', array('madapter_id' => $mid)); 
+			$condition->set_in('madapter_id');
 			if ($arid) {
 				$condition->set_in('archive_id');
 				$condition->set_archive_id($arid);
 			}
 			$condition->set_is_count(true);
-			$monitor = sw_member::operator_factory('monitor');
-			$count   = $monitor->get_operator('archive')->get_archive($condition);
+			$madapter = sw_member::operator_factory('madapter');
+			$count   = $madapter->get_operator('archive')->get_archive($condition);
 		} catch (\swan\exception\sw_exception $e) {
 			return $this->render_json(null, 10001, $e->getMessage());	
 		}
@@ -148,7 +148,7 @@ class sw_monitor_archive extends sw_abstract
 			$condition->set_is_count(false);
 			$condition->set_columns('*');
 			$condition->set_limit_page(array('page' => $page, 'rows_count' => $page_count));
-			$data   = $monitor->get_operator('archive')->get_archive($condition);
+			$data   = $madapter->get_operator('archive')->get_archive($condition);
 		} catch (\swan\exception\sw_exception $e) {
 			return $this->render_json(null, 10001, $e->getMessage());	
 		}
@@ -158,22 +158,22 @@ class sw_monitor_archive extends sw_abstract
 			'count'  => $count,
 		);
 
-		return $this->render_json($result, 10000, 'get monitor archive success.');
+		return $this->render_json($result, 10000, 'get madapter archive success.');
 	}
 
 	// }}}
 	// {{{ public function action_mod()
 
 	/**
-	 * 修改监控器数据项 
+	 * 修改监控适配器数据项 
 	 * 
 	 * @access public
 	 * @return void
 	 */
 	public function action_mod()
 	{	
-		$mid   = $this->__request->get_post('mid', '');
-		$arid  = $this->__request->get_post('arid', '');
+		$mid   = $this->__request->get_post('madapter_id', '');
+		$arid  = $this->__request->get_post('archive_id', '');
 		$cf_type = $this->__request->get_post('cf_type', '');
 		$xff   = $this->__request->get_post('xff', '');
 		$title = $this->__request->get_post('title', '');
@@ -183,7 +183,7 @@ class sw_monitor_archive extends sw_abstract
 			return $this->render_json(null, 10001, '`mid` and `arid` not allow is empty.');
 		}
 
-		// 修改 monitor archive
+		// 修改 madapter archive
 		$data = array();
 		if ($cf_type) {
 			$data['cf_type'] = $cf_type;	
@@ -206,18 +206,18 @@ class sw_monitor_archive extends sw_abstract
 		}
 
 		try {
-			$property_archive = sw_member::property_factory('monitor_archive', $data); 
-			$condition = sw_member::condition_factory('mod_monitor_archive', array('monitor_id' => $mid, 'archive_id' => $arid));
-			$condition->set_in('monitor_id');
+			$property_archive = sw_member::property_factory('madapter_archive', $data); 
+			$condition = sw_member::condition_factory('mod_madapter_archive', array('madapter_id' => $mid, 'archive_id' => $arid));
+			$condition->set_in('madapter_id');
 			$condition->set_in('archive_id');
 			$condition->set_property($property_archive);
-			$monitor = sw_member::operator_factory('monitor');
-			$monitor->get_operator('archive')->mod_archive($condition);
+			$madapter = sw_member::operator_factory('madapter');
+			$madapter->get_operator('archive')->mod_archive($condition);
 		} catch (\swan\exception\sw_exception $e) {
 			return $this->render_json(null, 10002, $e->getMessage());	
 		}
 
-		return $this->render_json(null, 10000, 'mod monitor archive success.');
+		return $this->render_json(null, 10000, 'mod madapter archive success.');
 	}
 
 	// }}}

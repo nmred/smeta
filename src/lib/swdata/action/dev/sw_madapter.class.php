@@ -83,9 +83,9 @@ class sw_madapter extends sw_abstract
 	public function action_del()
 	{
 		$madapter_name = $this->__request->get_post('name', '');
-		$madapter_id   = $this->__request->get_post('mid', '');
+		$madapter_id   = $this->__request->get_post('madapter_id', '');
 		if (!$madapter_name && !$madapter_id) {
-			return $this->render_json(null, 10001, '`name` or `mid` not allow is empty.');
+			return $this->render_json(null, 10001, '`name` or `madapter_id` not allow is empty.');
 		}
 
 		// 删除监控适配器
