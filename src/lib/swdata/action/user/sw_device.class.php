@@ -73,21 +73,21 @@ class sw_device extends sw_abstract
 			return $this->render_json(null, 10003, $e->getMessage());	
 		}
 
-		// 获取核心监控器
-		$condition = sw_member::condition_factory('get_monitor_basic');
-		$condition->set_in('monitor_type');
-		$condition->set_monitor_type('1');
-		$monitor = sw_member::operator_factory('monitor');
-		$monitor_basic = $monitor->get_operator('basic')->get_basic($condition);
+		// 获取核心监控适配器
+		$condition = sw_member::condition_factory('get_madapter_basic');
+		$condition->set_in('madapter_type');
+		$condition->set_madapter_type('1');
+		$madapter = sw_member::operator_factory('madapter');
+		$madapter_basic = $madapter->get_operator('basic')->get_basic($condition);
 
-		if (!empty($monitor_basic)) {
-			foreach ($monitor_basic as $monitor_info) {
-				$monitor_property_basic = sw_member::property_factory('monitor_basic', array('monitor_id' => $monitor_info['monitor_id']));
-				$device_property_monitor = sw_member::property_factory('device_monitor', array('dm_name' => $monitor_info['monitor_name']));
-				$device_property_monitor->set_monitor_basic($monitor_property_basic);
+		if (!empty($madapter_basic)) {
+			foreach ($madapter_basic as $madapter_info) {
+				$madapter_property_basic = sw_member::property_factory('madapter_basic', array('madapter_id' => $madapter_info['madapter_id']));
+				$property_monitor = sw_member::property_factory('device_monitor', array('monitor_name' => $madapter_info['madapter_name']));
+				$property_monitor->set_madapter_basic($madapter_property_basic);
 				try {	
 					$device = sw_member::operator_factory('device', $property_key);
-					$device_monitor = $device->get_operator('monitor')->add_monitor($device_property_monitor);
+					$device_madapter = $device->get_operator('monitor')->add_monitor($property_monitor);
 				} catch (\swan\exception\sw_exception $e) {
 					$db->rollback();
 					return $this->render_json(null, 10004, $e->getMessage());	
@@ -110,9 +110,9 @@ class sw_device extends sw_abstract
 	 */
 	public function action_del()
 	{
-		$did = $this->__request->get_post('did', '');
+		$did = $this->__request->get_post('device_id', '');
 		if (!$did) {
-			return $this->render_json(null, 10001, '`did` not allow is empty.');
+			return $this->render_json(null, 10001, '`device_id` not allow is empty.');
 		}
 
 		$db = \swan\db\sw_db::singleton();
@@ -137,39 +137,22 @@ class sw_device extends sw_abstract
 			return $this->render_json(null, 10003, $e->getMessage());	
 		}
 
-		// 获取核心监控器
-		$condition = sw_member::condition_factory('get_monitor_basic');
-		$condition->set_in('monitor_type');
-		$condition->set_monitor_type('1');
-		$monitor = sw_member::operator_factory('monitor');
-		$monitor_basic = $monitor->get_operator('basic')->get_basic($condition);
+		// 获取核心监控适配器
+		$condition = sw_member::condition_factory('get_madapter_basic');
+		$condition->set_in('madapter_type');
+		$condition->set_madapter_type('1');
+		$madapter = sw_member::operator_factory('madapter');
+		$madapter_basic = $madapter->get_operator('basic')->get_basic($condition);
 
-		if (!empty($monitor_basic)) {
-			foreach ($monitor_basic as $monitor_info) {
-				try {	
-					$condition = sw_member::condition_factory('get_device_monitor');
-					$condition->set_in('device_id');
-					$condition->set_in('monitor_id');
-					$condition->set_device_id($did);
-					$condition->set_monitor_id($monitor_info['monitor_id']);
-					$device = sw_member::operator_factory('device');
-					$device_monitor = $device->get_operator('monitor')->get_monitor($condition);
-					if (!empty($device_monitor)) {
-						foreach ($device_monitor as $dm_info) {
-							$condition = sw_member::condition_factory('del_device_monitor');
-							$condition->set_in('dm_id');
-							$condition->set_dm_id($dm_info['dm_id']);
-							$condition->set_in('device_id');
-							$condition->set_device_id($did);
-							$device = sw_member::operator_factory('device');
-							$device_monitor = $device->get_operator('monitor')->del_monitor($condition);
-						}
-					}
-				} catch (\swan\exception\sw_exception $e) {
-					$db->rollback();
-					return $this->render_json(null, 10004, $e->getMessage());	
-				}
-			}
+		try {	
+			$property_key = sw_member::property_factory('device_key', array('device_id' => $did)); 
+			$condition = sw_member::condition_factory('del_device_monitor');
+			$condition->set_in('device_id');
+			$device = sw_member::operator_factory('device', $property_key);
+			$monitor = $device->get_operator('monitor')->del_monitor($condition);
+		} catch (\swan\exception\sw_exception $e) {
+			$db->rollback();
+			return $this->render_json(null, 10004, $e->getMessage());	
 		}
 	
 		$db->commit();
@@ -187,12 +170,12 @@ class sw_device extends sw_abstract
 	 */
 	public function action_mod()
 	{	
-		$did = $this->__request->get_post('did', '');
+		$did = $this->__request->get_post('device_id', '');
 		$host_name = $this->__request->get_post('host_name', '');
 		$heartbeat    = $this->__request->get_post('heartbeat_time', '');
 		$display_name = $this->__request->get_post('display_name', '');
 		if (!$did) {
-			return $this->render_json(null, 10001, '`did` not allow is empty.');
+			return $this->render_json(null, 10001, '`device_id` not allow is empty.');
 		}
 
 		if ($host_name) {
@@ -200,7 +183,7 @@ class sw_device extends sw_abstract
 		}
 
 		if ($display_name) {
-			$data['display_name'] = $display_name;	
+			$data['device_display_name'] = $display_name;	
 		}
 
 		if ($heartbeat) {

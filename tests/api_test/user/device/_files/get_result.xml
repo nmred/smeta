@@ -1,0 +1,83 @@
+<?xml version="1.0" ?>
+<dataset>
+	<table name="sequence_global">
+		<column>table_name</column>
+		<column>sequence_id</column>
+		<row>
+			<value>madapter_basic</value>
+			<value>2</value>
+		</row>
+		<row>
+			<value>device_key</value>
+			<value>2</value>
+		</row>
+	</table>
+	<table name="device_key">
+		<column>device_id</column>
+		<column>device_name</column>
+		<row>
+			<value>1</value>
+			<value>lan-114</value>
+		</row>
+		<row>
+			<value>2</value>
+			<value>lan-115</value>
+		</row>
+	</table>
+	<table name="device_basic">
+		<column>device_id</column>
+		<column>device_display_name</column>
+		<column>host_name</column>
+		<column>heartbeat_time</column>
+		<row>
+			<value>1</value>
+			<value>desc_lan-114</value>
+			<value>192.168.1.114</value>
+			<value>300</value>
+		</row>
+		<row>
+			<value>2</value>
+			<value>desc_lan-115</value>
+			<value>192.168.1.115</value>
+			<value>300</value>
+		</row>
+	</table>
+	<table name="device_monitor">
+		<column>monitor_id</column>
+		<column>monitor_name</column>
+		<column>device_id</column>
+		<column>madapter_id</column>
+	</table>
+	<table name="madapter_basic">
+		<column>madapter_id</column>
+		<column>madapter_name</column>
+		<column>madapter_display_name</column>
+		<column>steps</column>
+		<column>store_type</column>
+		<column>madapter_type</column>
+		<row>
+			<value>1</value>
+			<value>apache</value>
+			<value>apache监控适配器</value>
+			<value>300</value>
+			<value>2</value>
+			<value>2</value>
+		</row>
+		<row>
+			<value>2</value>
+			<value>mysql</value>
+			<value>mysql监控适配器</value>
+			<value>300</value>
+			<value>2</value>
+			<value>2</value>
+		</row>
+		<row>
+			<value>3</value>
+			<value>heartbeat</value>
+			<value>服务器心跳线</value>
+			<value>300</value>
+			<value>4</value>
+			<value>1</value>
+		</row>
+	</table>
+</dataset>
