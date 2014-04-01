@@ -128,11 +128,9 @@ class sw_monitor_test extends sw_test_db
 	public function test_mod_monitor()
 	{
 		$device_property_key = sw_member::property_factory('device_key', array('device_id' => '1'));
-		$madapter_property_basic  = sw_member::property_factory('madapter_basic', array('madapter_id' => '1'));
 		$monitor_params[] = sw_member::property_factory('madapter_params', array('value' => 'http://www.apache_web1_mod.com/server_status', 'attr_id' => '1'));
 		$monitor_params[] = sw_member::property_factory('madapter_params', array('value' => 'http://www.apache_web1_mod.com/server_status', 'attr_id' => '2'));
 		$device_property_monitor = sw_member::property_factory('device_monitor');
-		$device_property_monitor->set_madapter_basic($madapter_property_basic);
 		$device_property_monitor->set_monitor_params($monitor_params);
 		$device_property_monitor->set_monitor_id(1);
 		$condition = sw_member::condition_factory('mod_device_monitor');

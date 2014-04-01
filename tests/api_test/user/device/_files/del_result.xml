@@ -43,10 +43,6 @@
 		</row>
 	</table>
 	<table name="device_monitor">
-		<column>monitor_id</column>
-		<column>monitor_name</column>
-		<column>device_id</column>
-		<column>madapter_id</column>
 	</table>
 	<table name="madapter_basic">
 		<column>madapter_id</column>

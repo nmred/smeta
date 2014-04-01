@@ -98,7 +98,7 @@ class sw_device extends sw_abstract
 	 * @access public
 	 * @return void
 	 */
-	public function get_device(\lib\member\condition\sw_get_device $condition)
+	public function get_device(\lib\member\condition\get\sw_device $condition)
 	{	
 		$condition->check_params();
 		$params = $condition->params();

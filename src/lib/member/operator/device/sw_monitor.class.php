@@ -201,11 +201,6 @@ class sw_monitor extends sw_abstract
         }
 
 		$monitor_property = $condition->get_property();
-		$madapter_basic_property = $monitor_property->get_madapter_basic();
-		$madapter_id = $madapter_basic_property->get_madapter_id();
-        if (!isset($madapter_id)) {
-            throw new sw_exception('Unknow madapter id.');
-        }
 		$monitor_params = $monitor_property->get_monitor_params(); 
 		$monitor_id = $monitor_property->get_monitor_id();
 

@@ -29,18 +29,18 @@ use \lib\member\sw_member;
 * @author $_SWANBR_AUTHOR_$ 
 +------------------------------------------------------------------------------
 */
-class sw_dispatch_config extends sw_abstract
+class sw_dconfig extends sw_abstract
 {
 	// {{{ functions
 	// {{{ public function action_do()
 
 	/**
-	 * 执行配置分发 
+	 * 分发客户端监控的配置 
 	 * 
 	 * @access public
 	 * @return intger
 	 */
-	public function action_do()
+	public function action_smond()
 	{
 		$device_name = $this->__request->get_post('device_name', '');
 		try {

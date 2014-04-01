@@ -12,14 +12,14 @@
 // | $_SWANBR_WEB_DOMAIN_$
 // +---------------------------------------------------------------------------
  
-namespace api_test\user\device;
+namespace api_test\user\monitor;
 use swan\test\sw_test_db;
-use mock\api_test\user\sw_device as sw_mock_device;
+use mock\api_test\user\sw_monitor as sw_mock_monitor;
 use mock\api_test\sw_request;
 
 /**
 +------------------------------------------------------------------------------
-* 设备测试 
+* 监控器测试 
 +------------------------------------------------------------------------------
 * 
 * @package 
@@ -28,7 +28,7 @@ use mock\api_test\sw_request;
 * @group sw_db
 +------------------------------------------------------------------------------
 */
-class sw_device extends sw_test_db
+class sw_monitor extends sw_test_db
 {
 	// {{{ consts
 	// }}}
@@ -40,7 +40,7 @@ class sw_device extends sw_test_db
 	 * @var mixed
 	 * @access protected
 	 */
-	protected $__device = null;
+	protected $__monitor = null;
 
 	// }}}
 	// {{{ functions
@@ -71,8 +71,8 @@ class sw_device extends sw_test_db
 	public function setUp()
 	{
 		parent::setUp();
-		$this->__device = sw_mock_device::get_instance($this);
-		$this->__device->init();
+		$this->__monitor = sw_mock_monitor::get_instance($this);
+		$this->__monitor->init();
 	}
 
 	// }}}
@@ -86,29 +86,23 @@ class sw_device extends sw_test_db
 	 */
 	public function test_action_add()
 	{
+		$attr_data = array(
+			array('attr_id' => 1, 'value' => 'http://www.apache_web1.com/server_status'),
+			array('attr_id' => 2, 'value' => 'http://www.apache_web2.com/server_status'),
+		);
 		$post_data = array(
-			'name' => 'lan-116',
-			'host_name' => '192.168.1.116',
-			'heartbeat_time' => 300,
-			'display_name' => 'desc_lan-116',
+			'device_id' => '2',
+			'madapter_id' => '1',
+			'monitor_name' => 'apache_web1',
+			'attr_data' => json_encode($attr_data, true),
 		);	
 
 		// 初始化 POST 参数
 		sw_request::get_instance($post_data);
-		$result = $this->__device->action_add();	
+		$result = $this->__monitor->action_add();	
 		$expect = 10000; 
 		$this->assertEquals($expect, $result['code']);
-		$this->assertEquals(3, $result['data']['device_id']);
-		$query_table = $this->getConnection()
-			                ->CreateQueryTable('device_key', 'select * from device_key');
-		$expect = $this->createXMLDataSet(dirname(__FILE__) . '/_files/add_result.xml')
-			           ->getTable('device_key');
-		$this->assertTablesEqual($expect, $query_table);
-		$query_table = $this->getConnection()
-			                ->CreateQueryTable('device_basic', 'select * from device_basic');
-		$expect = $this->createXMLDataSet(dirname(__FILE__) . '/_files/add_result.xml')
-			           ->getTable('device_basic');
-		$this->assertTablesEqual($expect, $query_table);
+		$this->assertEquals(1, $result['data']['monitor_id']);
 		$query_table = $this->getConnection()
 			                ->CreateQueryTable('device_monitor', 'select * from device_monitor');
 		$expect = $this->createXMLDataSet(dirname(__FILE__) . '/_files/add_result.xml')
@@ -127,22 +121,25 @@ class sw_device extends sw_test_db
 	 */
 	public function test_action_mod()
 	{
+		$attr_data = array(
+			array('attr_id' => 1, 'value' => 'http://www.apache_web1_mod.com/server_status'),
+			array('attr_id' => 2, 'value' => 'http://www.apache_web1_mod.com/server_status'),
+		);
 		$post_data = array(
-			'device_id' => 2,
-			'host_name' => '192.168.1.116',
-			'heartbeat_time' => 300,
-			'display_name' => 'desc_lan-116',
+			'device_id' => '1',
+			'monitor_id' => '1',
+			'attr_data' => json_encode($attr_data, true),
 		);	
 
 		// 初始化 POST 参数
 		sw_request::get_instance($post_data);
-		$result = $this->__device->action_mod();	
+		$result = $this->__monitor->action_mod();	
 		$expect = 10000; 
 		$this->assertEquals($expect, $result['code']);
 		$query_table = $this->getConnection()
-			                ->CreateQueryTable('device_basic', 'select * from device_basic');
+			                ->CreateQueryTable('device_monitor_params', 'select * from device_monitor_params');
 		$expect = $this->createXMLDataSet(dirname(__FILE__) . '/_files/mod_result.xml')
-			           ->getTable('device_basic');
+			           ->getTable('device_monitor_params');
 		$this->assertTablesEqual($expect, $query_table);
 	}
 
@@ -158,30 +155,26 @@ class sw_device extends sw_test_db
 	public function test_action_del()
 	{
 		$post_data = array(
-			'device_id'   => '3',
+			'device_id'   => '1',
+			'monitor_id'   => '1',
 		);	
 
 		// 初始化 POST 参数
 		sw_request::get_instance($post_data);
-		$this->__device->action_add();	
-		$result = $this->__device->action_del();	
+		$result = $this->__monitor->action_del();	
 		$expect = 10000; 
 		$this->assertEquals($expect, $result['code']);
-		$query_table = $this->getConnection()
-			                ->CreateQueryTable('device_basic', 'select * from device_basic');
-		$expect = $this->createXMLDataSet(dirname(__FILE__) . '/_files/del_result.xml')
-			           ->getTable('device_basic');
-		$this->assertTablesEqual($expect, $query_table);
-		$query_table = $this->getConnection()
-			                ->CreateQueryTable('device_key', 'select * from device_key');
-		$expect = $this->createXMLDataSet(dirname(__FILE__) . '/_files/del_result.xml')
-			           ->getTable('device_key');
-		$this->assertTablesEqual($expect, $query_table);
 		$query_table = $this->getConnection()
 			                ->CreateQueryTable('device_monitor', 'select * from device_monitor');
 		$expect = $this->createXMLDataSet(dirname(__FILE__) . '/_files/del_result.xml')
 			           ->getTable('device_monitor');
 		$this->assertTablesEqual($expect, $query_table);
+
+		$query_params = $this->getConnection()
+			                 ->CreateQueryTable('device_monitor_params', 'select * from device_monitor_params');
+		$expect_params = $this->createXMLDataSet(dirname(__FILE__) . '/_files/del_result.xml')
+			           ->getTable('device_monitor_params');
+		$this->assertTablesEqual($expect_params, $query_params);
 	}
 
 	// }}}
@@ -198,18 +191,48 @@ class sw_device extends sw_test_db
 		$post_data = array(
 			'page' => 1,
 			'page_count' => 20,
-			'madapter_id' => 1
+			'device_id' => 1
 		);	
 
 		// 初始化 POST 参数
 		sw_request::get_instance($post_data);
-		$result = $this->__device->action_json();	
+		$result = $this->__monitor->action_json();	
 		$expect = 10000; 
 		$this->assertEquals($expect, $result['code']);
-		$query_table = $this->array_to_dbset(array('device_info' => $result['data']['result']))
-							->getTable('device_info');
+		$query_table  = $this->array_to_dbset(array('device_monitor' => $result['data']['result']))
+							 ->getTable('device_monitor');
 		$expect = $this->createXMLDataSet(dirname(__FILE__) . '/_files/get_result.xml')
-			           ->getTable('device_info');
+			           ->getTable('device_monitor');
+		$this->assertTablesEqual($expect, $query_table);
+	}
+
+	// }}}
+	// {{{ public function test_get_monitor_params()
+	
+	/**
+	 * test_get_monitor_params 
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function test_get_monitor_params()
+	{
+		$post_data = array(
+			'page' => 1,
+			'page_count' => 20,
+			'device_id' => 1,
+			'monitor_id' => 1
+		);	
+
+		// 初始化 POST 参数
+		sw_request::get_instance($post_data);
+		$result = $this->__monitor->action_info();	
+		$expect = 10000; 
+		$this->assertEquals($expect, $result['code']);
+		$query_table  = $this->array_to_dbset(array('monitor_params' => $result['data']['result']))
+							 ->getTable('monitor_params');
+		$expect = $this->createXMLDataSet(dirname(__FILE__) . '/_files/get_params_result.xml')
+			           ->getTable('monitor_params');
 		$this->assertTablesEqual($expect, $query_table);
 	}
 

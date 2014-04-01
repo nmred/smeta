@@ -12,34 +12,25 @@
 			<value>2</value>
 		</row>
 	</table>
-	<table name="device_key">
+	<table name="device_info">
 		<column>device_id</column>
 		<column>device_name</column>
+		<column>host_name</column>
+		<column>heartbeat_time</column>
+		<column>device_display_name</column>
 		<row>
 			<value>1</value>
 			<value>lan-114</value>
+			<value>192.168.1.114</value>
+			<value>300</value>
+			<value>desc_lan-114</value>
 		</row>
 		<row>
 			<value>2</value>
 			<value>lan-115</value>
-		</row>
-	</table>
-	<table name="device_basic">
-		<column>device_id</column>
-		<column>device_display_name</column>
-		<column>host_name</column>
-		<column>heartbeat_time</column>
-		<row>
-			<value>1</value>
-			<value>desc_lan-114</value>
-			<value>192.168.1.114</value>
-			<value>300</value>
-		</row>
-		<row>
-			<value>2</value>
-			<value>desc_lan-115</value>
 			<value>192.168.1.115</value>
 			<value>300</value>
+			<value>desc_lan-115</value>
 		</row>
 	</table>
 	<table name="device_monitor">
