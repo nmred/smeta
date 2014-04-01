@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>监控适配器 archive 管理 API | Swan</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="/smeta/css/style.css">
+  <link href="//fonts.googleapis.com/css?family=Lato:300,700" rel="stylesheet" type="text/css">
+  <link href='http://fonts.googleapis.com/css?family=Source+Code+Pro:400,700' rel='stylesheet' type='text/css'>
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+</head>
+
+
+<body class="page">
+  <header id="header">
+  <div class="outer">
+    <div class="inner">
+      <h1 id="logo-wrap">
+        <a href="/smeta/" id="logo">Swan</a>
+      </h1>
+      <nav id="main-nav">
+        <ul id="main-nav-list">
+          
+            <li class="main-nav-item">
+              <a href="/" class="main-nav-link">主页</a>
+            </li>
+          
+            <li class="main-nav-item">
+              <a href="/smeta/docs/" class="main-nav-link current">文档</a>
+            </li>
+          
+            <li class="main-nav-item">
+              <a href="https://github.com/nmred/sf1" class="main-nav-link">仓库</a>
+            </li>
+          
+        </ul>
+      </nav>
+    </div>
+  </div>
+</header>
+
+  <article class="page">
+  <header id="page-banner">
+  <div class="outer">
+    <div class="inner">
+      <h1 class="page-title">监控适配器 archive 管理 API</h1>
+    </div>
+  </div>
+</header>
+  <div class="outer">
+    <div class="inner">
+  <select id="page-mobile-menu">
+    <option value="">Navigate...</option>
+    
+      <optgroup label="安装部署相关">
+        
+          <option value="/smeta/docs/rpm_publish.html">RPM 安装包发布</option>
+        
+          <option value="/smeta/docs/evn_deploy.html">环境部署</option>
+        
+          <option value="/smeta/docs/mysql_desc.html">数据字典</option>
+        
+      </optgroup>
+    
+      <optgroup label="Inner Api">
+        
+          <option value="/smeta/docs/inner_api.html">介绍</option>
+        
+          <option value="/smeta/docs/device.html">设备管理</option>
+        
+          <option value="/smeta/docs/device_monitor.html">监控器管理</option>
+        
+          <option value="/smeta/docs/madapter.html">监控适配器管理</option>
+        
+          <option value="/smeta/docs/madapter_attr.html">监控适配器属性管理</option>
+        
+          <option value="/smeta/docs/madapter_metric.html">监控适配器数据项管理</option>
+        
+          <option value="/smeta/docs/madapter_archive.html">监控适配器 archive 管理</option>
+        
+          <option value="/smeta/docs/api_errno.html">接口错误代码说明</option>
+        
+      </optgroup>
+    
+      <optgroup label="API 开发相关">
+        
+          <option value="/smeta/docs/null">介绍</option>
+        
+          <option value="/smeta/docs/null">路由规则及设置</option>
+        
+          <option value="/smeta/docs/null">函数及常用 LIB 的调用</option>
+        
+      </optgroup>
+    
+  </select>
+</div>
+    <div class="page-content">
+      <div class="toc-wrap">
+        <strong class="toc-title">Contents</strong>
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#-archive-madapter_archive-add-"><span class="toc-number">1.</span> <span class="toc-text">添加监控适配器 archive (madapter_archive.add)</span></a></li><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#-url-add_url-"><span class="toc-number">1.1.</span> <span class="toc-text">URL</a></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-add_post-"><span class="toc-number">1.2.</span> <span class="toc-text">请求方式</a></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-add_json-"><span class="toc-number">1.3.</span> <span class="toc-text">支持格式</a></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-add_param-"><span class="toc-number">1.4.</span> <span class="toc-text">请求参数</a></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-add_notice-"><span class="toc-number">1.5.</span> <span class="toc-text">注意事项</a></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-add_example-"><span class="toc-number">1.6.</span> <span class="toc-text">调用样例</a></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-add_result-"><span class="toc-number">1.7.</span> <span class="toc-text">返回结果</a></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-add_result_dis-"><span class="toc-number">1.8.</span> <span class="toc-text">返回字段说明</a></span></a></li></ol><li class="toc-item toc-level-3"><a class="toc-link" href="#-archive-madapter_archive-mod-"><span class="toc-number">2.</span> <span class="toc-text">修改监控适配器 archive (madapter_archive.mod)</span></a></li><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#-url-mod_url-"><span class="toc-number">2.1.</span> <span class="toc-text">URL</a></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-mod_post-"><span class="toc-number">2.2.</span> <span class="toc-text">请求方式</a></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-mod_json-"><span class="toc-number">2.3.</span> <span class="toc-text">支持格式</a></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-mod_param-"><span class="toc-number">2.4.</span> <span class="toc-text">请求参数</a></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-mod_notice-"><span class="toc-number">2.5.</span> <span class="toc-text">注意事项</a></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-mod_example-"><span class="toc-number">2.6.</span> <span class="toc-text">调用样例</a></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-mod_result-"><span class="toc-number">2.7.</span> <span class="toc-text">返回结果</a></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-mod_result_dis-"><span class="toc-number">2.8.</span> <span class="toc-text">返回字段说明</a></span></a></li></ol><li class="toc-item toc-level-3"><a class="toc-link" href="#-archive-madapter_archive-del-"><span class="toc-number">3.</span> <span class="toc-text">删除监控适配器 archive (madapter_archive.del)</span></a></li><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#-url-del_url-"><span class="toc-number">3.1.</span> <span class="toc-text">URL</a></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-del_post-"><span class="toc-number">3.2.</span> <span class="toc-text">请求方式</a></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-del_json-"><span class="toc-number">3.3.</span> <span class="toc-text">支持格式</a></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-del_param-"><span class="toc-number">3.4.</span> <span class="toc-text">请求参数</a></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-del_notice-"><span class="toc-number">3.5.</span> <span class="toc-text">注意事项</a></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-del_example-"><span class="toc-number">3.6.</span> <span class="toc-text">调用样例</a></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-del_result-"><span class="toc-number">3.7.</span> <span class="toc-text">返回结果</a></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-del_result_dis-"><span class="toc-number">3.8.</span> <span class="toc-text">返回字段说明</a></span></a></li></ol><li class="toc-item toc-level-3"><a class="toc-link" href="#-archive-madapter_archive-json-"><span class="toc-number">4.</span> <span class="toc-text">获取监控适配器 archive (madapter_archive.json)</span></a></li><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#-url-json_url-"><span class="toc-number">4.1.</span> <span class="toc-text">URL</a></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-json_post-"><span class="toc-number">4.2.</span> <span class="toc-text">请求方式</a></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-json_json-"><span class="toc-number">4.3.</span> <span class="toc-text">支持格式</a></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-json_param-"><span class="toc-number">4.4.</span> <span class="toc-text">请求参数</a></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-json_notice-"><span class="toc-number">4.5.</span> <span class="toc-text">注意事项</a></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-json_example-"><span class="toc-number">4.6.</span> <span class="toc-text">调用样例</a></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-json_result-"><span class="toc-number">4.7.</span> <span class="toc-text">返回结果</a></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-json_result_dis-"><span class="toc-number">4.8.</span> <span class="toc-text">返回字段说明</a></span></a></li></ol>
+      </div>
+      <div class="page-entry">
+        <h3 id="-archive-madapter_archive-add-">添加监控适配器 archive (madapter_archive.add)</h3>
+<h4 id="-url-add_url-"><a href="#add_url">URL</a></h4>
+<p><a href="http://127.0.0.1/dev/?/madapter_archive.add" target="_blank">http://127.0.0.1/dev/?/madapter_archive.add</a></p>
+<h4 id="-add_post-"><a href="#add_post">请求方式</a></h4>
+<p>POST</p>
+<h4 id="-add_json-"><a href="#add_json">支持格式</a></h4>
+<p>JSON </p>
+<h4 id="-add_param-"><a href="#add_param">请求参数</a></h4>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>必选</th>
+<th>类型及范围</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>madapter_id</code></td>
+<td>true</td>
+<td>int</td>
+<td>监控适配器 ID</td>
+</tr>
+<tr>
+<td><code>cf_type</code></td>
+<td>true</td>
+<td>int</td>
+<td>监控适配器 archive 计算公式</td>
+</tr>
+<tr>
+<td><code>xff</code></td>
+<td>true</td>
+<td>mixed</td>
+<td>监控适配器 archive 判断数据正确性的阀值</td>
+</tr>
+<tr>
+<td><code>steps</code></td>
+<td>true</td>
+<td>mixed</td>
+<td>监控适配器 archive 合并的时间点个数</td>
+</tr>
+<tr>
+<td><code>rows</code></td>
+<td>true</td>
+<td>mixed</td>
+<td>监控适配器 archive 合并最终最多的条数</td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td>true</td>
+<td>mixed</td>
+<td>监控适配器 archive 的描述信息</td>
+</tr>
+</tbody>
+</table>
+<h4 id="-add_notice-"><a href="#add_notice">注意事项</a></h4>
+<p>无</p>
+<h4 id="-add_example-"><a href="#add_example">调用样例</a></h4>
+<figure class="highlight"><pre><span class="php"><span class="preprocessor">&lt;?php</span>
+<span class="variable">$url</span> = <span class="string">'127.0.0.1:9080/dev/?/madapter_archive.add'</span>;
+<span class="variable">$rev</span> = call(<span class="variable">$url</span>, <span class="string">'POST'</span>, <span class="keyword">array</span>(<span class="string">'madapter_id'</span> =&gt; <span class="number">1</span>, <span class="string">'cf_type'</span> =&gt; <span class="number">2</span>, <span class="string">'xff'</span> =&gt; <span class="number">0.5</span>, <span class="string">'title'</span> =&gt; <span class="string">'test'</span>, <span class="string">'steps'</span> =&gt; <span class="number">300</span>, <span class="string">'rows'</span> =&gt; <span class="number">20</span>));
+<span class="variable">$rev</span> = json_decode(<span class="variable">$rev</span>, <span class="keyword">true</span>);
+var_dump(<span class="variable">$rev</span>);</span>
+</pre></figure>
+
+<h4 id="-add_result-"><a href="#add_result">返回结果</a></h4>
+<figure class="highlight json"><pre>{
+  "<span class="attribute">code</span>": <span class="value"><span class="number">10000</span></span>,
+  "<span class="attribute">msg</span>": <span class="value"><span class="string">"add madapter archive  success."</span></span>,
+  "<span class="attribute">data</span>": <span class="value">{
+    "<span class="attribute">archive_id</span>": <span class="value"><span class="string">"1"</span></span>,
+    "<span class="attribute">madapter_id</span>": <span class="value"><span class="string">"1"</span>
+  </span>}
+</span>}
+</pre></figure>
+
+<h4 id="-add_result_dis-"><a href="#add_result_dis">返回字段说明</a></h4>
+<table>
+<thead>
+<tr>
+<th>返回值字段</th>
+<th>字段类型</th>
+<th>字段说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>code</code></td>
+<td>string</td>
+<td>返回接口的状态码具体的状态码见 <a href="api_errno.html">接口错误码说明</a> </td>
+</tr>
+<tr>
+<td><code>msg</code></td>
+<td>string</td>
+<td>接口的返回描述信息</td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td>array NULL</td>
+<td>返回的数据，如果错误返回 NULL</td>
+</tr>
+<tr>
+<td><code>archive_id</code></td>
+<td>int</td>
+<td>返回监控适配器 archive ID</td>
+</tr>
+<tr>
+<td><code>madapter_id</code></td>
+<td>int</td>
+<td>返回监控适配器 ID</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="-archive-madapter_archive-mod-">修改监控适配器 archive (madapter_archive.mod)</h3>
+<h4 id="-url-mod_url-"><a href="#mod_url">URL</a></h4>
+<p><a href="http://127.0.0.1/dev/?/madapter_archive.mod" target="_blank">http://127.0.0.1/dev/?/madapter_archive.mod</a></p>
+<h4 id="-mod_post-"><a href="#mod_post">请求方式</a></h4>
+<p>POST</p>
+<h4 id="-mod_json-"><a href="#mod_json">支持格式</a></h4>
+<p>JSON </p>
+<h4 id="-mod_param-"><a href="#mod_param">请求参数</a></h4>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>必选</th>
+<th>类型及范围</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>madapter_id</code></td>
+<td>true</td>
+<td>int</td>
+<td>监控适配器 ID</td>
+</tr>
+<tr>
+<td><code>arid</code></td>
+<td>true</td>
+<td>int</td>
+<td>监控适配器 archive ID</td>
+</tr>
+<tr>
+<td><code>cf_type</code></td>
+<td>true</td>
+<td>int</td>
+<td>监控适配器 archive 计算公式</td>
+</tr>
+<tr>
+<td><code>xff</code></td>
+<td>true</td>
+<td>mixed</td>
+<td>监控适配器 archive 判断数据正确性的阀值</td>
+</tr>
+<tr>
+<td><code>steps</code></td>
+<td>true</td>
+<td>mixed</td>
+<td>监控适配器 archive 合并的时间点个数</td>
+</tr>
+<tr>
+<td><code>rows</code></td>
+<td>true</td>
+<td>mixed</td>
+<td>监控适配器 archive 合并最终最多的条数</td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td>true</td>
+<td>mixed</td>
+<td>监控适配器 archive 的描述信息</td>
+</tr>
+</tbody>
+</table>
+<h4 id="-mod_notice-"><a href="#mod_notice">注意事项</a></h4>
+<p>无</p>
+<h4 id="-mod_example-"><a href="#mod_example">调用样例</a></h4>
+<figure class="highlight"><pre><span class="php"><span class="preprocessor">&lt;?php</span>
+<span class="variable">$url</span> = <span class="string">'127.0.0.1:9080/dev/?/madapter_archive.mod'</span>;
+<span class="variable">$rev</span> = call(<span class="variable">$url</span>, <span class="string">'POST'</span>, <span class="keyword">array</span>(<span class="string">'arid'</span> =&gt; <span class="number">6</span>, <span class="string">'madapter_id'</span> =&gt; <span class="number">1</span>, <span class="string">'cf_type'</span> =&gt; <span class="number">3</span>, <span class="string">'xff'</span> =&gt; <span class="number">0.5</span>, <span class="string">'title'</span> =&gt; <span class="string">'test'</span>, <span class="string">'steps'</span> =&gt; <span class="number">300</span>, <span class="string">'rows'</span> = <span class="number">40</span>));
+<span class="variable">$rev</span> = json_decode(<span class="variable">$rev</span>, <span class="keyword">true</span>);
+var_dump(<span class="variable">$rev</span>);</span>
+</pre></figure>
+
+<h4 id="-mod_result-"><a href="#mod_result">返回结果</a></h4>
+<figure class="highlight json"><pre>
+  {
+    "<span class="attribute">code</span>": <span class="value"><span class="number">10000</span></span>,
+    "<span class="attribute">msg</span>": <span class="value"><span class="string">"mod madapter archive success."</span></span>,
+    "<span class="attribute">data</span>": <span class="value">Null 
+  </span>}
+</pre></figure>
+
+<h4 id="-mod_result_dis-"><a href="#mod_result_dis">返回字段说明</a></h4>
+<table>
+<thead>
+<tr>
+<th>返回值字段</th>
+<th>字段类型</th>
+<th>字段说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>code</code></td>
+<td>string</td>
+<td>返回接口的状态码具体的状态码见 <a href="api_errno.html">接口错误码说明</a> </td>
+</tr>
+<tr>
+<td><code>msg</code></td>
+<td>string</td>
+<td>接口的返回描述信息</td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td>array NULL</td>
+<td>不返回数据</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="-archive-madapter_archive-del-">删除监控适配器 archive (madapter_archive.del)</h3>
+<h4 id="-url-del_url-"><a href="#del_url">URL</a></h4>
+<p><a href="http://127.0.0.1/dev/?/madapter_archive.del" target="_blank">http://127.0.0.1/dev/?/madapter_archive.del</a></p>
+<h4 id="-del_post-"><a href="#del_post">请求方式</a></h4>
+<p>POST</p>
+<h4 id="-del_json-"><a href="#del_json">支持格式</a></h4>
+<p>JSON </p>
+<h4 id="-del_param-"><a href="#del_param">请求参数</a></h4>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>必选</th>
+<th>类型及范围</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>madapter_id</code></td>
+<td>true</td>
+<td>int</td>
+<td>监控适配器 ID</td>
+</tr>
+<tr>
+<td><code>arid</code></td>
+<td>true</td>
+<td>int</td>
+<td>监控适配器 archive ID</td>
+</tr>
+</tbody>
+</table>
+<h4 id="-del_notice-"><a href="#del_notice">注意事项</a></h4>
+<p>无</p>
+<h4 id="-del_example-"><a href="#del_example">调用样例</a></h4>
+<figure class="highlight"><pre><span class="php"><span class="preprocessor">&lt;?php</span>
+<span class="variable">$url</span> = <span class="string">'127.0.0.1:9080/dev/?/madapter_archive.del'</span>;
+<span class="variable">$rev</span> = call(<span class="variable">$url</span>, <span class="string">'POST'</span>, <span class="keyword">array</span>(<span class="string">'madapter_id'</span> =&gt; <span class="string">'3'</span>, <span class="string">'arid'</span> =&gt; <span class="string">'1'</span>));
+<span class="variable">$rev</span> = json_decode(<span class="variable">$rev</span>, <span class="keyword">true</span>);
+var_dump(<span class="variable">$rev</span>);</span>
+</pre></figure>
+
+<h4 id="-del_result-"><a href="#del_result">返回结果</a></h4>
+<figure class="highlight json"><pre>{
+  "<span class="attribute">code</span>": <span class="value"><span class="number">10000</span></span>,
+  "<span class="attribute">msg</span>": <span class="value"><span class="string">"delete madapter archive success."</span></span>,
+  "<span class="attribute">data</span>": <span class="value">Null 
+</span>}
+</pre></figure>
+
+<h4 id="-del_result_dis-"><a href="#del_result_dis">返回字段说明</a></h4>
+<table>
+<thead>
+<tr>
+<th>返回值字段</th>
+<th>字段类型</th>
+<th>字段说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>code</code></td>
+<td>string</td>
+<td>返回接口的状态码具体的状态码见 <a href="api_errno.html">接口错误码说明</a> </td>
+</tr>
+<tr>
+<td><code>msg</code></td>
+<td>string</td>
+<td>接口的返回描述信息</td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td>array NULL</td>
+<td>不返回数据</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="-archive-madapter_archive-json-">获取监控适配器 archive (madapter_archive.json)</h3>
+<h4 id="-url-json_url-"><a href="#json_url">URL</a></h4>
+<p><a href="http://127.0.0.1/dev/?/madapter_archive.json" target="_blank">http://127.0.0.1/dev/?/madapter_archive.json</a></p>
+<h4 id="-json_post-"><a href="#json_post">请求方式</a></h4>
+<p>POST</p>
+<h4 id="-json_json-"><a href="#json_json">支持格式</a></h4>
+<p>JSON </p>
+<h4 id="-json_param-"><a href="#json_param">请求参数</a></h4>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>必选</th>
+<th>类型及范围</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>madapter_id</code></td>
+<td>true</td>
+<td>int</td>
+<td>监控适配器 ID</td>
+</tr>
+<tr>
+<td><code>arid</code></td>
+<td>false</td>
+<td>int</td>
+<td>监控适配器 archive ID</td>
+</tr>
+<tr>
+<td><code>page</code></td>
+<td>false</td>
+<td>int</td>
+<td>分页的页码</td>
+</tr>
+<tr>
+<td><code>page_count</code></td>
+<td>false</td>
+<td>int</td>
+<td>每页的个数</td>
+</tr>
+</tbody>
+</table>
+<h4 id="-json_notice-"><a href="#json_notice">注意事项</a></h4>
+<p>无</p>
+<h4 id="-json_example-"><a href="#json_example">调用样例</a></h4>
+<figure class="highlight"><pre><span class="php"><span class="preprocessor">&lt;?php</span>
+<span class="variable">$url</span> = <span class="string">'127.0.0.1:9080/dev/?/madapter_archive.json'</span>;
+<span class="variable">$rev</span> = call(<span class="variable">$url</span>, <span class="string">'POST'</span>, <span class="keyword">array</span>(<span class="string">'arid'</span> =&gt; <span class="number">3</span>, <span class="string">'madapter_id'</span> =&gt; <span class="number">1</span>, <span class="string">'page'</span> =&gt; <span class="string">'1'</span>, <span class="string">'page_count'</span> =&gt; <span class="number">20</span>));
+<span class="variable">$rev</span> = json_decode(<span class="variable">$rev</span>, <span class="keyword">true</span>);
+var_dump(<span class="variable">$rev</span>);</span>
+</pre></figure>
+
+<h4 id="-json_result-"><a href="#json_result">返回结果</a></h4>
+<figure class="highlight json"><pre>{
+  "<span class="attribute">code</span>": <span class="value"><span class="number">10000</span></span>,
+  "<span class="attribute">msg</span>": <span class="value"><span class="string">"get madapter archive success."</span></span>,
+  "<span class="attribute">data</span>": <span class="value">{
+    "<span class="attribute">result</span>": <span class="value">[
+      {
+        "<span class="attribute">archive_id</span>": <span class="value"><span class="string">"3"</span></span>,
+        "<span class="attribute">madapter_id</span>": <span class="value"><span class="string">"1"</span></span>,
+        "<span class="attribute">title</span>": <span class="value"><span class="string">"test"</span></span>,
+        "<span class="attribute">cf_type</span>": <span class="value"><span class="string">"1"</span></span>,
+        "<span class="attribute">xff</span>": <span class="value"><span class="string">"0.5"</span></span>,
+        "<span class="attribute">steps</span>": <span class="value"><span class="string">"60"</span></span>,
+        "<span class="attribute">rows</span>": <span class="value"><span class="string">"10"</span>
+      </span>},
+      {
+        "<span class="attribute">archive_id</span>": <span class="value"><span class="string">"5"</span></span>,
+        "<span class="attribute">madapter_id</span>": <span class="value"><span class="string">"1"</span></span>,
+        "<span class="attribute">title</span>": <span class="value"><span class="string">"test"</span></span>,
+        "<span class="attribute">cf_type</span>": <span class="value"><span class="string">"1"</span></span>,
+        "<span class="attribute">xff</span>": <span class="value"><span class="string">"0.5"</span></span>,
+        "<span class="attribute">steps</span>": <span class="value"><span class="string">"60"</span></span>,
+        "<span class="attribute">rows</span>": <span class="value"><span class="string">"30"</span>
+      </span>}
+    ]</span>,
+    "<span class="attribute">count</span>": <span class="value"><span class="string">"2"</span>
+  </span>}
+</span>}
+</pre></figure>
+
+<h4 id="-json_result_dis-"><a href="#json_result_dis">返回字段说明</a></h4>
+<table>
+<thead>
+<tr>
+<th>返回值字段</th>
+<th>字段类型</th>
+<th>字段说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>code</code></td>
+<td>string</td>
+<td>返回接口的状态码具体的状态码见 <a href="api_errno.html">接口错误码说明</a> </td>
+</tr>
+<tr>
+<td><code>msg</code></td>
+<td>string</td>
+<td>接口的返回描述信息</td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td>array NULL</td>
+<td>不返回数据</td>
+</tr>
+<tr>
+<td><code>madapter_id</code></td>
+<td>true</td>
+<td>int</td>
+<td>监控适配器 ID</td>
+</tr>
+<tr>
+<td><code>archive_id</code></td>
+<td>true</td>
+<td>int</td>
+<td>监控适配器 archive ID</td>
+</tr>
+<tr>
+<td><code>cf_type</code></td>
+<td>true</td>
+<td>int</td>
+<td>监控适配器 archive 计算公式</td>
+</tr>
+<tr>
+<td><code>xff</code></td>
+<td>true</td>
+<td>mixed</td>
+<td>监控适配器 archive 判断数据正确性的阀值</td>
+</tr>
+<tr>
+<td><code>steps</code></td>
+<td>true</td>
+<td>mixed</td>
+<td>监控适配器 archive 合并的时间点个数</td>
+</tr>
+<tr>
+<td><code>rows</code></td>
+<td>true</td>
+<td>mixed</td>
+<td>监控适配器 archive 合并最终最多的条数</td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td>true</td>
+<td>mixed</td>
+<td>监控适配器 archive 的描述信息</td>
+</tr>
+</tbody>
+</table>
+
+      </div>
+      <footer id="page-footer">
+        <time id="page-footer-updated" datetime="2014-04-01T15:17:51.000Z">Last updated: 4月 1, 2014</time>
+        <a href="/smeta/docs/madapter_archive.html" id="page-footer-prev" class="page-footer-link">Prev</a>
+        
+      </footer>
+    </div>
+    <aside id="sidebar">
+  
+    <strong class="sidebar-title">安装部署相关</strong>
+    
+      <a href="/smeta/docs/rpm_publish.html" class="sidebar-link">RPM 安装包发布</a>
+    
+      <a href="/smeta/docs/evn_deploy.html" class="sidebar-link">环境部署</a>
+    
+      <a href="/smeta/docs/mysql_desc.html" class="sidebar-link">数据字典</a>
+    
+  
+    <strong class="sidebar-title">Inner Api</strong>
+    
+      <a href="/smeta/docs/inner_api.html" class="sidebar-link">介绍</a>
+    
+      <a href="/smeta/docs/device.html" class="sidebar-link">设备管理</a>
+    
+      <a href="/smeta/docs/device_monitor.html" class="sidebar-link">监控器管理</a>
+    
+      <a href="/smeta/docs/madapter.html" class="sidebar-link">监控适配器管理</a>
+    
+      <a href="/smeta/docs/madapter_attr.html" class="sidebar-link">监控适配器属性管理</a>
+    
+      <a href="/smeta/docs/madapter_metric.html" class="sidebar-link">监控适配器数据项管理</a>
+    
+      <a href="/smeta/docs/madapter_archive.html" class="sidebar-link current">监控适配器 archive 管理</a>
+    
+      <a href="/smeta/docs/api_errno.html" class="sidebar-link">接口错误代码说明</a>
+    
+  
+    <strong class="sidebar-title">API 开发相关</strong>
+    
+      <a href="/smeta/docs/null" class="sidebar-link">介绍</a>
+    
+      <a href="/smeta/docs/null" class="sidebar-link">路由规则及设置</a>
+    
+      <a href="/smeta/docs/null" class="sidebar-link">函数及常用 LIB 的调用</a>
+    
+  
+</aside>
+  </div>
+</article>
+  <footer id="footer">
+  <div class="outer">
+    <div class="inner">
+      &copy; 2014 <a href="http://www.swanlinux.net">Swan team</a><br>
+    </div>
+  </div>
+</footer>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/smeta/js/script.js"></script>
+
+</body>
+</html>

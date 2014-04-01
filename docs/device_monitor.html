@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <title>设备监控器管理 API | Swan</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <link rel="stylesheet" href="/swansoft/css/style.css">
+  <link rel="stylesheet" href="/smeta/css/style.css">
   <link href="//fonts.googleapis.com/css?family=Lato:300,700" rel="stylesheet" type="text/css">
   <link href='http://fonts.googleapis.com/css?family=Source+Code+Pro:400,700' rel='stylesheet' type='text/css'>
   <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
@@ -16,7 +16,7 @@
   <div class="outer">
     <div class="inner">
       <h1 id="logo-wrap">
-        <a href="/swansoft/" id="logo">Swan</a>
+        <a href="/smeta/" id="logo">Swan</a>
       </h1>
       <nav id="main-nav">
         <ul id="main-nav-list">
@@ -26,7 +26,7 @@
             </li>
           
             <li class="main-nav-item">
-              <a href="/swansoft/docs/" class="main-nav-link current">文档</a>
+              <a href="/smeta/docs/" class="main-nav-link current">文档</a>
             </li>
           
             <li class="main-nav-item">
@@ -54,41 +54,41 @@
     
       <optgroup label="安装部署相关">
         
-          <option value="/swansoft/docs/rpm_publish.html">RPM 安装包发布</option>
+          <option value="/smeta/docs/rpm_publish.html">RPM 安装包发布</option>
         
-          <option value="/swansoft/docs/evn_deploy.html">环境部署</option>
+          <option value="/smeta/docs/evn_deploy.html">环境部署</option>
         
-          <option value="/swansoft/docs/mysql_desc.html">数据字典</option>
+          <option value="/smeta/docs/mysql_desc.html">数据字典</option>
         
       </optgroup>
     
       <optgroup label="Inner Api">
         
-          <option value="/swansoft/docs/inner_api.html">介绍</option>
+          <option value="/smeta/docs/inner_api.html">介绍</option>
         
-          <option value="/swansoft/docs/device.html">设备管理</option>
+          <option value="/smeta/docs/device.html">设备管理</option>
         
-          <option value="/swansoft/docs/device_monitor.html">设备监控器管理</option>
+          <option value="/smeta/docs/device_monitor.html">监控器管理</option>
         
-          <option value="/swansoft/docs/monitor.html">监控器管理</option>
+          <option value="/smeta/docs/madapter.html">监控适配器管理</option>
         
-          <option value="/swansoft/docs/monitor_attr.html">监控器属性管理</option>
+          <option value="/smeta/docs/madapter_attr.html">监控适配器属性管理</option>
         
-          <option value="/swansoft/docs/monitor_metric.html">监控器数据项管理</option>
+          <option value="/smeta/docs/madapter_metric.html">监控适配器数据项管理</option>
         
-          <option value="/swansoft/docs/monitor_archive.html">监控器 archive 管理</option>
+          <option value="/smeta/docs/madapter_archive.html">监控适配器 archive 管理</option>
         
-          <option value="/swansoft/docs/api_errno.html">接口错误代码说明</option>
+          <option value="/smeta/docs/api_errno.html">接口错误代码说明</option>
         
       </optgroup>
     
       <optgroup label="API 开发相关">
         
-          <option value="/swansoft/docs/null">介绍</option>
+          <option value="/smeta/docs/null">介绍</option>
         
-          <option value="/swansoft/docs/null">路由规则及设置</option>
+          <option value="/smeta/docs/null">路由规则及设置</option>
         
-          <option value="/swansoft/docs/null">函数及常用 LIB 的调用</option>
+          <option value="/smeta/docs/null">函数及常用 LIB 的调用</option>
         
       </optgroup>
     
@@ -119,19 +119,19 @@
 </thead>
 <tbody>
 <tr>
-<td><code>did</code></td>
+<td><code>device_id</code></td>
 <td>true</td>
 <td>int</td>
 <td>设备 ID</td>
 </tr>
 <tr>
-<td><code>mid</code></td>
+<td><code>madapter_id</code></td>
 <td>true</td>
 <td>int</td>
 <td>监控器 ID</td>
 </tr>
 <tr>
-<td><code>dm_name</code></td>
+<td><code>monitor_name</code></td>
 <td>true</td>
 <td>string</td>
 <td>设备监控器名称</td>
@@ -160,7 +160,7 @@
   ),
 );
 <span class="variable">$attr_data</span> = json_encode(<span class="variable">$attr_data</span>);
-<span class="variable">$rev</span> = call(<span class="variable">$url</span>, <span class="string">'POST'</span>, <span class="keyword">array</span>(<span class="string">'mid'</span> =&gt; <span class="number">1</span>, <span class="string">'did'</span> =&gt; <span class="number">1</span>, <span class="string">'attr_data'</span> =&gt; <span class="variable">$attr_data</span>, <span class="string">'db_name'</span> =&gt; <span class="string">'test_dm'</span>));
+<span class="variable">$rev</span> = call(<span class="variable">$url</span>, <span class="string">'POST'</span>, <span class="keyword">array</span>(<span class="string">'madapter_id'</span> =&gt; <span class="number">1</span>, <span class="string">'device_id'</span> =&gt; <span class="number">1</span>, <span class="string">'attr_data'</span> =&gt; <span class="variable">$attr_data</span>, <span class="string">'db_name'</span> =&gt; <span class="string">'test_dm'</span>));
 <span class="variable">$rev</span> = json_decode(<span class="variable">$rev</span>, <span class="keyword">true</span>);
 var_dump(<span class="variable">$rev</span>);</span>
 </pre></figure>
@@ -199,7 +199,7 @@ var_dump(<span class="variable">$rev</span>);</span>
 <td>返回的数据，如果错误返回 NULL</td>
 </tr>
 <tr>
-<td><code>dm_id</code></td>
+<td><code>monitor_id</code></td>
 <td>int</td>
 <td>返回该设备监控器 ID</td>
 </tr>
@@ -230,19 +230,19 @@ var_dump(<span class="variable">$rev</span>);</span>
 </thead>
 <tbody>
 <tr>
-<td><code>did</code></td>
+<td><code>device_id</code></td>
 <td>true</td>
 <td>int</td>
 <td>设备 ID</td>
 </tr>
 <tr>
-<td><code>mid</code></td>
+<td><code>madapter_id</code></td>
 <td>true</td>
 <td>int</td>
 <td>监控器 ID</td>
 </tr>
 <tr>
-<td><code>dm_id</code></td>
+<td><code>monitor_id</code></td>
 <td>true</td>
 <td>string</td>
 <td>设备监控器 ID</td>
@@ -271,7 +271,7 @@ var_dump(<span class="variable">$rev</span>);</span>
   );
   <span class="variable">$attr_data</span> = json_encode(<span class="variable">$attr_data</span>);
   <span class="variable">$url</span> = <span class="string">'127.0.0.1:9080/user/?/device_monitor.mod'</span>;
-  <span class="variable">$rev</span> = call(<span class="variable">$url</span>, <span class="string">'POST'</span>, <span class="keyword">array</span>(<span class="string">'did'</span> =&gt; <span class="number">1</span>, <span class="string">'mid'</span> =&gt; <span class="number">1</span>, <span class="string">'attr_data'</span> =&gt; <span class="variable">$attr_data</span>, <span class="string">'dm_id'</span> =&gt; <span class="number">1</span>));
+  <span class="variable">$rev</span> = call(<span class="variable">$url</span>, <span class="string">'POST'</span>, <span class="keyword">array</span>(<span class="string">'device_id'</span> =&gt; <span class="number">1</span>, <span class="string">'madapter_id'</span> =&gt; <span class="number">1</span>, <span class="string">'attr_data'</span> =&gt; <span class="variable">$attr_data</span>, <span class="string">'monitor_id'</span> =&gt; <span class="number">1</span>));
   <span class="variable">$rev</span> = json_decode(<span class="variable">$rev</span>, <span class="keyword">true</span>);
   var_dump(<span class="variable">$rev</span>);</span>
 </pre></figure>
@@ -332,13 +332,13 @@ var_dump(<span class="variable">$rev</span>);</span>
 </thead>
 <tbody>
 <tr>
-<td><code>dm_id</code></td>
+<td><code>monitor_id</code></td>
 <td>true</td>
 <td>int</td>
 <td>设备监控器 ID</td>
 </tr>
 <tr>
-<td><code>did</code></td>
+<td><code>device_id</code></td>
 <td>true</td>
 <td>int</td>
 <td>设备 ID</td>
@@ -350,7 +350,7 @@ var_dump(<span class="variable">$rev</span>);</span>
 <h4 id="-del_example-"><a href="#del_example">调用样例</a></h4>
 <figure class="highlight"><pre><span class="php"><span class="preprocessor">&lt;?php</span>
 <span class="variable">$url</span> = <span class="string">'127.0.0.1:9080/user/?/device_monitor.del'</span>;
-<span class="variable">$rev</span> = call(<span class="variable">$url</span>, <span class="string">'POST'</span>, <span class="keyword">array</span>(<span class="string">'dm_id'</span> =&gt; <span class="string">'1'</span>, <span class="string">'did'</span> =&gt; <span class="number">1</span>));
+<span class="variable">$rev</span> = call(<span class="variable">$url</span>, <span class="string">'POST'</span>, <span class="keyword">array</span>(<span class="string">'monitor_id'</span> =&gt; <span class="string">'1'</span>, <span class="string">'device_id'</span> =&gt; <span class="number">1</span>));
 <span class="variable">$rev</span> = json_decode(<span class="variable">$rev</span>, <span class="keyword">true</span>);
 var_dump(<span class="variable">$rev</span>);</span>
 </pre></figure>
@@ -410,7 +410,7 @@ var_dump(<span class="variable">$rev</span>);</span>
 </thead>
 <tbody>
 <tr>
-<td><code>did</code></td>
+<td><code>device_id</code></td>
 <td>true</td>
 <td>int</td>
 <td>设备 ID</td>
@@ -434,7 +434,7 @@ var_dump(<span class="variable">$rev</span>);</span>
 <h4 id="-json_example-"><a href="#json_example">调用样例</a></h4>
 <figure class="highlight"><pre><span class="php"><span class="preprocessor">&lt;?php</span>
 <span class="variable">$url</span> = <span class="string">'127.0.0.1:9080/user/?/device.json'</span>;
-<span class="variable">$rev</span> = call(<span class="variable">$url</span>, <span class="string">'POST'</span>, <span class="keyword">array</span>(<span class="string">'did'</span> =&gt; <span class="string">'3'</span>));
+<span class="variable">$rev</span> = call(<span class="variable">$url</span>, <span class="string">'POST'</span>, <span class="keyword">array</span>(<span class="string">'device_id'</span> =&gt; <span class="string">'3'</span>));
 <span class="variable">$rev</span> = json_decode(<span class="variable">$rev</span>, <span class="keyword">true</span>);
 var_dump(<span class="variable">$rev</span>);</span>
 </pre></figure>
@@ -446,8 +446,8 @@ var_dump(<span class="variable">$rev</span>);</span>
   "<span class="attribute">data</span>": <span class="value">{
     "<span class="attribute">result</span>": <span class="value">[
       {
-        "<span class="attribute">dm_id</span>": <span class="value"><span class="string">"11"</span></span>,
-        "<span class="attribute">dm_name</span>": <span class="value"><span class="string">"test_name"</span></span>,
+        "<span class="attribute">monitor_id</span>": <span class="value"><span class="string">"11"</span></span>,
+        "<span class="attribute">monitor_name</span>": <span class="value"><span class="string">"test_name"</span></span>,
         "<span class="attribute">device_id</span>": <span class="value"><span class="string">"1"</span></span>,
         "<span class="attribute">monitor_id</span>": <span class="value"><span class="string">"1"</span></span>,
         "<span class="attribute">monitor_name</span>": <span class="value"><span class="string">"apache"</span></span>,
@@ -491,12 +491,12 @@ var_dump(<span class="variable">$rev</span>);</span>
 <td>设备 ID</td>
 </tr>
 <tr>
-<td><code>dm_id</code></td>
+<td><code>monitor_id</code></td>
 <td>int</td>
 <td>设备监控器 ID</td>
 </tr>
 <tr>
-<td><code>dm_name</code></td>
+<td><code>monitor_name</code></td>
 <td>int</td>
 <td>设备监控器名称</td>
 </tr>
@@ -542,19 +542,19 @@ var_dump(<span class="variable">$rev</span>);</span>
 </thead>
 <tbody>
 <tr>
-<td><code>did</code></td>
+<td><code>device_id</code></td>
 <td>true</td>
 <td>int</td>
 <td>设备 ID</td>
 </tr>
 <tr>
-<td><code>mid</code></td>
+<td><code>madapter_id</code></td>
 <td>true</td>
 <td>int</td>
 <td>监控器 ID</td>
 </tr>
 <tr>
-<td><code>dm_id</code></td>
+<td><code>monitor_id</code></td>
 <td>true</td>
 <td>int</td>
 <td>设备监控器 ID</td>
@@ -578,7 +578,7 @@ var_dump(<span class="variable">$rev</span>);</span>
 <h4 id="-info_example-"><a href="#info_example">调用样例</a></h4>
 <figure class="highlight"><pre><span class="php"><span class="preprocessor">&lt;?php</span>
 <span class="variable">$url</span> = <span class="string">'127.0.0.1:9080/user/?/device_monitor.info'</span>;
-<span class="variable">$rev</span> = call(<span class="variable">$url</span>, <span class="string">'POST'</span>, <span class="keyword">array</span>(<span class="string">'did'</span> =&gt; <span class="string">'1'</span>, <span class="string">'mid'</span> =&gt; <span class="string">'1'</span>));
+<span class="variable">$rev</span> = call(<span class="variable">$url</span>, <span class="string">'POST'</span>, <span class="keyword">array</span>(<span class="string">'device_id'</span> =&gt; <span class="string">'1'</span>, <span class="string">'madapter_id'</span> =&gt; <span class="string">'1'</span>));
 <span class="variable">$rev</span> = json_decode(<span class="variable">$rev</span>, <span class="keyword">true</span>);
 var_dump(<span class="variable">$rev</span>);</span>
 </pre></figure>
@@ -590,8 +590,8 @@ var_dump(<span class="variable">$rev</span>);</span>
   "<span class="attribute">data</span>": <span class="value">{
     "<span class="attribute">result</span>": <span class="value">[
       {
-        "<span class="attribute">dm_id</span>": <span class="value"><span class="string">"11"</span></span>,
-        "<span class="attribute">dm_name</span>": <span class="value"><span class="string">"test_name"</span></span>,
+        "<span class="attribute">monitor_id</span>": <span class="value"><span class="string">"11"</span></span>,
+        "<span class="attribute">monitor_name</span>": <span class="value"><span class="string">"test_name"</span></span>,
         "<span class="attribute">device_id</span>": <span class="value"><span class="string">"1"</span></span>,
         "<span class="attribute">monitor_id</span>": <span class="value"><span class="string">"1"</span></span>,
         "<span class="attribute">attr_id</span>": <span class="value"><span class="string">"1"</span></span>,
@@ -603,8 +603,8 @@ var_dump(<span class="variable">$rev</span>);</span>
         "<span class="attribute">attr_display_name</span>": <span class="value"><span class="string">""</span>
       </span>},
       {
-        "<span class="attribute">dm_id</span>": <span class="value"><span class="string">"11"</span></span>,
-        "<span class="attribute">dm_name</span>": <span class="value"><span class="string">"test_name"</span></span>,
+        "<span class="attribute">monitor_id</span>": <span class="value"><span class="string">"11"</span></span>,
+        "<span class="attribute">monitor_name</span>": <span class="value"><span class="string">"test_name"</span></span>,
         "<span class="attribute">device_id</span>": <span class="value"><span class="string">"1"</span></span>,
         "<span class="attribute">monitor_id</span>": <span class="value"><span class="string">"1"</span></span>,
         "<span class="attribute">attr_id</span>": <span class="value"><span class="string">"2"</span></span>,
@@ -652,12 +652,12 @@ var_dump(<span class="variable">$rev</span>);</span>
 <td>设备 ID</td>
 </tr>
 <tr>
-<td><code>dm_id</code></td>
+<td><code>monitor_id</code></td>
 <td>int</td>
 <td>设备监控器 ID</td>
 </tr>
 <tr>
-<td><code>dm_name</code></td>
+<td><code>monitor_name</code></td>
 <td>string</td>
 <td>设备监控器名称</td>
 </tr>
@@ -706,48 +706,48 @@ var_dump(<span class="variable">$rev</span>);</span>
 
       </div>
       <footer id="page-footer">
-        <time id="page-footer-updated" datetime="2014-02-28T14:27:42.000Z">Last updated: 2月 28, 2014</time>
-        <a href="/swansoft/docs/device.html" id="page-footer-prev" class="page-footer-link">Prev</a>
-        <a href="/swansoft/docs/monitor.html" id="page-footer-next" class="page-footer-link">Next</a>
+        <time id="page-footer-updated" datetime="2014-04-01T15:17:51.000Z">Last updated: 4月 1, 2014</time>
+        <a href="/smeta/docs/device.html" id="page-footer-prev" class="page-footer-link">Prev</a>
+        <a href="/smeta/docs/madapter.html" id="page-footer-next" class="page-footer-link">Next</a>
       </footer>
     </div>
     <aside id="sidebar">
   
     <strong class="sidebar-title">安装部署相关</strong>
     
-      <a href="/swansoft/docs/rpm_publish.html" class="sidebar-link">RPM 安装包发布</a>
+      <a href="/smeta/docs/rpm_publish.html" class="sidebar-link">RPM 安装包发布</a>
     
-      <a href="/swansoft/docs/evn_deploy.html" class="sidebar-link">环境部署</a>
+      <a href="/smeta/docs/evn_deploy.html" class="sidebar-link">环境部署</a>
     
-      <a href="/swansoft/docs/mysql_desc.html" class="sidebar-link">数据字典</a>
+      <a href="/smeta/docs/mysql_desc.html" class="sidebar-link">数据字典</a>
     
   
     <strong class="sidebar-title">Inner Api</strong>
     
-      <a href="/swansoft/docs/inner_api.html" class="sidebar-link">介绍</a>
+      <a href="/smeta/docs/inner_api.html" class="sidebar-link">介绍</a>
     
-      <a href="/swansoft/docs/device.html" class="sidebar-link">设备管理</a>
+      <a href="/smeta/docs/device.html" class="sidebar-link">设备管理</a>
     
-      <a href="/swansoft/docs/device_monitor.html" class="sidebar-link current">设备监控器管理</a>
+      <a href="/smeta/docs/device_monitor.html" class="sidebar-link current">监控器管理</a>
     
-      <a href="/swansoft/docs/monitor.html" class="sidebar-link">监控器管理</a>
+      <a href="/smeta/docs/madapter.html" class="sidebar-link">监控适配器管理</a>
     
-      <a href="/swansoft/docs/monitor_attr.html" class="sidebar-link">监控器属性管理</a>
+      <a href="/smeta/docs/madapter_attr.html" class="sidebar-link">监控适配器属性管理</a>
     
-      <a href="/swansoft/docs/monitor_metric.html" class="sidebar-link">监控器数据项管理</a>
+      <a href="/smeta/docs/madapter_metric.html" class="sidebar-link">监控适配器数据项管理</a>
     
-      <a href="/swansoft/docs/monitor_archive.html" class="sidebar-link">监控器 archive 管理</a>
+      <a href="/smeta/docs/madapter_archive.html" class="sidebar-link">监控适配器 archive 管理</a>
     
-      <a href="/swansoft/docs/api_errno.html" class="sidebar-link">接口错误代码说明</a>
+      <a href="/smeta/docs/api_errno.html" class="sidebar-link">接口错误代码说明</a>
     
   
     <strong class="sidebar-title">API 开发相关</strong>
     
-      <a href="/swansoft/docs/null" class="sidebar-link">介绍</a>
+      <a href="/smeta/docs/null" class="sidebar-link">介绍</a>
     
-      <a href="/swansoft/docs/null" class="sidebar-link">路由规则及设置</a>
+      <a href="/smeta/docs/null" class="sidebar-link">路由规则及设置</a>
     
-      <a href="/swansoft/docs/null" class="sidebar-link">函数及常用 LIB 的调用</a>
+      <a href="/smeta/docs/null" class="sidebar-link">函数及常用 LIB 的调用</a>
     
   
 </aside>
@@ -761,7 +761,7 @@ var_dump(<span class="variable">$rev</span>);</span>
   </div>
 </footer>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-<script src="/swansoft/js/script.js"></script>
+<script src="/smeta/js/script.js"></script>
 
 </body>
 </html>

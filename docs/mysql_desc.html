@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <title>Smeta 产品数据字典 | Swan</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <link rel="stylesheet" href="/swansoft/css/style.css">
+  <link rel="stylesheet" href="/smeta/css/style.css">
   <link href="//fonts.googleapis.com/css?family=Lato:300,700" rel="stylesheet" type="text/css">
   <link href='http://fonts.googleapis.com/css?family=Source+Code+Pro:400,700' rel='stylesheet' type='text/css'>
   <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
@@ -16,7 +16,7 @@
   <div class="outer">
     <div class="inner">
       <h1 id="logo-wrap">
-        <a href="/swansoft/" id="logo">Swan</a>
+        <a href="/smeta/" id="logo">Swan</a>
       </h1>
       <nav id="main-nav">
         <ul id="main-nav-list">
@@ -26,7 +26,7 @@
             </li>
           
             <li class="main-nav-item">
-              <a href="/swansoft/docs/" class="main-nav-link current">文档</a>
+              <a href="/smeta/docs/" class="main-nav-link current">文档</a>
             </li>
           
             <li class="main-nav-item">
@@ -54,41 +54,41 @@
     
       <optgroup label="安装部署相关">
         
-          <option value="/swansoft/docs/rpm_publish.html">RPM 安装包发布</option>
+          <option value="/smeta/docs/rpm_publish.html">RPM 安装包发布</option>
         
-          <option value="/swansoft/docs/evn_deploy.html">环境部署</option>
+          <option value="/smeta/docs/evn_deploy.html">环境部署</option>
         
-          <option value="/swansoft/docs/mysql_desc.html">数据字典</option>
+          <option value="/smeta/docs/mysql_desc.html">数据字典</option>
         
       </optgroup>
     
       <optgroup label="Inner Api">
         
-          <option value="/swansoft/docs/inner_api.html">介绍</option>
+          <option value="/smeta/docs/inner_api.html">介绍</option>
         
-          <option value="/swansoft/docs/device.html">设备管理</option>
+          <option value="/smeta/docs/device.html">设备管理</option>
         
-          <option value="/swansoft/docs/device_monitor.html">设备监控器管理</option>
+          <option value="/smeta/docs/device_monitor.html">监控器管理</option>
         
-          <option value="/swansoft/docs/monitor.html">监控器管理</option>
+          <option value="/smeta/docs/madapter.html">监控适配器管理</option>
         
-          <option value="/swansoft/docs/monitor_attr.html">监控器属性管理</option>
+          <option value="/smeta/docs/madapter_attr.html">监控适配器属性管理</option>
         
-          <option value="/swansoft/docs/monitor_metric.html">监控器数据项管理</option>
+          <option value="/smeta/docs/madapter_metric.html">监控适配器数据项管理</option>
         
-          <option value="/swansoft/docs/monitor_archive.html">监控器 archive 管理</option>
+          <option value="/smeta/docs/madapter_archive.html">监控适配器 archive 管理</option>
         
-          <option value="/swansoft/docs/api_errno.html">接口错误代码说明</option>
+          <option value="/smeta/docs/api_errno.html">接口错误代码说明</option>
         
       </optgroup>
     
       <optgroup label="API 开发相关">
         
-          <option value="/swansoft/docs/null">介绍</option>
+          <option value="/smeta/docs/null">介绍</option>
         
-          <option value="/swansoft/docs/null">路由规则及设置</option>
+          <option value="/smeta/docs/null">路由规则及设置</option>
         
-          <option value="/swansoft/docs/null">函数及常用 LIB 的调用</option>
+          <option value="/smeta/docs/null">函数及常用 LIB 的调用</option>
         
       </optgroup>
     
@@ -97,7 +97,7 @@
     <div class="page-content">
       <div class="toc-wrap">
         <strong class="toc-title">Contents</strong>
-        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#swan_soft-"><span class="toc-number">1.</span> <span class="toc-text">swan_soft 数据库</span></a></li><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#sequence_global"><span class="toc-number">1.1.</span> <span class="toc-text">sequence_global</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#sequence_device"><span class="toc-number">1.2.</span> <span class="toc-text">sequence_device</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#sequence_monitor"><span class="toc-number">1.3.</span> <span class="toc-text">sequence_monitor</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#sequence_graph"><span class="toc-number">1.4.</span> <span class="toc-text">sequence_graph</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#device_key"><span class="toc-number">1.5.</span> <span class="toc-text">device_key</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#device_basic"><span class="toc-number">1.6.</span> <span class="toc-text">device_basic</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#device_monitor"><span class="toc-number">1.7.</span> <span class="toc-text">device_monitor</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#device_monitor_params"><span class="toc-number">1.8.</span> <span class="toc-text">device_monitor_params</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#monitor_basic"><span class="toc-number">1.9.</span> <span class="toc-text">monitor_basic</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#monitor_attribute"><span class="toc-number">1.10.</span> <span class="toc-text">monitor_attribute</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#monitor_metric"><span class="toc-number">1.11.</span> <span class="toc-text">monitor_metric</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#monitor_archive"><span class="toc-number">1.12.</span> <span class="toc-text">monitor_archive</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#graph_basic"><span class="toc-number">1.13.</span> <span class="toc-text">graph_basic</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#graph_def"><span class="toc-number">1.14.</span> <span class="toc-text">graph_def</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#graph_cdef"><span class="toc-number">1.15.</span> <span class="toc-text">graph_cdef</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#graph_graph"><span class="toc-number">1.16.</span> <span class="toc-text">graph_graph</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#graph_comment"><span class="toc-number">1.17.</span> <span class="toc-text">graph_comment</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#graph_gprint"><span class="toc-number">1.18.</span> <span class="toc-text">graph_gprint</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#swan_soft-"><span class="toc-number">1.</span> <span class="toc-text">swan_soft 数据库</span></a></li><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#sequence_global"><span class="toc-number">1.1.</span> <span class="toc-text">sequence_global</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#sequence_device"><span class="toc-number">1.2.</span> <span class="toc-text">sequence_device</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#sequence_madapter"><span class="toc-number">1.3.</span> <span class="toc-text">sequence_madapter</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#sequence_graph"><span class="toc-number">1.4.</span> <span class="toc-text">sequence_graph</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#device_key"><span class="toc-number">1.5.</span> <span class="toc-text">device_key</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#device_basic"><span class="toc-number">1.6.</span> <span class="toc-text">device_basic</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#device_monitor"><span class="toc-number">1.7.</span> <span class="toc-text">device_monitor</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#device_monitor_params"><span class="toc-number">1.8.</span> <span class="toc-text">device_monitor_params</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#madapter_basic"><span class="toc-number">1.9.</span> <span class="toc-text">madapter_basic</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#madapter_attribute"><span class="toc-number">1.10.</span> <span class="toc-text">madapter_attribute</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#madapter_metric"><span class="toc-number">1.11.</span> <span class="toc-text">madapter_metric</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#madapter_archive"><span class="toc-number">1.12.</span> <span class="toc-text">madapter_archive</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#graph_basic"><span class="toc-number">1.13.</span> <span class="toc-text">graph_basic</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#graph_def"><span class="toc-number">1.14.</span> <span class="toc-text">graph_def</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#graph_cdef"><span class="toc-number">1.15.</span> <span class="toc-text">graph_cdef</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#graph_graph"><span class="toc-number">1.16.</span> <span class="toc-text">graph_graph</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#graph_comment"><span class="toc-number">1.17.</span> <span class="toc-text">graph_comment</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#graph_gprint"><span class="toc-number">1.18.</span> <span class="toc-text">graph_gprint</span></a></li></ol>
       </div>
       <div class="page-entry">
         <h3 id="swan_soft-">swan_soft 数据库</h3>
@@ -288,7 +288,7 @@
 </tr>
 </tbody>
 </table>
-<h4 id="sequence_monitor">sequence_monitor</h4>
+<h4 id="sequence_madapter">sequence_madapter</h4>
 <table>
 <thead>
 <tr>
@@ -299,11 +299,11 @@
 <tbody>
 <tr>
 <td> 表名</td>
-<td>sequence_monitor</td>
+<td>sequence_madapter</td>
 </tr>
 <tr>
 <td> 描述</td>
-<td>监控器数据表的唯一序列号</td>
+<td>监控适配器数据表的唯一序列号</td>
 </tr>
 <tr>
 <td> Engine</td>
@@ -315,7 +315,7 @@
 </tr>
 <tr>
 <td> 主键</td>
-<td><code>monitor_id</code>,<code>table_name</code></td>
+<td><code>madapter_id</code>,<code>table_name</code></td>
 </tr>
 </tbody>
 </table>
@@ -333,7 +333,7 @@
 </thead>
 <tbody>
 <tr>
-<td>monitor_id</td>
+<td>madapter_id</td>
 <td>int</td>
 <td>false</td>
 <td>11</td>
@@ -343,7 +343,7 @@
 </tr>
 <tr>
 <td></td>
-<td>设备 ID</td>
+<td>监控适配器 ID</td>
 <td></td>
 <td></td>
 <td></td>
@@ -679,6 +679,25 @@
 <td></td>
 <td></td>
 </tr>
+<tr>
+<td>heartbeat_time</td>
+<td>int</td>
+<td>false</td>
+<td>11</td>
+<td>300</td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td></td>
+<td>用来检测服务器心跳的阀值, 单位（秒）</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h4 id="device_monitor">device_monitor</h4>
@@ -696,7 +715,7 @@
 </tr>
 <tr>
 <td> 描述</td>
-<td>监控的设备的监控器</td>
+<td>设备监控器</td>
 </tr>
 <tr>
 <td> Engine</td>
@@ -708,7 +727,7 @@
 </tr>
 <tr>
 <td> 主键</td>
-<td><code>dm_id</code></td>
+<td><code>monitor_id</code>,<code>device_id</code></td>
 </tr>
 </tbody>
 </table>
@@ -726,7 +745,7 @@
 </thead>
 <tbody>
 <tr>
-<td>dm_id</td>
+<td>monitor_id</td>
 <td>int</td>
 <td>false</td>
 <td>11</td>
@@ -745,7 +764,7 @@
 <td></td>
 </tr>
 <tr>
-<td>dm_name</td>
+<td>monitor_name</td>
 <td>varchar</td>
 <td>false</td>
 <td>255</td>
@@ -755,7 +774,7 @@
 </tr>
 <tr>
 <td></td>
-<td>设备监控器名称</td>
+<td>设备监控适配器名称</td>
 <td></td>
 <td></td>
 <td></td>
@@ -783,7 +802,7 @@
 <td></td>
 </tr>
 <tr>
-<td>monitor_id</td>
+<td>madapter_id</td>
 <td>int</td>
 <td>false</td>
 <td>11</td>
@@ -793,7 +812,7 @@
 </tr>
 <tr>
 <td></td>
-<td>监控器 id</td>
+<td>监控适配器 id</td>
 <td></td>
 <td></td>
 <td></td>
@@ -830,7 +849,7 @@
 </tr>
 <tr>
 <td> 主键</td>
-<td><code>attr_id</code>,<code>device_id</code>,<code>dm_id</code></td>
+<td><code>attr_id</code>,<code>device_id</code>,<code>monitor_id</code></td>
 </tr>
 </tbody>
 </table>
@@ -886,7 +905,7 @@
 <td></td>
 </tr>
 <tr>
-<td>dm_id</td>
+<td>monitor_id</td>
 <td>int</td>
 <td>false</td>
 <td>11</td>
@@ -925,7 +944,7 @@
 </tr>
 </tbody>
 </table>
-<h4 id="monitor_basic">monitor_basic</h4>
+<h4 id="madapter_basic">madapter_basic</h4>
 <table>
 <thead>
 <tr>
@@ -936,11 +955,11 @@
 <tbody>
 <tr>
 <td> 表名</td>
-<td>monitor_basic</td>
+<td>madapter_basic</td>
 </tr>
 <tr>
 <td> 描述</td>
-<td>监控器管理</td>
+<td>监控适配器管理</td>
 </tr>
 <tr>
 <td> Engine</td>
@@ -952,7 +971,7 @@
 </tr>
 <tr>
 <td> 主键</td>
-<td><code>monitor_id</code></td>
+<td><code>madapter_id</code></td>
 </tr>
 </tbody>
 </table>
@@ -970,7 +989,7 @@
 </thead>
 <tbody>
 <tr>
-<td>monitor_id</td>
+<td>madapter_id</td>
 <td>int</td>
 <td>false</td>
 <td>11</td>
@@ -980,7 +999,7 @@
 </tr>
 <tr>
 <td></td>
-<td>监控器 id</td>
+<td>监控适配器 id</td>
 <td></td>
 <td></td>
 <td></td>
@@ -989,7 +1008,7 @@
 <td></td>
 </tr>
 <tr>
-<td>monitor_name</td>
+<td>madapter_name</td>
 <td>varchar</td>
 <td>false</td>
 <td>255</td>
@@ -999,7 +1018,7 @@
 </tr>
 <tr>
 <td></td>
-<td>监控器名称</td>
+<td>监控适配器名称</td>
 <td></td>
 <td></td>
 <td></td>
@@ -1008,7 +1027,7 @@
 <td></td>
 </tr>
 <tr>
-<td>monitor_display_name</td>
+<td>madapter_display_name</td>
 <td>varchar</td>
 <td>false</td>
 <td>255</td>
@@ -1018,7 +1037,7 @@
 </tr>
 <tr>
 <td></td>
-<td>监控器显示名称</td>
+<td>监控适配器显示名称</td>
 <td></td>
 <td></td>
 <td></td>
@@ -1037,7 +1056,45 @@
 </tr>
 <tr>
 <td></td>
-<td>监控器存储 rrd 的间隔时间 (秒)</td>
+<td>监控适配器存储 rrd 的间隔时间 (秒)</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>store_type</td>
+<td>tinyint</td>
+<td>false</td>
+<td>1</td>
+<td>2</td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td></td>
+<td>数据存储引擎 2: rrd存储 4: redis存储 , 如果是选项之和说明是 rrd + redis</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>madapter_type</td>
+<td>tinyint</td>
+<td>false</td>
+<td>1</td>
+<td>2</td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td></td>
+<td>监控适配器类型：1: core 该类型在添加设备的时候会一并添加进去，不允许删除 2：normal 普通监控适配器</td>
 <td></td>
 <td></td>
 <td></td>
@@ -1047,7 +1104,7 @@
 </tr>
 </tbody>
 </table>
-<h4 id="monitor_attribute">monitor_attribute</h4>
+<h4 id="madapter_attribute">madapter_attribute</h4>
 <table>
 <thead>
 <tr>
@@ -1058,11 +1115,11 @@
 <tbody>
 <tr>
 <td> 表名</td>
-<td>monitor_attribute</td>
+<td>madapter_attribute</td>
 </tr>
 <tr>
 <td> 描述</td>
-<td>监控器属性管理</td>
+<td>监控适配器属性管理</td>
 </tr>
 <tr>
 <td> Engine</td>
@@ -1074,7 +1131,7 @@
 </tr>
 <tr>
 <td> 主键</td>
-<td><code>attr_id</code>,<code>monitor_id</code></td>
+<td><code>attr_id</code>,<code>madapter_id</code></td>
 </tr>
 </tbody>
 </table>
@@ -1102,7 +1159,7 @@
 </tr>
 <tr>
 <td></td>
-<td>监控器属性 id</td>
+<td>监控适配器属性 id</td>
 <td></td>
 <td></td>
 <td></td>
@@ -1111,7 +1168,7 @@
 <td></td>
 </tr>
 <tr>
-<td>monitor_id</td>
+<td>madapter_id</td>
 <td>int</td>
 <td>false</td>
 <td>11</td>
@@ -1121,7 +1178,7 @@
 </tr>
 <tr>
 <td></td>
-<td>监控器 id</td>
+<td>监控适配器 id</td>
 <td></td>
 <td></td>
 <td></td>
@@ -1226,7 +1283,7 @@
 </tr>
 </tbody>
 </table>
-<h4 id="monitor_metric">monitor_metric</h4>
+<h4 id="madapter_metric">madapter_metric</h4>
 <table>
 <thead>
 <tr>
@@ -1237,11 +1294,11 @@
 <tbody>
 <tr>
 <td> 表名</td>
-<td>monitor_metric</td>
+<td>madapter_metric</td>
 </tr>
 <tr>
 <td> 描述</td>
-<td>监控器收集数据项</td>
+<td>监控适配器收集数据项</td>
 </tr>
 <tr>
 <td> Engine</td>
@@ -1253,7 +1310,7 @@
 </tr>
 <tr>
 <td> 主键</td>
-<td><code>metric_id</code>,<code>monitor_id</code></td>
+<td><code>metric_id</code>,<code>madapter_id</code></td>
 </tr>
 </tbody>
 </table>
@@ -1309,7 +1366,7 @@
 <td></td>
 </tr>
 <tr>
-<td>monitor_id</td>
+<td>madapter_id</td>
 <td>int</td>
 <td>false</td>
 <td>11</td>
@@ -1319,7 +1376,7 @@
 </tr>
 <tr>
 <td></td>
-<td>监控器 id</td>
+<td>监控适配器 id</td>
 <td></td>
 <td></td>
 <td></td>
@@ -1481,7 +1538,7 @@
 </tr>
 </tbody>
 </table>
-<h4 id="monitor_archive">monitor_archive</h4>
+<h4 id="madapter_archive">madapter_archive</h4>
 <table>
 <thead>
 <tr>
@@ -1492,11 +1549,11 @@
 <tbody>
 <tr>
 <td> 表名</td>
-<td>monitor_archive</td>
+<td>madapter_archive</td>
 </tr>
 <tr>
 <td> 描述</td>
-<td>监控器数据归档规则</td>
+<td>监控适配器数据归档规则</td>
 </tr>
 <tr>
 <td> Engine</td>
@@ -1508,7 +1565,7 @@
 </tr>
 <tr>
 <td> 主键</td>
-<td><code>archive_id</code>,<code>monitor_id</code></td>
+<td><code>archive_id</code>,<code>madapter_id</code></td>
 </tr>
 </tbody>
 </table>
@@ -1545,7 +1602,7 @@
 <td></td>
 </tr>
 <tr>
-<td>monitor_id</td>
+<td>madapter_id</td>
 <td>int</td>
 <td>false</td>
 <td>11</td>
@@ -1555,7 +1612,7 @@
 </tr>
 <tr>
 <td></td>
-<td>监控器 id</td>
+<td>监控适配器 id</td>
 <td></td>
 <td></td>
 <td></td>
@@ -1675,7 +1732,7 @@
 </tr>
 <tr>
 <td> 描述</td>
-<td>监控器绘图配置</td>
+<td>监控适配器绘图配置</td>
 </tr>
 <tr>
 <td> Engine</td>
@@ -1892,7 +1949,7 @@
 </tr>
 <tr>
 <td> 描述</td>
-<td>监控器绘图数据项定义</td>
+<td>监控适配器绘图数据项定义</td>
 </tr>
 <tr>
 <td> Engine</td>
@@ -2033,7 +2090,7 @@
 </tr>
 <tr>
 <td> 描述</td>
-<td>监控器绘图计算数据项定义</td>
+<td>监控适配器绘图计算数据项定义</td>
 </tr>
 <tr>
 <td> Engine</td>
@@ -2155,7 +2212,7 @@
 </tr>
 <tr>
 <td> 描述</td>
-<td>监控器绘图定义</td>
+<td>监控适配器绘图定义</td>
 </tr>
 <tr>
 <td> Engine</td>
@@ -2296,7 +2353,7 @@
 </tr>
 <tr>
 <td> 描述</td>
-<td>监控器绘图注释性文字定义</td>
+<td>监控适配器绘图注释性文字定义</td>
 </tr>
 <tr>
 <td> Engine</td>
@@ -2399,7 +2456,7 @@
 </tr>
 <tr>
 <td> 描述</td>
-<td>监控器绘图格式化的文字信息</td>
+<td>监控适配器绘图格式化的文字信息</td>
 </tr>
 <tr>
 <td> Engine</td>
@@ -2528,48 +2585,48 @@
 
       </div>
       <footer id="page-footer">
-        <time id="page-footer-updated" datetime="2014-02-28T13:51:19.000Z">Last updated: 2月 28, 2014</time>
-        <a href="/swansoft/docs/evn_deploy.html" id="page-footer-prev" class="page-footer-link">Prev</a>
-        <a href="/swansoft/docs/inner_api.html" id="page-footer-next" class="page-footer-link">Next</a>
+        <time id="page-footer-updated" datetime="2014-04-01T15:17:51.000Z">Last updated: 4月 1, 2014</time>
+        <a href="/smeta/docs/evn_deploy.html" id="page-footer-prev" class="page-footer-link">Prev</a>
+        <a href="/smeta/docs/inner_api.html" id="page-footer-next" class="page-footer-link">Next</a>
       </footer>
     </div>
     <aside id="sidebar">
   
     <strong class="sidebar-title">安装部署相关</strong>
     
-      <a href="/swansoft/docs/rpm_publish.html" class="sidebar-link">RPM 安装包发布</a>
+      <a href="/smeta/docs/rpm_publish.html" class="sidebar-link">RPM 安装包发布</a>
     
-      <a href="/swansoft/docs/evn_deploy.html" class="sidebar-link">环境部署</a>
+      <a href="/smeta/docs/evn_deploy.html" class="sidebar-link">环境部署</a>
     
-      <a href="/swansoft/docs/mysql_desc.html" class="sidebar-link current">数据字典</a>
+      <a href="/smeta/docs/mysql_desc.html" class="sidebar-link current">数据字典</a>
     
   
     <strong class="sidebar-title">Inner Api</strong>
     
-      <a href="/swansoft/docs/inner_api.html" class="sidebar-link">介绍</a>
+      <a href="/smeta/docs/inner_api.html" class="sidebar-link">介绍</a>
     
-      <a href="/swansoft/docs/device.html" class="sidebar-link">设备管理</a>
+      <a href="/smeta/docs/device.html" class="sidebar-link">设备管理</a>
     
-      <a href="/swansoft/docs/device_monitor.html" class="sidebar-link">设备监控器管理</a>
+      <a href="/smeta/docs/device_monitor.html" class="sidebar-link">监控器管理</a>
     
-      <a href="/swansoft/docs/monitor.html" class="sidebar-link">监控器管理</a>
+      <a href="/smeta/docs/madapter.html" class="sidebar-link">监控适配器管理</a>
     
-      <a href="/swansoft/docs/monitor_attr.html" class="sidebar-link">监控器属性管理</a>
+      <a href="/smeta/docs/madapter_attr.html" class="sidebar-link">监控适配器属性管理</a>
     
-      <a href="/swansoft/docs/monitor_metric.html" class="sidebar-link">监控器数据项管理</a>
+      <a href="/smeta/docs/madapter_metric.html" class="sidebar-link">监控适配器数据项管理</a>
     
-      <a href="/swansoft/docs/monitor_archive.html" class="sidebar-link">监控器 archive 管理</a>
+      <a href="/smeta/docs/madapter_archive.html" class="sidebar-link">监控适配器 archive 管理</a>
     
-      <a href="/swansoft/docs/api_errno.html" class="sidebar-link">接口错误代码说明</a>
+      <a href="/smeta/docs/api_errno.html" class="sidebar-link">接口错误代码说明</a>
     
   
     <strong class="sidebar-title">API 开发相关</strong>
     
-      <a href="/swansoft/docs/null" class="sidebar-link">介绍</a>
+      <a href="/smeta/docs/null" class="sidebar-link">介绍</a>
     
-      <a href="/swansoft/docs/null" class="sidebar-link">路由规则及设置</a>
+      <a href="/smeta/docs/null" class="sidebar-link">路由规则及设置</a>
     
-      <a href="/swansoft/docs/null" class="sidebar-link">函数及常用 LIB 的调用</a>
+      <a href="/smeta/docs/null" class="sidebar-link">函数及常用 LIB 的调用</a>
     
   
 </aside>
@@ -2583,7 +2640,7 @@
   </div>
 </footer>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-<script src="/swansoft/js/script.js"></script>
+<script src="/smeta/js/script.js"></script>
 
 </body>
 </html>
