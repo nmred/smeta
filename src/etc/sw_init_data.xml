@@ -6,93 +6,93 @@
     <devices>
 		<device name="lan-115" host_name="127.0.0.1" display_name="115 设备" heartbeat_time="60">
 			<!--
-			<monitor name="apache" dm_name="apache">
+			-->
+			<monitor name="apache" monitor_name="apache">
 				<param name="url">http://localhost:8090/server-status</param>
 			</monitor>
 
-			<monitor name="mysql" dm_name="mysql">
+			<monitor name="mysql" monitor_name="mysql">
 				<param name="username">swan</param>
 				<param name="password">swan</param>
 				<param name="dsn">unix_socket=/usr/local/swan/run/sw_mysql.sock;dbname=swan_soft</param>
 			</monitor>
 
-			<monitor name="nginx" dm_name="nginx">
+			<monitor name="nginx" monitor_name="nginx">
 				<param name="url">http://localhost/server-status</param>
 			</monitor>
 
-			<monitor name="harddisk" dm_name="sda1">
+			<monitor name="harddisk" monitor_name="sda1">
 				<param name="device">/dev/sda1</param>
 			</monitor>
-			<monitor name="harddisk" dm_name="sdb1">
+			<monitor name="harddisk" monitor_name="sdb1">
 				<param name="device">/dev/sdb1</param>
 			</monitor>
 
-			<monitor name="memcached" dm_name="memcache">
+			<monitor name="memcached" monitor_name="memcache">
 				<param name="server">127.0.0.1:11211</param>
 			</monitor>
 
-			<monitor name="apc" dm_name="apc">
+			<monitor name="apc" monitor_name="apc">
 				<param name="url">http://localhost:8090/tpl/apc-json.php</param>
 			</monitor>
 
-			<monitor name="network" dm_name="io">
+			<monitor name="network" monitor_name="io">
 				<param name="device">lo</param>
 			</monitor>
-			-->
 		</device>
 		<device name="lan-114" host_name="127.0.0.1" display_name="114 设备" heartbeat_time="60">
 			<!--
-			<monitor name="apache" dm_name="apache">
+			-->
+			<monitor name="apache" monitor_name="apache">
 				<param name="url">http://localhost:8090/server-status</param>
 			</monitor>
 
-			<monitor name="mysql" dm_name="mysql">
+			<monitor name="mysql" monitor_name="mysql">
 				<param name="username">swan</param>
 				<param name="password">swan</param>
 				<param name="dsn">unix_socket=/usr/local/swan/run/sw_mysql.sock;dbname=swan_soft</param>
 			</monitor>
 
-			<monitor name="nginx" dm_name="nginx">
+			<monitor name="nginx" monitor_name="nginx">
 				<param name="url">http://localhost/server-status</param>
 			</monitor>
 
-			<monitor name="harddisk" dm_name="sda1">
+			<monitor name="harddisk" monitor_name="sda1">
 				<param name="device">/dev/sda1</param>
 			</monitor>
-			<monitor name="harddisk" dm_name="sdb1">
+			<monitor name="harddisk" monitor_name="sdb1">
 				<param name="device">/dev/sdb1</param>
 			</monitor>
 
-			<monitor name="memcached" dm_name="memcache">
+			<monitor name="memcached" monitor_name="memcache">
 				<param name="server">127.0.0.1:11211</param>
 			</monitor>
 
-			<monitor name="apc" dm_name="apc">
+			<monitor name="apc" monitor_name="apc">
 				<param name="url">http://localhost:8090/tpl/apc-json.php</param>
 			</monitor>
 
-			<monitor name="network" dm_name="io">
+			<monitor name="network" monitor_name="io">
 				<param name="device">lo</param>
 			</monitor>
-			-->
 		</device>
     </devices>
 
     <!-- }}} -->
-    <!-- {{{ monitors -->
+    <!-- {{{ madapters -->
 
-    <monitors>
+    <madapters>
 		<!-- cf_type
 		1:AVERAGE
 		2:MIN
 		3:MAX
 		4:LAST
 		-->
-        <monitor name="heartbeat" steps="0" display_name="用来检测服务器心跳的核心监控器" store_type="4" monitor_type="1">
-        </monitor>
-        <monitor name="server_info" steps="0" display_name="用来检测服务器硬件信息的核心监控器" store_type="4" monitor_type="1">
-        </monitor>
-        <monitor name="apache" steps="300" display_name="APACHE 监控器" store_type="2" monitor_type="2">
+        <madapter name="heartbeat" steps="0" display_name="用来检测服务器心跳的核心监控器" store_type="4" madapter_type="1">
+        </madapter>
+        <madapter name="server_info" steps="0" display_name="用来检测服务器硬件信息的核心监控器" store_type="4" madapter_type="1">
+        </madapter>
+        <madapter name="apache" steps="300" display_name="APACHE 监控器" store_type="2" madapter_type="2">
             <param name="url" form_type="1">http://localhost:8090/server-status</param>
             <archive cf_type="1" xff="0.5" steps="1" rows="600"/>   <!--2d-->
             <archive cf_type="1" xff="0.5" steps="6" rows="700"/>   <!--2w-->
@@ -106,9 +106,9 @@
             <archive cf_type="3" xff="0.5" steps="6" rows="700"/>   <!--2w-->
             <archive cf_type="3" xff="0.5" steps="24" rows="775"/>  <!--2m-->
             <archive cf_type="3" xff="0.5" steps="288" rows="797"/> <!--2y-->
-        </monitor>
+        </madapter>
 
-        <monitor name="mysql" steps="300" display_name="MYSQL 监控器"  store_type="2" monitor_type="2">
+        <madapter name="mysql" steps="300" display_name="MYSQL 监控器"  store_type="2" madapter_type="2">
             <param name="username" form_type="1">swan</param>
             <param name="password" form_type="1">swan</param>
             <param name="dsn"  form_type="1">unix_socket=/usr/local/swan/run/sw_mysql.sock;dbname=swan_soft</param>
@@ -124,9 +124,9 @@
             <archive cf_type="3" xff="0.5" steps="6" rows="700"/>   <!--2w-->
             <archive cf_type="3" xff="0.5" steps="24" rows="775"/>  <!--2m-->
             <archive cf_type="3" xff="0.5" steps="288" rows="797"/> <!--2y-->
-        </monitor>
+        </madapter>
 
-        <monitor name="nginx" steps="300"  display_name="NGINX 监控器"  store_type="2" monitor_type="2">
+        <madapter name="nginx" steps="300"  display_name="NGINX 监控器"  store_type="2" madapter_type="2">
             <param name="url" form_type="1">http://localhost/server-status</param>
             <archive cf_type="1" xff="0.5" steps="1" rows="600"/>   <!--2d-->
             <archive cf_type="1" xff="0.5" steps="6" rows="700"/>   <!--2w-->
@@ -140,10 +140,10 @@
             <archive cf_type="3" xff="0.5" steps="6" rows="700"/>   <!--2w-->
             <archive cf_type="3" xff="0.5" steps="24" rows="775"/>  <!--2m-->
             <archive cf_type="3" xff="0.5" steps="288" rows="797"/> <!--2y-->
-        </monitor>
+        </madapter>
 
         <!-- auto : 1 程序自动获取磁盘分区 0 : 获取配置项 multi 和 device -->
-        <monitor name="harddisk" steps="300"  display_name="磁盘监控器"  store_type="2" monitor_type="2">
+        <madapter name="harddisk" steps="300"  display_name="磁盘监控器"  store_type="2" madapter_type="2">
             <param name="device" form_type="1"></param>
             <archive cf_type="1" xff="0.5" steps="1" rows="600"/>   <!--2d-->
             <archive cf_type="1" xff="0.5" steps="6" rows="700"/>   <!--2w-->
@@ -157,9 +157,9 @@
             <archive cf_type="3" xff="0.5" steps="6" rows="700"/>   <!--2w-->
             <archive cf_type="3" xff="0.5" steps="24" rows="775"/>  <!--2m-->
             <archive cf_type="3" xff="0.5" steps="288" rows="797"/> <!--2y-->
-        </monitor>
+        </madapter>
 
-        <monitor name="memcached" steps="300" display_name="MEMCACHED 监控器"  store_type="2" monitor_type="2">
+        <madapter name="memcached" steps="300" display_name="MEMCACHED 监控器"  store_type="2" madapter_type="2">
             <param name="server" form_type="1">127.0.0.1:11211</param>
             <archive cf_type="1" xff="0.5" steps="1" rows="600"/>   <!--2d-->
             <archive cf_type="1" xff="0.5" steps="6" rows="700"/>   <!--2w-->
@@ -173,10 +173,10 @@
             <archive cf_type="3" xff="0.5" steps="6" rows="700"/>   <!--2w-->
             <archive cf_type="3" xff="0.5" steps="24" rows="775"/>  <!--2m-->
             <archive cf_type="3" xff="0.5" steps="288" rows="797"/> <!--2y-->
-        </monitor>
+        </madapter>
 
         <!-- apc-json.php 在仓库 /src/lib/ganglia 目录中，将其拷贝到 apache 可以访问的目录中 -->
-        <monitor name="apc" steps="300"  display_name="APC 监控器"  store_type="2" monitor_type="2">
+        <madapter name="apc" steps="300"  display_name="APC 监控器"  store_type="2" madapter_type="2">
             <param name="url" form_type="1">http://localhost:8090/tpl/apc-json.php</param>
             <archive cf_type="1" xff="0.5" steps="1" rows="600"/>   <!--2d-->
             <archive cf_type="1" xff="0.5" steps="6" rows="700"/>   <!--2w-->
@@ -190,9 +190,9 @@
             <archive cf_type="3" xff="0.5" steps="6" rows="700"/>   <!--2w-->
             <archive cf_type="3" xff="0.5" steps="24" rows="775"/>  <!--2m-->
             <archive cf_type="3" xff="0.5" steps="288" rows="797"/> <!--2y-->
-        </monitor>
+        </madapter>
 
-        <monitor name="network" steps="300" display_name="网络监控器"  store_type="2" monitor_type="2">
+        <madapter name="network" steps="300" display_name="网络监控器"  store_type="2" madapter_type="2">
             <param name="device" form_type="1">lo</param>
             <archive cf_type="1" xff="0.5" steps="1" rows="600"/>   <!--2d-->
             <archive cf_type="1" xff="0.5" steps="6" rows="700"/>   <!--2w-->
@@ -206,8 +206,8 @@
             <archive cf_type="3" xff="0.5" steps="6" rows="700"/>   <!--2w-->
             <archive cf_type="3" xff="0.5" steps="24" rows="775"/>  <!--2m-->
             <archive cf_type="3" xff="0.5" steps="288" rows="797"/> <!--2y-->
-        </monitor>
-    </monitors>
+        </madapter>
+    </madapters>
 
     <!-- }}} -->
     <!-- {{{ metrics -->

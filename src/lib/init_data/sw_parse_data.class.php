@@ -48,7 +48,7 @@ class sw_parse_data
      */
     protected $__categories = array(
         'devices'  => true,
-        'monitors' => true,
+        'madapters' => true,
         'metric_groups'  => true,
     );
 
@@ -66,7 +66,7 @@ class sw_parse_data
      * @var array
      * @access protected
      */
-    protected $__monitors = array();
+    protected $__madapters = array();
 
 	/**
 	 * 监控数据项配置 
@@ -120,7 +120,7 @@ class sw_parse_data
 	}
 
 	// }}}
-	// {{{ public function get_monitors()
+	// {{{ public function get_madapters()
 	
 	/**
 	 * 获取监控器 
@@ -128,9 +128,9 @@ class sw_parse_data
 	 * @access public
 	 * @return array
 	 */
-	public function get_monitors()
+	public function get_madapters()
 	{
-		return $this->__monitors;
+		return $this->__madapters;
 	}
 
 	// }}}
@@ -148,14 +148,14 @@ class sw_parse_data
             try {
                 $this->__xml_config = new \SimpleXMLIterator(PATH_INIT_DATA, 0, true);
             } catch (exception $e) {
-                throw new sw_exception('parse monitor xml config file faild.');
+                throw new sw_exception('parse madapter xml config file faild.');
             }
         }
 
         foreach ($this->__xml_config as $cate_name => $value) {
             if (!array_key_exists($cate_name, $this->__categories) || false == $this->__categories[$cate_name]) {
 				continue;
-//                throw new sw_exception('parse monitor config faild. category is `modules` or `collection_groups`');
+//                throw new sw_exception('parse madapter config faild. category is `modules` or `collection_groups`');
             }
 
             $parse_func = '_parse_' . $cate_name;
@@ -197,15 +197,15 @@ class sw_parse_data
                     continue;
                 }
 				$monitor_attr = $monitor->attributes();
-				$monitor_name = (string) $monitor_attr->name;
-				$dm_name = (string)$monitor_attr->dm_name; 
+				$monitor_name = (string) $monitor_attr->monitor_name;
+				$madapter_name = (string)$monitor_attr->name; 
 				foreach ($monitor->children() as $mtag_name => $value) {
 					$param_attr = $value->attributes();
 					$param_name = (string) $param_attr->name;
-					$monitors[$dm_name]['attrs'][$param_name] = (string)$value;	
+					$monitors[$monitor_name]['attrs'][$param_name] = (string)$value;	
 				}
-				$monitors[$dm_name]['name'] = $monitor_name;
-				$monitors[$dm_name]['dm_name'] = (string)$monitor_attr->dm_name;
+				$monitors[$monitor_name]['name'] = $monitor_name;
+				$monitors[$monitor_name]['madapter_name'] = $madapter_name;
             }
 			$devices[$name]['monitors'] = $monitors;
 		}
@@ -214,7 +214,7 @@ class sw_parse_data
 	}
 
 	// }}}
-	// {{{ protected function _parse_monitors()
+	// {{{ protected function _parse_madapters()
 	
 	/**
 	 * 解析监控器 
@@ -223,29 +223,29 @@ class sw_parse_data
 	 * @access protected
 	 * @return void
 	 */
-	protected function _parse_monitors($config)
+	protected function _parse_madapters($config)
 	{
-		$monitors = array();
-		foreach ($config as $monitor) {
-			$attributes = $monitor->attributes();
+		$madapters = array();
+		foreach ($config as $madapter) {
+			$attributes = $madapter->attributes();
             if (!isset($attributes->name)) {
-                throw new sw_exception("parse xml config monitor error. name is empty.");
+                throw new sw_exception("parse xml config madapter error. name is empty.");
             }
 
             $name = (string) $attributes->name;
-            $monitors[$name] = array();
+            $madapters[$name] = array();
             foreach ($attributes as $attr_name => $attr_value) {
-                $monitors[$name][(string) $attr_name] = (string) $attr_value;
+                $madapters[$name][(string) $attr_name] = (string) $attr_value;
             }
 
             $attrs = array();
-            foreach ($monitor->children() as $tag_name => $tag_value) {
+            foreach ($madapter->children() as $tag_name => $tag_value) {
                 if ('param' == $tag_name) {
 					$param_attrs = (array)$tag_value->attributes();
 					$param_attrs = $param_attrs['@attributes'];
 					$param_name  = $param_attrs['name'];
 					if ('' === $param_name) {
-						throw new sw_exception("parse xml config monitor error. param name is empty.");
+						throw new sw_exception("parse xml config madapter error. param name is empty.");
 					}
 
 					$item = array();
@@ -254,7 +254,7 @@ class sw_parse_data
 					}
 
 					$item['attr_default'] = (string) $tag_value;
-					$monitors[$name]['attrs'][] = $item;
+					$madapters[$name]['attrs'][] = $item;
                 }
 
                 if ('archive' == $tag_name) {
@@ -266,12 +266,12 @@ class sw_parse_data
 						$ar_item[(string) $attr_name] = (string) $attr_value;
 					}
 
-					$monitors[$name]['archives'][] = $ar_item;
+					$madapters[$name]['archives'][] = $ar_item;
                 }
             }
 		}
 
-		return $monitors;
+		return $madapters;
 	}
 
 	// }}}

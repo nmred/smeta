@@ -33,15 +33,15 @@ class sw_init_data
 	// {{{ members
 	
 	/**
-	 * 所有的监控器信息 
+	 * 所有的监控适配器信息 
 	 * 
 	 * @var array
 	 * @access protected
 	 */
-	protected $__monitors = array();
+	protected $__madapters = array();
 
 	/**
-	 * 监控器的数据项 
+	 * 监控适配器的数据项 
 	 * 
 	 * @var array
 	 * @access protected
@@ -49,7 +49,7 @@ class sw_init_data
 	protected $__metrics = array();
 
 	/**
-	 * 设备监控器 
+	 * 设备监控适配器 
 	 * 
 	 * @var array
 	 * @access protected
@@ -57,20 +57,20 @@ class sw_init_data
 	protected $__devices = array();
 
 	/**
-	 * 保存监控器数据库返回的 IDS 
+	 * 保存监控适配器数据库返回的 IDS 
+	 * 
+	 * @var array
+	 * @access protected
+	 */
+	protected $__madapter_ids = array();
+
+	/**
+	 *  设备监控适配器组合 ID 
 	 * 
 	 * @var array
 	 * @access protected
 	 */
 	protected $__monitor_ids = array();
-
-	/**
-	 *  设备监控器组合 ID 
-	 * 
-	 * @var array
-	 * @access protected
-	 */
-	protected $__dm_ids = array();
 
 	// }}}
 	// {{{ functions
@@ -86,56 +86,56 @@ class sw_init_data
 	{
 		$parse = new \lib\init_data\sw_parse_data();
 		$parse->generate_dynamic();
-		$this->__monitors = $parse->get_monitors();
+		$this->__madapters = $parse->get_madapters();
 		$this->__metrics  = $parse->get_metrics();
 		$this->__devices  = $parse->get_devices();
 
-		$this->_init_monitor();
+		$this->_init_madapter();
 		$this->_init_metrics();
 		$this->_init_devices();
 	}
 
 	// }}}
-	// {{{ protected function _init_monitor()
+	// {{{ protected function _init_madapter()
 	
 	/**
-	 * _init_monitor 
+	 * _init_madapter 
 	 * 
 	 * @access protected
 	 * @return void
 	 */
-	protected function _init_monitor()
+	protected function _init_madapter()
 	{
-		foreach ($this->__monitors as $name => $monitor) {
-			$attrs = isset($monitor['attrs']) ? $monitor['attrs'] : array();
-			unset($monitor['attrs']);
-			$archives = isset($monitor['archives']) ? $monitor['archives'] : array();
-			unset($monitor['archives']);
-			$data = \lib\inner_client\sw_inner_client::call('dev', 'monitor.add', $monitor);
+		foreach ($this->__madapters as $name => $madapter) {
+			$attrs = isset($madapter['attrs']) ? $madapter['attrs'] : array();
+			unset($madapter['attrs']);
+			$archives = isset($madapter['archives']) ? $madapter['archives'] : array();
+			unset($madapter['archives']);
+			$data = \lib\inner_client\sw_inner_client::call('dev', 'madapter.add', $madapter);
 			if ($data['code'] !== 10000) {
-				throw new sw_exception("add monitor: $name .," . $data['msg']);	
+				throw new sw_exception("add madapter: $name .," . $data['msg']);	
 			}
-			$monitor_id = $data['data']['monitor_id'];
+			$madapter_id = $data['data']['madapter_id'];
 
 			$attr_ids = array();
 			foreach ($attrs as $value) {
-				$value['mid'] = $monitor_id;
-				$data = \lib\inner_client\sw_inner_client::call('dev', 'monitor_attr.add', $value);
+				$value['madapter_id'] = $madapter_id;
+				$data = \lib\inner_client\sw_inner_client::call('dev', 'madapter_attr.add', $value);
 				if ($data['code'] !== 10000) {
-					throw new sw_exception("add monitor: $name ,attr_name:" . $value['name'] . $data['msg']);	
+					throw new sw_exception("add madapter: $name ,attr_name:" . $value['name'] . $data['msg']);	
 				}
 
 				$attr_ids[$value['name']] = $data['data']['attr_id'];
 			}
 			foreach ($archives as $value) {
-				$value['mid'] = $monitor_id;
-				$data = \lib\inner_client\sw_inner_client::call('dev', 'monitor_archive.add', $value);
+				$value['madapter_id'] = $madapter_id;
+				$data = \lib\inner_client\sw_inner_client::call('dev', 'madapter_archive.add', $value);
 				if ($data['code'] !== 10000) {
-					throw new sw_exception("add monitor: $name ". $data['msg']);	
+					throw new sw_exception("add madapter: $name ". $data['msg']);	
 				}
 			}
-			$this->__monitor_ids[$name]['id'] = $monitor_id;
-			$this->__monitor_ids[$name]['attr_ids'] = $attr_ids;
+			$this->__madapter_ids[$name]['id'] = $madapter_id;
+			$this->__madapter_ids[$name]['attr_ids'] = $attr_ids;
 		}	
 	}
 
@@ -143,24 +143,24 @@ class sw_init_data
 	// {{{ protected function _init_metrics()
 	
 	/**
-	 * 入库监控器的数据项 
+	 * 入库监控适配器的数据项 
 	 * 
 	 * @access protected
 	 * @return void
 	 */
 	protected function _init_metrics()
 	{
-		foreach ($this->__metrics as $monitor_name => $metrics) {
+		foreach ($this->__metrics as $madapter_name => $metrics) {
 			$metric_ids = array();
 			foreach ($metrics as $metric_name => $value) {
-				$value['mid'] = $this->__monitor_ids[$monitor_name]['id'];
-				$data = \lib\inner_client\sw_inner_client::call('dev', 'monitor_metric.add', $value);
+				$value['madapter_id'] = $this->__madapter_ids[$madapter_name]['id'];
+				$data = \lib\inner_client\sw_inner_client::call('dev', 'madapter_metric.add', $value);
 				if ($data['code'] !== 10000) {
-					throw new sw_exception("add monitor: $name ., metric:$metric_name" . $data['msg']);	
+					throw new sw_exception("add madapter: $name ., metric:$metric_name" . $data['msg']);	
 				}
 				$metric_ids[$metric_name] = $data['data']['metric_id'];
 			}
-			$this->__monitor_ids[$monitor_name]['metric_ids'] = $metric_ids;
+			$this->__madapter_ids[$madapter_name]['metric_ids'] = $metric_ids;
 		}	
 	}
 
@@ -168,7 +168,7 @@ class sw_init_data
 	// {{{ protected function _init_devices()
 	
 	/**
-	 * 入库设备、设备监控器 
+	 * 入库设备、设备监控适配器 
 	 * 
 	 * @access protected
 	 * @return void
@@ -184,30 +184,31 @@ class sw_init_data
 			}
 			$device_id = $data['data']['device_id'];
 
-			foreach ($monitors as $dm_name => $value) {
-				$monitor_name = $value['name'];
+			foreach ($monitors as $monitor_name => $value) {
+				$madapter_name = $value['madapter_name'];
+				$monitor_name  = $value['name'];
 				$attr_data = array();
 				foreach ($value['attrs'] as $attr_name => $attr_value) {
-					if (!isset($this->__monitor_ids[$monitor_name]['attr_ids'][$attr_name])) {
+					if (!isset($this->__madapter_ids[$madapter_name]['attr_ids'][$attr_name])) {
 						continue;
 					}
 					$attr_data[] = array(
-						'attr_id' => $this->__monitor_ids[$monitor_name]['attr_ids'][$attr_name],
+						'attr_id' => $this->__madapter_ids[$madapter_name]['attr_ids'][$attr_name],
 						'value'   => $attr_value,
 					);	
 				}
 				$post_data = array(
-					'did' => $device_id,
-					'mid' => $this->__monitor_ids[$monitor_name]['id'],
-					'dm_name' => $value['dm_name'],
+					'device_id' => $device_id,
+					'madapter_id' => $this->__madapter_ids[$madapter_name]['id'],
+					'monitor_name' => $monitor_name,
 					'attr_data' => json_encode($attr_data),
 				);
-				$data = \lib\inner_client\sw_inner_client::call('user', 'device_monitor.add', $post_data);
+				$data = \lib\inner_client\sw_inner_client::call('user', 'dmonitor.add', $post_data);
 				if ($data['code'] !== 10000) {
-					throw new sw_exception("add device: $device_name .,monitor: $monitor_name" . $data['msg']);	
+					throw new sw_exception("add device: $device_name .,monitor_name: $monitor_name" . $data['msg']);	
 				}
 
-				$this->__dm_ids[$device_name][$monitor_name] = $data['data'];
+				$this->__monitor_ids[$device_name][$monitor_name] = $data['data'];
 			}
 		}	
 	}
