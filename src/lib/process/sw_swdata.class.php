@@ -129,6 +129,22 @@ class sw_swdata extends sw_abstract
 	 */
 	protected $__router = null;
 
+	/**
+	 * 访问日志对象 
+	 * 
+	 * @var object
+	 * @access protected
+	 */
+	protected $__log_access = null;
+
+	/**
+	 * 错误日志对象 
+	 * 
+	 * @var object
+	 * @access protected
+	 */
+	protected $__log_error = null;
+
     // }}} end members
     // {{{ functions
     // {{{ protected function _init()
@@ -159,6 +175,18 @@ class sw_swdata extends sw_abstract
         }
 
         $this->__event_base = new \EventBase();
+
+		// 初始化日志对象
+		$options = \lib\log\sw_log::get_logsvr_config();
+		$options['log_id'] = \lib\log\sw_log::LOG_SWDATA_ACCESS_ID;
+		$writer = \swan\log\sw_log::writer_factory('logsvr', $options);
+		$this->__log_access = new \swan\log\sw_log();
+		$this->__log_access->add_writer($writer);
+
+		$options['log_id'] = \lib\log\sw_log::LOG_SWDATA_ERROR_ID;
+		$writer = \swan\log\sw_log::writer_factory('logsvr', $options);
+		$this->__log_error = new \swan\log\sw_log();
+		$this->__log_error->add_writer($writer);
     }
 
     // }}}
@@ -313,6 +341,7 @@ class sw_swdata extends sw_abstract
 	{
 		// 添加控制器命名空间
 		try {
+			$start_time = microtime(true);
 			$controller = sw_controller::get_instance();
 			$request = \swan\ehttp\sw_request::get_instance();
 			$request->init($erequest);
@@ -321,11 +350,55 @@ class sw_swdata extends sw_abstract
 			$erequest->set_module_name($module);
 			$controller->add_controller_namespace($this->__controller_namespace[$module], $module);
 			$controller->get_router()->add_route($module, $this->__router);
-			$eresponse->render_exceptions(true);
 			$controller->dispatch($erequest, $eresponse);
-		} catch (\swan\exception\sw_exception $e) {
-            $this->log($e->getMessage(), LOG_INFO);
+			$uri = $request->get_uri();
+			$end_time = microtime(true);
+			$time = $end_time - $start_time;
+			$this->_log_access("uri:$uri spend_time:$time");
+		} catch (\Exception $e) {
+			$request->send_reply(503);
+			$this->_log_error($e->getMessage());
 		}
+	}
+
+	// }}}
+	// {{{ protected function _log_access()
+
+	/**
+	 * _log_access 
+	 * 
+	 * @param mixed $message 
+	 * @access protected
+	 * @return void
+	 */
+	protected function _log_access($message, $level = null)
+	{
+		if (isset($this->__log_access)) {
+			if (!$level) {
+				$level = LOG_DEBUG;
+			}
+			$this->__log_access->log($message, $level);	
+		}	
+	}
+
+	// }}}
+	// {{{ protected function _log_error()
+
+	/**
+	 * 记录 http 错误日志 
+	 * 
+	 * @param string $message 
+	 * @access protected
+	 * @return void
+	 */
+	protected function _log_error($message, $level = null)
+	{
+		if (isset($this->__log_error)) {
+			if (!$level) {
+				$level = LOG_INFO;
+			}
+			$this->__log_error->log($message, $level);	
+		}	
 	}
 
 	// }}}
