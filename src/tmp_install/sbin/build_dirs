@@ -41,6 +41,13 @@ ARRAY_DIRS=(
         "data/rrd"
     "run"
     "web"
+		"graph"
+			"graph/900"
+			"graph/3600"
+			"graph/86400"
+			"graph/604800"
+			"graph/2592000"
+			"graph/31536000"
 )
 
 # 需要 chown 的目录 ( [是否需要递归. 1 | 0] [路径] )
@@ -49,6 +56,7 @@ ARRAY_CHOWN=(
     "1" "log"
     "1" "data"
     "1" "run"
+    "1" "web"
 )
 
 # 需要 chmod 的目录 ( [权限] [是否需要递归. 1 | 0] [路径] )

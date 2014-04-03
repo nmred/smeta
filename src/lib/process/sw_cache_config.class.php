@@ -183,39 +183,11 @@ class sw_cache_config extends sw_abstract
 	 */
 	protected function _reconfig($interval)
 	{
-		// 缓存 dm 数据
+		// 缓存监控器数据
 		$redis = \swan\redis\sw_redis::singleton();
-		$dm_data = array();
+		$monitor_data = array();
 		try {
-			$dm_data = \lib\inner_client\sw_inner_client::call('user', 'dispatch_config.cache_dm');
-			if (isset($dm_data['data'])) {
-				$dm_data = $dm_data['data'];
-			} else {
-				$dm_data = array();	
-			}
-		} catch (\swan\exception\sw_exception $e) {
-			$this->log($e->getMessage(), LOG_INFO);
-		}
-
-		$old_dm_ids = $redis->smembers(SWAN_CACHE_DM_IDS);
-		$dm_ids = array();
-		foreach ($dm_data as $key => $value) {	
-			$cache_data = json_encode($value);
-			$redis->set('dm_' . $key, $cache_data, self::EXPIRE_TIME);
-
-			$dm_ids[] = $key;
-			$redis->sadd(SWAN_CACHE_DM_IDS, $key);
-			$redis->expire(SWAN_CACHE_DM_IDS, self::EXPIRE_TIME);
-		}
-		$del_dm_ids = array_diff($old_dm_ids, $dm_ids);
-		foreach ($del_dm_ids as $key) {
-			$redis->srem(SWAN_CACHE_DM_IDS, $key);
-			$redis->delete('dm_' . $key);
-		}
-
-		// 缓存监控器相关数据
-		try {
-			$monitor_data = \lib\inner_client\sw_inner_client::call('user', 'dispatch_config.cache_monitor');
+			$monitor_data = \lib\inner_client\sw_inner_client::call('user', 'dconfig.monitor');
 			if (isset($monitor_data['data'])) {
 				$monitor_data = $monitor_data['data'];
 			} else {
@@ -227,18 +199,46 @@ class sw_cache_config extends sw_abstract
 
 		$old_monitor_ids = $redis->smembers(SWAN_CACHE_MONITOR_IDS);
 		$monitor_ids = array();
-		foreach ($monitor_data as $monitor_id => $value) {	
+		foreach ($monitor_data as $key => $value) {	
+			$cache_data = json_encode($value);
+			$redis->set(SWAN_CACHE_MONITOR_PREFIX . $key, $cache_data, self::EXPIRE_TIME);
+
+			$monitor_ids[] = $key;
+			$redis->sadd(SWAN_CACHE_MONITOR_IDS, $key);
+			$redis->expire(SWAN_CACHE_MONITOR_IDS, self::EXPIRE_TIME);
+		}
+		$del_monitor_ids = array_diff($old_monitor_ids, $monitor_ids);
+		foreach ($del_monitor_ids as $key) {
+			$redis->srem(SWAN_CACHE_MONITOR_IDS, $key);
+			$redis->delete(SWAN_CACHE_MONITOR_PREFIX . $key);
+		}
+
+		// 缓存监控适配器相关数据
+		try {
+			$madapter_data = \lib\inner_client\sw_inner_client::call('user', 'dconfig.madapter');
+			if (isset($madapter_data['data'])) {
+				$madapter_data = $madapter_data['data'];
+			} else {
+				$madapter_data = array();	
+			}
+		} catch (\swan\exception\sw_exception $e) {
+			$this->log($e->getMessage(), LOG_INFO);
+		}
+
+		$old_madapter_ids = $redis->smembers(SWAN_CACHE_MADAPTER_IDS);
+		$madapter_ids = array();
+		foreach ($madapter_data as $madapter_id => $value) {	
 			if (isset($value['archives'])) {
 				$cache_data = json_encode($value['archives']);
-				$redis->set('archive_' . $monitor_id, $cache_data, self::EXPIRE_TIME);
+				$redis->set(SWAN_CACHE_MADAPTER_ARCHIVE_PREFIX . $madapter_id, $cache_data, self::EXPIRE_TIME);
 			}
 
 			if (isset($value['metrics'])) {
-				$scache_id = 'metric_ids_' . $monitor_id;
+				$scache_id = SWAN_CACHE_METRIC_IDS . $madapter_id;
 				$old_metric_ids = $redis->smembers($scache_id);
 				$metric_ids = array();
 				foreach ($value['metrics'] as $val) {
-					$cache_id = 'metric_' . $monitor_id . '_' . $val['metric_id'];
+					$cache_id = SWAN_CACHE_METRIC_PREFIX . $madapter_id . '_' . $val['metric_id'];
 					$cache_data = json_encode($val);
 					$redis->set($cache_id, $cache_data, self::EXPIRE_TIME);
 					$metric_ids[] = $val['metric_id'];
@@ -248,25 +248,24 @@ class sw_cache_config extends sw_abstract
 				$del_metric_ids = array_diff($old_metric_ids, $metric_ids);
 				foreach ($del_metric_ids as $metric_id) {
 					$redis->srem($scache_id, $metric_id);
-					$redis->delete('metric_' . $monitor_id . '_' . $metric_id);
+					$redis->delete(SWAN_CACHE_METRIC_PREFIX . $madapter_id . '_' . $metric_id);
 				}
 			}
 
 			if (isset($value['basic'])) {
 				$cache_data = json_encode($value['basic']);
-				$redis->set('monitor_' . $monitor_id, $cache_data, self::EXPIRE_TIME);
-				$monitor_ids[] = $monitor_id;
-				$redis->sadd(SWAN_CACHE_MONITOR_IDS, $monitor_id);
-				$redis->expire(SWAN_CACHE_MONITOR_IDS, self::EXPIRE_TIME);
+				$redis->set(SWAN_CACHE_MADAPTER_PREFIX . $madapter_id, $cache_data, self::EXPIRE_TIME);
+				$madapter_ids[] = $madapter_id;
+				$redis->sadd(SWAN_CACHE_MADAPTER_IDS, $madapter_id);
+				$redis->expire(SWAN_CACHE_MADAPTER_IDS, self::EXPIRE_TIME);
 			}
 		}
 
-		$del_monitor_ids = array_diff($old_monitor_ids, $monitor_ids);
-		foreach ($del_monitor_ids as $monitor_id) {
-			$redis->srem(SWAN_CACHE_MONITOR_IDS, $monitor_id);
-			$redis->delete('monitor_' . $monitor_id);
+		$del_madapter_ids = array_diff($old_madapter_ids, $madapter_ids);
+		foreach ($del_madapter_ids as $madapter_id) {
+			$redis->srem(SWAN_CACHE_MONITOR_IDS, $madapter_id);
+			$redis->delete(SWAN_CACHE_MADAPTER_PREFIX . $madapter_id);
 		}
-
 	}
 
 	// }}}

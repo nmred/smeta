@@ -357,25 +357,25 @@ class sw_smeta extends sw_abstract
 		}
 
 		$redis = \swan\redis\sw_redis::singleton();
-		list($device_id, $dm_id, $metric_id) = explode('_', $info[0]);
-		$dm_info = $redis->get('dm_' . $device_id . '_' . $dm_id);
-		$dm_info = json_decode($dm_info, true);
-		if (!$dm_info) {
-			$this->log('store failed, get dm info fail.: ' . $data, LOG_INFO);
-			return;
-		}
-		$monitor_info = $redis->get('monitor_' . $dm_info['monitor_id']);
+		list($device_id, $monitor_id, $metric_id) = explode('_', $info[0]);
+		$monitor_info = $redis->get(SWAN_CACHE_MONITOR_PREFIX . $device_id . '_' . $monitor_id);
 		$monitor_info = json_decode($monitor_info, true);
 		if (!$monitor_info) {
 			$this->log('store failed, get monitor info fail.: ' . $data, LOG_INFO);
 			return;
 		}
-
-		if (!isset($monitor_info['store_type'])) {
+		$madapter_info = $redis->get(SWAN_CACHE_MADAPTER_PREFIX . $monitor_info['madapter_id']);
+		$madapter_info = json_decode($madapter_info, true);
+		if (!$madapter_info) {
+			$this->log('store failed, get madapter info fail.: ' . $data, LOG_INFO);
 			return;
 		}
 
-		switch ((int)$monitor_info['store_type']) {
+		if (!isset($madapter_info['store_type'])) {
+			return;
+		}
+
+		switch ((int)$madapter_info['store_type']) {
 			case 2:
 				$this->__rrd_gmc->doBackground('rrd_store', $data);
 				break;

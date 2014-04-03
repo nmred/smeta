@@ -40,7 +40,7 @@ class sw_madapter_params extends sw_abstract
 	protected $__allow_attributes = array(
 		'value'   => true,
 		'attr_id' => true,
-		'dm_id'   => true,
+		'monitor_id'   => true,
 	);
 
 	/**
@@ -58,7 +58,7 @@ class sw_madapter_params extends sw_abstract
 	 * @var string
 	 * @access protected
 	 */
-	protected $__key_attributes = array('value_id', 'attr_id', 'dm_id');
+	protected $__key_attributes = array('value_id', 'attr_id', 'monitor_id');
 
 	// }}}		
 	// {{{ functions

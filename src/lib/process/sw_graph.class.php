@@ -105,14 +105,14 @@ class sw_graph extends sw_abstract
 				continue;
 			}
 
-			list($dm_id, $metric_id) = $graph_info;
+			list($monitor_id, $metric_id) = $graph_info;
 			try {
-				lib_graph::graph($dm_id, $metric_id, array('time_grid' => lib_graph::T_15_MIN));
-				lib_graph::graph($dm_id, $metric_id, array('time_grid' => lib_graph::T_60_MIN));
-				lib_graph::graph($dm_id, $metric_id, array('time_grid' => lib_graph::T_1_DAY));
-				lib_graph::graph($dm_id, $metric_id, array('time_grid' => lib_graph::T_7_DAY));
-				lib_graph::graph($dm_id, $metric_id, array('time_grid' => lib_graph::T_30_DAY));
-				lib_graph::graph($dm_id, $metric_id, array('time_grid' => lib_graph::T_365_DAY));
+				lib_graph::graph($monitor_id, $metric_id, array('time_grid' => lib_graph::T_15_MIN));
+				lib_graph::graph($monitor_id, $metric_id, array('time_grid' => lib_graph::T_60_MIN));
+				lib_graph::graph($monitor_id, $metric_id, array('time_grid' => lib_graph::T_1_DAY));
+				lib_graph::graph($monitor_id, $metric_id, array('time_grid' => lib_graph::T_7_DAY));
+				lib_graph::graph($monitor_id, $metric_id, array('time_grid' => lib_graph::T_30_DAY));
+				lib_graph::graph($monitor_id, $metric_id, array('time_grid' => lib_graph::T_365_DAY));
 			} catch (\swan\exception\sw_exception $e) {
 				$this->log($e->getMessage(), LOG_INFO);
 			}

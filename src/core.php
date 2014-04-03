@@ -149,8 +149,13 @@ define('SWAN_TBN_MADAPTER_ARCHIVE', 'madapter_archive');
 // }}}
 // {{{ redis key
 
-define('SWAN_CACHE_DM_IDS', 'config_cache_dm_ids');
 define('SWAN_CACHE_MONITOR_IDS', 'config_cache_monitor_ids');
+define('SWAN_CACHE_MONITOR_PREFIX', 'monitor_prefix_');
+define('SWAN_CACHE_MADAPTER_IDS', 'config_cache_madapter_ids');
+define('SWAN_CACHE_MADAPTER_PREFIX', 'madapter_prefix_');
+define('SWAN_CACHE_MADAPTER_ARCHIVE_PREFIX', 'archive_prefix_');
+define('SWAN_CACHE_METRIC_IDS', 'metric_ids_');
+define('SWAN_CACHE_METRIC_PREFIX', 'metric_prefix_');
 define('SWAN_QUEUE_GRAPH', 'swan_queue_graph');
 define('SWAN_MONITOR_REDIS_DATA', 'swan_monitor_data_');
 // }}}

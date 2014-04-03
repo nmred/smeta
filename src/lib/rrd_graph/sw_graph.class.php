@@ -69,37 +69,37 @@ class sw_graph
 	/**
 	 * 绘制图片 
 	 * 
-	 * @param string $dm_id 
+	 * @param string $monitor_id 
 	 * @static
 	 * @access public
 	 * @return void
 	 */
-	public static function graph($dm_id, $metric_id, $options = array())
+	public static function graph($monitor_id, $metric_id, $options = array())
 	{
 		// 创建 rrd 数据库
 		if (!isset(self::$__redis))	{
 			self::$__redis = \swan\redis\sw_redis::singleton();	
 		}
 		
-		$dm_info = self::$__redis->get('dm_' . $dm_id);
-		if (!$dm_info) {
+		$monitor_info = self::$__redis->get(SWAN_CACHE_MONITOR_PREFIX . $monitor_id);
+		if (!$monitor_info) {
 			throw new sw_exception('graph rrd file faild. reason is get dm info fail.');	
 		}
-		$dm_info    = json_decode($dm_info, true);
-		$monitor_id = $dm_info['monitor_id']; 
+		$monitor_info  = json_decode($monitor_info, true);
+		$madapter_id = $monitor_info['madapter_id']; 
 		// 获取metric info		
-		$metric_info = self::$__redis->get('metric_' . $monitor_id . '_' . $metric_id);
+		$metric_info = self::$__redis->get(SWAN_CACHE_METRIC_PREFIX . $madapter_id . '_' . $metric_id);
 		if (!$metric_info) {
 			throw new sw_exception('graph rrd file faild. reason is get monitor metric info fail.');	
 		}
 		$metric_info = json_decode($metric_info, true);
 
-		$graph_params = self::_get_graph_params($dm_info, $metric_info, $options);
+		$graph_params = self::_get_graph_params($monitor_info, $metric_info, $options);
 		$time_grid = isset($options['time_grid']) ? $options['time_grid'] : self::T_15_MIN;
 		if (!array_key_exists($options['time_grid'], self::$__x_grid)) {
 			$time_grid = self::T_15_MIN;
 		}
-		$out_file = PATH_SWAN_RRD_GRAPH . $time_grid . '/' . $dm_id . '_' . $metric_id . '.png';
+		$out_file = PATH_SWAN_RRD_GRAPH . $time_grid . '/' . $monitor_id . '_' . $metric_id . '.png';
 		try {
 			$graph = new \RRDGraph($out_file);
 			$graph->setOptions($graph_params);
@@ -117,17 +117,17 @@ class sw_graph
 	/**
 	 * 获取绘图的参数 
 	 * 
-	 * @param array $dm_info 
+	 * @param array $monitor_info 
 	 * @param array $metric_info 
 	 * @param array $options 
 	 * @static
 	 * @access protected
 	 * @return void
 	 */
-	protected static function _get_graph_params($dm_info, $metric_info, $options)
+	protected static function _get_graph_params($monitor_info, $metric_info, $options)
 	{
-		$dm_id = $dm_info['device_id'] . '_' . $dm_info['dm_id'];
-		$file_name = PATH_SWAN_RRD . $dm_id . '.rrd';
+		$monitor_key = $monitor_info['device_id'] . '_' . $monitor_info['monitor_id'];
+		$file_name = PATH_SWAN_RRD . $monitor_key . '.rrd';
 		if (!file_exists($file_name)) {
 			throw new sw_exception('not exists rrd file:' . $file_name);
 		}
@@ -141,7 +141,7 @@ class sw_graph
 		$start_time = $end_time - $time_grid;
 
 		$metric_name = $metric_info['metric_name'];
-		$title       = $dm_info['device_name'] . '-' . $metric_info['title'];
+		$title       = $monitor_info['device_name'] . '-' . $metric_info['title'];
 		$options = array(
 			'--color' => "SHADEA#DDDDDD",
 			'--color' => "SHADEB#808080",

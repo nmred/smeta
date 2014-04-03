@@ -73,30 +73,30 @@ class sw_update
 	/**
 	 * 更新 RRD 库 
 	 * 
-	 * @param string $dm_id 
+	 * @param string $monitor_id 
 	 * @static
 	 * @access public
 	 * @return void
 	 */
-	public static function update($dm_key, $data, $time)
+	public static function update($monitor_key, $data, $time)
 	{
 		// 更新 rrd 数据库
 		if (!isset(self::$__redis))	{
 			self::$__redis = \swan\redis\sw_redis::singleton();	
 		}
-		$file_name = sw_create::create($dm_key);
+		$file_name = sw_create::create($monitor_key);
 
-		$dm_info = self::$__redis->get('dm_' . $dm_key);
-		if (!$dm_info) {
-			throw new sw_exception('create rrd file faild. reason is get dm info fail.');	
+		$monitor_info = self::$__redis->get(SWAN_CACHE_MONITOR_PREFIX . $monitor_key);
+		if (!$monitor_info) {
+			throw new sw_exception('create rrd file faild. reason is get monitor info fail.');	
 		}
-		$dm_info    = json_decode($dm_info, true);
-		$monitor_id = $dm_info['monitor_id']; 
+		$monitor_info  = json_decode($monitor_info, true);
+		$madapter_id = $monitor_info['madapter_id']; 
 
 		$metrics = array();
 		foreach ($data as $metric_id => $value) {
 			// 获取metric info		
-			$metric_info = self::$__redis->get('metric_' . $monitor_id . '_' . $metric_id);
+			$metric_info = self::$__redis->get(SWAN_CACHE_METRIC_PREFIX . $madapter_id . '_' . $metric_id);
 			if (!$metric_info) {
 				throw new sw_exception('create rrd file faild. reason is get monitor metric info fail.');	
 			}

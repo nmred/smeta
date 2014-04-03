@@ -228,19 +228,19 @@ class sw_graph_queue extends sw_abstract
 	protected function _get_config_data()
 	{
 		$this->__prepare_data = array();
-		$ids = $this->__redis->smembers(SWAN_CACHE_DM_IDS);
+		$ids = $this->__redis->smembers(SWAN_CACHE_MONITOR_IDS);
 		foreach ($ids as $key) {
-			$dm_info = $this->__redis->get('dm_' . $key);
-			$dm_info = json_decode($dm_info, true);
-			if (!$dm_info) {
-				$this->log('get dm info fail. dm_id:' . $key, LOG_DEBUG);
+			$monitor_info = $this->__redis->get(SWAN_CACHE_MONITOR_PREFIX . $key);
+			$monitor_info = json_decode($monitor_info, true);
+			if (!$monitor_info) {
+				$this->log('get monitor info fail. monitor_id:' . $key, LOG_DEBUG);
 				continue;
 			}
 
-			$monitor_id = $dm_info['monitor_id'];
-			$metric_ids = $this->__redis->smembers('metric_ids_' . $monitor_id);
+			$madapter_id = $monitor_info['madapter_id'];
+			$metric_ids  = $this->__redis->smembers(SWAN_CACHE_METRIC_IDS . $madapter_id);
 			if (!$metric_ids) {
-				$this->log('get metric fail. monitor_id:' . $monitor_id . 'dm_id:' . $key, LOG_DEBUG);
+				$this->log('get metric fail. madapter_id:' . $madapter_id . 'monitor_id:' . $key, LOG_DEBUG);
 				continue;
 			}
 			$this->__prepare_data[$key] = $metric_ids;

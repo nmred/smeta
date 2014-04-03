@@ -72,14 +72,14 @@ class sw_create
 	/**
 	 * 创建 RRD 库 
 	 * 
-	 * @param string $dm_id 
+	 * @param string $monitor_id 
 	 * @static
 	 * @access public
 	 * @return void
 	 */
-	public static function create($dm_id, $force = false)
+	public static function create($monitor_id, $force = false)
 	{
-		$file_name = PATH_SWAN_RRD . $dm_id . '.rrd';
+		$file_name = PATH_SWAN_RRD . $monitor_id . '.rrd';
 		if (file_exists($file_name) && !$force) {
 			return $file_name;	
 		}
@@ -89,21 +89,21 @@ class sw_create
 			self::$__redis = \swan\redis\sw_redis::singleton();	
 		}
 		
-		$dm_info = self::$__redis->get('dm_' . $dm_id);
-		if (!$dm_info) {
-			throw new sw_exception('create rrd file faild. reason is get dm info fail.');	
-		}
-		$dm_info    = json_decode($dm_info, true);
-		$monitor_id = $dm_info['monitor_id']; 
-		$monitor_info = self::$__redis->get('monitor_' . $monitor_id);
+		$monitor_info = self::$__redis->get(SWAN_CACHE_MONITOR_PREFIX . $monitor_id);
 		if (!$monitor_info) {
 			throw new sw_exception('create rrd file faild. reason is get monitor info fail.');	
 		}
-		$monitor_info    = json_decode($monitor_info, true);
-		$rrd_creater = new \RRDCreator($file_name, "now -10d", $monitor_info['steps']);
+		$monitor_info = json_decode($monitor_info, true);
+		$madapter_id = $monitor_info['madapter_id']; 
+		$madapter_info = self::$__redis->get(SWAN_CACHE_MADAPTER_PREFIX . $madapter_id);
+		if (!$madapter_info) {
+			throw new sw_exception('create rrd file faild. reason is get madapter info fail.');	
+		}
+		$madapter_info = json_decode($madapter_info, true);
+		$rrd_creater = new \RRDCreator($file_name, "now -10d", $madapter_info['steps']);
 		
 		// 获取 archive
-		$archives = self::$__redis->get('archive_' . $monitor_id);
+		$archives = self::$__redis->get(SWAN_CACHE_MADAPTER_ARCHIVE_PREFIX . $madapter_id);
 		if (!$archives) {
 			throw new sw_exception('create rrd file faild. reason is get monitor archive fail.');	
 		}
@@ -114,14 +114,14 @@ class sw_create
 		}
 
 		// 获取 metrics
-		$metric_ids = self::$__redis->smembers('metric_ids_' . $monitor_id);
+		$metric_ids = self::$__redis->smembers(SWAN_CACHE_METRIC_IDS . $madapter_id);
 		if (empty($metric_ids)) {
-			throw new sw_exception('not exists metric this dm. dm:' . $dm_id);	
+			throw new sw_exception('not exists metric this monitor. monitor:' . $monitor_id);	
 		}
 
 		foreach ($metric_ids as $metric_id) {
 			// 获取metric info		
-			$metric_info = self::$__redis->get('metric_' . $monitor_id . '_' . $metric_id);
+			$metric_info = self::$__redis->get(SWAN_CACHE_METRIC_PREFIX . $madapter_id . '_' . $metric_id);
 			if (!$metric_info) {
 				throw new sw_exception('create rrd file faild. reason is get monitor metric info fail.');	
 			}

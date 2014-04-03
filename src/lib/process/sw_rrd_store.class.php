@@ -123,30 +123,30 @@ class sw_rrd_store extends sw_abstract
         $data = rtrim($data);
 		$data = json_decode($data, true);
 		if (isset($data[1])) {
-			list($device_id, $dm_id, $metric_id) = explode('_', $data[0]);
-			$dm_key = $device_id . '_' . $dm_id;
-			if (isset($this->__rrd_cache[$dm_key]['data'])
-				&& isset($this->__rrd_cache[$dm_key]['time'])
-				&& $data[1]['time'] >= $this->__rrd_cache[$dm_key]['time'] + 5) {
+			list($device_id, $monitor_id, $metric_id) = explode('_', $data[0]);
+			$monitor_key = $device_id . '_' . $monitor_id;
+			if (isset($this->__rrd_cache[$monitor_key]['data'])
+				&& isset($this->__rrd_cache[$monitor_key]['time'])
+				&& $data[1]['time'] >= $this->__rrd_cache[$monitor_key]['time'] + 5) {
 				try {
-					sw_update::update($dm_key, $this->__rrd_cache[$dm_key]['data'], $this->__rrd_cache[$dm_key]['time']);
-					$this->log('update success data:' . var_export($this->__rrd_cache[$dm_key], true), LOG_INFO);
+					sw_update::update($monitor_key, $this->__rrd_cache[$monitor_key]['data'], $this->__rrd_cache[$monitor_key]['time']);
+					$this->log('update success data:' . var_export($this->__rrd_cache[$monitor_key], true), LOG_INFO);
 				} catch (\Exception $e) {
 					$this->log($e->getMessage(), LOG_INFO);	
 				}
 
-				$this->__rrd_cache[$dm_key]['data'] = array();
-				$this->__last_time[$dm_key] = $this->__rrd_cache[$dm_key]['time'];
+				$this->__rrd_cache[$monitor_key]['data'] = array();
+				$this->__last_time[$monitor_key] = $this->__rrd_cache[$monitor_key]['time'];
 			}
 	
-			if (!isset($this->__rrd_cache[$dm_key]['data'])) {
-				$this->__rrd_cache[$dm_key]['data'] = array();	
+			if (!isset($this->__rrd_cache[$monitor_key]['data'])) {
+				$this->__rrd_cache[$monitor_key]['data'] = array();	
 			}
 
 			// 第一次存储没有 __last_time 可以通过
-			if (!isset($this->__last_time[$dm_key]) || $data[1]['time'] > $this->__last_time[$dm_key]) {
-				$this->__rrd_cache[$dm_key]['data'][$metric_id] = $data[1]['value'];
-				$this->__rrd_cache[$dm_key]['time'] = $data[1]['time'];
+			if (!isset($this->__last_time[$monitor_key]) || $data[1]['time'] > $this->__last_time[$monitor_key]) {
+				$this->__rrd_cache[$monitor_key]['data'][$metric_id] = $data[1]['value'];
+				$this->__rrd_cache[$monitor_key]['time'] = $data[1]['time'];
 			}
 		}
     }
