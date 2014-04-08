@@ -147,6 +147,53 @@
             </table>
 
             <!-- }}} -->
+            <!-- {{{ table sequence_alert -->
+
+            <table name="sequence_alert">
+                <desc>告警策略数据表的唯一序列号</desc>
+                <engine>InnoDB</engine>
+                <charset>utf8</charset>
+                <columns>
+                    <column name="alert_id">
+                        <desc>告警策略 ID</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+						<unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                    <column name="table_name">
+                        <desc>维护序列号的表名称</desc>
+                        <type>varchar</type>
+                        <nullable>false</nullable>
+                        <precision>64</precision>
+                        <default></default>
+                    </column>
+
+                    <column name="sequence_id">
+                        <desc>自增长 ID</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+						<unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+                </columns>
+
+                <keys>
+                    <key name="">
+						<desc></desc>
+                        <type>primary</type>
+                        <fields>
+                            <field name="alert_id"></field>
+                            <field name="table_name"></field>
+                        </fields>
+                    </key>
+                </keys>
+            </table>
+
+            <!-- }}} -->
             <!-- {{{ table sequence_graph -->
 
             <table name="sequence_graph">
@@ -1143,6 +1190,204 @@
                         <fields>
                             <field name="graph_id"></field>
                             <field name="gprint_id"></field>
+                        </fields>
+                    </key>
+                </keys>
+            </table>
+
+            <!-- }}} -->
+            <!-- {{{ table alert_basic -->
+
+            <table name="alert_basic">
+                <desc>告警策略管理</desc>
+                <engine>InnoDB</engine>
+                <charset>utf8</charset>
+                <columns>
+                    <column name="alert_id">
+                        <desc>告警策略 id</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+                        <unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                    <column name="alert_name">
+                        <desc>告警策略名称</desc>
+                        <type>varchar</type>
+                        <nullable>false</nullable>
+                        <precision>255</precision>
+                        <default></default>
+                    </column>
+
+                    <column name="alert_display_name">
+                        <desc>策略显示名称</desc>
+                        <type>varchar</type>
+                        <nullable>false</nullable>
+                        <precision>255</precision>
+                        <default></default>
+                    </column>
+
+                    <column name="alert_type">
+                        <desc>告警策略类型 2: 服务器告警 4: 数据项指标告警 8: 两者都是</desc>
+                        <type>tinyint</type>
+                        <nullable>false</nullable>
+                        <precision>1</precision>
+                        <unsigned>true</unsigned>
+                        <default>4</default>
+                    </column>
+
+                    <column name="scope_type">
+                        <desc>策略作用范围 2: 全局监控适配器 4: 全局设备 8: 局部某个监控器</desc>
+                        <type>tinyint</type>
+                        <nullable>false</nullable>
+                        <precision>1</precision>
+                        <unsigned>true</unsigned>
+                        <default>2</default>
+                    </column>
+
+                    <column name="madapter_id">
+                        <desc>监控适配器 id</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+                        <unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                    <column name="device_id">
+                        <desc>设备 id</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+                        <unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                    <column name="monitor_id">
+                        <desc>监控器 id</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+                        <unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+                </columns>
+
+                <keys>
+                    <key name="">
+                        <desc></desc>
+                        <type>primary</type>
+                        <fields>
+                            <field name="alert_id"></field>
+                        </fields>
+                    </key>
+                </keys>
+            </table>
+
+            <!-- }}} -->
+            <!-- {{{ table alert_metric -->
+
+            <table name="alert_metric">
+                <desc>告警数据项管理</desc>
+                <engine>InnoDB</engine>
+                <charset>utf8</charset>
+                <columns>
+                    <column name="metric_id">
+                        <desc>告警数据项 id</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+                        <unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                    <column name="alert_id">
+                        <desc>告警策略 id</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+                        <unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                    <column name="madapter_id">
+                        <desc>监控适配器 id</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+                        <unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                    <column name="madapter_metric_id">
+                        <desc>监控适配器数据项 id</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+                        <unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                    <column name="alert_name">
+                        <desc>告警策略名称</desc>
+                        <type>varchar</type>
+                        <nullable>false</nullable>
+                        <precision>255</precision>
+                        <default></default>
+                    </column>
+
+                    <column name="alert_display_name">
+                        <desc>策略显示名称</desc>
+                        <type>varchar</type>
+                        <nullable>false</nullable>
+                        <precision>255</precision>
+                        <default></default>
+                    </column>
+
+                    <column name="scope_type">
+                        <desc>策略作用范围 2: 全局监控适配器 4: 全局设备 8: 局部某个监控器</desc>
+                        <type>tinyint</type>
+                        <nullable>false</nullable>
+                        <precision>1</precision>
+                        <unsigned>true</unsigned>
+                        <default>2</default>
+                    </column>
+
+                    <column name="madapter_id">
+                        <desc>监控适配器 id</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+                        <unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                    <column name="device_id">
+                        <desc>设备 id</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+                        <unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+
+                    <column name="monitor_id">
+                        <desc>监控器 id</desc>
+                        <type>int</type>
+                        <nullable>false</nullable>
+                        <precision>11</precision>
+                        <unsigned>true</unsigned>
+                        <default></default>
+                    </column>
+                </columns>
+
+                <keys>
+                    <key name="">
+                        <desc></desc>
+                        <type>primary</type>
+                        <fields>
+                            <field name="alert_id"></field>
                         </fields>
                     </key>
                 </keys>
