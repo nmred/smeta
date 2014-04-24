@@ -1329,33 +1329,17 @@
                         <default></default>
                     </column>
 
-                    <column name="alert_name">
-                        <desc>告警策略名称</desc>
-                        <type>varchar</type>
-                        <nullable>false</nullable>
-                        <precision>255</precision>
-                        <default></default>
-                    </column>
-
-                    <column name="alert_display_name">
-                        <desc>策略显示名称</desc>
-                        <type>varchar</type>
-                        <nullable>false</nullable>
-                        <precision>255</precision>
-                        <default></default>
-                    </column>
-
-                    <column name="scope_type">
-                        <desc>策略作用范围 2: 全局监控适配器 4: 全局设备 8: 局部某个监控器</desc>
+                    <column name="compare_type">
+                        <desc>比较规则: 1: 大于 2: 小于 3: 等于 4: 大于等于 5: 小于等于 6: 大于等于</desc>
                         <type>tinyint</type>
                         <nullable>false</nullable>
                         <precision>1</precision>
                         <unsigned>true</unsigned>
-                        <default>2</default>
+                        <default>1</default>
                     </column>
 
-                    <column name="madapter_id">
-                        <desc>监控适配器 id</desc>
+                    <column name="value">
+                        <desc></desc>
                         <type>int</type>
                         <nullable>false</nullable>
                         <precision>11</precision>
@@ -1363,23 +1347,6 @@
                         <default></default>
                     </column>
 
-                    <column name="device_id">
-                        <desc>设备 id</desc>
-                        <type>int</type>
-                        <nullable>false</nullable>
-                        <precision>11</precision>
-                        <unsigned>true</unsigned>
-                        <default></default>
-                    </column>
-
-                    <column name="monitor_id">
-                        <desc>监控器 id</desc>
-                        <type>int</type>
-                        <nullable>false</nullable>
-                        <precision>11</precision>
-                        <unsigned>true</unsigned>
-                        <default></default>
-                    </column>
                 </columns>
 
                 <keys>
@@ -1388,6 +1355,7 @@
                         <type>primary</type>
                         <fields>
                             <field name="alert_id"></field>
+                            <field name="metric_id"></field>
                         </fields>
                     </key>
                 </keys>
