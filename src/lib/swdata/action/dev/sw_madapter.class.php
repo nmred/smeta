@@ -118,8 +118,8 @@ class sw_madapter extends sw_abstract
 	public function action_json()
 	{
 		// 获取监控适配器
-		$page = $this->__request->get_post('page', 1);
-		$page_count = $this->__request->get_post('page_count', 10);
+		$length = $this->__request->get_post('length', 10);
+		$start = $this->__request->get_post('start', 0);
 		$count = 0;
 		try {
 			$condition_basic = sw_member::condition_factory('get_madapter_basic'); 
@@ -137,7 +137,7 @@ class sw_madapter extends sw_abstract
 		try {
 			$condition_basic->set_is_count(false);
 			$condition_basic->set_columns('*');
-			$condition_basic->set_limit_page(array('page' => $page, 'rows_count' => $page_count));
+			$condition_basic->set_limit(array('count' => $length, 'offset' => $start));
 			$madapter = sw_member::operator_factory('madapter');
 			$data   = $madapter->get_operator('basic')->get_basic($condition_basic);
 		} catch (\swan\exception\sw_exception $e) {

@@ -1,0 +1,35 @@
+<?xml version="1.0" ?>
+<dataset>
+	<table name="sequence_global">
+		<column>table_name</column>
+		<column>sequence_id</column>
+		<row>
+			<value>madapter_basic</value>
+			<value>2</value>
+		</row>
+	</table>
+	<table name="madapter_basic">
+		<column>madapter_id</column>
+		<column>madapter_name</column>
+		<column>madapter_display_name</column>
+		<column>steps</column>
+		<column>store_type</column>
+		<column>madapter_type</column>
+		<row>
+			<value>1</value>
+			<value>apache</value>
+			<value>apache监控适配器</value>
+			<value>300</value>
+			<value>2</value>
+			<value>2</value>
+		</row>
+		<row>
+			<value>2</value>
+			<value>ngnix</value>
+			<value>ngnix监控适配器</value>
+			<value>350</value>
+			<value>2</value>
+			<value>2</value>
+		</row>
+	</table>
+</dataset>

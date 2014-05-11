@@ -174,8 +174,8 @@ class sw_madapter extends sw_test_db
 	public function test_action_json()
 	{
 		$post_data = array(
-			'page' => 1,
-			'page_count' => 20,
+			'start' => 0,
+			'length' => 10,
 		);	
 
 		// 初始化 POST 参数

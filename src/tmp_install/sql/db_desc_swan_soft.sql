@@ -66,6 +66,27 @@ CREATE TABLE `sequence_madapter` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --  }}} 
+-- {{{  table sequence_alert
+
+-- 
+-- 告警策略数据表的唯一序列号
+-- 
+-- alert_id
+-- 	告警策略 ID
+-- table_name
+-- 	维护序列号的表名称
+-- sequence_id
+-- 	自增长 ID
+
+DROP TABLE IF EXISTS `sequence_alert`;
+CREATE TABLE `sequence_alert` (
+	`alert_id` int(11) UNSIGNED NOT NULL ,
+	`table_name` varchar(64) NOT NULL ,
+	`sequence_id` int(11) UNSIGNED NOT NULL ,
+	PRIMARY KEY (`alert_id`,`table_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--  }}} 
 -- {{{  table sequence_graph
 
 -- 
@@ -480,6 +501,72 @@ CREATE TABLE `graph_gprint` (
 	`cf_type` tinyint(11) UNSIGNED NOT NULL ,
 	`format` varchar(255) NOT NULL ,
 	PRIMARY KEY (`graph_id`,`gprint_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--  }}} 
+-- {{{  table alert_basic
+
+-- 
+-- 告警策略管理
+-- 
+-- alert_id
+-- 	告警策略 id
+-- alert_name
+-- 	告警策略名称
+-- alert_display_name
+-- 	策略显示名称
+-- alert_type
+-- 	告警策略类型 2: 服务器告警 4: 数据项指标告警 8: 两者都是
+-- scope_type
+-- 	策略作用范围 2: 全局监控适配器 4: 全局设备 8: 局部某个监控器
+-- madapter_id
+-- 	监控适配器 id
+-- device_id
+-- 	设备 id
+-- monitor_id
+-- 	监控器 id
+
+DROP TABLE IF EXISTS `alert_basic`;
+CREATE TABLE `alert_basic` (
+	`alert_id` int(11) UNSIGNED NOT NULL ,
+	`alert_name` varchar(255) NOT NULL ,
+	`alert_display_name` varchar(255) NOT NULL ,
+	`alert_type` tinyint(1) UNSIGNED NOT NULL DEFAULT '4',
+	`scope_type` tinyint(1) UNSIGNED NOT NULL DEFAULT '2',
+	`madapter_id` int(11) UNSIGNED NOT NULL ,
+	`device_id` int(11) UNSIGNED NOT NULL ,
+	`monitor_id` int(11) UNSIGNED NOT NULL ,
+	PRIMARY KEY (`alert_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--  }}} 
+-- {{{  table alert_metric
+
+-- 
+-- 告警数据项管理
+-- 
+-- metric_id
+-- 	告警数据项 id
+-- alert_id
+-- 	告警策略 id
+-- madapter_id
+-- 	监控适配器 id
+-- madapter_metric_id
+-- 	监控适配器数据项 id
+-- compare_type
+-- 	比较规则: 1: 大于 2: 小于 3: 等于 4: 大于等于 5: 小于等于 6: 大于等于
+-- value
+-- 	
+
+DROP TABLE IF EXISTS `alert_metric`;
+CREATE TABLE `alert_metric` (
+	`metric_id` int(11) UNSIGNED NOT NULL ,
+	`alert_id` int(11) UNSIGNED NOT NULL ,
+	`madapter_id` int(11) UNSIGNED NOT NULL ,
+	`madapter_metric_id` int(11) UNSIGNED NOT NULL ,
+	`compare_type` tinyint(1) UNSIGNED NOT NULL DEFAULT '1',
+	`value` int(11) UNSIGNED NOT NULL ,
+	PRIMARY KEY (`alert_id`,`metric_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --  }}} 
